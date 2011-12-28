@@ -1,0 +1,12 @@
+#!/usr/local/bin/bash
+
+mount -uw /
+
+#Set web server: server.bind = 127.0.0.1
+FILE=/conf/base/etc/local/lighttpd/lighttpd.conf
+sed -e 's/#server\.bind.*$/server\.bind = "10.255.255.2"/' ${FILE} > ${FILE}
+
+mount -ur /
+
+service lighttpd restart
+

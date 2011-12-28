@@ -1,0 +1,5 @@
+; system-config-lvm GtkAccelMap rc-file         -*- scheme -*-
+; this file is an automated accelerator map dump
+;
+; (gtk_accel_path "<system-config-lvm>/-Orphan/_About" "")
+; (gtk_accel_path "<system-config-lvm>/-Orphan/_Quit" "<Control>q")

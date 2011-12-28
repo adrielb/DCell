@@ -1,0 +1,4 @@
+------- System Config Soundcard Log --------
+Tue Sep 22 13:07:45 EDT 2009
+
+aplay: main:583: audio open error: Inappropriate ioctl for device

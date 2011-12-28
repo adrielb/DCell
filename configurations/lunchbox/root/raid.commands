@@ -1,0 +1,6 @@
+logfile start raid.current.config
+open afa0
+container list
+disk list
+logfile end 
+exit

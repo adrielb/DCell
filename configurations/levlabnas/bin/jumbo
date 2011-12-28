@@ -1,0 +1,3 @@
+route change 10.255.255.0/24 -mtu 9000
+netstat -rnW
+ifconfig em1 mtu 9000

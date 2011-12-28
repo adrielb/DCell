@@ -1,0 +1,12 @@
+*.dat
+*.bin
+*.Real64
+a.out
+*.gray
+*.a
+*.dx
+.project
+.cproject
+.settings
+*.x
+LevelSetFromThres

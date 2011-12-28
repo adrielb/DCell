@@ -1,0 +1,78 @@
+rint = 0.001
+iterations = 1 
+dt = 1e-7 
+halfbox = 0.5
+
+TIME_STEP = dt
+ITERATIONS = iterations
+INTERACTION_RADIUS = 0.003
+
+PARTITION_X = [[-halfbox TO halfbox STEP halfbox/5]]
+PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/5]]
+PARTITION_Z = [[-halfbox TO halfbox STEP halfbox/5]]
+
+DEFINE_MOLECULES
+{
+	A {DIFFUSION_CONSTANT_3D = 6e-6}
+	B {DIFFUSION_CONSTANT_3D = 6e-6}
+}
+
+DEFINE_REACTIONS
+{
+	A -> B [1e3]:my_rxn
+}
+
+my_box BOX {
+	CORNERS = [-halfbox,-halfbox,-halfbox],[halfbox,halfbox,halfbox]
+	DEFINE_SURFACE_REGIONS{
+		my_region {
+			ELEMENT_LIST = [ALL_ELEMENTS]
+			}
+	}
+}
+
+my_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = 0.99
+	MOLECULE = A
+	NUMBER_TO_RELEASE = 1000
+}
+
+INSTANTIATE world OBJECT 
+{
+	system OBJECT my_box { }
+	my_release_site OBJECT my_release_site { }
+}
+
+VIZ_OUTPUT {
+	MODE = DREAMM_V3
+	FILENAME = "my"
+
+	/*
+	MODE = DREAMM_V3_GROUPED
+	FILENAME = "./viz_data/my"
+	*/
+
+	MOLECULES {
+		NAME_LIST {ALL_MOLECULES}
+		ITERATION_NUMBERS {ALL_DATA @ ALL_ITERATIONS}
+		/*TIME_POINTS {ALL_DATA @ ALL_TIMES}*/
+	}
+
+	MESHES {
+		NAME_LIST {ALL_MESHES}
+		ITERATION_NUMBERS {ALL_DATA @ [0]}
+		/*TIME_POINTS {ALL_DATA @ [0]}*/
+	}
+}
+
+REACTION_DATA_OUTPUT
+{
+	STEP = dt * 1
+	
+	{COUNT[A,WORLD]} => "./react_data/A.dat"
+	{COUNT[B,WORLD]} => "./react_data/B.dat"
+	{COUNT[my_rxn,WORLD]} => "./react_data/my_rxn.dat"
+
+}
+

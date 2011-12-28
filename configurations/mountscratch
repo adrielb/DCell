@@ -1,0 +1,5 @@
+#!/bin/bash
+
+CMD="mkdir -p /scratch; mount -t nfs -o async,noatime,intr levlabhn:/scratch /scratch"
+
+su -c "mount /dev/sdb1 /scratch; rocks run host compute collate=yes command='$CMD'"

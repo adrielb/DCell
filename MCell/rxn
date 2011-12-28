@@ -1,0 +1,26 @@
+(*
+sf = 1*10^8;
+A = 0.01;
+B = 1.0;
+k1 = 0.025 * sf;
+k2 = 1 * sf;
+k3 = 1 * sf;
+k4 = 1 * sf;
+k5 = 0.0004 * sf;
+*)
+
+rxn = {
+{ Y     \[ShortRightArrow] X, k1 * A}, 
+{ X + Y \[ShortRightArrow] C, k2 },
+{ X     \[ShortRightArrow] X + X + Z, k3 * A },
+{ X + X \[ShortRightArrow] DD, k4 },
+{ Z     \[ShortRightArrow] Y, k5 * B}
+};
+
+sys = interpret[ rxn ];
+
+sol = run[ sys, timeSpan -> {0, .001}, initialConditions -> { Y[0] == 
+0.014 } ][[1,3,1]];
+
+
+Plot[ {X[t], Y[t],  Z[t]} /. sol //Evaluate, {t, 0 , 0.001} ]

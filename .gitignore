@@ -1,0 +1,11 @@
+*.[oa]
+*~
+*.so
+*.m
+*.dat
+*.bin
+*.Real64
+a.out
+.project
+.cproject
+

@@ -1,0 +1,183 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      5395,        136]*)
+(*NotebookOutlinePosition[      6058,        159]*)
+(*  CellTagsIndexPosition[      6014,        155]*)
+(*WindowFrame->Generic*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(Get["\</home/abergman/Research/DCell/PetscImport.m\>"];\)\)], "Input",\
+
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetDirectory["\</nas-0-0/abergman/sims/4122.k0\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    \(\(fscale = 100;\)\), "\n", 
+    \(\(MX = 1000;\)\), "\n", 
+    \(\(MY = 250;\)\), "\n", 
+    \(\(dx = 0.1;\)\), "\n", 
+    \(\(contactThres = 0.3;\)\), "\n", 
+    \(\(LX = 100;\)\), "\n", 
+    \(\(LY = 25;\)\), "\n", 
+    \(\(vscale = 50;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\({{groovesbin, groovesls}, pos} = 
+        ImportGrid["\<grooves\>"];\)\), "\n", 
+    \(\(Block[{MX, MY}, \[IndentingNewLine]{MY, MX} = 
+          Dimensions[groovesls]; \[IndentingNewLine]grooves = 
+          ListInterpolation[
+            groovesls, {{1, MY} - 0.5 + pos[\([2, 2]\)], {1, MX} - 0.5 + 
+                  pos[\([2, 1]\)]}*dx, 
+            InterpolationOrder \[Rule] 1];\[IndentingNewLine]];\)\), "\n", 
+    \(\(ImportIrreg["\<grooves.irregNode.10000.array\>"];\)\), "\n", 
+    \(\(groovesir = ir`X*dx;\)\n\), "\[IndentingNewLine]", 
+    \(\(CellForces[] := 
+        Module[{vecs}, \[IndentingNewLine]vecs = 
+            Take[{ir`X*dx, ir`nv, fscale*ir`f1}\[Transpose] , {1, \(-1\), 
+                1}]; \[IndentingNewLine]vecs = 
+            Transpose[vecs]; \[IndentingNewLine]Graphics[{PointSize[0.001], 
+              Blue, Point /@ \((ir`X*dx)\), AbsoluteThickness[0.0025], 
+              Function[{p, n, k}, {Magenta, Line[{p, p + n*k}]}]~MapThread~
+                vecs}]\[IndentingNewLine]];\)\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]Print["\<TIME: \>", 
+              time]; \[IndentingNewLine]ImportIrreg["\<mycell.irregNode.\>" <> 
+                ToString[time] <> "\<.array\>"]; \[IndentingNewLine]{pvel, 
+                uvel, vvel} = 
+              ImportFluid1[MX, MY, dx, "\<uvp\>", 
+                time]; \[IndentingNewLine]\[IndentingNewLine]g = 
+              DisplayTogether[\[IndentingNewLine]ContourPlot[
+                  grooves[y, x], {x, dx, LX}, {y, dx, LY}, 
+                  PlotPoints \[Rule] 1 {LX, LY}, ImageSize \[Rule] 1100, 
+                  PlotRange \[Rule] {{0, LX}, {\(-2\), LY}, All}, 
+                  Contours \[Rule] {0, \(-contactThres\)/dx}, 
+                  ContourShading \[Rule] None, AspectRatio \[Rule] Automatic, 
+                  Epilog \[Rule] {Red, 
+                      ProgressBar[]}], \[IndentingNewLine]CellForces[], \
+\[IndentingNewLine]PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, dx, 
+                    LX - 1}, {y, dx, LY - 1}, ScaleFactor \[Rule] None, 
+                  ScaleFunction \[Rule] \((#*vscale &)\), 
+                  PlotPoints \[Rule] {LX, LY}/1, Frame \[Rule] False, 
+                  HeadLength \[Rule] 
+                    0.2*10^\(-2. \)]]; \
+\[IndentingNewLine]\[IndentingNewLine]Export["\<g.\>" <> 
+                ToString[time] <> "\<.png\>", 
+              g];\[IndentingNewLine]\[IndentingNewLine]]];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[{
+    \(AppendTo[$Echo, "\<stdout\>"]\), "\[IndentingNewLine]", 
+    \(\(MakeViz[RealtimeGraph];\)\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(RealtimeGraph[9999];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[
+    \(\(DensityPlot[grooves[y, x], {x, 0, LX}, {y, 0, LY}, 
+        Epilog \[Rule] {Green, Point /@ groovesir}, 
+        AspectRatio \[Rule] Automatic, 
+        PlotPoints \[Rule] 10 {LX, LY}];\)\)], "Input"]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1200, 1550},
+WindowMargins->{{Automatic, 0}, {0, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1755, 51, 122, 3, 27, "Input",
+  InitializationCell->True],
+Cell[1880, 56, 88, 1, 27, "Input"],
+Cell[1971, 59, 39, 1, 27, "Input"],
+Cell[2013, 62, 1374, 27, 363, "Input",
+  InitializationCell->True],
+Cell[3390, 91, 1518, 26, 251, "Input",
+  InitializationCell->True],
+Cell[4911, 119, 153, 3, 43, "Input",
+  InitializationCell->True],
+Cell[5067, 124, 57, 1, 27, "Input"],
+Cell[5127, 127, 39, 1, 27, "Input"],
+Cell[5169, 130, 222, 4, 27, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,65 @@
+RAID 0 - EXT2
+Version 1.03e       ------Sequential Output------ --Sequential Input- --Random-
+                    -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Precis           8G 63940  99 156017  18 46555   7 52470  81 162068  13 332.3   0
+                    ------Sequential Create------ --------Random Create--------
+                    -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16  6942  99 +++++ +++ +++++ +++  7160  99 +++++ +++ 16866  65
+Precis,8G,63940,99,156017,18,46555,7,52470,81,162068,13,332.3,0,16,6942,99,+++++,+++,+++++,+++,7160,99,+++++,+++,16866,65
+
+
+RAID 1 - EXT3
+Version 1.03e       ------Sequential Output------ --Sequential Input- --Random-
+                    -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Precis           8G 50831  93 108664  34 44560   8 49559  76 113049   8 220.0   0
+                    ------Sequential Create------ --------Random Create--------
+                    -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16  4107  99 +++++ +++ +++++ +++  4198  99 +++++ +++ 11910 100
+Precis,8G,50831,93,108664,34,44560,8,49559,76,113049,8,220.0,0,16,4107,99,+++++,+++,+++++,+++,4198,99,+++++,+++,11910,100
+
+JBOD - EXT3
+Version 1.03e       ------Sequential Output------ --Sequential Input- --Random-
+                    -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Precis           8G 51554  92 64125  17 23468   4 43216  66 56458   4 133.7   0
+                    ------Sequential Create------ --------Random Create--------
+                    -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++
+Precis,8G,51554,92,64125,17,23468,4,43216,66,56458,4,133.7,0,16,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++,+++++,+++
+--------------------------
+lunchbox
+Ext3 noatime
+Version 1.03e       ------Sequential Output------ --Sequential Input- --Random-
+                    -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Lunchbox         4G           25377  10 14366   4           77771   8 385.1   1
+                    ------Sequential Create------ --------Random Create--------
+                    -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16 +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++ +++++ +++
+Lunchbox,4G,,,25377,10,14366,4,,,77771,8,385.1,1,16,+++++,+++,+++++,+++,+++++,+++
+
+XFS
+Version 1.03e       ------Sequential Output------ --Sequential Input- --Random-
+                    -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Lunchbox         4G           27656   9 14411   3           86299   9 392.2   1
+                    ------Sequential Create------ --------Random Create--------
+                    -Create-- --Read--- -Delete-- -Create-- --Read--- -Delete--
+              files  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP  /sec %CP
+                 16  5416  32 +++++ +++  2600  14  2259  14 +++++ +++  1137   9
+Lunchbox,4G,,,27656,9,14411,3,,,86299,9,392.2,1,16,5416,32,+++++,+++,2600,14,2259,14,+++++,+++,1137,9
+
+Precis RAID10
+Version  1.96       ------Sequential Output------ --Sequential Input- --Random-
+Concurrency   1     -Per Chr- --Block-- -Rewrite- -Per Chr- --Block-- --Seeks--
+Machine        Size K/sec %CP K/sec %CP K/sec %CP K/sec %CP K/sec %CP  /sec %CP
+Precis        6552M   169  98 113848  36 51949  16   972  97 142780  15 506.9  15
+Latency             55645us     955ms     278ms   33467us   72748us     111ms
+1.96,1.96,Precis,1,1278700142,6552M,,169,98,113848,36,51949,16,972,97,142780,15,506.9,15,,,,,,,,,,,,,,,,,,55645us,955ms,278ms,33467us,72748us,111ms,,,,,,
+

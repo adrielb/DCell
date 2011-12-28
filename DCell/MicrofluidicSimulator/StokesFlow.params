@@ -1,0 +1,36 @@
+Input 8-bit unisigned binary image (0 - black, 255 - white)
+-IMAGE_NAME						check.gray
+-HEIGHT								21
+-WIDTH 								16
+-BACKGROUND_COLOR			0
+-FLUIDIC_LAYER_COLOR 	255
+-SCALE_COLOR					232
+
+Use SI units: length in meters, force in Newtons and time in seconds, 
+except for concentrations
+
+Chip properties
+-DENSITY							1e3
+-VISCOSITY 						1e-3
+-GRAVITY							10,
+DENSITY							997.0
+VISCOSITY 						8.93e-4
+GRAVITY							9.81,
+-CHIP_HEIGHT					30e-6
+-SCALE_BAR            18e-3
+-DELTA_T							.001435
+-DIFFUSION						2.6e-12
+     
+Boundary Condtions: syringe height and concentration (uM)
+label of boundary followed by assigned color
+-BC_HEIGHT_128	      .1
+-BC_CONCENTRATION_128 0
+-BC_HEIGHT_64	      	0
+-BC_CONCENTRATION_64	0
+
+Solver Options
+pc_type 							ilu
+pc_factor_levels 			6
+pc_factor_fill 				3
+pc_factor_shift_positive_definite 1e-10
+pc_factor_mat_ordering_type rowlength

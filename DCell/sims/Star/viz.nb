@@ -1,0 +1,865 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     30457,        706]*)
+(*NotebookOutlinePosition[     31141,        730]*)
+(*  CellTagsIndexPosition[     31097,        726]*)
+(*WindowFrame->Generic*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(AppendTo[$Echo, "\<stdout\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    \(Get[Environment["\<ALT_DISP\>"]]\), "\[IndentingNewLine]", 
+    \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory["\</nas-0-0/abergman/scratch\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("/nas-0-0/abergman/scratch"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[{
+    \(\(vscale = 2\ 10^\(-1\);\)\), "\[IndentingNewLine]", 
+    \(\(fscale = 1\ 10^\(-1\);\)\), "\[IndentingNewLine]", 
+    \(\(MX = 48;\)\), "\[IndentingNewLine]", 
+    \(\(MY = MX;\)\), "\[IndentingNewLine]", 
+    \(\(LX = \(LY = 24\);\)\), "\[IndentingNewLine]", 
+    \(\(dx = 0.5;\)\), "\[IndentingNewLine]", 
+    \(\(idx = 0;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = 
+                t + 10000}, \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[time] <> "\<.array\>"]; \[IndentingNewLine]g = 
+              Graphics[{Blue, PointSize[0.008], 
+                  Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                    MapThread~{ir`X + 0.5, ir`nv, fscale*ir`f1}, Orange, 
+                  Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                      FontSize \[Rule] 44, 
+                      FontWeight \[Rule] "\<Bold\>"], {18, 
+                      6}]}]; \[IndentingNewLine]Show[g, 
+              AspectRatio \[Rule] \((MY/MX)\), ImageSize \[Rule] 1000, 
+              PlotRange \[Rule] {{0, MX - 2}, {\(-1\), 
+                    MY - 2}}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\[IndentingNewLine]", 
+    \(clear\), "\n", 
+    \(RealtimeGraph[idx]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = 
+                t + 10000}, \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[time] <> "\<.array\>"]; \[IndentingNewLine]If[
+              ir`raw === $Failed, 
+              Return[]]; \[IndentingNewLine]{pvel, uvel, vvel} = 
+              ImportFluid0[MX, MY, "\<rhs\>", time]; \[IndentingNewLine]g = 
+              DensityPlot[uvel[y, x], {x, 0.5, MX - 2}, {y, 0.5, MY - 2}, 
+                PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}, {\(-10\), 
+                      10}}, PlotPoints \[Rule] {4  MX, 4  MX}, 
+                Frame \[Rule] False, ImageSize \[Rule] 1000, 
+                Epilog \[Rule] {Green, PointSize[0.008], 
+                    Function[{p, n, k, x}, {Point[p], Line[{p, p + n*k}], 
+                          Red, Point[x]}]~
+                      MapThread~{ir`X, ir`nv, fscale*ir`f1, ir`x}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {3, 
+                        3}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\[IndentingNewLine]", 
+    \(clear\), "\n", 
+    \(RealtimeGraph[idx]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Function::"fpct"\), \(\(:\)\(\ \)\), "\<\"Too many parameters \
+in \\!\\({MX, MY, dx, prefix, time}\\) to be filled from \
+\\!\\(\\(\\(Function[\\(\\(\\(\\({MX, MY, dx, prefix, time}\\)\\), \\(\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)\\)\\)]\\)\\)[\\(\\(48, 48, \\\"rhs\\\
+\", 10001\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Function::fpct\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Set::"shape"\), \(\(:\)\(\ \)\), "\<\"Lists \\!\\({pvel, uvel, \
+vvel}\\) and \\!\\(\\(\\(Function[\\(\\(\\(\\({MX, MY, dx, prefix, \
+time}\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)[\\(\\(48, 48, \\\"rhs\\\", \
+10001\\)\\)]\\) are not the same shape. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Set::shape\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(RealtimeGraph /@ {0, 1, 2};\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = 
+                t + 10000}, \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[time] <> "\<.array\>"]; \[IndentingNewLine]If[
+              ir`raw === $Failed, 
+              Return[]]; \[IndentingNewLine]{pvel, uvel, vvel} = 
+              ImportFluid1[MX, MY, dx, "\<uvp\>", 
+                time]; \[IndentingNewLine]g = 
+              PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, 0.5, LX - 1}, {y, 
+                  0.5, LY - 1}, ScaleFactor \[Rule] None, 
+                ScaleFunction \[Rule] \((#*vscale &)\), 
+                PlotPoints \[Rule] {64, 64}, Frame \[Rule] False, 
+                ImageSize \[Rule] 1150, HeadLength \[Rule] 0.2*10^\(-2. \), 
+                Epilog \[Rule] {Blue, PointSize[0.008], 
+                    Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                      MapThread~{ir`X*dx, ir`nv, fscale*ir`f1}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {18, 
+                        6}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\n", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[idx]\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(RealtimeGraph\)], "Input"],
+
+Cell[BoxData[
+    \(FileNames["\<uvp*\>"]\)], "Input"],
+
+Cell[BoxData[
+    \(\(Histogram[ir`f1];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(MX = \(MY = 384\);\)\), "\[IndentingNewLine]", 
+    \(\(dx = 0.0625;\)\), "\[IndentingNewLine]", 
+    \(\(time = 10001;\)\), "\[IndentingNewLine]", 
+    \(\({pvel, uvel, vvel} = 
+        ImportFluid1[MX, MY, dx, "\<uvp\>", 
+          time];\)\), "\[IndentingNewLine]", 
+    \(\(ImportIrreg["\<irregNode.\>" <> 
+          ToString[time] <> "\<.array\>"];\)\), "\[IndentingNewLine]", 
+    \(\(Plot[\(uvel[LY*#, x] &\) /@ {1\/3, 1\/2, 2\/3} // Evaluate, {x, 0.5, 
+          LX - 1}, 
+        PlotRange \[Rule] {\(-3\), 4.5}];\)\), "\[IndentingNewLine]", 
+    \(\(Histogram[ir`f1];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Mean[ir`f1]\), "\[IndentingNewLine]", 
+    \(StandardDeviation[ir`f1]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-0.02945237376208262`\)\)], "Output"],
+
+Cell[BoxData[
+    \(0.17889549705415936`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(StartRealtimeGraph[5, RealtimeGraph]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Import::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found during \
+\\!\\(Import[\\(\\(\\\"uvp.10000.Real64\\\", \\\"Real64\\\", \
+\\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Import::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Rest[$Failed]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"argx"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Rest\\) called with \
+\\!\\(0\\) arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"argx"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Rest\\) called with \
+\\!\\(0\\) arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(Rest[]\\) does not contain a list of data and coordinates. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(3\\) of \
+\\!\\(Transpose[\\(\\(\\(\\(Rest[]\\)\\), \\(\\({2, 3, 1}\\)\\)\\)\\)]\\) \
+does not exist. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(\\(\\(Transpose[\\(\\(\\(\\(Rest[]\\)\\), \\(\\({2, 3, \
+1}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] 3 \[RightDoubleBracket]\\) does \
+not contain a list of data and coordinates. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(3\\) of \
+\\!\\(Transpose[\\(\\(\\(\\(Rest[]\\)\\), \\(\\({2.`, 3.`, \
+1.`}\\)\\)\\)\\)]\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\
+\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(\\(\\(Transpose[\\(\\(\\(\\(Rest[]\\)\\), \\(\\({2.`, 3.`, \
+1.`}\\)\\)\\)\\)]\\)\\) \[LeftDoubleBracket] 3 \[RightDoubleBracket]\\) does \
+not contain a list of data and coordinates. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Interpolation :: \\\"innd\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(ListInterpolation :: \\\"ingrdm\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(3\\) of \
+\\!\\(Transpose[\\(\\(\\(\\(Rest[]\\)\\), \\(\\({2.`, 3.`, \
+1.`}\\)\\)\\)\\)]\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\
+\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partw\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\({}\\) cannot be transposed. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Set::"shape"\), \(\(:\)\(\ \)\), "\<\"Lists \
+\\!\\({Graphics`PlotField`Private`points$345795, \
+Graphics`PlotField`Private`vectors$345795}\\) and \\!\\(Transpose[\\(\\({}\\)\
+\\)]\\) are not the same shape. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Set::shape\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"mptd"\), \(\(:\)\(\ \)\), "\<\"Object \
+\\!\\(Graphics`PlotField`Private`vectors$345795\\) at position {2, \
+\\!\\(1\\)} in \\!\\(MapThread[\\(\\(\\(\\(\\(\\(If[\\(\\(\\(\\(\\(\\(#3 \
+\[Equal] 0\\)\\) || \\(\\(! \
+\\(\\(Graphics`PlotField`Private`numberQ[#2]\\)\\)\\)\\)\\)\\), \
+\\(\\({\\(\\({0, 0}\\)\\), 0}\\)\\), \\(\\({\\(#1\\\\ #2\\)\\/#3, \
+#2}\\)\\)\\)\\)]\\)\\) &\\)\\), \
+\\(\\({Graphics`PlotField`Private`vectors$345795, \
+Graphics`PlotField`Private`vectors$345795, \
+Graphics`PlotField`Private`vectors$345795}\\)\\)\\)\\)]\\) has only \
+\\!\\(0\\) of required \\!\\(1\\) dimensions. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"MapThread::mptd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Set::"shape"\), \(\(:\)\(\ \)\), "\<\"Lists \
+\\!\\({Graphics`PlotField`Private`vectors$345795, \
+Graphics`PlotField`Private`mags$345795}\\) and \
+\\!\\(Transpose[\\(\\(MapThread[\\(\\(\\(\\(\\(\\(If[\\(\\(\\(\\(\\(\\(#3 \
+\[Equal] 0\\)\\) || \\(\\(! \
+\\(\\(Graphics`PlotField`Private`numberQ[\\(\\(Slot[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)\\)\\), \\(\\({\\(\\({0, 0}\\)\\), \
+0}\\)\\), \\(\\({\\(#1\\\\ #2\\)\\/\\(Slot[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\), #2}\\)\\)\\)\\)]\\)\\) &\\)\\), \
+\\(\\({Graphics`PlotField`Private`vectors$345795, \\(\\(\[LeftSkeleton] 41 \
+\[RightSkeleton]\\)\\), \
+Graphics`PlotField`Private`vectors$345795}\\)\\)\\)\\)]\\)\\)]\\) are not the \
+same shape. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Set::shape\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\({Graphics`PlotField`Private`colors$345795, \
+Graphics`PlotField`Private`points$345795, \
+Graphics`PlotField`Private`vectors$345795, \
+Graphics`PlotField`Private`vectors$345795}\\) cannot be transposed. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\({Graphics`PlotField`Private`colors$345795, \
+\\(\\(Arrow[\\(\\(Graphics`PlotField`Private`points$345795, \
+\\(\\(Graphics`PlotField`Private`points$345795 + \
+Graphics`PlotField`Private`vectors$345795\\)\\), \\(\\(\[LeftSkeleton] 7 \
+\[RightSkeleton]\\)\\), \\(\\(HeadScaling \[Rule] Automatic\\)\\), \\(\\(\
+\[LeftSkeleton] 5 \[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\) cannot be \
+transposed. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Transpose :: \\\"nmtx\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \(Arrow::"bad" \(\(:\)\(\ \)\) 
+      "Arguments \!\({Graphics`PlotField`Private`points$345795, \
+\(\(Graphics`PlotField`Private`points$345795 + \
+Graphics`PlotField`Private`vectors$345795\)\), \(\(HeadLength \[Rule] \
+0.002`\)\), \(\(HeadScaling \[Rule] Automatic\)\), \(\(\[LeftSkeleton] 4 \
+\[RightSkeleton]\)\), \(\(ZeroShape \[Rule] Automatic\)\), \(\(HeadScaling \
+\[Rule] Automatic\)\), \(\(\[LeftSkeleton] 5 \[RightSkeleton]\)\)}\) to Arrow \
+are not valid."\)], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), \
+"\<\"\\!\\(Transpose[\\(\\({Graphics`PlotField`Private`colors$345795, \
+\\(\\({}\\)\\)}\\)\\)]\\) was encountered where a \\!\\(Graphics\\) primitive \
+or directive was expected. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(RealtimeGraph /@ Range[50, 75]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10069.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10070.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10071.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(BinaryReadList :: \\\"nffil\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \({Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, 
+      Null, Null, Null, Null, Null, Null, Null, Null, Return[], Return[], 
+      Return[], Return[], Return[], Return[], Return[]}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ImportIrreg["\<irregNode.array\>"]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.array\\\", \\\"Real64\\\", \
+\\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]{pvel, uvel, vvel} = 
+              ImportFluid1[MX, MY, "\<uvp\>", time]; \[IndentingNewLine]g = 
+              Plot3D[pvel[y, x], {x, 2, MX - 4}, {y, 2, MY - 4}, 
+                Mesh \[Rule] False, 
+                PlotRange \[Rule] {All, All, {\(-5\), 10}}, 
+                PlotPoints \[Rule] 
+                  2 {MX, MY}]; \[IndentingNewLine]Export["\<g.\>" <> 
+                ToString[time] <> "\<.png\>", 
+              g];\[IndentingNewLine]]];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[52]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(temporal = Import["\<temporal.dat\>"];\)\), "\[IndentingNewLine]", 
+    \(Print[temporal[\([1]\)]]\), "\[IndentingNewLine]", 
+    \(\({ti, TIME, dt, dtcfl, tiframe} = 
+        Transpose@Rest[temporal];\)\), "\[IndentingNewLine]", 
+    \(\(SetOptions[ListPlot, 
+        PlotJoined \[Rule] True];\)\), "\[IndentingNewLine]", 
+    \(\(DisplayTogether[
+        ListPlot[dt, PlotStyle \[Rule] Thickness[0.004], 
+          PlotRange \[Rule] All], 
+        ListPlot[dtcfl, PlotStyle \[Rule] Red]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({"iter", "t", "dt", "dtcfl", "tiframe"}\)], "Print"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(temporal // TableForm\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListPlot[TIME]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Particles", "Section"],
+
+Cell[BoxData[{
+    \(clear\), "\n", 
+    \(\(ImportParticles = 
+        Function[t, 
+          file = "\<particles.\>" <> 
+              ToString[t + 10000] <> "\<.array\>"; \[IndentingNewLine]dat = 
+            BinaryReadList[
+              file, {"\<Real64\>", "\<Real64\>", "\<Real64\>", "\<Real64\>", \
+"\<Integer32\>", "\<Integer32\>"}]; \[IndentingNewLine]dat = 
+            Transpose[Most@dat]; \[IndentingNewLine]X = 
+            dat[\([{1, 2}]\)] // Transpose; \[IndentingNewLine]radius = 
+            dat[\([4]\)]; \[IndentingNewLine]sign = 
+            dat[\([5]\)];\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(Function[i, ImportParticles[i]; Length[X]] /@ Range[0, 1]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(clear\), "\n", 
+    \(\(g = 
+        Function[t, 
+            ImportParticles[
+              t]; \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[
+                  10000 + 
+                    t] <> "\<.array\>"]; \[IndentingNewLine]circles = {X, 
+                  radius, sign}\[Transpose] ;  (*\[IndentingNewLine]circles = 
+                Select[circles, 
+                  0.1 < #[\([2]\)] < 0.5 &]; \[IndentingNewLine]circles = 
+                Take[circles, {1, \(-1\), 1}];*) \[IndentingNewLine]ListPlot[
+              ir`X, PlotJoined \[Rule] False, 
+              PlotStyle \[Rule] PointSize[0.01], ImageSize \[Rule] 800, 
+              Frame \[Rule] False, 
+              Prolog \[Rule] {Blue, Disk[circles[\([1, 1]\)], 1], 
+                  MapThread[{If[#3 \[Equal] 1, Green, Red], 
+                        Circle[#1, #2]} &, circles\[Transpose] ]}, 
+              AspectRatio \[Rule] 1]] /@ Range[0, 1, 1];\)\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Circle::"radius"\), \(\(:\)\(\ \)\), "\<\"Radius \
+\\!\\(-1.3936787746323539`*^-77\\) is not a positive number or a pair of \
+positive numbers. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\
+\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Circle::radius\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Circle::"radius"\), \(\(:\)\(\ \)\), "\<\"Radius \
+\\!\\(-0.018292311585673456`\\) is not a positive number or a pair of \
+positive numbers. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\
+\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Circle::radius\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gptn"\), \(\(:\)\(\ \)\), "\<\"Coordinate \
+\\!\\(Indeterminate\\) in \\!\\({Indeterminate, 19.72278389526806`}\\) is not \
+a floating-point number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Graphics::gptn\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Circle::"radius"\), \(\(:\)\(\ \)\), "\<\"Radius \
+\\!\\(-9.471449708552134`*^178\\) is not a positive number or a pair of \
+positive numbers. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\
+\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Circle::radius\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Circle :: \\\"radius\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gptn"\), \(\(:\)\(\ \)\), "\<\"Coordinate \
+\\!\\(Indeterminate\\) in \\!\\({Indeterminate, 18.80433907735111`}\\) is not \
+a floating-point number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Graphics::gptn\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gptn"\), \(\(:\)\(\ \)\), "\<\"Coordinate \
+\\!\\(Indeterminate\\) in \
+\\!\\({6.656329353974332045959`8.129450145742634*^-316, Indeterminate}\\) is \
+not a floating-point number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Graphics::gptn\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Graphics :: \\\"gptn\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]fscale = 
+              10^\(-2\); \[IndentingNewLine]MX = 48; \[IndentingNewLine]MY = 
+              48; \[IndentingNewLine]uvp = 
+              ImportVec2[MX, 
+                3, "\<rhs.\>" <> 
+                  ToString[
+                    time] <> "\<.Real64\>"]; \[IndentingNewLine]ImportIrreg["\
+\<irregNode.\>" <> ToString[time] <> "\<.array\>"]; \[IndentingNewLine]uvel = 
+              ListInterpolation[uvp[\([1]\)], {{1, MY} - 1, {1, MX} - 1.5}, 
+                InterpolationOrder \[Rule] 0]; \[IndentingNewLine]vvel = 
+              ListInterpolation[uvp[\([2]\)], {{1, MY} - 1.5, {1, MX} - 1}, 
+                InterpolationOrder \[Rule] 0]; \[IndentingNewLine]g = 
+              DensityPlot[uvel[y, x], {x, 0, MX - 2}, {y, 0, MY - 2}, 
+                PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}, All}, 
+                PlotPoints \[Rule] 8 {MY, MX}, Frame \[Rule] False, 
+                ImageSize \[Rule] 1000, 
+                Epilog \[Rule] {Blue, PointSize[0.008], 
+                    Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                      MapThread~{ir`X + 0.5, ir`nv, fscale*ir`f1}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {18, 
+                        6}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\n", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(idx = 1;\)\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[idx - 1]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListDensityPlot[uvp[\([1]\)]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Min[uvp[\([1]\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(-46285.444235969226`\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Mean[Flatten@uvp[\([2]\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(-0.00032905306885362554`\)\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1200, 1550},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1755, 51, 67, 1, 27, "Input"],
+Cell[1825, 54, 39, 1, 27, "Input"],
+Cell[1867, 57, 183, 3, 43, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[2075, 64, 78, 1, 27, "Input"],
+Cell[2156, 67, 61, 1, 27, "Output"]
+}, Open  ]],
+Cell[2232, 71, 44, 1, 27, "Input"],
+Cell[2279, 74, 361, 7, 123, "Input"],
+Cell[2643, 83, 1058, 19, 155, "Input"],
+
+Cell[CellGroupData[{
+Cell[3726, 106, 1391, 24, 203, "Input"],
+Cell[5120, 132, 490, 7, 20, "Message"],
+Cell[5613, 141, 466, 7, 20, "Message"]
+}, Open  ]],
+Cell[6094, 151, 105, 2, 43, "Input"],
+Cell[6202, 155, 1453, 26, 203, "Input",
+  InitializationCell->True],
+Cell[7658, 183, 46, 1, 27, "Input"],
+Cell[7707, 186, 54, 1, 27, "Input"],
+Cell[7764, 189, 54, 1, 27, "Input"],
+Cell[7821, 192, 616, 12, 144, "Input"],
+
+Cell[CellGroupData[{
+Cell[8462, 208, 104, 2, 43, "Input"],
+Cell[8569, 212, 59, 1, 27, "Output"],
+Cell[8631, 215, 54, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8722, 221, 69, 1, 27, "Input"],
+Cell[8794, 224, 365, 5, 70, "Message"],
+Cell[9162, 231, 317, 5, 70, "Message"],
+Cell[9482, 238, 303, 4, 70, "Message"],
+Cell[9788, 244, 303, 4, 70, "Message"],
+Cell[10094, 250, 331, 5, 70, "Message"],
+Cell[10428, 257, 400, 6, 70, "Message"],
+Cell[10831, 265, 344, 5, 70, "Message"],
+Cell[11178, 272, 448, 6, 70, "Message"],
+Cell[11629, 280, 400, 6, 70, "Message"],
+Cell[12032, 288, 350, 5, 70, "Message"],
+Cell[12385, 295, 454, 6, 70, "Message"],
+Cell[12842, 303, 337, 5, 70, "Message"],
+Cell[13182, 310, 400, 6, 70, "Message"],
+Cell[13585, 318, 343, 5, 70, "Message"],
+Cell[13931, 325, 350, 5, 70, "Message"],
+Cell[14284, 332, 329, 5, 70, "Message"],
+Cell[14616, 339, 323, 5, 70, "Message"],
+Cell[14942, 346, 396, 6, 70, "Message"],
+Cell[15341, 354, 800, 13, 70, "Message"],
+Cell[16144, 369, 924, 15, 70, "Message"],
+Cell[17071, 386, 497, 8, 70, "Message"],
+Cell[17571, 396, 683, 10, 70, "Message"],
+Cell[18257, 408, 333, 5, 70, "Message"],
+Cell[18593, 415, 499, 8, 70, "Message"],
+Cell[19095, 425, 411, 6, 70, "Message"],
+Cell[19509, 433, 42, 1, 70, "Output"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[19588, 439, 63, 1, 24, "Input"],
+Cell[19654, 442, 387, 5, 20, "Message"],
+Cell[20044, 449, 387, 5, 20, "Message"],
+Cell[20434, 456, 387, 5, 20, "Message"],
+Cell[20824, 463, 339, 5, 20, "Message"],
+Cell[21166, 470, 232, 3, 43, "Output"]
+}, Open  ]],
+Cell[21413, 476, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[21477, 481, 67, 1, 27, "Input"],
+Cell[21547, 484, 381, 5, 20, "Message"]
+}, Open  ]],
+Cell[21943, 492, 586, 11, 91, "Input"],
+Cell[22532, 505, 96, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[22653, 511, 529, 10, 91, "Input"],
+Cell[23185, 523, 72, 1, 23, "Print"]
+}, Open  ]],
+Cell[23272, 527, 54, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[23351, 532, 47, 1, 27, "Input"],
+Cell[23401, 535, 130, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23568, 543, 28, 0, 74, "Section"],
+Cell[23599, 545, 614, 12, 139, "Input"],
+Cell[24216, 559, 90, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[24331, 564, 987, 19, 139, "Input"],
+Cell[25321, 585, 336, 5, 23, "Message"],
+Cell[25660, 592, 333, 5, 20, "Message"],
+Cell[25996, 599, 352, 5, 20, "Message"],
+Cell[26351, 606, 335, 5, 23, "Message"],
+Cell[26689, 613, 332, 5, 20, "Message"],
+Cell[27024, 620, 352, 5, 20, "Message"],
+Cell[27379, 627, 383, 6, 25, "Message"],
+Cell[27765, 635, 332, 5, 20, "Message"]
+}, Open  ]],
+Cell[28112, 643, 1781, 31, 267, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[29918, 678, 62, 1, 27, "Input"],
+Cell[29983, 681, 137, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30157, 689, 50, 1, 27, "Input"],
+Cell[30210, 692, 58, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[30305, 698, 59, 1, 27, "Input"],
+Cell[30367, 701, 62, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

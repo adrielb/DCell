@@ -1,0 +1,346 @@
+Adaptec AFA
+rpm -ivh afasnmp-4.0-0.i386.rpm
+yum -y install "compat-libstdc++-296"
+rpm -ivh afaapps-4.1-0.i386.rpm 
+
+lm_sensors     # yum install if not present
+sensors-detect # (select YES for all questions)
+sensors        # runs sensors 
+
+yum install hddtemp
+
+**********************************************************************
+create login banner
+/etc/motd
+/etc/issue
+/etc/ssh-banner
+
+"This computer system is the property of University College London.
+
+Disconnect NOW if you have not been expressly authorised to use this system. Unauthorised use is a criminal offence under the Computer Misuse Act 1990.
+
+Communications on or through University College London's computer systems may be monitored or recorded to secure effective system operation and for other lawful purposes."
+
+Unauthorized access to this machine is prohibited. Use of this system is limited to
+authorized individuals only. All activity is monitored.
+Login Server Warning Banner:
+Unauthorized use of this machine is prohibited. This is a University machine intended
+for University purposes. The University reserves the right to monitor its use as necessary
+to ensure its stability, availability, and security.
+
+*******************************************************************
+***********************        WARNING!     *********************** 
+*******************************************************************
+* This service is for authorised clients only                     *
+* It is a criminal offence to:                                    *
+* i. Obtain access to data without authority                      *
+* ii Damage, delete, alter or insert data without authority       *
+*******************************************************************
+* Communications on or through the computer systems may be 
+  monitored or recorded to secure effective system operation and for other lawful purposes."
+************************************************
+NOTICE TO USERS WARNING! 
+The use of this system is restricted to authorized users, unauthorized access is forbidden and will be prosecuted by law. All information and communications on this system are subject to review, monitoring and recording at any time, without notice or permission. Users should have no expectation of privacy.
+ *************************************************
+This machine is for the exclusive use of SOMEONE.
+Anyone attempting to gain, or gaining access other
+than as specifically authorized will be prosecuted
+under all applicable statutes plus all applicable
+civil rules for damages.
+**********************************************************************
+remove x11
+remove cups
+remove bluetooth
+
+no root ssh login
+emacs /etc/ssh/sshd_config
+# Add or uncomment this line:
+  PermitRootLogin no
+  Protocol 2
+service sshd restart
+
+cron script for afa0
+email warning/alert/error msgs
+
+disable listening sendmail damoen
+
+harden samba 
+harden apache
+
+NSA RHEL5 security guide
+
+grep sda /var/log/messages
+grep sdb /var/log/messages
+grep -i aac /var/log/messages 
+
+place: alev@jhu? levchenkolab@yahoo.com, kiran? hao? as mail to
+
+
+who         Shows a listing of currently logged-in users.
+w           Shows who is logged on and what they are doing.
+last        Shows a list of last logged-in users, including login time, logout time, login IP address, etc.
+lastb       Same as last, except that by default it shows a log of the file /var/log/btmp, which contains all the bad login attempts.
+lastlog     This command reports data maintained in /var/log/lastlog, which is a record of the last time a user logged in.
+ac          Prints out the connect time in hours on a per-user basis or daily basis etc. This command reads /var/log/wtmp.
+dump-utmp   Converts raw data from /var/run/utmp or /var/log/wtmp into ASCII-parsable format. 
+
+
+Seagate Barracuda 7200.11 SATA Specs
+120 MBytes/sec max sustained data transfer rate
+60C max operating temperature
+1/10^14 bits nonrecoverable read errors
+---------------------------------------------
+[root@mailstore1b ~]# cd ~
+[root@mailstore1b ~]# wget ftp://ftp.us.dell.com/scsi-raid/afa-apps-snmp.2807420-A04.tar.gz
+[root@mailstore1b ~]# tar xzf afa-apps-snmp.2807420-A04.tar.gz
+[root@mailstore1b ~]# yum -y install "compat-libstdc++-296"
+[root@mailstore1b ~]# rpm -ivh afaapps-4.1-0.i386.rpm
+
+---------------------------------------------
+AFA0> disk show smart /view_changeable /all /full
+Executing: disk show smart /view_changeable=TRUE /all=TRUE /full=TRUE
+
+        Smart    Method of         Enable
+        Capable  Informational     Exception  Performance  Log     Interval       Report  Error
+B:ID:L  Device   Exceptions(MRIE)  Control    Enabled      Errors  Timer (secs.)  Count   Count
+------  -------  ----------------  ---------  -----------  ------  -------------  ------  ------
+0:00:0     Y                           X                      X          X           X
+0:01:0     Y                           X                      X          X           X
+0:02:0     Y                           X                      X          X           X
+0:03:0     Y                           X                      X          X           X
+0:04:0     Y                           X                      X          X           X
+0:05:0     Y                           X                      X          X           X
+
+AFA0> disk set smart /all
+Executing: disk set smart /all=TRUE
+SMART parameters on disk (0,00,0) were successfully set.
+SMART parameters on disk (0,01,0) were successfully set.
+SMART parameters on disk (0,02,0) were successfully set.
+SMART parameters on disk (0,03,0) were successfully set.
+SMART parameters on disk (0,04,0) were successfully set.
+SMART parameters on disk (0,05,0) were successfully set.
+
+AFA0>
+AFA0> container list    # if a container shows a ! instead of a :, partition is dead
+AFA0> disk show space   # will also show partition as DEAD
+AFA0> disk remove dead_partitions (0,3,0)
+
+
+----------------------
+edit /etc/updatedb.conf to add directories to exclude from 'locate'
+
+----------------------
+port scanning:
+nmap -A -v 128.220.136.155
+
+---------------
+lm_sensors
+sensors-detect
+sensors
+--------------
+yum list available kmod-xfs\*
+yum install kmod-xfs xfsdump xfsprogs
+-------------------
+[root@Lunchbox ~]# /sbin/parted /dev/sdb
+GNU Parted 1.8.1
+Using /dev/sdb
+Welcome to GNU Parted! Type 'help' to view a list of commands.
+(parted) print
+Error: Unable to open /dev/sdb - unrecognised disk label.
+(parted) mklabel
+New disk label type? msdos
+(parted) print
+
+Model: Adaptec Mirror23 (scsi)
+Disk /dev/sdb: 1000GB
+Sector size (logical/physical): 512B/512B
+Partition Table: msdos
+
+Number  Start  End  Size  Type  File system  Flags
+
+[root@Lunchbox ~]# /sbin/mkfs -t xfs /dev/sdb1
+---------------------
+EXT3 10G partition, 4G file, 11 MB/s write, 36.3 MB/s read
+XFS 10G partition, 4G file, 30 MB/s write, 50 MB/s read
+EXT3 noatime, 27.9 MB/s write, 54.5 MB/s read
+EXT3 noatime, PROMISE 31 write, 44 read single drive
+XFS PROMISE single drive, 28 write, 64 read
+XFS PROMISE raid-0, 65 write, 82 read
+XFS PROMISE raid-1, 25 write, 74 read
+XFS PROMIE+ADAPTEC raid10,  60 write, 70 read
+
+EXT3 8G on precis, 65MB/s write
+----------------------------------------------
+(parted) mkpart
+Partition type?  primary/extended? p
+File system type?  [ext2]?
+Start? 0
+End? -1
+(parted)
+----------------------------------------------
+mdadm --stop /dev/md10
+mdadm --zero-superblock /dev/sdd1 /dev/sdc1 /dev/sdb1
+mdadm --create /dev/md1 --level=raid1 --raid-devices=2 /dev/sdd1 /dev/sdc1
+mdadm --detail /dev/md1
+mdadm --create /dev/md10 --chunk=128 --level=raid0 --raid-devices=2 /dev/md1 /dev/sdb1
+/sbin/mkfs -t xfs -f /dev/md10
+mount -t xfs -o noatime /dev/md10 /lunchbox
+mount -t xfs -o noatime,nodiratime,nobarrier /dev/md10 /lunchbox/
+
+[root@Lunchbox ~]# /sbin/mkfs -t xfs -f /dev/md10
+meta-data=/dev/md10              isize=256    agcount=32, agsize=15261600 blks
+         =                       sectsz=512   attr=0
+data     =                       bsize=4096   blocks=488371200, imaxpct=25
+         =                       sunit=32     swidth=64 blks, unwritten=1
+naming   =version 2              bsize=4096
+log      =internal log           bsize=4096   blocks=32768, version=1
+         =                       sectsz=512   sunit=0 blks, lazy-count=0
+realtime =none                   extsz=262144 blocks=0, rtextents=0
+
+
+raid10,f2 fastest
+
+------------------------------
+chunk: 64K
+fsblock: 4K
+stride = chunk / fsblock = 16K
+width = # data disks * stride = 32K
+mkfs.ext3 -b 4096 -E stride=16 -E stripe-width=32
+noatime,commit=120,
+--------------------------
+mysql
+U: root
+P: 3WemlqFuPp
+--------------------------
+lunchbox wordpress
+/home/blog
+P: BNvBkpYc
+
+mysql U: LevLabBlog, P: b5DXFPwzIP
+DB: levlabblogdb
+mysql> create database levlabblogdb;
+mysql> GRANT ALL PRIVILEGES ON levlabblogdb.* TO "LevLabBlog"@"localhost" IDENTIFIED BY "b5DXFPwzIP";
+mysql> FLUSH PRIVILEGES;
+
+wordpress U: levlabadmin ; P: sea7N5V
+
+For larger attachments, need to increase limits:
+PHPSEC_POST_MAXLIMIT = 1024*256 = 262144M  php upper limit
+
+/etc/php.ini
+; Maximum size of POST data that PHP will accept.
+post_max_size = 260000M
+
+; Maximum allowed size for uploaded files.
+upload_max_filesize = 260000M
+
+; Resource Limits ;
+max_execution_time = 30     ; Maximum execution time of each script, in seconds
+max_input_time = 60 ; Maximum amount of time each script may spend parsing request data
+memory_limit = 16M      ; Maximum amount of memory a script may consume
+
+chgrp apache /home/abergman/public_html/wp-content
+chmod 775 /home/abergman/public_html/wp-content
+
+---------------------------
+/etc/httpd/conf/httpd.conf
+
+ServerName 128.220.136.155
+
+#Needs ~userid chmod 711
+#Needs chmod 755 ~userid/public_html
+<IfModule mod_userdir.c>
+    UserDir public_html
+    UserDir disabled root
+</IfModule>
+
+htdigest -c /var/www/.digest_pw private levlabuser
+
+<Directory "/">
+  Options FollowSymLinks
+  AllowOverride None
+
+  AuthType Digest
+  AuthName "private"
+  AuthDigestDomain http://128.220.136.155/
+  AuthDigestProvider file
+  AuthUserFile /var/www/.digest_pw
+  Require valid-user
+</Directory>
+<Directory "/home/*/public_html/public_data">
+  Options Indexes
+  IndexOptions FancyIndexing FoldersFirst
+  Dav On
+</Directory>
+
+
+service httpd restart
+-----------------------------------
+install mysql administrator
+-----------------------------------
+wordpress
+
+Membership > 
+
+Users > Your Profile > Nickname = Adriel, Display name publicly = Adriel
+-----------------------------------
+
+[homes]
+        comment = Home Directories
+        browseable = no
+        writable = yes
+        valid users = %S
+
+
+[printers]
+        comment = All Printers
+        path = /var/spool/samba
+        browseable = no
+;       guest ok = no
+;       writable = No
+        printable = no
+
+[root@Lunchbox samba]# testparm
+[root@Lunchbox samba]# chkconfig --level 345 smb on
+[root@Lunchbox samba]# chkconfig --list smb
+smb             0:off   1:off   2:off   3:on    4:on    5:on    6:off
+
+[root@Lunchbox ~]# smbpasswd -a abergman
+New SMB password:
+Retype new SMB password:
+Added user abergman.
+-----------------------------------
+emacs /etc/inittab
+change the runlevel from 5 to 3 (multiuser, no X11)
+id:3:initdefault:
+
+Device node is setup:
+[root@Lunchbox dev]# grep aac /proc/devices
+253 aac
+[root@Lunchbox dev]# cd /dev
+[root@Lunchbox dev]# mknod afa0 c 253 0
+
+Double check that the major number in 'grep aac /proc/devices' matches 'ls
+-l /dev/afa0'.
+[root@Lunchbox dev]# ll afa0
+crw-r--r-- 1 root root 253, 0 Sep 25 12:41 afa0
+
+[root@Lunchbox tmp]# /sbin/lsmod |grep aac
+aacraid                67657  2
+scsi_mod              141717  5 scsi_dh,sg,libata,aacraid,sd_mod
+
+----------------------------------------------
+Mounting Lunchbox
+chmod 6755 /sbin/mount.cifs
+chmod 6755 /sbin/umount.cifs
+
+In mounticebox:
+USERNAME=$1
+PASS=$2
+mkdir -p ~/icebox/Home
+mkdir -p ~/icebox/Pub
+/sbin/mount.cifs //128.220.136.25/Home ~/icebox/Home -o username=$USERNAME,password=$PASS,uid=$USER,gid=$USER
+/sbin/mount.cifs //128.220.136.25/Pub ~/icebox/Pub  -o username=$USERNAME,password=$PASS,uid=$USER,gid=$USER
+-----------------------------------------------
+
+

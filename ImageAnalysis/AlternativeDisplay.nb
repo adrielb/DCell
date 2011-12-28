@@ -1,0 +1,268 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      7203,        203]*)
+(*NotebookOutlinePosition[      7887,        227]*)
+(*  CellTagsIndexPosition[      7843,        223]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(Needs["\<Graphics`Graphics`\>"]\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[{
+    \(\($IMAGESIZE = {1000, 1500};\)\), "\[IndentingNewLine]", 
+    \(\($IMAGEARRAYSIZE = {1000, 1500};\)\), "\[IndentingNewLine]", 
+    \(Off[General::"\<spell\>"]\), "\n", 
+    \(Off[General::"\<spell1\>"]\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[GraphicsArray, GraphicsSpacing \[Rule] 0, 
+        ImageSize \[RuleDelayed] $IMAGEARRAYSIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[DensityPlot, PlotRange \[Rule] All, Mesh \[Rule] False, 
+        PlotPoints \[Rule] 100, 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[Plot3D, ImageSize \[RuleDelayed] $IMAGESIZE, 
+        PlotRange \[Rule] All];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[ListDensityPlot, PlotRange \[Rule] All, 
+        Mesh \[Rule] False, Frame \[Rule] False, 
+        AspectRatio \[Rule] Automatic, 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[ListPlot3D, PlotRange \[Rule] All, 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[Graphics`Graphics`Histogram, 
+        Graphics`Graphics`BarEdges \[Rule] False, 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[ListPlot, Axes \[Rule] False, Frame \[Rule] True, 
+        PlotRange \[Rule] All, 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[Plot, PlotRange \[Rule] All, \ 
+        ImageSize \[RuleDelayed] $IMAGESIZE];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(\(SetOptions[ListContourPlot, ContourShading \[Rule] None, 
+        Contours \[Rule] {0}, ContourStyle \[Rule] Red];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{
+        StyleBox[
+          RowBox[{"Unpr", 
+            StyleBox["otect",
+              FormatType->StandardForm]}]], 
+        StyleBox["[",
+          FormatType->StandardForm], 
+        StyleBox["AltDisplayFunction",
+          FormatType->StandardForm], 
+        StyleBox["]",
+          FormatType->StandardForm]}], 
+      StyleBox[";",
+        FormatType->StandardForm]}], "\[IndentingNewLine]", 
+    StyleBox[\(AltDisplayFunction[
+            gr : \((_Graphics | _Graphics3D | _SurfaceGraphics | \
+_DensityGraphics | _ContourGraphics | _GraphicsArray)\)] := 
+          Module[{}, \[IndentingNewLine]NotebookWrite[nbAltDisp, 
+              Cell[GraphicsData["\<PostScript\>", 
+                  DisplayString[
+                    gr]], "\<Graphics\>"]]; \[IndentingNewLine]gr\
+\[IndentingNewLine]];\),
+      FormatType->
+        StandardForm], "\[IndentingNewLine]", \(AltDisplayFunction[___] := 
+        Print["\<ERROR AltDisplayFunction\>"];\), "\[IndentingNewLine]", 
+    RowBox[{
+      StyleBox[\(Protect[AltDisplayFunction];\),
+        FormatType->StandardForm], 
+      "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+    StyleBox[\($DisplayFunction = AltDisplayFunction;\),
+      FormatType->StandardForm]}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    \(clear := \((\[IndentingNewLine]SelectionMove[nbAltDisp, All, 
+          Notebook]; \[IndentingNewLine]SetSelectedNotebook[
+          nbAltDisp];)\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[{\(Unprotect[ani];\), "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{
+        StyleBox["ani",
+          FormatType->StandardForm], 
+        StyleBox["=",
+          
+          FormatType->
+            StandardForm], \(DisplayFunction \[Rule] \((NotebookWrite[
+                nbAltDisp, 
+                Cell[GraphicsData["\<PostScript\>", 
+                    DisplayString[#]], "\<Graphics\>"]] &)\)\)}], 
+      ";"}], "\[IndentingNewLine]", \(Protect[ani];\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[{
+    RowBox[{\(Unprotect[nbAltDisp];\), "\[IndentingNewLine]", 
+      RowBox[{"(*", 
+        StyleBox[\(nbAltDisp = 
+              NotebookPut[
+                Import[StringReplace[
+                    Environment["\<ALT_DISP\>"], "\<.m\>" -> \
+"\<Notebook.nb\>"]]];\),
+          FormatType->StandardForm], 
+        StyleBox["*)",
+          FormatType->StandardForm]}]}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"Module", "[", 
+        RowBox[{\({env}\), ",", "\[IndentingNewLine]", 
+          
+          RowBox[{\(env = Environment["\<ALT_DISP\>"]\), ";", 
+            "\[IndentingNewLine]", \(If[
+              env === $Failed, \[IndentingNewLine]$DisplayFunction = 
+                Identity; \[IndentingNewLine]Return[]]\), ";", 
+            "\[IndentingNewLine]", 
+            
+            StyleBox[\(nbAltDisp = 
+                NotebookOpen[
+                  StringReplace[env, "\<.m\>" -> "\<Notebook.nb\>"]]\),
+              FormatType->StandardForm], 
+            StyleBox[";",
+              FormatType->StandardForm]}]}], "\[IndentingNewLine]", "]"}], 
+      ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{
+        StyleBox["Protect",
+          FormatType->StandardForm], 
+        StyleBox["[",
+          FormatType->StandardForm], "nbAltDisp", "]"}], ";"}]}], "Input",
+  InitializationCell->True]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{1192, 1548},
+WindowMargins->{{Automatic, 0}, {0, Automatic}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 92, 2, 27, "Input",
+  InitializationCell->True],
+Cell[1849, 55, 264, 5, 75, "Input",
+  InitializationCell->True],
+Cell[2116, 62, 169, 3, 27, "Input",
+  InitializationCell->True],
+Cell[2288, 67, 211, 4, 27, "Input",
+  InitializationCell->True],
+Cell[2502, 73, 153, 3, 27, "Input",
+  InitializationCell->True],
+Cell[2658, 78, 252, 5, 27, "Input",
+  InitializationCell->True],
+Cell[2913, 85, 157, 3, 27, "Input",
+  InitializationCell->True],
+Cell[3073, 90, 202, 4, 27, "Input",
+  InitializationCell->True],
+Cell[3278, 96, 204, 4, 27, "Input",
+  InitializationCell->True],
+Cell[3485, 102, 153, 3, 27, "Input",
+  InitializationCell->True],
+Cell[3641, 107, 179, 3, 27, "Input",
+  InitializationCell->True],
+Cell[3823, 112, 1298, 32, 171, "Input",
+  InitializationCell->True],
+Cell[5124, 146, 208, 4, 59, "Input",
+  InitializationCell->True],
+Cell[5335, 152, 517, 13, 59, "Input",
+  InitializationCell->True],
+Cell[5855, 167, 1344, 34, 171, "Input",
+  InitializationCell->True]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

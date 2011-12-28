@@ -1,0 +1,729 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     19873,        571]*)
+(*NotebookOutlinePosition[     20569,        596]*)
+(*  CellTagsIndexPosition[     20525,        592]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Init", "Subsection"],
+
+Cell[BoxData[
+    \(<< Graphics`Graphics`\)], "Input"],
+
+Cell[BoxData[
+    \(\(SetOptions[ListDensityPlot, PlotRange \[Rule] All, 
+        Mesh \[Rule] False, AspectRatio \[Rule] Automatic, 
+        ImageSize \[Rule] 500];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(SetOptions[Histogram, BarEdges \[Rule] False, 
+        ImageSize \[Rule] 500];\)\)], "Input"],
+
+Cell[BoxData[{
+    StyleBox[\(nb = 
+        NotebookCreate[]; \ $DisplayFunction\  = \ \((NotebookWrite[nb, 
+              Cell[GraphicsData["\<PostScript\>", 
+                  DisplayString[#]], "\<Graphics\>"]]; \
+\[IndentingNewLine]SelectionMove[nb, All, 
+              Notebook]; \[IndentingNewLine]SetSelectedNotebook[
+              nb];\[IndentingNewLine])\) &;\),
+      FormatType->StandardForm], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{
+        StyleBox["ani",
+          FormatType->StandardForm], 
+        StyleBox["=",
+          
+          FormatType->StandardForm], \(NotebookWrite[nb, 
+            Cell[GraphicsData["\<PostScript\>", 
+                DisplayString[#]], "\<Graphics\>"]] &\)}], ";"}]}], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Loading Joanne's Phase", "Subsection"],
+
+Cell[BoxData[
+    \(\(If[\[IndentingNewLine]$OperatingSystem == "\<Unix\>", \
+\[IndentingNewLine]\(SetDirectory["\</home/abergman/Research/Image \
+Analysis/\>"];\), \[IndentingNewLine]\(SetDirectory["\<C:\\Documents and \
+Settings\\Adriel\\My Documents\\Research\\Image Analysis\\\>"];\)\
+\[IndentingNewLine]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(imgs = 
+      Import["\<Mel10 0.1% Serum Control in dish 20x - Position \
+4-Phase.tif\>"]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(imgs\\)\\\" is similar to existing symbol \\\
+\"\\!\\(img\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\
+\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False], ",", 
+        TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+          False,
+          Editable->False]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(Histogram[Flatten@imgs[\([30, 1, 1]\)]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[Sign[imgs[\([30, 1, 1]\)] - 70.5], 
+      PlotRange \[Rule] All]\)], "Input"],
+
+Cell[BoxData[
+    \(\(crop = \(Take[#[\([1, 1]\)], {\(-70\), 60} + 290, {\(-30\), 50} + 
+                370] &\) /@ imgs;\)\)], "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["Loading WF38 Phase", "Subsection"],
+
+Cell[BoxData[
+    \(\(SetDirectory["\<C:\\Documents and Settings\\Adriel\\My Documents\\My \
+Pictures\\WF38 5inch\\\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(SetDirectory["\<\\\\128.220.136.25\\Home\\adriel\\Working copy\\WF38 \
+5inch\\\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(img = Import["\<wf380028.tif.jpg\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Show[img]\)], "Input"],
+
+Cell[BoxData[{
+    \(\(crop = 
+        CropBox[img[\([1, 1]\)], {819.005, 775.887}, 
+          50];\)\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[crop]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(crop = 
+        Function[
+            i, \[IndentingNewLine]img = 
+              Import["\<wf3800\>" <> 
+                  If[i \[GreaterEqual] 10, 
+                    ToString[i], "\<0\>" <> 
+                      ToString[
+                        i]] <> "\<.tif.jpg\>"]; \[IndentingNewLine]CropBox[
+              img[\([1, 1]\)], {819.005, 775.887}, 50]\[IndentingNewLine]] /@ 
+          Range[0, 28];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(ListDensityPlot[#, DisplayFunction \[Rule] ani] &\) /@ 
+      crop\)], "Input"],
+
+Cell[BoxData[
+    \(\(Histogram[Flatten[#], DisplayFunction \[Rule] ani, 
+          HistogramRange \[Rule] {30, 255}] &\) /@ crop\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(ListDensityPlot[\(-Sign[# - 75.5]\), 
+          DisplayFunction \[Rule] ani] &\) /@ crop\)], "Input"],
+
+Cell[BoxData[
+    \({Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, 
+      Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, Null, 
+      Null, Null, Null, Null, Null, Null}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(img = crop;\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(edge = \(-Clip[crop, {10, 79}]\);\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[\(-Sign[crop - 75]\)]\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Code", "Subsection"],
+
+Cell[BoxData[
+    \(\(img = crop[\([1]\)];\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[img]\)], "Input"],
+
+Cell[BoxData[
+    \(\(Histogram[Flatten@img];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Max[img] - Min[img]\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[imgs[\([30, 1, 1]\)], 
+      ColorFunction \[Rule] \((If[# <  .15, Hue[1], 
+              Hue[0, 0, #]] &)\)]\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[Sign[img - 112.5]]\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[Clip[img, {80, 112}]]\)], "Input"],
+
+Cell[BoxData[
+    \(\(edge = \(If[# > 112.5, # - 112. , 4 \((112 - #)\)] &\) /@ 
+            Flatten[img] // 
+          Partition[#, Length[img[\([1]\)]]] &;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(112 - Min[img]\)], "Input"],
+
+Cell[BoxData[
+    \(26\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(226. /26\)], "Input"],
+
+Cell[BoxData[
+    \(8.692307692307693`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(Histogram[Sqrt@\(Flatten@Abs[img - 112]\)];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(edge = Sqrt@Abs[img - 112. ];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(edge = 
+        BlockFunc[
+          Function[
+            pp, \[IndentingNewLine]pp[\([2, 2]\)] - 
+              Min[pp]\[IndentingNewLine]], 3, MirrorBC[img]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(edge = CentralDifference[MirrorBC@Abs[img - 112. ]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Dimensions[img]\), "\[IndentingNewLine]", 
+    \(Dimensions[edge]\)}], "Input"],
+
+Cell[BoxData[
+    \({101, 101}\)], "Output"],
+
+Cell[BoxData[
+    \({101, 101}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[edge]\)], "Input"],
+
+Cell[BoxData[{
+    \(\({f, fx, fy, fxi, fyi} = 
+        NormalizeEdgeMap[MirrorBC@edge];\)\), "\[IndentingNewLine]", 
+    \(\(ui = fxi;\)\), "\n", 
+    \(\(vi = fyi;\)\)}], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[fx]\)], "Input"],
+
+Cell[BoxData[{
+    \(\({u, v} = CalcGVFMatrices[fx, fy];\)\), "\n", 
+    \(\({ui, 
+          vi} = \(ListInterpolation[Transpose[#]] &\) /@ {u, 
+            v};\)\)}], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[v]\)], "Input"],
+
+Cell[BoxData[
+    \(\(path = 
+        Transpose@{{55.7685, 17.6828}, {75.6417, 31.0805}, {41.7009, 
+              78.4189}, {19.1482, 74.3996}};\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(path = Reparameterize[path[\([1]\)], path[\([2]\)], 1];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Block[{$DisplayFunction = Identity}, \[IndentingNewLine]\(p = 
+          ListDensityPlot[edge];\)\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \(Show@
+      Block[{$DisplayFunction = Identity}, \[IndentingNewLine]DisplayTogether[
+          p, ListPlot[newpath\[Transpose] , 
+            PlotStyle \[Rule] Hue[0]]]]\)], "Input"],
+
+Cell[BoxData[
+    \(SnakeMonitor[newpath, 0, 1, 50]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sparser@Length[newpath[\([1]\)]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(LinearSolveFunction[{250, 250}, "<>"]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(1600\ 10\)], "Input"],
+
+Cell[BoxData[
+    \(16000\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(AbsoluteTiming[\[IndentingNewLine]\(newpath = 
+          func[path, ui, vi, 200];\)\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({2.921875`7.917206626048585\ Second, Null}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Segment Reparameterization", "Subsection"],
+
+Cell[BoxData[
+    \(\(ReparameterizeSegment = 
+        Function[
+          seg, \[IndentingNewLine]{x, y} = seg; \[IndentingNewLine]xi = 
+            Interpolation[x, 
+              InterpolationOrder \[Rule] 1]; \[IndentingNewLine]yi = 
+            Interpolation[y, 
+              InterpolationOrder \[Rule] 
+                1]; \[IndentingNewLine]distances = \@\(\((Most@x - \
+Rest@x)\)^2 + \((Most@y - Rest@y)\)^2\); \[IndentingNewLine]s = \
+\(Interpolation[Thread[{FoldList[Plus, 0, distances], Range[Length[x]]}], 
+                InterpolationOrder \[Rule] 1]\)[
+              Range[0.5, Total[distances], 0.5]]; \[IndentingNewLine]{xi[s], 
+            yi[s]}\[IndentingNewLine]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(s\)], "Input"],
+
+Cell[BoxData[
+    \({1, 1.0353553390593273`, 1.0707106781186546`, 1.1060660171779821`, 
+      1.1414213562373094`, 1.176776695296637`, 1.2121320343559643`, 
+      1.2474873734152916`, 1.282842712474619`, 1.3181980515339462`, 
+      1.3535533905932737`, 1.3889087296526013`, 1.4242640687119286`, 
+      1.4596194077712559`, 1.4949747468305832`, 1.5303300858899105`, 
+      1.565685424949238`, 1.6010407640085653`, 1.6363961030678928`, 
+      1.6717514421272202`, 1.7071067811865475`, 1.7424621202458748`, 
+      1.7778174593052023`, 1.8131727983645296`, 1.848528137423857`, 
+      1.8838834764831844`, 1.9192388155425117`, 1.954594154601839`, 
+      1.9899494936611666`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(seg1 = {{0, 0}, {10, 10}}\[Transpose] \)], "Input"],
+
+Cell[BoxData[
+    \(\(seg2 = {{10, 10}, {0, 0}}\[Transpose] ;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(seg1 = ReparameterizeSegment[seg1]\), "\[IndentingNewLine]", 
+    \(seg2 = ReparameterizeSegment[seg2]\)}], "Input"],
+
+Cell[BoxData[
+    \({{0.35355339059327306`, 0.7071067811865461`, 1.060660171779821`, 
+        1.414213562373094`, 1.7677669529663689`, 2.121320343559643`, 
+        2.474873734152916`, 2.828427124746189`, 3.181980515339462`, 
+        3.5355339059327378`, 3.8890872965260126`, 4.242640687119286`, 
+        4.596194077712559`, 4.949747468305832`, 5.303300858899105`, 
+        5.65685424949238`, 6.010407640085653`, 6.3639610306789285`, 
+        6.7175144212722016`, 7.071067811865475`, 7.424621202458748`, 
+        7.778174593052023`, 8.131727983645296`, 8.48528137423857`, 
+        8.838834764831844`, 9.192388155425117`, 9.54594154601839`, 
+        9.899494936611665`}, {0.35355339059327306`, 0.7071067811865461`, 
+        1.060660171779821`, 1.414213562373094`, 1.7677669529663689`, 
+        2.121320343559643`, 2.474873734152916`, 2.828427124746189`, 
+        3.181980515339462`, 3.5355339059327378`, 3.8890872965260126`, 
+        4.242640687119286`, 4.596194077712559`, 4.949747468305832`, 
+        5.303300858899105`, 5.65685424949238`, 6.010407640085653`, 
+        6.3639610306789285`, 6.7175144212722016`, 7.071067811865475`, 
+        7.424621202458748`, 7.778174593052023`, 8.131727983645296`, 
+        8.48528137423857`, 8.838834764831844`, 9.192388155425117`, 
+        9.54594154601839`, 9.899494936611665`}}\)], "Output"],
+
+Cell[BoxData[
+    \({{9.646446609406727`, 9.292893218813452`, 8.939339828220179`, 
+        8.585786437626904`, 8.232233047033631`, 7.878679656440357`, 
+        7.525126265847083`, 7.17157287525381`, 6.818019484660536`, 
+        6.464466094067262`, 6.110912703473988`, 5.757359312880715`, 
+        5.403805922287441`, 5.050252531694167`, 4.696699141100894`, 
+        4.34314575050762`, 3.989592359914347`, 3.636038969321073`, 
+        3.2824855787277984`, 2.928932188134524`, 2.5753787975412497`, 
+        2.2218254069479757`, 1.8682720163547015`, 1.5147186257614271`, 
+        1.1611652351681532`, 0.8076118445748788`, 0.45405845398160444`, 
+        0.1005050633883342`}, {9.646446609406727`, 9.292893218813452`, 
+        8.939339828220179`, 8.585786437626904`, 8.232233047033631`, 
+        7.878679656440357`, 7.525126265847083`, 7.17157287525381`, 
+        6.818019484660536`, 6.464466094067262`, 6.110912703473988`, 
+        5.757359312880715`, 5.403805922287441`, 5.050252531694167`, 
+        4.696699141100894`, 4.34314575050762`, 3.989592359914347`, 
+        3.636038969321073`, 3.2824855787277984`, 2.928932188134524`, 
+        2.5753787975412497`, 2.2218254069479757`, 1.8682720163547015`, 
+        1.5147186257614271`, 1.1611652351681532`, 0.8076118445748788`, 
+        0.45405845398160444`, 0.1005050633883342`}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(start = 2;\)\), "\[IndentingNewLine]", 
+    \(\(len = Length[seg1[\([1]\)]] - 1;\)\), "\[IndentingNewLine]", 
+    \({\[IndentingNewLine]Map[{#, #} &, 
+        Range[start, len]], \[IndentingNewLine]Map[{#, # + 1} &, 
+        Range[start, len - 1]], \[IndentingNewLine]Map[{# + 1, #} &, 
+        Range[start, len - 1]]\[IndentingNewLine]}\)}], "Input"],
+
+Cell[BoxData[
+    \({{{2, 2}, {3, 3}, {4, 4}, {5, 5}, {6, 6}, {7, 7}, {8, 8}, {9, 9}, {10, 
+          10}, {11, 11}, {12, 12}, {13, 13}, {14, 14}, {15, 15}, {16, 
+          16}, {17, 17}, {18, 18}, {19, 19}, {20, 20}, {21, 21}, {22, 
+          22}, {23, 23}, {24, 24}, {25, 25}, {26, 26}, {27, 27}, {28, 
+          28}}, {{2, 3}, {3, 4}, {4, 5}, {5, 6}, {6, 7}, {7, 8}, {8, 9}, {9, 
+          10}, {10, 11}, {11, 12}, {12, 13}, {13, 14}, {14, 15}, {15, 
+          16}, {16, 17}, {17, 18}, {18, 19}, {19, 20}, {20, 21}, {21, 
+          22}, {22, 23}, {23, 24}, {24, 25}, {25, 26}, {26, 27}, {27, 
+          28}}, {{3, 2}, {4, 3}, {5, 4}, {6, 5}, {7, 6}, {8, 7}, {9, 8}, {10, 
+          9}, {11, 10}, {12, 11}, {13, 12}, {14, 13}, {15, 14}, {16, 
+          15}, {17, 16}, {18, 17}, {19, 18}, {20, 19}, {21, 20}, {22, 
+          21}, {23, 22}, {24, 23}, {25, 24}, {26, 25}, {27, 26}, {28, 
+          27}}}\)], "Output"]
+}, Open  ]]
+}, Closed]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+AutoGeneratedPackage->None,
+WindowSize->{632, 926},
+WindowMargins->{{0, Automatic}, {Automatic, 26}},
+ShowSelection->True,
+Magnification->1
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 26, 0, 38, "Subsection"],
+Cell[1805, 55, 54, 1, 30, "Input"],
+Cell[1862, 58, 180, 3, 50, "Input"],
+Cell[2045, 63, 115, 2, 30, "Input"],
+Cell[2163, 67, 735, 17, 210, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[2935, 89, 44, 0, 30, "Subsection"],
+Cell[2982, 91, 325, 5, 150, "Input"],
+
+Cell[CellGroupData[{
+Cell[3332, 100, 122, 3, 50, "Input"],
+Cell[3457, 105, 355, 5, 37, "Message"],
+Cell[3815, 112, 4400, 107, 143, "Output"]
+}, Open  ]],
+Cell[8230, 222, 77, 1, 30, "Input"],
+Cell[8310, 225, 113, 2, 30, "Input"],
+Cell[8426, 229, 137, 2, 30, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[8600, 236, 40, 0, 30, "Subsection"],
+Cell[8643, 238, 135, 2, 59, "Input"],
+Cell[8781, 242, 120, 2, 43, "Input"],
+Cell[8904, 246, 74, 1, 27, "Input"],
+Cell[8981, 249, 42, 1, 27, "Input"],
+Cell[9026, 252, 170, 4, 43, "Input"],
+Cell[9199, 258, 441, 10, 91, "Input"],
+Cell[9643, 270, 101, 2, 27, "Input"],
+Cell[9747, 274, 142, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[9914, 280, 123, 2, 27, "Input"],
+Cell[10040, 284, 222, 3, 59, "Output"]
+}, Open  ]],
+Cell[10277, 290, 48, 1, 27, "Input"],
+Cell[10328, 293, 70, 1, 27, "Input"],
+Cell[10401, 296, 70, 1, 27, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10508, 302, 26, 0, 38, "Subsection"],
+Cell[10537, 304, 57, 1, 27, "Input"],
+Cell[10597, 307, 53, 1, 27, "Input"],
+Cell[10653, 310, 60, 1, 27, "Input"],
+Cell[10716, 313, 52, 1, 27, "Input"],
+Cell[10771, 316, 158, 3, 43, "Input"],
+Cell[10932, 321, 67, 1, 27, "Input"],
+Cell[11002, 324, 70, 1, 27, "Input"],
+Cell[11075, 327, 172, 3, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[11272, 334, 47, 1, 27, "Input"],
+Cell[11322, 337, 36, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11395, 343, 41, 1, 27, "Input"],
+Cell[11439, 346, 52, 1, 27, "Output"]
+}, Open  ]],
+Cell[11506, 350, 80, 1, 27, "Input"],
+Cell[11589, 353, 66, 1, 27, "Input"],
+Cell[11658, 356, 198, 5, 59, "Input"],
+Cell[11859, 363, 89, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[11973, 368, 100, 2, 43, "Input"],
+Cell[12076, 372, 44, 1, 27, "Output"],
+Cell[12123, 375, 44, 1, 27, "Output"]
+}, Open  ]],
+Cell[12182, 379, 54, 1, 27, "Input"],
+Cell[12239, 382, 181, 4, 59, "Input"],
+Cell[12423, 388, 52, 1, 27, "Input"],
+Cell[12478, 391, 176, 4, 43, "Input"],
+Cell[12657, 397, 51, 1, 27, "Input"],
+Cell[12711, 400, 159, 3, 43, "Input"],
+Cell[12873, 405, 92, 1, 27, "Input"],
+Cell[12968, 408, 150, 2, 59, "Input"],
+Cell[13121, 412, 202, 4, 43, "Input"],
+Cell[13326, 418, 64, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[13415, 423, 65, 1, 27, "Input"],
+Cell[13483, 426, 115, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13635, 434, 41, 1, 27, "Input"],
+Cell[13679, 437, 39, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13755, 443, 136, 2, 59, "Input"],
+Cell[13894, 447, 76, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14019, 454, 48, 0, 38, "Subsection"],
+Cell[14070, 456, 701, 13, 214, "Input"],
+
+Cell[CellGroupData[{
+Cell[14796, 473, 34, 1, 30, "Input"],
+Cell[14833, 476, 683, 10, 86, "Output"]
+}, Open  ]],
+Cell[15531, 489, 71, 1, 30, "Input"],
+Cell[15605, 492, 76, 1, 30, "Input"],
+
+Cell[CellGroupData[{
+Cell[15706, 497, 137, 2, 50, "Input"],
+Cell[15846, 501, 1330, 19, 162, "Output"],
+Cell[17179, 522, 1336, 19, 162, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18552, 546, 374, 6, 150, "Input"],
+Cell[18929, 554, 916, 13, 238, "Output"]
+}, Open  ]]
+}, Closed]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

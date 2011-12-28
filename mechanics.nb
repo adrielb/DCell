@@ -1,0 +1,738 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     25699,        666]*)
+(*NotebookOutlinePosition[     26329,        688]*)
+(*  CellTagsIndexPosition[     26285,        684]*)
+(*WindowFrame->Generic*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+    \(\(V = {u[x, y, z], v[x, y, z], 
+          w[x, y, z]};\)\), "\[IndentingNewLine]", 
+    \(\(gv = D[V, {{x, y, z}}]\[Transpose] ;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[gv]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{
+                SuperscriptBox["u", 
+                  TagBox[\((1, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["v", 
+                  TagBox[\((1, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["w", 
+                  TagBox[\((1, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}]},
+            {
+              RowBox[{
+                SuperscriptBox["u", 
+                  TagBox[\((0, 1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["v", 
+                  TagBox[\((0, 1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["w", 
+                  TagBox[\((0, 1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}]},
+            {
+              RowBox[{
+                SuperscriptBox["u", 
+                  TagBox[\((0, 0, 1)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["v", 
+                  TagBox[\((0, 0, 1)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+              RowBox[{
+                SuperscriptBox["w", 
+                  TagBox[\((0, 0, 1)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(x, y, z\), "]"}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(EE = \(1\/2\) gv + \(1\/2\) 
+            gv\[Transpose] ;\)\), "\[IndentingNewLine]", 
+    \(\(T = 2  \[Mu]\ EE // FullSimplify;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[T]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{"2", " ", "\[Mu]", " ", 
+                RowBox[{
+                  SuperscriptBox["u", 
+                    TagBox[\((1, 0, 0)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}]},
+            {
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"2", " ", "\[Mu]", " ", 
+                RowBox[{
+                  SuperscriptBox["v", 
+                    TagBox[\((0, 1, 0)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}]},
+            {
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"2", " ", "\[Mu]", " ", 
+                RowBox[{
+                  SuperscriptBox["w", 
+                    TagBox[\((0, 0, 1)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(x, y, z\), "]"}]}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\[Sigma] = \(-p[x, y, z]\) IdentityMatrix[3] + 
+          T;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[\[Sigma]]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              RowBox[{\(-p[x, y, z]\), "+", 
+                RowBox[{"2", " ", "\[Mu]", " ", 
+                  RowBox[{
+                    SuperscriptBox["u", 
+                      TagBox[\((1, 0, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(x, y, z\), "]"}]}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}]},
+            {
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{\(-p[x, y, z]\), "+", 
+                RowBox[{"2", " ", "\[Mu]", " ", 
+                  RowBox[{
+                    SuperscriptBox["v", 
+                      TagBox[\((0, 1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(x, y, z\), "]"}]}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}]},
+            {
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["u", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{"\[Mu]", " ", 
+                RowBox[{"(", 
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox["v", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}], 
+                    "+", 
+                    RowBox[{
+                      SuperscriptBox["w", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  ")"}]}], 
+              RowBox[{\(-p[x, y, z]\), "+", 
+                RowBox[{"2", " ", "\[Mu]", " ", 
+                  RowBox[{
+                    SuperscriptBox["w", 
+                      TagBox[\((0, 0, 1)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(x, y, z\), "]"}]}]}]}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(NS = \(Inner[D, \[Sigma], {x, y, z}] // FullSimplify\) // 
+        MatrixForm\), "\[IndentingNewLine]", 
+    \(NS /. subs // MatrixForm\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", 
+        TagBox[GridBox[{
+              {
+                RowBox[{
+                  RowBox[{"-", 
+                    RowBox[{
+                      SuperscriptBox["p", 
+                        TagBox[\((1, 0, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  "+", 
+                  RowBox[{"\[Mu]", " ", 
+                    RowBox[{"(", 
+                      RowBox[{
+                        RowBox[{
+                          SuperscriptBox["u", 
+                            TagBox[\((0, 0, 2)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["u", 
+                            TagBox[\((0, 2, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["w", 
+                            TagBox[\((1, 0, 1)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["v", 
+                            TagBox[\((1, 1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{"2", " ", 
+                          RowBox[{
+                            SuperscriptBox["u", 
+                              TagBox[\((2, 0, 0)\),
+                                Derivative],
+                              MultilineFunction->None], "[", \(x, y, z\), 
+                            "]"}]}]}], ")"}]}]}]},
+              {
+                RowBox[{
+                  RowBox[{"-", 
+                    RowBox[{
+                      SuperscriptBox["p", 
+                        TagBox[\((0, 1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  "+", 
+                  RowBox[{"\[Mu]", " ", 
+                    RowBox[{"(", 
+                      RowBox[{
+                        RowBox[{
+                          SuperscriptBox["v", 
+                            TagBox[\((0, 0, 2)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["w", 
+                            TagBox[\((0, 1, 1)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{"2", " ", 
+                          RowBox[{
+                            SuperscriptBox["v", 
+                              TagBox[\((0, 2, 0)\),
+                                Derivative],
+                              MultilineFunction->None], "[", \(x, y, z\), 
+                            "]"}]}], "+", 
+                        RowBox[{
+                          SuperscriptBox["u", 
+                            TagBox[\((1, 1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["v", 
+                            TagBox[\((2, 0, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), 
+                          "]"}]}], ")"}]}]}]},
+              {
+                RowBox[{
+                  RowBox[{"-", 
+                    RowBox[{
+                      SuperscriptBox["p", 
+                        TagBox[\((0, 0, 1)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(x, y, z\), "]"}]}], 
+                  "+", 
+                  RowBox[{"\[Mu]", " ", 
+                    RowBox[{"(", 
+                      RowBox[{
+                        RowBox[{"2", " ", 
+                          RowBox[{
+                            SuperscriptBox["w", 
+                              TagBox[\((0, 0, 2)\),
+                                Derivative],
+                              MultilineFunction->None], "[", \(x, y, z\), 
+                            "]"}]}], "+", 
+                        RowBox[{
+                          SuperscriptBox["v", 
+                            TagBox[\((0, 1, 1)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["w", 
+                            TagBox[\((0, 2, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["u", 
+                            TagBox[\((1, 0, 1)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), "]"}],
+                         "+", 
+                        RowBox[{
+                          SuperscriptBox["w", 
+                            TagBox[\((2, 0, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(x, y, z\), 
+                          "]"}]}], ")"}]}]}]}
+              },
+            RowSpacings->1,
+            ColumnAlignments->{Left}],
+          Column], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", 
+          TagBox[GridBox[{
+                {\(\(-p\_x\) + \[Mu]\ \((2\ u\_xx + u\_yy + u\_zz + 
+                          v\_{1, 1, 0} + w\_{1, 0, 1})\)\)},
+                {\(\(-p\_y\) + \[Mu]\ \((u\_{1, 1, 0} + v\_xx + 2\ v\_yy + 
+                          v\_zz + w\_{0, 1, 1})\)\)},
+                {\(\(-p\_z\) + \[Mu]\ \((u\_{1, 0, 1} + v\_{0, 1, 1} + 
+                          w\_xx + w\_yy + 2\ w\_zz)\)\)}
+                },
+              RowSpacings->1,
+              ColumnAlignments->{Left}],
+            Column], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"FullForm", "[", 
+      RowBox[{
+        SuperscriptBox["u", 
+          TagBox[\((0, 0, 2)\),
+            Derivative],
+          MultilineFunction->None], "[", \(x, y, z\), "]"}], "]"}]], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      StyleBox[\(\(\(Derivative[0, 0, 2]\)[u]\)[x, y, z]\),
+        ShowSpecialCharacters->False,
+        ShowStringCharacters->True,
+        NumberMarks->True],
+      FullForm]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"subs", "=", 
+        RowBox[{"{", "\[IndentingNewLine]", 
+          
+          RowBox[{\(\(\(Derivative[1, 0, 0]\)[p]\)[x, y, z] \[Rule] p\_x\), 
+            ",", "\[IndentingNewLine]", \(\(\(Derivative[0, 1, 0]\)[p]\)[x, 
+                y, z] \[Rule] p\_y\), ",", 
+            "\[IndentingNewLine]", \(\(\(Derivative[0, 0, 1]\)[p]\)[x, y, 
+                z] \[Rule] p\_z\), ",", "\[IndentingNewLine]", 
+            RowBox[{
+              TagBox[
+                StyleBox[\(\(\(Derivative[a_, b_, c_]\)[u_]\)[x, y, z]\),
+                  ShowSpecialCharacters->False,
+                  ShowStringCharacters->True,
+                  NumberMarks->True],
+                FullForm], 
+              "\[Rule]", \(u\_\(Which[a \[Equal] 2, xx, b \[Equal] 2, yy, 
+                    c \[Equal] 2, zz, True, {a, b, c}]\)\)}]}], 
+          "\[IndentingNewLine]", "}"}]}], ";"}]], "Input"],
+
+Cell[BoxData[{
+    \(\[Sigma] =. \), "\[IndentingNewLine]", 
+    \(Table[\[Sigma]\_\(i, j\), {i, 3}, {j, 3}] // \[IndentingNewLine]Inner[
+        D, Table[\[Sigma]\_\(i, j\), {i, 3}, {j, 3}], {x, y, z}]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Tr[T]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"2", " ", "\[Mu]", " ", 
+        RowBox[{
+          SuperscriptBox["w", 
+            TagBox[\((0, 0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(x, y, z\), "]"}]}], "+", 
+      RowBox[{"2", " ", "\[Mu]", " ", 
+        RowBox[{
+          SuperscriptBox["v", 
+            TagBox[\((0, 1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(x, y, z\), "]"}]}], "+", 
+      RowBox[{"2", " ", "\[Mu]", " ", 
+        RowBox[{
+          SuperscriptBox["u", 
+            TagBox[\((1, 0, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(x, y, z\), "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\[CapitalEpsilon] = {{\[Epsilon]\_{1, 1}[x, y, z], \[Epsilon]\_{1, 2}[
+              x, y, z], \[Epsilon]\_{1, 3}[x, y, z]}, {\[Epsilon]\_{1, 2}[x, 
+              y, z], \[Epsilon]\_{2, 2}[x, y, z], \[Epsilon]\_{2, 3}[x, y, 
+              z]}, {\[Epsilon]\_{1, 3}[x, y, z], \[Epsilon]\_{2, 3}[x, y, 
+              z], \[Epsilon]\_{3, 3}[x, y, z]}};\)\), "\n", 
+    \(MatrixForm[\[CapitalEpsilon]]\), "\[IndentingNewLine]", 
+    \(Inner[D, \[CapitalEpsilon], {x, y, z}] /. subs // 
+      MatrixForm\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Epsilon]\_{1, 1}[x, y, z]\), \(\[Epsilon]\_{1, 2}[x, y, 
+                z]\), \(\[Epsilon]\_{1, 3}[x, y, z]\)},
+            {\(\[Epsilon]\_{1, 2}[x, y, z]\), \(\[Epsilon]\_{2, 2}[x, y, 
+                z]\), \(\[Epsilon]\_{2, 3}[x, y, z]\)},
+            {\(\[Epsilon]\_{1, 3}[x, y, z]\), \(\[Epsilon]\_{2, 3}[x, y, 
+                z]\), \(\[Epsilon]\_{3, 3}[x, y, z]\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", 
+        TagBox[GridBox[{
+              {\(\((\[Epsilon]\_{1, 1})\)\_{1, 0, 0} + \((\[Epsilon]\_{1, 2})\
+\)\_{0, 1, 0} + \((\[Epsilon]\_{1, 3})\)\_{0, 0, 1}\)},
+              {\(\((\[Epsilon]\_{1, 2})\)\_{1, 0, 0} + \((\[Epsilon]\_{2, 2})\
+\)\_{0, 1, 0} + \((\[Epsilon]\_{2, 3})\)\_{0, 0, 1}\)},
+              {\(\((\[Epsilon]\_{1, 3})\)\_{1, 0, 0} + \((\[Epsilon]\_{2, 3})\
+\)\_{0, 1, 0} + \((\[Epsilon]\_{3, 3})\)\_{0, 0, 1}\)}
+              },
+            RowSpacings->1,
+            ColumnAlignments->{Left}],
+          Column], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1550},
+WindowMargins->{{Automatic, 0}, {0, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1777, 53, 213, 4, 76, "Input"],
+Cell[1993, 59, 2139, 56, 96, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4169, 120, 214, 4, 91, "Input"],
+Cell[4386, 126, 4794, 119, 96, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9217, 250, 153, 3, 52, "Input"],
+Cell[9373, 255, 4971, 122, 96, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14381, 382, 170, 3, 53, "Input"],
+Cell[14554, 387, 6046, 138, 96, "Output"],
+Cell[20603, 527, 766, 18, 90, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21406, 550, 222, 6, 33, "Input"],
+Cell[21631, 558, 215, 6, 30, "Output"]
+}, Open  ]],
+Cell[21861, 567, 923, 19, 145, "Input"],
+Cell[22787, 588, 216, 3, 79, "Input"],
+
+Cell[CellGroupData[{
+Cell[23028, 595, 38, 1, 31, "Input"],
+Cell[23069, 598, 690, 19, 32, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23796, 622, 534, 8, 101, "Input"],
+Cell[24333, 632, 660, 14, 90, "Output"],
+Cell[24996, 648, 687, 15, 100, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

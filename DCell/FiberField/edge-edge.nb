@@ -1,0 +1,883 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     24217,        724]*)
+(*NotebookOutlinePosition[     24847,        746]*)
+(*  CellTagsIndexPosition[     24803,        742]*)
+(*WindowFrame->Generic*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[
+    \(Get@Environment["\<ALT_DISP\>"]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Normal", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(X21 = {x21[1], x21[2], x21[3]};\)\), "\[IndentingNewLine]", 
+    \(\(X43 = {x43[1], x43[2], x43[3]};\)\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(x43\\)\\\" is similar to existing symbol \
+\\\"\\!\\(X43\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Cross[X21, X43]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-x21[3]\)\ x43[2] + x21[2]\ x43[3], 
+      x21[3]\ x43[1] - x21[1]\ x43[3], \(-x21[2]\)\ x43[1] + 
+        x21[1]\ x43[2]}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(ToString@\(CForm@#\) &\) /@ Cross[X21, X43]\)], "Input"],
+
+Cell[BoxData[
+    \({"-(x21(3)*x43(2)) + x21(2)*x43(3)", "x21(3)*x43(1) - x21(1)*x43(3)", 
+      "-(x21(2)*x43(1)) + x21(1)*x43(2)"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(StringReplace[%, {"\<(1)\>" \[Rule] "\<.x\>", "\<(2)\>" \[Rule] \
+"\<.y\>", "\<(3)\>" \[Rule] "\<.z\>"}] // TableForm\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {"\<\"-(x21.z*x43.y) + x21.y*x43.z\"\>"},
+          {"\<\"x21.z*x43.x - x21.x*x43.z\"\>"},
+          {"\<\"-(x21.y*x43.x) + x21.x*x43.y\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      TableForm[ {"-(x21.z*x43.y) + x21.y*x43.z", "x21.z*x43.x - x21.x*x43.z",
+         "-(x21.y*x43.x) + x21.x*x43.y"}]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CForm[Norm@Cross[X21, X43] /. Abs \[Rule] Identity]\)], "Input"],
+
+Cell["\<\
+Sqrt(Power(-(x21(2)*x43(1)) + x21(1)*x43(2),2) + \
+Power(x21(3)*x43(1) - x21(1)*x43(3),2) + Power(-(x21(3)*x43(2)) + \
+x21(2)*x43(3),2))\
+\>", "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Collision Detection", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Function[
+          s, \[IndentingNewLine]\(StringReplace["\<Coor cAB = { XA.x - XB.x, \
+XA.y - XB.y, XA.z - XB.z};\n\>", {"\<c\>" \[Rule] s, \ "\<A\>" \[Rule] 
+                    ToString[#[\([1]\)]], "\<B\>" \[Rule] 
+                    ToString[#[\([2]\)]]}] &\) /@ {{2, 1}, {3, 1}, {4, 
+                1}, {4, 3}}] /@ {"\<x\>", "\<v\>"} // StringJoin\)], "Input"],
+
+Cell[BoxData[
+    \("Coor x21 = { X2.x - X1.x, X2.y - X1.y, X2.z - X1.z}\nCoor x31 = { X3.x \
+- X1.x, X3.y - X1.y, X3.z - X1.z}\nCoor x41 = { X4.x - X1.x, X4.y - X1.y, \
+X4.z - X1.z}\nCoor x43 = { X4.x - X3.x, X4.y - X3.y, X4.z - X3.z}\nCoor v21 = \
+{ X2.x - X1.x, X2.y - X1.y, X2.z - X1.z}\nCoor v31 = { X3.x - X1.x, X3.y - \
+X1.y, X3.z - X1.z}\nCoor v41 = { X4.x - X1.x, X4.y - X1.y, X4.z - X1.z}\nCoor \
+v43 = { X4.x - X3.x, X4.y - X3.y, X4.z - X3.z}\n"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(X21 = {x21[1], x21[2], x21[3]};\)\), "\[IndentingNewLine]", 
+    \(\(V21 = {v21[1], v21[2], v21[3]};\)\), "\[IndentingNewLine]", 
+    \(\(X31 = {x31[1], x31[2], x31[3]};\)\), "\[IndentingNewLine]", 
+    \(\(V31 = {v31[1], v31[2], v31[3]};\)\), "\[IndentingNewLine]", 
+    \(\(X41 = {x41[1], x41[2], x41[3]};\)\), "\[IndentingNewLine]", 
+    \(\(V41 = {v41[1], v41[2], v41[3]};\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(equ = \(Cross[X21 + t*V21, X31 + t*V31] . \((X41 + t*V41)\) // 
+          Expand\) // Collect[#, t] &\)], "Input"],
+
+Cell[BoxData[
+    \(t\^3\ \((\(-v21[3]\)\ v31[2]\ v41[1] + v21[2]\ v31[3]\ v41[1] + 
+            v21[3]\ v31[1]\ v41[2] - v21[1]\ v31[3]\ v41[2] - 
+            v21[2]\ v31[1]\ v41[3] + v21[1]\ v31[2]\ v41[3])\) - 
+      x21[3]\ x31[2]\ x41[1] + x21[2]\ x31[3]\ x41[1] + 
+      x21[3]\ x31[1]\ x41[2] - x21[1]\ x31[3]\ x41[2] - 
+      x21[2]\ x31[1]\ x41[3] + x21[1]\ x31[2]\ x41[3] + 
+      t\^2\ \((\(-v31[3]\)\ v41[2]\ x21[1] + v31[2]\ v41[3]\ x21[1] + 
+            v31[3]\ v41[1]\ x21[2] - v31[1]\ v41[3]\ x21[2] - 
+            v31[2]\ v41[1]\ x21[3] + v31[1]\ v41[2]\ x21[3] + 
+            v21[3]\ v41[2]\ x31[1] - v21[2]\ v41[3]\ x31[1] - 
+            v21[3]\ v41[1]\ x31[2] + v21[1]\ v41[3]\ x31[2] + 
+            v21[2]\ v41[1]\ x31[3] - v21[1]\ v41[2]\ x31[3] - 
+            v21[3]\ v31[2]\ x41[1] + v21[2]\ v31[3]\ x41[1] + 
+            v21[3]\ v31[1]\ x41[2] - v21[1]\ v31[3]\ x41[2] - 
+            v21[2]\ v31[1]\ x41[3] + v21[1]\ v31[2]\ x41[3])\) + 
+      t\ \((\(-v41[3]\)\ x21[2]\ x31[1] + v41[2]\ x21[3]\ x31[1] + 
+            v41[3]\ x21[1]\ x31[2] - v41[1]\ x21[3]\ x31[2] - 
+            v41[2]\ x21[1]\ x31[3] + v41[1]\ x21[2]\ x31[3] + 
+            v31[3]\ x21[2]\ x41[1] - v31[2]\ x21[3]\ x41[1] - 
+            v21[3]\ x31[2]\ x41[1] + v21[2]\ x31[3]\ x41[1] - 
+            v31[3]\ x21[1]\ x41[2] + v31[1]\ x21[3]\ x41[2] + 
+            v21[3]\ x31[1]\ x41[2] - v21[1]\ x31[3]\ x41[2] + 
+            v31[2]\ x21[1]\ x41[3] - v31[1]\ x21[2]\ x41[3] - 
+            v21[2]\ x31[1]\ x41[3] + v21[1]\ x31[2]\ x41[3])\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CoefficientList[a\  + \ b\ t\  + \ c\ t\^2 + d\ t\^3, t]\)], "Input"],
+
+Cell[BoxData[
+    \({a, b, c, d}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(coef = CoefficientList[equ, t];\)\), "\[IndentingNewLine]", 
+    \(coef // TableForm\)}], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {\(\(-x21[3]\)\ x31[2]\ x41[1] + x21[2]\ x31[3]\ x41[1] + 
+              x21[3]\ x31[1]\ x41[2] - x21[1]\ x31[3]\ x41[2] - 
+              x21[2]\ x31[1]\ x41[3] + x21[1]\ x31[2]\ x41[3]\)},
+          {\(\(-v41[3]\)\ x21[2]\ x31[1] + v41[2]\ x21[3]\ x31[1] + 
+              v41[3]\ x21[1]\ x31[2] - v41[1]\ x21[3]\ x31[2] - 
+              v41[2]\ x21[1]\ x31[3] + v41[1]\ x21[2]\ x31[3] + 
+              v31[3]\ x21[2]\ x41[1] - v31[2]\ x21[3]\ x41[1] - 
+              v21[3]\ x31[2]\ x41[1] + v21[2]\ x31[3]\ x41[1] - 
+              v31[3]\ x21[1]\ x41[2] + v31[1]\ x21[3]\ x41[2] + 
+              v21[3]\ x31[1]\ x41[2] - v21[1]\ x31[3]\ x41[2] + 
+              v31[2]\ x21[1]\ x41[3] - v31[1]\ x21[2]\ x41[3] - 
+              v21[2]\ x31[1]\ x41[3] + v21[1]\ x31[2]\ x41[3]\)},
+          {\(\(-v31[3]\)\ v41[2]\ x21[1] + v31[2]\ v41[3]\ x21[1] + 
+              v31[3]\ v41[1]\ x21[2] - v31[1]\ v41[3]\ x21[2] - 
+              v31[2]\ v41[1]\ x21[3] + v31[1]\ v41[2]\ x21[3] + 
+              v21[3]\ v41[2]\ x31[1] - v21[2]\ v41[3]\ x31[1] - 
+              v21[3]\ v41[1]\ x31[2] + v21[1]\ v41[3]\ x31[2] + 
+              v21[2]\ v41[1]\ x31[3] - v21[1]\ v41[2]\ x31[3] - 
+              v21[3]\ v31[2]\ x41[1] + v21[2]\ v31[3]\ x41[1] + 
+              v21[3]\ v31[1]\ x41[2] - v21[1]\ v31[3]\ x41[2] - 
+              v21[2]\ v31[1]\ x41[3] + v21[1]\ v31[2]\ x41[3]\)},
+          {\(\(-v21[3]\)\ v31[2]\ v41[1] + v21[2]\ v31[3]\ v41[1] + 
+              v21[3]\ v31[1]\ v41[2] - v21[1]\ v31[3]\ v41[2] - 
+              v21[2]\ v31[1]\ v41[3] + v21[1]\ v31[2]\ v41[3]\)}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      TableForm[ {
+        Plus[ 
+          Times[ -1, 
+            x21[ 3], 
+            x31[ 2], 
+            x41[ 1]], 
+          Times[ 
+            x21[ 2], 
+            x31[ 3], 
+            x41[ 1]], 
+          Times[ 
+            x21[ 3], 
+            x31[ 1], 
+            x41[ 2]], 
+          Times[ -1, 
+            x21[ 1], 
+            x31[ 3], 
+            x41[ 2]], 
+          Times[ -1, 
+            x21[ 2], 
+            x31[ 1], 
+            x41[ 3]], 
+          Times[ 
+            x21[ 1], 
+            x31[ 2], 
+            x41[ 3]]], 
+        Plus[ 
+          Times[ -1, 
+            v41[ 3], 
+            x21[ 2], 
+            x31[ 1]], 
+          Times[ 
+            v41[ 2], 
+            x21[ 3], 
+            x31[ 1]], 
+          Times[ 
+            v41[ 3], 
+            x21[ 1], 
+            x31[ 2]], 
+          Times[ -1, 
+            v41[ 1], 
+            x21[ 3], 
+            x31[ 2]], 
+          Times[ -1, 
+            v41[ 2], 
+            x21[ 1], 
+            x31[ 3]], 
+          Times[ 
+            v41[ 1], 
+            x21[ 2], 
+            x31[ 3]], 
+          Times[ 
+            v31[ 3], 
+            x21[ 2], 
+            x41[ 1]], 
+          Times[ -1, 
+            v31[ 2], 
+            x21[ 3], 
+            x41[ 1]], 
+          Times[ -1, 
+            v21[ 3], 
+            x31[ 2], 
+            x41[ 1]], 
+          Times[ 
+            v21[ 2], 
+            x31[ 3], 
+            x41[ 1]], 
+          Times[ -1, 
+            v31[ 3], 
+            x21[ 1], 
+            x41[ 2]], 
+          Times[ 
+            v31[ 1], 
+            x21[ 3], 
+            x41[ 2]], 
+          Times[ 
+            v21[ 3], 
+            x31[ 1], 
+            x41[ 2]], 
+          Times[ -1, 
+            v21[ 1], 
+            x31[ 3], 
+            x41[ 2]], 
+          Times[ 
+            v31[ 2], 
+            x21[ 1], 
+            x41[ 3]], 
+          Times[ -1, 
+            v31[ 1], 
+            x21[ 2], 
+            x41[ 3]], 
+          Times[ -1, 
+            v21[ 2], 
+            x31[ 1], 
+            x41[ 3]], 
+          Times[ 
+            v21[ 1], 
+            x31[ 2], 
+            x41[ 3]]], 
+        Plus[ 
+          Times[ -1, 
+            v31[ 3], 
+            v41[ 2], 
+            x21[ 1]], 
+          Times[ 
+            v31[ 2], 
+            v41[ 3], 
+            x21[ 1]], 
+          Times[ 
+            v31[ 3], 
+            v41[ 1], 
+            x21[ 2]], 
+          Times[ -1, 
+            v31[ 1], 
+            v41[ 3], 
+            x21[ 2]], 
+          Times[ -1, 
+            v31[ 2], 
+            v41[ 1], 
+            x21[ 3]], 
+          Times[ 
+            v31[ 1], 
+            v41[ 2], 
+            x21[ 3]], 
+          Times[ 
+            v21[ 3], 
+            v41[ 2], 
+            x31[ 1]], 
+          Times[ -1, 
+            v21[ 2], 
+            v41[ 3], 
+            x31[ 1]], 
+          Times[ -1, 
+            v21[ 3], 
+            v41[ 1], 
+            x31[ 2]], 
+          Times[ 
+            v21[ 1], 
+            v41[ 3], 
+            x31[ 2]], 
+          Times[ 
+            v21[ 2], 
+            v41[ 1], 
+            x31[ 3]], 
+          Times[ -1, 
+            v21[ 1], 
+            v41[ 2], 
+            x31[ 3]], 
+          Times[ -1, 
+            v21[ 3], 
+            v31[ 2], 
+            x41[ 1]], 
+          Times[ 
+            v21[ 2], 
+            v31[ 3], 
+            x41[ 1]], 
+          Times[ 
+            v21[ 3], 
+            v31[ 1], 
+            x41[ 2]], 
+          Times[ -1, 
+            v21[ 1], 
+            v31[ 3], 
+            x41[ 2]], 
+          Times[ -1, 
+            v21[ 2], 
+            v31[ 1], 
+            x41[ 3]], 
+          Times[ 
+            v21[ 1], 
+            v31[ 2], 
+            x41[ 3]]], 
+        Plus[ 
+          Times[ -1, 
+            v21[ 3], 
+            v31[ 2], 
+            v41[ 1]], 
+          Times[ 
+            v21[ 2], 
+            v31[ 3], 
+            v41[ 1]], 
+          Times[ 
+            v21[ 3], 
+            v31[ 1], 
+            v41[ 2]], 
+          Times[ -1, 
+            v21[ 1], 
+            v31[ 3], 
+            v41[ 2]], 
+          Times[ -1, 
+            v21[ 2], 
+            v31[ 1], 
+            v41[ 3]], 
+          Times[ 
+            v21[ 1], 
+            v31[ 2], 
+            v41[ 3]]]}]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(StringReplace[\(ToString@\(CForm@#\) &\) /@ 
+          coef, {"\<(1)\>" \[Rule] "\<.x\>", "\<(2)\>" \[Rule] "\<.y\>", \
+"\<(3)\>" \[Rule] "\<.z\>"}] // TableForm\)], "Input"],
+
+Cell[BoxData[
+    InterpretationBox[GridBox[{
+          {"\<\"-(x21.z*x31.y*x41.x) + x21.y*x31.z*x41.x + x21.z*x31.x*x41.y \
+- x21.x*x31.z*x41.y - x21.y*x31.x*x41.z + x21.x*x31.y*x41.z\"\>"},
+          {"\<\"-(v41.z*x21.y*x31.x) + v41.y*x21.z*x31.x + v41.z*x21.x*x31.y \
+- v41.x*x21.z*x31.y - v41.y*x21.x*x31.z + v41.x*x21.y*x31.z + \
+v31.z*x21.y*x41.x - v31.y*x21.z*x41.x - v21.z*x31.y*x41.x + v21.y*x31.z*x41.x \
+- v31.z*x21.x*x41.y + v31.x*x21.z*x41.y + v21.z*x31.x*x41.y - \
+v21.x*x31.z*x41.y + v31.y*x21.x*x41.z - v31.x*x21.y*x41.z - v21.y*x31.x*x41.z \
++ v21.x*x31.y*x41.z\"\>"},
+          {"\<\"-(v31.z*v41.y*x21.x) + v31.y*v41.z*x21.x + v31.z*v41.x*x21.y \
+- v31.x*v41.z*x21.y - v31.y*v41.x*x21.z + v31.x*v41.y*x21.z + \
+v21.z*v41.y*x31.x - v21.y*v41.z*x31.x - v21.z*v41.x*x31.y + v21.x*v41.z*x31.y \
++ v21.y*v41.x*x31.z - v21.x*v41.y*x31.z - v21.z*v31.y*x41.x + \
+v21.y*v31.z*x41.x + v21.z*v31.x*x41.y - v21.x*v31.z*x41.y - v21.y*v31.x*x41.z \
++ v21.x*v31.y*x41.z\"\>"},
+          {"\<\"-(v21.z*v31.y*v41.x) + v21.y*v31.z*v41.x + v21.z*v31.x*v41.y \
+- v21.x*v31.z*v41.y - v21.y*v31.x*v41.z + v21.x*v31.y*v41.z\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      TableForm[ {
+        "-(x21.z*x31.y*x41.x) + x21.y*x31.z*x41.x + x21.z*x31.x*x41.y - \
+x21.x*x31.z*x41.y - x21.y*x31.x*x41.z + x21.x*x31.y*x41.z", 
+        "-(v41.z*x21.y*x31.x) + v41.y*x21.z*x31.x + v41.z*x21.x*x31.y - \
+v41.x*x21.z*x31.y - v41.y*x21.x*x31.z + v41.x*x21.y*x31.z + v31.z*x21.y*x41.x \
+- v31.y*x21.z*x41.x - v21.z*x31.y*x41.x + v21.y*x31.z*x41.x - \
+v31.z*x21.x*x41.y + v31.x*x21.z*x41.y + v21.z*x31.x*x41.y - v21.x*x31.z*x41.y \
++ v31.y*x21.x*x41.z - v31.x*x21.y*x41.z - v21.y*x31.x*x41.z + \
+v21.x*x31.y*x41.z", 
+        "-(v31.z*v41.y*x21.x) + v31.y*v41.z*x21.x + v31.z*v41.x*x21.y - \
+v31.x*v41.z*x21.y - v31.y*v41.x*x21.z + v31.x*v41.y*x21.z + v21.z*v41.y*x31.x \
+- v21.y*v41.z*x31.x - v21.z*v41.x*x31.y + v21.x*v41.z*x31.y + \
+v21.y*v41.x*x31.z - v21.x*v41.y*x31.z - v21.z*v31.y*x41.x + v21.y*v31.z*x41.x \
++ v21.z*v31.x*x41.y - v21.x*v31.z*x41.y - v21.y*v31.x*x41.z + \
+v21.x*v31.y*x41.z", 
+        "-(v21.z*v31.y*v41.x) + v21.y*v31.z*v41.x + v21.z*v31.x*v41.y - \
+v21.x*v31.z*v41.y - v21.y*v31.x*v41.z + v21.x*v31.y*v41.z"}]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(x1 = {0, 1, 0};\)\), "\[IndentingNewLine]", 
+    \(\(x2 = {0, \(-1\), 0};\)\), "\[IndentingNewLine]", 
+    \(\(x3 = {1, 0, 1};\)\), "\[IndentingNewLine]", 
+    \(\(x4 = {1, 0, \(-1\)};\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(X21 = x2 - x1\), "\[IndentingNewLine]", 
+    \(X31 = x3 - x1\), "\[IndentingNewLine]", 
+    \(X41 = x4 - x1\)}], "Input"],
+
+Cell[BoxData[
+    \({0, \(-2\), 0}\)], "Output"],
+
+Cell[BoxData[
+    \({1, \(-1\), 1}\)], "Output"],
+
+Cell[BoxData[
+    \({1, \(-1\), \(-1\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(v1 = {1.0000001, 0, 0};\)\), "\[IndentingNewLine]", 
+    \(\(v2 = {1, 0, 0};\)\), "\[IndentingNewLine]", 
+    \(\(v3 = {1, 0, 0};\)\), "\[IndentingNewLine]", 
+    \(\(v4 = {1, 0, 0};\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(V21 = v2 - v1\), "\[IndentingNewLine]", 
+    \(V31 = v3 - v1\), "\[IndentingNewLine]", 
+    \(V41 = v4 - v1\)}], "Input"],
+
+Cell[BoxData[
+    \({\(-1.0000000005838672`*^-7\), 0, 0}\)], "Output"],
+
+Cell[BoxData[
+    \({\(-1.0000000005838672`*^-7\), 0, 0}\)], "Output"],
+
+Cell[BoxData[
+    \({\(-1.0000000005838672`*^-7\), 0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[equ \[Equal] 0]\)], "Input"],
+
+Cell[BoxData[
+    \({{t \[Rule] 1.9999999988322657`*^7}}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Mass-Spring Model", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Table[x[n, m], {n, 7}, {m, 2}]\)], "Input"],
+
+Cell[BoxData[
+    \({{x[1, 1], x[1, 2]}, {x[2, 1], x[2, 2]}, {x[3, 1], x[3, 2]}, {x[4, 1], 
+        x[4, 2]}, {x[5, 1], x[5, 2]}, {x[6, 1], x[6, 2]}, {x[7, 1], 
+        x[7, 2]}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(SpringForce = 
+        Function[{x1, x2, lo}, 
+          Module[{n, d, k = 1}, \[IndentingNewLine]n = 
+              Norm[x2 - 
+                  x1]; \[IndentingNewLine]d = \(x2 - x1\)\/n; \
+\[IndentingNewLine]k \((n - lo)\) 
+              d\[IndentingNewLine]]];\)\), "\[IndentingNewLine]", 
+    \(SpringForce[{0. , 0}, {1, 1}, 1]\)}], "Input"],
+
+Cell[BoxData[
+    \({0.29289321881345254`, 0.29289321881345254`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(DampingForce = 
+        Function[{v1, v2, x1, x2}, 
+          Module[{b, d, 
+              k = 10}, \[IndentingNewLine]d = \(x2 - x1\)\/Norm[x2 - x1]; \
+\[IndentingNewLine]k \((\((v2 - 
+                    v1)\))\)\[IndentingNewLine]]];\)\), \
+"\[IndentingNewLine]", 
+    \(DampingForce[{0, 0}, {1, 1}, {2, 2}, {3, 3}]\)}], "Input"],
+
+Cell[BoxData[
+    \({10, 10}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(MyForce = 
+        Function[{x0, x1, x2, v0, v1, v2, xm1, 
+            x3}, \[IndentingNewLine]If[xm1[\([1, 0, 2]\)] \[Equal] 0, 0, 
+              SpringForce[x1, xm1,  .4]] + 
+            If[x3[\([1, 0, 2]\)] \[Equal] NUM + 1, 0, 
+              SpringForce[x1, x3,  .4]] + SpringForce[x1, x0, 1] + 
+            SpringForce[x1, x2, 1] + {0, \(-0.01\)}\/NUM + 
+            DampingForce[v1, v2, x1, x2] + 
+            DampingForce[v1, v0, x1, x0]];\)\), "\[IndentingNewLine]", 
+    \(MyForce[{\(-1\), 1}, {0. , 0}, {1, 1}, {1, 1}, {0, 0}, {1, 
+        1}, {\(-2\), 1}[t], {2, 1}[t]]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(\\(\\(\\(\\({\\(\\(-2\\)\\), 1}\\)\\)[t]\\)\\) \[LeftDoubleBracket] \\(\
+\\(1, 0, 2\\)\\) \[RightDoubleBracket]\\) is longer than depth of object. \\!\
+\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partd"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(\\(\\(\\(\\({2, 1}\\)\\)[t]\\)\\) \[LeftDoubleBracket] \\(\\(1, 0, 2\\)\
+\\) \[RightDoubleBracket]\\) is longer than depth of object. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \({\(\(20.`\)\(\[InvisibleSpace]\)\) + 
+        If[\({\(-2\), 1}[t]\)\[LeftDoubleBracket]1, 0, 
+              2\[RightDoubleBracket] \[Equal] 0, 0, 
+          SpringForce[{0.`, 0}, {\(-2\), 1}[t], 0.4`]] + 
+        If[\({2, 1}[t]\)\[LeftDoubleBracket]1, 0, 
+              2\[RightDoubleBracket] \[Equal] 65, 0, 
+          SpringForce[{0.`, 0}, {2, 1}[t], 
+            0.4`]], \(\(20.585630187626904`\)\(\[InvisibleSpace]\)\) + 
+        If[\({\(-2\), 1}[t]\)\[LeftDoubleBracket]1, 0, 
+              2\[RightDoubleBracket] \[Equal] 0, 0, 
+          SpringForce[{0.`, 0}, {\(-2\), 1}[t], 0.4`]] + 
+        If[\({2, 1}[t]\)\[LeftDoubleBracket]1, 0, 
+              2\[RightDoubleBracket] \[Equal] 65, 0, 
+          SpringForce[{0.`, 0}, {2, 1}[t], 0.4`]]}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ic[\([254, 2]\)] = 0\)], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ic[\([2, 2]\)] = 0\)], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(NUM = 64;\)\), "\[IndentingNewLine]", 
+    \(\(ic = 
+        Table[{\[IndentingNewLine]\(x[1, n]\)[0] \[Equal] 
+                n, \(x[2, n]\)[0] \[Equal] 
+                10  Random[
+                    Real, {\(-1\), 1}], \[IndentingNewLine]\(x[1, n]'\)[
+                  0] \[Equal] 0, \(x[2, n]'\)[0] \[Equal] 0}, {n, NUM}] // 
+          Flatten;\)\), "\[IndentingNewLine]", 
+    \(\(eq = {\[IndentingNewLine]\(x[1, 1]''\)[t] \[Equal] 
+              0, \[IndentingNewLine]\(x[2, 1]''\)[t] \[Equal] 
+              0, \[IndentingNewLine]Table[
+              Thread[{\(x[1, n]''\)[t], \(x[2, n]''\)[t]} == 
+                  MyForce[\[IndentingNewLine]{\(x[1, n - 1]\)[
+                        t], \(x[2, n - 1]\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n]\)[t], \(x[2, n]\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n + 1]\)[
+                        t], \(x[2, n + 1]\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n - 1]'\)[
+                        t], \(x[2, n - 1]'\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n]'\)[
+                        t], \(x[2, n]'\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n + 1]'\)[
+                        t], \(x[2, n + 1]'\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n - 2]\)[
+                        t], \(x[2, n - 2]\)[
+                        t]}, \[IndentingNewLine]{\(x[1, n + 2]\)[
+                        t], \(x[2, n + 2]\)[t]}, \[IndentingNewLine]]], {n, 
+                2, NUM - 1}], \[IndentingNewLine]\(x[1, NUM]''\)[t] \[Equal] 
+              0, \[IndentingNewLine]\(x[2, NUM]''\)[t] \[Equal] 
+              0\[IndentingNewLine]} // Flatten;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(tend = 200;\)\), "\n", 
+    \(\(sol = \(NDSolve[Join[ic, eq], 
+            Flatten@Table[{x[1, n], x[2, n]}, {n, NUM}], {t, 0, tend}, 
+            MaxSteps \[Rule] \[Infinity]]\)[\([1]\)];\)\), "\n", 
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(\(Function[t, 
+          dat = Table[\(x[m, n]\)[t], {n, NUM}, {m, 2}] /. 
+              sol; \[IndentingNewLine]ListPlot[dat, PlotJoined \[Rule] True, 
+            Epilog \[Rule] Point /@ dat, PlotRange \[Rule] {\(-9\), 9}]] /@ 
+        Range[0, tend, 1];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Function[t, 
+          dat = Table[\(x[m, n]\)[t], {n, NUM}, {m, 2}] /. 
+              sol; \[IndentingNewLine]ListPlot[dat, PlotJoined \[Rule] True, 
+            Epilog \[Rule] Point /@ dat, PlotRange \[Rule] All]] /@ 
+        Range[0, tend, 1];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Function[t, dat = Table[\(x[m, n]\)[t], {n, NUM}, {m, 2}] /. sol; 
+          Max[dat[\([\)\(All, 2\)\(]\)]]] /@ Range[0, tend, 1] // 
+      Max\), "\[IndentingNewLine]", 
+    \(Function[t, dat = Table[\(x[m, n]\)[t], {n, NUM}, {m, 2}] /. sol; 
+          Min[dat[\([\)\(All, 2\)\(]\)]]] /@ Range[0, tend, 1] // 
+      Min\)}], "Input"],
+
+Cell[BoxData[
+    \(10.337866694423651`\)], "Output"],
+
+Cell[BoxData[
+    \(\(-8.74343076193549`\)\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1550},
+WindowMargins->{{Automatic, 0}, {0, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1755, 51, 39, 1, 27, "Input"],
+Cell[1797, 54, 64, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[1886, 59, 28, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[1939, 63, 139, 2, 43, "Input"],
+Cell[2081, 67, 354, 5, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2472, 77, 48, 1, 27, "Input"],
+Cell[2523, 80, 159, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2719, 88, 78, 1, 27, "Input"],
+Cell[2800, 91, 146, 2, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2983, 98, 150, 2, 27, "Input"],
+Cell[3136, 102, 463, 11, 68, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3636, 118, 84, 1, 27, "Input"],
+Cell[3723, 121, 162, 4, 39, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3934, 131, 41, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[4000, 135, 389, 6, 59, "Input"],
+Cell[4392, 143, 470, 6, 146, "Output"]
+}, Open  ]],
+Cell[4877, 152, 415, 6, 107, "Input"],
+
+Cell[CellGroupData[{
+Cell[5317, 162, 134, 2, 27, "Input"],
+Cell[5454, 166, 1548, 24, 133, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7039, 195, 89, 1, 31, "Input"],
+Cell[7131, 198, 46, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7214, 204, 121, 2, 43, "Input"],
+Cell[7338, 208, 6028, 227, 82, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13403, 440, 194, 3, 27, "Input"],
+Cell[13600, 445, 2324, 39, 82, "Output"]
+}, Open  ]],
+Cell[15939, 487, 223, 4, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[16187, 495, 142, 3, 59, "Input"],
+Cell[16332, 500, 48, 1, 26, "Output"],
+Cell[16383, 503, 48, 1, 26, "Output"],
+Cell[16434, 506, 53, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16524, 512, 381, 7, 139, "Input"],
+Cell[16908, 521, 70, 1, 27, "Output"],
+Cell[16981, 524, 70, 1, 27, "Output"],
+Cell[17054, 527, 70, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17161, 533, 54, 1, 27, "Input"],
+Cell[17218, 536, 70, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17337, 543, 39, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[17401, 547, 63, 1, 27, "Input"],
+Cell[17467, 550, 192, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17696, 558, 369, 8, 135, "Input"],
+Cell[18068, 568, 78, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18183, 574, 355, 8, 121, "Input"],
+Cell[18541, 584, 42, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18620, 590, 617, 11, 98, "Input"],
+Cell[19240, 603, 407, 6, 20, "Message"],
+Cell[19650, 611, 394, 6, 20, "Message"],
+Cell[20047, 619, 782, 14, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20866, 638, 53, 1, 27, "Input"],
+Cell[20922, 641, 35, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20994, 647, 51, 1, 27, "Input"],
+Cell[21048, 650, 35, 1, 26, "Output"]
+}, Open  ]],
+Cell[21098, 654, 1720, 30, 331, "Input"],
+Cell[22821, 686, 546, 10, 91, "Input"],
+Cell[23370, 698, 324, 6, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[23719, 708, 355, 6, 43, "Input"],
+Cell[24077, 716, 53, 1, 26, "Output"],
+Cell[24133, 719, 56, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,1336 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     37038,       1108]*)
+(*NotebookOutlinePosition[     37689,       1131]*)
+(*  CellTagsIndexPosition[     37645,       1127]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["3D", "Section"],
+
+Cell[CellGroupData[{
+
+Cell["Corrections", "Subsection"],
+
+Cell[BoxData[
+    \(CC[x_] := jp\_x + h\_x\ jpx\_x + \(h\_x\^2\) jpxx\_x\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(CC[1]\)], "Input"],
+
+Cell[BoxData[
+    \(jp\_1 + h\_1\ jpx\_1 + h\_1\%2\ jpxx\_1\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["pxx", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[p[X[n, t], n, t], {n, 2}]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        SuperscriptBox["p", 
+          TagBox[\((0, 2, 0)\),
+            Derivative],
+          MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((2, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{"(", 
+          RowBox[{
+            RowBox[{
+              SuperscriptBox["p", 
+                TagBox[\((1, 1, 0)\),
+                  Derivative],
+                MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+            
+            RowBox[{
+              RowBox[{
+                SuperscriptBox["X", 
+                  TagBox[\((1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+              RowBox[{
+                SuperscriptBox["p", 
+                  TagBox[\((2, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}]}],
+           ")"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[p[X[n, t], n, t], {t, 2}]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        SuperscriptBox["p", 
+          TagBox[\((0, 0, 2)\),
+            Derivative],
+          MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((0, 2)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{"(", 
+          RowBox[{
+            RowBox[{
+              SuperscriptBox["p", 
+                TagBox[\((1, 0, 1)\),
+                  Derivative],
+                MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+            
+            RowBox[{
+              RowBox[{
+                SuperscriptBox["X", 
+                  TagBox[\((0, 1)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+              RowBox[{
+                SuperscriptBox["p", 
+                  TagBox[\((2, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}]}],
+           ")"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[p[X[n, t], n, t], t, n]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        SuperscriptBox["p", 
+          TagBox[\((0, 1, 1)\),
+            Derivative],
+          MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((1, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{"(", 
+          RowBox[{
+            RowBox[{
+              SuperscriptBox["p", 
+                TagBox[\((1, 1, 0)\),
+                  Derivative],
+                MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+            
+            RowBox[{
+              RowBox[{
+                SuperscriptBox["X", 
+                  TagBox[\((1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+              RowBox[{
+                SuperscriptBox["p", 
+                  TagBox[\((2, 0, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}]}]}],
+           ")"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{" ", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((0, 1, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+        RowBox[{
+          RowBox[{
+            SuperscriptBox["X", 
+              TagBox[\((1, 1)\),
+                Derivative],
+              MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+          RowBox[{
+            SuperscriptBox["p", 
+              TagBox[\((1, 0, 0)\),
+                Derivative],
+              MultilineFunction->None], "[", \(X[n, t], n, t\), 
+            "]"}]}]}]}]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[p[X[n, t], n, t], n]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        SuperscriptBox["p", 
+          TagBox[\((0, 1, 0)\),
+            Derivative],
+          MultilineFunction->None], "[", \(X[n, t], n, t\), "]"}], "+", 
+      RowBox[{
+        RowBox[{
+          SuperscriptBox["X", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(n, t\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["p", 
+            TagBox[\((1, 0, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(X[n, t], n, t\), 
+          "]"}]}]}]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Code generator", "Subsection"],
+
+Cell[BoxData[
+    \(\(d = 3;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(pre = "\<n->\>";\)\), "\[IndentingNewLine]", 
+    \(\(L = {"\<n\>", "\<s\>", "\<r\>"};\)\), "\[IndentingNewLine]", 
+    \(\(G = {"\<x\>", "\<y\>", "\<z\>"};\)\), "\[IndentingNewLine]", 
+    \(\(A = 
+        Table[pre <> L[\([i]\)] <> G[\([j]\)], {i, d}, {j, 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[A]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"\<\"n->nx\"\>", "\<\"n->ny\"\>", "\<\"n->nz\"\>"},
+            {"\<\"n->sx\"\>", "\<\"n->sy\"\>", "\<\"n->sz\"\>"},
+            {"\<\"n->rx\"\>", "\<\"n->ry\"\>", "\<\"n->rz\"\>"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(pre = "\<j->\>";\)\), "\[IndentingNewLine]", 
+    \(\(L = {"\<e\>", "\<n\>", "\<t\>"};\)\), "\[IndentingNewLine]", 
+    \(\(p = Table[pre <> L[\([i]\)], {i, d}];\)\), "\[IndentingNewLine]", 
+    \(\(pp = 
+        Table[pre <> L[\([i]\)] <> L[\([j]\)], {i, d}, {j, 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[pp]\), "\[IndentingNewLine]", 
+    \(\(pp[\([1, 2]\)] = pp[\([2, 1]\)];\)\), "\[IndentingNewLine]", 
+    \(If[d \[Equal] 3, \[IndentingNewLine]pp[\([1, 3]\)] = 
+        pp[\([3, 1]\)]; \[IndentingNewLine]pp[\([3, 2]\)] = 
+        pp[\([2, 3]\)];\[IndentingNewLine]]\), "\[IndentingNewLine]", 
+    \(MatrixForm[pp]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"\<\"j->ee\"\>", "\<\"j->en\"\>", "\<\"j->et\"\>"},
+            {"\<\"j->ne\"\>", "\<\"j->nn\"\>", "\<\"j->nt\"\>"},
+            {"\<\"j->te\"\>", "\<\"j->tn\"\>", "\<\"j->tt\"\>"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"\<\"j->ee\"\>", "\<\"j->ne\"\>", "\<\"j->te\"\>"},
+            {"\<\"j->ne\"\>", "\<\"j->nn\"\>", "\<\"j->nt\"\>"},
+            {"\<\"j->te\"\>", "\<\"j->nt\"\>", "\<\"j->tt\"\>"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(e = A\[Transpose]  . p\), "\n", 
+    \(\(ee = A\[Transpose]  . pp . A;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[ee]\)}], "Input"],
+
+Cell[BoxData[
+    \({"j->e"\ "n->nx" + "j->n"\ "n->sx", 
+      "j->e"\ "n->ny" + "j->n"\ "n->sy"}\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\("n->nx"\ \(("j->ee"\ "n->nx" + "j->ne"\ "n->sx")\) + 
+                "n->sx"\ \(("j->ne"\ "n->nx" + 
+                      "j->nn"\ "n->sx")\)\), \("n->ny"\ \(("j->ee"\ "n->nx" + 
+                      "j->ne"\ "n->sx")\) + \(("j->ne"\ "n->nx" + 
+                      "j->nn"\ "n->sx")\)\ "n->sy"\)},
+            {\("n->nx"\ \(("j->ee"\ "n->ny" + "j->ne"\ "n->sy")\) + 
+                "n->sx"\ \(("j->ne"\ "n->ny" + 
+                      "j->nn"\ "n->sy")\)\), \("n->ny"\ \(("j->ee"\ "n->ny" + 
+                      "j->ne"\ "n->sy")\) + 
+                "n->sy"\ \(("j->ne"\ "n->ny" + "j->nn"\ "n->sy")\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(x = Table[pre <> G[\([i]\)], {i, d}];\)\), "\[IndentingNewLine]", 
+    \(\(xx = 
+        Table[pre <> G[\([i]\)] <> G[\([j]\)], {i, d}, {j, 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[xx]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"\<\"j->xx\"\>", "\<\"j->xy\"\>", "\<\"j->xz\"\>"},
+            {"\<\"j->yx\"\>", "\<\"j->yy\"\>", "\<\"j->yz\"\>"},
+            {"\<\"j->zx\"\>", "\<\"j->zy\"\>", "\<\"j->zz\"\>"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[xx]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"\<\"j->xx\"\>", "\<\"j->xy\"\>", "\<\"j->xz\"\>"},
+            {"\<\"j->xy\"\>", "\<\"j->yy\"\>", "\<\"j->yz\"\>"},
+            {"\<\"j->xz\"\>", "\<\"j->yz\"\>", "\<\"j->zz\"\>"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(If[d \[Equal] 3, \[IndentingNewLine]xx[\([2, 1]\)] = 
+        xx[\([1, 2]\)]; \[IndentingNewLine]xx[\([3, 1]\)] = 
+        xx[\([1, 3]\)]; \[IndentingNewLine]xx[\([3, 2]\)] = 
+        xx[\([2, 3]\)];\[IndentingNewLine]]\), "\[IndentingNewLine]", 
+    \(\(g2l = A . xx . \((A\[Transpose] )\);\)\), "\[IndentingNewLine]", 
+    \(\(MapThread[#1 <> "\< = \>" <> ToString@CForm[#2] <> "\<;\n\>" &, {p, 
+            A . x}] // 
+        StringReplace[#, {"\<\\\>" -> "\<\>", "\<\"\>" -> "\<\>"}] &\) // 
+      StringJoin\), "\[IndentingNewLine]", 
+    \(\(\(MapThread[#1 <> "\< = \>" <> 
+                ToString@CForm[#2] <> "\<;\n\>" &, {Flatten@pp, 
+              Flatten@g2l}] // 
+          StringReplace[#, {"\<\\\>" -> "\<\>", "\<\"\>" -> "\<\>"}] &\) // 
+        Extract[#, {If[
+                  d \[Equal] 3, {1, 2, 3, 5, 6, 9}, {1, 2, 
+                    4}]}\[Transpose] ] &\) // StringJoin\)}], "Input"],
+
+Cell[BoxData[
+    \("j->e = j->x*n->nx + j->y*n->ny + j->z*n->nz;\nj->n = j->x*n->sx + \
+j->y*n->sy + j->z*n->sz;\nj->t = j->x*n->rx + j->y*n->ry + j->z*n->rz;\n"\)], \
+"Output"],
+
+Cell[BoxData[
+    \("j->ee = n->nx*(j->xx*n->nx + j->xy*n->ny + j->xz*n->nz) + \
+n->ny*(j->xy*n->nx + j->yy*n->ny + j->yz*n->nz) + n->nz*(j->xz*n->nx + \
+j->yz*n->ny + j->zz*n->nz);\nj->ne = (j->xx*n->nx + j->xy*n->ny + \
+j->xz*n->nz)*n->sx + (j->xy*n->nx + j->yy*n->ny + j->yz*n->nz)*n->sy + \
+(j->xz*n->nx + j->yz*n->ny + j->zz*n->nz)*n->sz;\nj->te = (j->xx*n->nx + \
+j->xy*n->ny + j->xz*n->nz)*n->rx + (j->xy*n->nx + j->yy*n->ny + \
+j->yz*n->nz)*n->ry + (j->xz*n->nx + j->yz*n->ny + j->zz*n->nz)*n->rz;\nj->nn \
+= n->sx*(j->xx*n->sx + j->xy*n->sy + j->xz*n->sz) + n->sy*(j->xy*n->sx + \
+j->yy*n->sy + j->yz*n->sz) + n->sz*(j->xz*n->sx + j->yz*n->sy + j->zz*n->sz);\
+\nj->nt = n->rx*(j->xx*n->sx + j->xy*n->sy + j->xz*n->sz) + \
+n->ry*(j->xy*n->sx + j->yy*n->sy + j->yz*n->sz) + n->rz*(j->xz*n->sx + \
+j->yz*n->sy + j->zz*n->sz);\nj->tt = n->rx*(j->xx*n->rx + j->xy*n->ry + \
+j->xz*n->rz) + n->ry*(j->xy*n->rx + j->yy*n->ry + j->yz*n->rz) + \
+n->rz*(j->xz*n->rx + j->yz*n->ry + j->zz*n->rz);\n"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(MapThread[#1 <> "\< = \>" <> ToString@CForm[#2] <> "\<;\n\>" &, {x, 
+            e}] // StringReplace[#, {"\<\\\>" -> "\<\>", "\<\"\>" -> "\<\>"}] \
+&\) // StringJoin\)], "Input"],
+
+Cell[BoxData[
+    \("j->x = j->e*n->nx + j->n*n->sx;\nj->y = j->e*n->ny + j->n*n->sy;\n\
+"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(MapThread[#1 <> "\< = \>" <> 
+                ToString@CForm[#2] <> "\<;\n\>" &, {Flatten@xx, Flatten@ee}] // 
+          StringReplace[#, {"\<\\\>" -> "\<\>", "\<\"\>" -> "\<\>"}] &\) // 
+        Extract[#, {If[
+                  d \[Equal] 3, {1, 2, 3, 5, 6, 9}, {1, 2, 
+                    4}]}\[Transpose] ] &\) // StringJoin\)], "Input"],
+
+Cell[BoxData[
+    \("j->xx = n->nx*(j->ee*n->nx + j->te*n->rx + j->ne*n->sx) + \
+n->sx*(j->ne*n->nx + j->nt*n->rx + j->nn*n->sx) + n->rx*(j->te*n->nx + \
+j->tt*n->rx + j->nt*n->sx);\nj->xy = n->ny*(j->ee*n->nx + j->te*n->rx + \
+j->ne*n->sx) + n->ry*(j->te*n->nx + j->tt*n->rx + j->nt*n->sx) + (j->ne*n->nx \
++ j->nt*n->rx + j->nn*n->sx)*n->sy;\nj->xz = n->nz*(j->ee*n->nx + j->te*n->rx \
++ j->ne*n->sx) + n->rz*(j->te*n->nx + j->tt*n->rx + j->nt*n->sx) + \
+(j->ne*n->nx + j->nt*n->rx + j->nn*n->sx)*n->sz;\nj->yy = n->ny*(j->ee*n->ny \
++ j->te*n->ry + j->ne*n->sy) + n->sy*(j->ne*n->ny + j->nt*n->ry + \
+j->nn*n->sy) + n->ry*(j->te*n->ny + j->tt*n->ry + j->nt*n->sy);\nj->yz = \
+n->nz*(j->ee*n->ny + j->te*n->ry + j->ne*n->sy) + n->rz*(j->te*n->ny + \
+j->tt*n->ry + j->nt*n->sy) + (j->ne*n->ny + j->nt*n->ry + j->nn*n->sy)*n->sz;\
+\nj->zz = n->nz*(j->ee*n->nz + j->te*n->rz + j->ne*n->sz) + \
+n->sz*(j->ne*n->nz + j->nt*n->rz + j->nn*n->sz) + n->rz*(j->te*n->nz + \
+j->tt*n->rz + j->nt*n->sz);\n"\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2D-3D Compatibility", "Subsection"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[
+    \(\(d = 2;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(L = {"\<n\>", "\<s\>", "\<r\>"};\)\), "\[IndentingNewLine]", 
+    \(\(G = {"\<x\>", "\<y\>", "\<z\>"};\)\), "\[IndentingNewLine]", 
+    \(\(A = 
+        Table[L[\([i]\)] <> G[\([j]\)] // Symbol, {i, d}, {j, 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[A]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"nx", "ny"},
+            {"sx", "sy"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(L = {"\<e\>", "\<n\>", "\<t\>"};\)\), "\[IndentingNewLine]", 
+    \(\(p = Table[L[\([i]\)], {i, d}];\)\), "\[IndentingNewLine]", 
+    \(\(pp = 
+        Table[L[\([i]\)] <> L[\([j]\)] // Symbol, {i, d}, {j, 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[pp]\), "\[IndentingNewLine]", 
+    \(\(pp[\([1, 2]\)] = pp[\([2, 1]\)];\)\), "\[IndentingNewLine]", 
+    \(If[d \[Equal] 3, \[IndentingNewLine]pp[\([1, 3]\)] = 
+        pp[\([3, 1]\)]; \[IndentingNewLine]pp[\([3, 2]\)] = 
+        pp[\([2, 3]\)];\[IndentingNewLine]]\), "\[IndentingNewLine]", 
+    \(MatrixForm[pp]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"ee", "en"},
+            {"ne", "nn"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"ee", "ne"},
+            {"ne", "nn"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(mat = A\[Transpose]  . pp . A;\)\), "\n", 
+    \(MatrixForm[mat]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(nx\ \((ee\ nx + ne\ sx)\) + 
+                sx\ \((ne\ nx + nn\ sx)\)\), \(ny\ \((ee\ nx + 
+                      ne\ sx)\) + \((ne\ nx + nn\ sx)\)\ sy\)},
+            {\(nx\ \((ee\ ny + ne\ sy)\) + 
+                sx\ \((ne\ ny + nn\ sy)\)\), \(ny\ \((ee\ ny + ne\ sy)\) + 
+                sy\ \((ne\ ny + nn\ sy)\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[mat /. {rx | ry | rz | et | tt | nt \[Rule] 0}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(nx\ \((ee\ nx + ne\ sx)\) + 
+                sx\ \((ne\ nx + nn\ sx)\)\), \(ny\ \((ee\ nx + 
+                      ne\ sx)\) + \((ne\ nx + 
+                      nn\ sx)\)\ sy\), \(nz\ \((ee\ nx + 
+                      ne\ sx)\) + \((ne\ nx + nn\ sx)\)\ sz\)},
+            {\(nx\ \((ee\ ny + ne\ sy)\) + 
+                sx\ \((ne\ ny + nn\ sy)\)\), \(ny\ \((ee\ ny + ne\ sy)\) + 
+                sy\ \((ne\ ny + nn\ sy)\)\), \(nz\ \((ee\ ny + 
+                      ne\ sy)\) + \((ne\ ny + nn\ sy)\)\ sz\)},
+            {\(nx\ \((ee\ nz + ne\ sz)\) + 
+                sx\ \((ne\ nz + nn\ sz)\)\), \(ny\ \((ee\ nz + ne\ sz)\) + 
+                sy\ \((ne\ nz + nn\ sz)\)\), \(nz\ \((ee\ nz + ne\ sz)\) + 
+                sz\ \((ne\ nz + nn\ sz)\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(C1 = Table[{\[Tau]\_i, n\_i}, {i, 2}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[C1\[Transpose] ]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Tau]\_1\), \(\[Tau]\_2\)},
+            {\(n\_1\), \(n\_2\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{"LinearSolve", "[", 
+        RowBox[{\(C1\[Transpose] \), ",", " ", 
+          RowBox[{"(", GridBox[{
+                {"0"},
+                {"fk"}
+                }], ")"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+    \({{\(fk\ \[Tau]\_2\)\/\(\(-n\_2\)\ \[Tau]\_1 + n\_1\ \[Tau]\_2\)}, {\(fk\
+\ \[Tau]\_1\)\/\(n\_2\ \[Tau]\_1 - n\_1\ \[Tau]\_2\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[{ux, uy}] \[Equal] MatrixForm[sol]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", 
+          TagBox[GridBox[{
+                {"ux"},
+                {"uy"}
+                },
+              RowSpacings->1,
+              ColumnAlignments->{Left}],
+            Column], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]], "\[Equal]", 
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", GridBox[{
+              {\(\(fk\ n\_1\)\/\(\(-n\_2\)\ \[Tau]\_1 + n\_1\ \[Tau]\_2\)\)},
+              {\(\(fk\ \[Tau]\_1\)\/\(n\_2\ \[Tau]\_1 - n\_1\ \[Tau]\_2\)\)}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]]}]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["ux", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(C1 = 
+        Table[{\[Tau]1\_i, \[Tau]2\_i, n\_i}, {i, 
+            3}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[C1]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Tau]1\_1\), \(\[Tau]2\_1\), \(n\_1\)},
+            {\(\[Tau]1\_2\), \(\[Tau]2\_2\), \(n\_2\)},
+            {\(\[Tau]1\_3\), \(\[Tau]2\_3\), \(n\_3\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{"LinearSolve", "[", 
+        RowBox[{"C1", ",", " ", 
+          RowBox[{"(", GridBox[{
+                {"0"},
+                {"0"},
+                {"fk"}
+                }], ")"}]}], "]"}]}]], "Input"],
+
+Cell[BoxData[
+    \({{\(\(-fk\)\ n\_2\ \[Tau]2\_1 + fk\ n\_1\ \[Tau]2\_2\)\/\(n\_3\ \[Tau]1\
+\_2\ \[Tau]2\_1 - n\_2\ \[Tau]1\_3\ \[Tau]2\_1 - n\_3\ \[Tau]1\_1\ \[Tau]2\_2 \
++ n\_1\ \[Tau]1\_3\ \[Tau]2\_2 + n\_2\ \[Tau]1\_1\ \[Tau]2\_3 - n\_1\ \[Tau]1\
+\_2\ \[Tau]2\_3\)}, {\(fk\ \((n\_2\ \[Tau]1\_1 - n\_1\ \
+\[Tau]1\_2)\)\)\/\(n\_3\ \[Tau]1\_2\ \[Tau]2\_1 - n\_2\ \[Tau]1\_3\ \
+\[Tau]2\_1 - n\_3\ \[Tau]1\_1\ \[Tau]2\_2 + n\_1\ \[Tau]1\_3\ \[Tau]2\_2 + \
+n\_2\ \[Tau]1\_1\ \[Tau]2\_3 - n\_1\ \[Tau]1\_2\ \[Tau]2\_3\)}, {\(fk\ \((\(-\
+\[Tau]1\_2\)\ \[Tau]2\_1 + \[Tau]1\_1\ \[Tau]2\_2)\)\)\/\(\(-n\_3\)\ \
+\[Tau]1\_2\ \[Tau]2\_1 + n\_2\ \[Tau]1\_3\ \[Tau]2\_1 + n\_3\ \[Tau]1\_1\ \
+\[Tau]2\_2 - n\_1\ \[Tau]1\_3\ \[Tau]2\_2 - n\_2\ \[Tau]1\_1\ \[Tau]2\_3 + \
+n\_1\ \[Tau]1\_2\ \[Tau]2\_3\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[{ux, uy, uz}] \[Equal] MatrixForm[sol]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", 
+          TagBox[GridBox[{
+                {"ux"},
+                {"uy"},
+                {"uz"}
+                },
+              RowSpacings->1,
+              ColumnAlignments->{Left}],
+            Column], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]], "\[Equal]", 
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", GridBox[{
+              {\(\(\(-fk\)\ n\_2\ \[Tau]2\_1 + 
+                      fk\ n\_1\ \[Tau]2\_2\)\/\(n\_3\ \[Tau]1\_2\ \[Tau]2\_1 \
+- n\_2\ \[Tau]1\_3\ \[Tau]2\_1 - n\_3\ \[Tau]1\_1\ \[Tau]2\_2 + 
+                      n\_1\ \[Tau]1\_3\ \[Tau]2\_2 + 
+                      n\_2\ \[Tau]1\_1\ \[Tau]2\_3 - 
+                      n\_1\ \[Tau]1\_2\ \[Tau]2\_3\)\)},
+              {\(\(fk\ \((n\_2\ \[Tau]1\_1 - 
+                          n\_1\ \[Tau]1\_2)\)\)\/\(n\_3\ \[Tau]1\_2\ \
+\[Tau]2\_1 - n\_2\ \[Tau]1\_3\ \[Tau]2\_1 - n\_3\ \[Tau]1\_1\ \[Tau]2\_2 + 
+                      n\_1\ \[Tau]1\_3\ \[Tau]2\_2 + 
+                      n\_2\ \[Tau]1\_1\ \[Tau]2\_3 - 
+                      n\_1\ \[Tau]1\_2\ \[Tau]2\_3\)\)},
+              {\(\(fk\ \((\(-\[Tau]1\_2\)\ \[Tau]2\_1 + \[Tau]1\_1\ \
+\[Tau]2\_2)\)\)\/\(\(-n\_3\)\ \[Tau]1\_2\ \[Tau]2\_1 + 
+                      n\_2\ \[Tau]1\_3\ \[Tau]2\_1 + 
+                      n\_3\ \[Tau]1\_1\ \[Tau]2\_2 - 
+                      n\_1\ \[Tau]1\_3\ \[Tau]2\_2 - 
+                      n\_2\ \[Tau]1\_1\ \[Tau]2\_3 + 
+                      n\_1\ \[Tau]1\_2\ \[Tau]2\_3\)\)}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]]}]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["uxx", "Subsection"],
+
+Cell[BoxData[
+    \(\(C2 = Table[C[i, j], {i, 6}, {j, 6}];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"u", "=", 
+        RowBox[{"(", GridBox[{
+              {"uxx"},
+              {"uxy"},
+              {"uxz"},
+              {"uyy"},
+              {"uyz"},
+              {"uzz"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"f", "=", 
+        RowBox[{"(", GridBox[{
+              {"0"},
+              {"0"},
+              {"0"},
+              {"dt1"},
+              {"dt2"},
+              {"px"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"k", "=", 
+        RowBox[{
+          RowBox[{"(", GridBox[{
+                {"x1ss", "x2ss", "x3ss"},
+                {"x1tt", "x2tt", "x3tt"},
+                {"x1st", "x2st", "x3st"},
+                {"n1s", "n2s", "n3s"},
+                {"n1t", "n2t", "n2t"},
+                {"0", "0", "0"}
+                }], ")"}], ".", 
+          RowBox[{"(", GridBox[{
+                {"ux"},
+                {"uy"},
+                {"uz"}
+                }], ")"}]}]}], ";"}], "\[IndentingNewLine]", \(MatrixForm[
+      p . k]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(ux\ x1ss + uy\ x2ss + uz\ x3ss\)},
+            {\(ux\ x1tt + uy\ x2tt + uz\ x3tt\)},
+            {\(n1s\ ux + n2s\ uy + n3s\ uz\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[""], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm[C2 . u] \[Equal] MatrixForm[f - k]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", GridBox[{
+              {\(uxx\ C[1, 1] + uxy\ C[1, 2] + uxz\ C[1, 3] + uyy\ C[1, 4] + 
+                  uyz\ C[1, 5] + uzz\ C[1, 6]\)},
+              {\(uxx\ C[2, 1] + uxy\ C[2, 2] + uxz\ C[2, 3] + uyy\ C[2, 4] + 
+                  uyz\ C[2, 5] + uzz\ C[2, 6]\)},
+              {\(uxx\ C[3, 1] + uxy\ C[3, 2] + uxz\ C[3, 3] + uyy\ C[3, 4] + 
+                  uyz\ C[3, 5] + uzz\ C[3, 6]\)},
+              {\(uxx\ C[4, 1] + uxy\ C[4, 2] + uxz\ C[4, 3] + uyy\ C[4, 4] + 
+                  uyz\ C[4, 5] + uzz\ C[4, 6]\)},
+              {\(uxx\ C[5, 1] + uxy\ C[5, 2] + uxz\ C[5, 3] + uyy\ C[5, 4] + 
+                  uyz\ C[5, 5] + uzz\ C[5, 6]\)},
+              {\(uxx\ C[6, 1] + uxy\ C[6, 2] + uxz\ C[6, 3] + uyy\ C[6, 4] + 
+                  uyz\ C[6, 5] + uzz\ C[6, 6]\)}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]], "\[Equal]", 
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", GridBox[{
+              {\(\(-ux\)\ x1ss - uy\ x2ss - uz\ x3ss\)},
+              {\(\(-ux\)\ x1tt - uy\ x2tt - uz\ x3tt\)},
+              {\(\(-ux\)\ x1st - uy\ x2st - uz\ x3st\)},
+              {\(dt1 - n1s\ ux - n2s\ uy - n3s\ uz\)},
+              {\(dt2 - n1t\ ux - n2t\ uy - n2t\ uz\)},
+              {"px"}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]]}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(LinearSolve[C2, \ f - k]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"p", "=", 
+        RowBox[{"(", GridBox[{
+              {"1", "0", "0", "0", "0", "0"},
+              {"0", "1", "0", "0", "0", "0"},
+              {"0", "0", "0", "1", "0", "0"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", \(p . C2 // 
+      MatrixForm\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(C[1, 1]\), \(C[1, 2]\), \(C[1, 3]\), \(C[1, 4]\), \(C[1, 
+                5]\), \(C[1, 6]\)},
+            {\(C[2, 1]\), \(C[2, 2]\), \(C[2, 3]\), \(C[2, 4]\), \(C[2, 
+                5]\), \(C[2, 6]\)},
+            {\(C[4, 1]\), \(C[4, 2]\), \(C[4, 3]\), \(C[4, 4]\), \(C[4, 
+                5]\), \(C[4, 6]\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2d", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(C2 = Table[c[i, j], {i, 3}, {j, 3}];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[C2]\), "\[IndentingNewLine]", 
+    \(\(c[3, 1] = 1;\)\), "\[IndentingNewLine]", 
+    \(\(c[3, 2] = 0;\)\), "\[IndentingNewLine]", 
+    \(\(c[3, 3] = 1;\)\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(c[1, 1]\), \(c[1, 2]\), \(c[1, 3]\)},
+            {\(c[2, 1]\), \(c[2, 2]\), \(c[2, 3]\)},
+            {\(c[3, 1]\), \(c[3, 2]\), \(c[3, 3]\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"u", "=", 
+        RowBox[{"(", GridBox[{
+              {"uxx"},
+              {"uxy"},
+              {"uyy"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"f", "=", 
+        RowBox[{"(", GridBox[{
+              {"0"},
+              {"dt1"},
+              {"px"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"k", "=", 
+        RowBox[{
+          RowBox[{"(", GridBox[{
+                {"x1ss", "x2ss"},
+                {"n1s", "n2s"},
+                {"0", "0"}
+                }], ")"}], ".", 
+          RowBox[{"(", GridBox[{
+                {"ux"},
+                {"uy"}
+                }], ")"}]}]}], ";"}], "\[IndentingNewLine]", \(MatrixForm[
+      k]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(ux\ x1ss + uy\ x2ss\)},
+            {\(n1s\ ux + n2s\ uy\)},
+            {"0"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(LinearSolve[C2, \ f - k] // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(px - \(c[1, 2]\ \((dt1 - n1s\ ux - n2s\ uy - px\ c[2, 1])\) - \
+\((\(-ux\)\ x1ss - uy\ x2ss - px\ c[1, 1])\)\ c[2, 2]\)\/\(\(-\((\(-c[1, 1]\) \
++ c[1, 3])\)\)\ c[2, 2] + c[1, 2]\ \((\(-c[2, 1]\) + c[2, 3])\)\)\)},
+            {\(\(\(-ux\)\ x1ss - uy\ x2ss - px\ c[1, 1]\)\/c[1, 2] - \
+\(\((\(-c[1, 1]\) + c[1, 3])\)\ \((c[1, 2]\ \((dt1 - n1s\ ux - n2s\ uy - px\ \
+c[2, 1])\) - \((\(-ux\)\ x1ss - uy\ x2ss - px\ c[1, 1])\)\ c[2, \
+2])\)\)\/\(c[1, 2]\ \((\(-\((\(-c[1, 1]\) + c[1, 3])\)\)\ c[2, 2] + c[1, 2]\ \
+\((\(-c[2, 1]\) + c[2, 3])\))\)\)\)},
+            {\(\(c[1, 
+                        2]\ \((dt1 - n1s\ ux - n2s\ uy - 
+                          px\ c[2, 1])\) - \((\(-ux\)\ x1ss - uy\ x2ss - 
+                          px\ c[1, 1])\)\ c[2, 
+                        2]\)\/\(\(-\((\(-c[1, 1]\) + c[1, 3])\)\)\ c[2, 2] + 
+                    c[1, 2]\ \((\(-c[2, 1]\) + c[2, 3])\)\)\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{" ", 
+      TagBox[
+        RowBox[{"(", "\[NoBreak]", GridBox[{
+              {\(px - 
+                  c[1, 2]\ \((dt1 - n1s\ ux - n2s\ uy - 
+                        px\ c[2, 1])\) - \((\(-ux\)\ x1ss - uy\ x2ss - 
+                        px\ c[1, 1])\)\ c[2, 2]\)},
+              {\(\(-ux\)\ x1ss - uy\ x2ss - 
+                  px\ c[1, 
+                      1] - \((\(-c[1, 1]\) + 
+                        c[1, 3])\)\ \((c[1, 
+                            2]\ \((dt1 - n1s\ ux - n2s\ uy - 
+                              px\ c[2, 1])\) - \((\(-ux\)\ x1ss - uy\ x2ss - 
+                              px\ c[1, 1])\)\ c[2, 2])\)\)},
+              {\(c[1, 
+                      2]\ \((dt1 - n1s\ ux - n2s\ uy - 
+                        px\ c[2, 1])\) - \((\(-ux\)\ x1ss - uy\ x2ss - 
+                        px\ c[1, 1])\)\ c[2, 2]\)}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+        Function[ BoxForm`e$, 
+          MatrixForm[ BoxForm`e$]]]}]], "Input"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowSize->{1280, 948},
+WindowMargins->{{0, Automatic}, {25, Automatic}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 21, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[1822, 57, 33, 0, 38, "Subsection"],
+Cell[1858, 59, 85, 1, 31, "Input"],
+
+Cell[CellGroupData[{
+Cell[1968, 64, 38, 1, 27, "Input"],
+Cell[2009, 67, 73, 1, 31, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2131, 74, 25, 0, 38, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[2181, 78, 60, 1, 27, "Input"],
+Cell[2244, 81, 1859, 54, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4140, 140, 60, 1, 27, "Input"],
+Cell[4203, 143, 1859, 54, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6099, 202, 58, 1, 27, "Input"],
+Cell[6160, 205, 1859, 54, 29, "Output"]
+}, Open  ]],
+Cell[8034, 262, 646, 19, 29, "Input"],
+
+Cell[CellGroupData[{
+Cell[8705, 285, 55, 1, 27, "Input"],
+Cell[8763, 288, 591, 18, 29, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9403, 312, 36, 0, 38, "Subsection"],
+Cell[9442, 314, 43, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[9510, 319, 361, 7, 91, "Input"],
+Cell[9874, 328, 465, 11, 76, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10376, 344, 678, 12, 187, "Input"],
+Cell[11057, 358, 465, 11, 76, "Output"],
+Cell[11525, 371, 465, 11, 76, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12027, 387, 155, 3, 59, "Input"],
+Cell[12185, 392, 111, 2, 27, "Output"],
+Cell[12299, 396, 900, 18, 45, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13236, 419, 244, 5, 59, "Input"],
+Cell[13483, 426, 465, 11, 76, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13985, 442, 47, 1, 27, "Input"],
+Cell[14035, 445, 465, 11, 76, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14537, 461, 930, 16, 155, "Input"],
+Cell[15470, 479, 178, 3, 75, "Output"],
+Cell[15651, 484, 1010, 14, 123, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16698, 503, 201, 3, 27, "Input"],
+Cell[16902, 508, 104, 2, 59, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17043, 515, 365, 6, 43, "Input"],
+Cell[17411, 523, 1010, 14, 123, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18470, 543, 41, 0, 38, "Subsection"],
+Cell[18514, 545, 39, 1, 27, "Input"],
+Cell[18556, 548, 43, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[18624, 553, 310, 6, 75, "Input"],
+Cell[18937, 561, 322, 10, 45, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19296, 576, 620, 11, 171, "Input"],
+Cell[19919, 589, 322, 10, 45, "Output"],
+Cell[20244, 601, 322, 10, 45, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20603, 616, 101, 2, 43, "Input"],
+Cell[20707, 620, 608, 14, 45, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21352, 639, 91, 1, 27, "Input"],
+Cell[21446, 642, 1037, 21, 63, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[22532, 669, 22, 0, 38, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[22579, 673, 138, 2, 43, "Input"],
+Cell[22720, 677, 348, 10, 45, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23105, 692, 248, 7, 45, "Input"],
+Cell[23356, 701, 161, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23554, 708, 78, 1, 27, "Input"],
+Cell[23635, 711, 794, 22, 67, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24478, 739, 24, 0, 38, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[24527, 743, 160, 4, 43, "Input"],
+Cell[24690, 749, 438, 11, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[25165, 765, 256, 8, 63, "Input"],
+Cell[25424, 775, 805, 11, 85, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[26266, 791, 82, 1, 27, "Input"],
+Cell[26351, 794, 1776, 40, 95, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28176, 840, 25, 0, 38, "Subsection"],
+Cell[28204, 842, 73, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[28302, 847, 1098, 37, 400, "Input"],
+Cell[29403, 886, 417, 11, 63, "Output"]
+}, Open  ]],
+Cell[29835, 900, 26, 0, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[29886, 904, 78, 1, 27, "Input"],
+Cell[29967, 907, 1647, 35, 245, "Output"]
+}, Open  ]],
+Cell[31629, 945, 57, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[31711, 950, 321, 8, 83, "Input"],
+Cell[32035, 960, 597, 14, 63, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[32693, 981, 21, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[32739, 985, 273, 5, 91, "Input"],
+Cell[33015, 992, 429, 11, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[33481, 1008, 793, 27, 203, "Input"],
+Cell[34277, 1037, 365, 11, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[34679, 1053, 71, 1, 27, "Input"],
+Cell[34753, 1056, 1177, 22, 93, "Output"]
+}, Open  ]],
+Cell[35945, 1081, 1077, 24, 63, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+L=/lunchbox
+H=/home/abergman
+B="$H/usr/sbin/bonnie++ -d $L -x 3 -q -u abergman:abergman"
+D=$H/ddbenchmark
+
+echo "====================Defaults"
+cd ~
+umount $L
+mount -t xfs /dev/md10 /lunchbox
+cd $L
+$D
+$B
+
+echo "====================noatime,nodiratime"
+cd ~
+umount $L
+mount -t xfs -o noatime,nodiratime /dev/md10 /lunchbox
+cd $L
+$D
+$B
+
+echo "====================nobarrier"
+cd ~
+umount $L
+mount -t xfs -o nobarrier /dev/md10 /lunchbox
+cd $L
+$D
+$B
+
+echo "====================noatime,nodiratime,nobarrier"
+cd ~
+umount $L
+mount -t xfs -o noatime,nodiratime,nobarrier /dev/md10 /lunchbox
+cd $L
+$D
+$B

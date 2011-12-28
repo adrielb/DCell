@@ -1,0 +1,412 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      7685,        285]*)
+(*NotebookOutlinePosition[      8315,        307]*)
+(*  CellTagsIndexPosition[      8271,        303]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[""], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(Cuboid[{0, 0, 0}, {100, 100, 25}] // Graphics3D\) // Show\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics3D  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(Table[
+            Cuboid[{0, 0, 0} + 33 {i, j, 0}, {33, 33, 25} + 
+                33 {i, j, 0}], {i, 0, 2}, {j, 0, 2}] // Flatten\) // 
+        Graphics3D\) // Show\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(s = 10000;\)\), "\[IndentingNewLine]", 
+    \(\(6.  s\^2\)\/s\^3\)}], "Input"],
+
+Cell[BoxData[
+    \(0.0006000000000000001`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(s =. \)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(6\/s \[Equal] 0.01 // Solve\)], "Input"],
+
+Cell[BoxData[
+    \({{s \[Rule] 600.`}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Plot[6\/s, {s, 128, 2048}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[k \((k - 15)\), k]\)], "Input"],
+
+Cell[BoxData[
+    \(\(-15\) + 2\ k\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(k \((k - z)\) /. Solve[\(-z\) + 2\ k \[Equal] 0, k]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-\(z\^2\/4\)\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({1\/2\ \((\(-15\) + z\/2)\)\ z} // Expand\)], "Input"],
+
+Cell[BoxData[
+    \({\(-\(\(15\ z\)\/2\)\) + z\^2\/4}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(z = 15;\)\), "\[IndentingNewLine]", 
+    \(Plot[\(k \((k - z)\)\)\/\(z\^2\/4\), {k, 0, z}]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(imgs = 
+        FileNames["\</home/abergman/Research/DCell/temp/vec.*.dat\>"];\)\)], \
+"Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(Min[Rest@Import[#, "\<Real64\>"]] &\) /@ imgs\)], "Input"],
+
+Cell[BoxData[
+    \({2.846696700968118`*^-24, 3.3700174177510037`*^-23, 
+      4.803871478942499`*^-22, 8.950748443291241`*^-21, 
+      1.7676814372657788`*^-19, 4.045989235864132`*^-18, 
+      9.102896331841946`*^-17, 1.9154446405276905`*^-15, 
+      4.634362333302598`*^-14, 1.5423130589678774`*^-11, 
+      0.000049989452612818805`, 0.000060692416289505486`, 
+      0.00004586458549435442`, 0.00006753862146493473`, 
+      1.0878842404866973`*^-13, 0.000025165200652668773`, 
+      0.000082044060643397`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(data = 
+        Rest@Import["\</home/abergman/Research/DCell/temp/vec.1190.dat\>", \
+"\<Real64\>"];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[data]\)], "Input"],
+
+Cell[BoxData[
+    \({500000}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(dof = 2;\)\), "\[IndentingNewLine]", 
+    \(\(m = 100;\)\), "\[IndentingNewLine]", 
+    \(\(n = 100;\)\), "\[IndentingNewLine]", 
+    \(\(p = 25;\)\), "\[IndentingNewLine]", 
+    \(\(dat = Partition[data, dof];\)\), "\[IndentingNewLine]", 
+    \(\(dat = Partition[dat[\([All, 2]\)], m];\)\), "\[IndentingNewLine]", 
+    \(\(dat = Partition[dat, n];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(dat *= 2^16. ;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[dat]\)], "Input"],
+
+Cell[BoxData[
+    \({25, 100, 100}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(<< Graphics`Graphics`\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(max = Max[dat]\)], "Input"],
+
+Cell[BoxData[
+    \(0.3858749888776286`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DisplayTogetherArray[\[IndentingNewLine]\(ListDensityPlot[#, 
+              PlotRange \[Rule] {0, max}, Frame \[Rule] False, 
+              Mesh \[Rule] False, 
+              ColorFunction \[Rule] \((RGBColor[0, #, 0] &)\)] &\) /@ dat // 
+        Partition[#, 5] &, \[IndentingNewLine]GraphicsSpacing \[Rule] 0, 
+      ImageSize \[Rule] 800]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  GraphicsArray  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({ .8  max, max}\)], "Input"],
+
+Cell[BoxData[
+    \({20230.962616867415`, 25288.70327108427`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(Histogram[Flatten[dat], 
+        HistogramRange \[Rule] { .01\ max, max}];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(mz1 = 24\), "\[IndentingNewLine]", 
+    \(Table[\(\(-k\) \((k - mz1)\)\)\/\(mz1\^2/4. \), {k, 0, 
+        mz1}]\)}], "Input"],
+
+Cell[BoxData[
+    \(24\)], "Output"],
+
+Cell[BoxData[
+    \({0, 0.1597222222222222`, 0.3055555555555555`, 0.4375`, 
+      0.5555555555555556`, 0.6597222222222222`, 0.75`, 0.8263888888888888`, 
+      0.8888888888888888`, 0.9375`, 0.9722222222222223`, 0.9930555555555555`, 
+      1.`, 0.9930555555555556`, 0.9722222222222221`, 0.9374999999999999`, 
+      0.8888888888888888`, 0.8263888888888888`, 0.75`, 0.6597222222222222`, 
+      0.5555555555555556`, 0.43749999999999994`, 0.3055555555555555`, 
+      0.1597222222222222`, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(<< Graphics`Animation`\)], "Input"],
+
+Cell[BoxData[
+    \(\(pts = Position[dat, _?\((# >  .3 &)\)];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(n = \(Norm[# - {12, 50, 50}] &\) /@ N@pts;\)\)], "Input"],
+
+Cell[BoxData[
+    \(SpinShow[g, Frames \[Rule] 30, 
+      SpinRange \[Rule] {0\ Degree, 180\ Degree}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(g = \(\(Thread[{\(RGBColor[0, #\/Max[n], 0] &\) /@ n, Point /@ pts}] // 
+            Flatten\) // Graphics3D\) // Show\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics3D  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowSize->{1280, 948},
+WindowMargins->{{0, Automatic}, {-4, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 26, 0, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[1805, 55, 92, 1, 27, "Input"],
+Cell[1900, 58, 132, 3, 27, "Output"]
+}, Open  ]],
+Cell[2047, 64, 203, 4, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2275, 72, 101, 2, 64, "Input"],
+Cell[2379, 76, 56, 1, 27, "Output"]
+}, Open  ]],
+Cell[2450, 80, 38, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2513, 85, 60, 1, 44, "Input"],
+Cell[2576, 88, 53, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2666, 94, 59, 1, 44, "Input"],
+Cell[2728, 97, 130, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2895, 105, 53, 1, 27, "Input"],
+Cell[2951, 108, 48, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3036, 114, 84, 1, 27, "Input"],
+Cell[3123, 117, 52, 1, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3212, 123, 74, 1, 44, "Input"],
+Cell[3289, 126, 67, 1, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3393, 132, 127, 2, 75, "Input"],
+Cell[3523, 136, 130, 3, 27, "Output"]
+}, Open  ]],
+Cell[3668, 142, 117, 3, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[3810, 149, 80, 1, 27, "Input"],
+Cell[3893, 152, 521, 9, 47, "Output"]
+}, Open  ]],
+Cell[4429, 164, 136, 3, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4590, 171, 49, 1, 27, "Input"],
+Cell[4642, 174, 42, 1, 27, "Output"]
+}, Open  ]],
+Cell[4699, 178, 387, 7, 123, "Input"],
+Cell[5089, 187, 51, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[5165, 192, 48, 1, 27, "Input"],
+Cell[5216, 195, 48, 1, 27, "Output"]
+}, Open  ]],
+Cell[5279, 199, 54, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[5358, 204, 47, 1, 27, "Input"],
+Cell[5408, 207, 53, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5498, 213, 374, 6, 59, "Input"],
+Cell[5875, 221, 135, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6047, 229, 48, 1, 27, "Input"],
+Cell[6098, 232, 75, 1, 27, "Output"]
+}, Open  ]],
+Cell[6188, 236, 111, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[6324, 242, 146, 3, 64, "Input"],
+Cell[6473, 247, 36, 1, 27, "Output"],
+Cell[6512, 250, 498, 7, 43, "Output"]
+}, Open  ]],
+Cell[7025, 260, 55, 1, 27, "Input"],
+Cell[7083, 263, 76, 1, 27, "Input"],
+Cell[7162, 266, 79, 1, 27, "Input"],
+Cell[7244, 269, 114, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[7383, 275, 151, 2, 45, "Input"],
+Cell[7537, 279, 132, 3, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

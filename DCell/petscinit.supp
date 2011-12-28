@@ -1,0 +1,8 @@
+{
+   My_PetscInit_Suppress
+   Memcheck:Leak
+   ...
+   fun:PetscInitialize
+   ...
+}
+

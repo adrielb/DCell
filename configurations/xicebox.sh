@@ -1,0 +1,1 @@
+su -c "mount -t cifs //128.220.136.25/Home /media/icebox/Home -o username=adriel,password=uiojkl,uid=abergman,gid=abergman;mount -t cifs //128.220.136.25/Pub  /media/icebox/Pub  -o username=adriel,password=uiojkl,uid=abergman,gid=abergman"

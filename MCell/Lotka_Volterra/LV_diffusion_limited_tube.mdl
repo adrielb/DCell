@@ -1,0 +1,147 @@
+Na = 6.022e23
+Tube_vol_um = 0.00895345 /*cubic microns*/
+Tube_vol = Tube_vol_um * 1e-15 /*liters*/
+
+number_of_B_to_release = 20 
+number_of_C_to_release = 20 
+ 
+partition_step = 0.010
+
+rint = 0.003
+
+iterations = 2000 
+
+dt = 1e-8 
+TIME_STEP = dt
+TIME_STEP_MAX = 1*dt
+ITERATIONS = iterations
+EFFECTOR_GRID_DENSITY = 10000
+INTERACTION_RADIUS = 0.003
+
+
+PARTITION_X = [[-0.40 TO 0.40 STEP partition_step]]
+PARTITION_Y = [[-0.15 TO 0.15 STEP partition_step]]
+PARTITION_Z = [[-0.40 TO 0.40 STEP partition_step]]
+
+dc_original = 6e-6
+dc_use = dc_original 
+
+DEFINE_MOLECULES
+{
+   B {DIFFUSION_CONSTANT_3D = dc_use}
+   C {DIFFUSION_CONSTANT_3D = dc_use}
+   D {DIFFUSION_CONSTANT_3D = dc_use}
+}
+
+A_conc = 0.2 
+effective_k_plus = 0.43e8*A_conc
+
+DEFINE_REACTIONS
+{
+   B -> B + B [effective_k_plus]
+   B + C -> C + C [9e19]
+   C -> D [5.0e6]  
+}
+
+DEFINE_SURFACE_CLASSES {
+  transp {
+    TRANSPARENT = B
+    TRANSPARENT = C
+    TRANSPARENT = D
+  }
+
+}
+
+DEFINE_SURFACE_CLASS absorp {
+	ABSORPTIVE = D
+}
+
+B_release CUBIC_RELEASE_SITE
+{
+   LOCATION = [-0.00194636,0.0154949,0.0802885]
+   LIGAND = B
+   NUMBER_TO_RELEASE = number_of_B_to_release
+   SITE_DIAMETER = 0.03 
+
+}
+
+C_release CUBIC_RELEASE_SITE
+{
+   LOCATION = [-0.00194636,0.0154949,0.0802885]
+   LIGAND = C
+   NUMBER_TO_RELEASE = number_of_C_to_release
+   SITE_DIAMETER = 0.03
+
+}
+
+INCLUDE_FILE = "tube_mesh_object.mdl"
+
+locx = 0.062306002
+locy = -0.00034738
+locz = -0.063786902
+
+width = 0.035 
+half = width / 2.0
+
+sample_box BOX {
+	CORNERS = [locx - half, locy - half, locz - half],[locx + half, locy + half, locz + half]
+	DEFINE_SURFACE_REGIONS {
+		r1 {
+			ELEMENT_LIST = [ALL_ELEMENTS]
+			SURFACE_CLASS = transp
+			}
+		}
+}
+	
+
+INSTANTIATE world OBJECT 
+{
+	
+   small_tube OBJECT Tube {SCALE = [0.001,0.001,0.001]}
+   sample_box OBJECT sample_box {}
+   B_release OBJECT B_release{}
+   C_release OBJECT C_release{}
+}
+VIZ_OUTPUT
+{
+   MODE = DREAMM_V3 
+	FILENAME = "Diff_LV"
+	MOLECULES {
+		NAME_LIST {ALL_MOLECULES}
+		ITERATION_NUMBERS {ALL_DATA @ ALL_ITERATIONS}
+	}
+
+	MESHES {
+		NAME_LIST {ALL_MESHES}
+		ITERATION_NUMBERS {ALL_DATA @ [0]}
+	}
+}
+
+
+REACTION_DATA_OUTPUT
+{
+   OUTPUT_BUFFER_SIZE = 1000  
+
+   STEP = dt * 100
+
+   {COUNT [B, world.sample_box]} => "./reaction_data/B_sample.dat"
+   {COUNT [B, WORLD]} => "./reaction_data/B.dat"
+   {COUNT [C, world.sample_box]} => "./reaction_data/C_sample.dat"
+   {COUNT [C, world.sample_box] + COUNT [B, world.sample_box]} => "./reaction_data/BC_sample.dat"
+   {COUNT [C, WORLD]} => "./reaction_data/C.dat"
+   {COUNT [D, WORLD]} => "./reaction_data/D.dat"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

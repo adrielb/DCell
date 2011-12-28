@@ -1,0 +1,16 @@
+#!/bin/bash
+# request Bourne again shell as shell for job
+#$ -S /bin/bash
+# merge stderr with stdout
+#$ -j y
+# assign a name to submitted job
+#$ -N render
+# change output file name
+#$ -o $HOME/output/$JOB_NAME.$JOB_ID.$TASK_ID
+# export environment variables
+#$ -V
+
+echo $HOSTNAME
+echo TASK_ID = $TASK_ID
+echo GE_TASK ID = $GE_TASK_ID
+echo SGE_TASK ID = $SGE_TASK_ID

@@ -1,0 +1,114 @@
+
+INCLUDE_FILE = "input.py"
+
+TIME_STEP = dt
+TIME_STEP_MAX = 1*dt
+ITERATIONS = iterations 
+
+EFFECTOR_GRID_DENSITY = 10000
+INTERACTION_RADIUS = R_int 
+
+count_X = x_count
+count_Y = y_count
+count_Z = z_count
+
+half_box = ((volume)^(1/3))/2 
+
+PARTITION_X = [[-(half_box-0.00001) TO (half_box-0.00001) STEP 0.008]]
+PARTITION_Y = [[-(half_box-0.00001) TO (half_box-0.00001) STEP 0.008]]
+PARTITION_Z = [[-(half_box-0.00001) TO (half_box-0.00001) STEP 0.008]]
+
+DEFINE_MOLECULES
+{
+	C {DIFFUSION_CONSTANT_3D = dc}
+	D {DIFFUSION_CONSTANT_3D = dc}
+	vm_X {DIFFUSION_CONSTANT_3D = dc}
+	vm_Y {DIFFUSION_CONSTANT_3D = dc}
+	vm_Z {DIFFUSION_CONSTANT_3D = dc}
+}
+
+DEFINE_SURFACE_CLASSES {
+	absorp_CD { ABSORPTIVE = C ABSORPTIVE = D }
+}
+
+DEFINE_REACTIONS {
+
+	vm_Y -> vm_X  [k1*A]
+	vm_X + vm_Y -> C [k2]  
+	vm_X -> vm_X + vm_X + vm_Z [k3*A]
+	vm_X + vm_X -> D [k4] 
+	vm_Z -> vm_Y [k5*B]
+}
+
+vm_X_release CUBIC_RELEASE_SITE
+{
+	LOCATION = [0,0,0]
+	MOLECULE = vm_X 
+	NUMBER_TO_RELEASE = count_X
+	SITE_DIAMETER = 2*(half_box - 0.0001) 
+}
+
+vm_Y_release CUBIC_RELEASE_SITE
+{
+	LOCATION = [0,0,0]
+	MOLECULE = vm_Y
+	NUMBER_TO_RELEASE = count_Y
+	SITE_DIAMETER = 2*(half_box - 0.0001) 
+}
+
+vm_Z_release CUBIC_RELEASE_SITE
+{
+	LOCATION = [0,0,0]
+	MOLECULE = vm_Z
+	NUMBER_TO_RELEASE = count_Z
+	SITE_DIAMETER = 2*(half_box - 0.0001) 
+}
+
+box BOX
+{
+	CORNERS = [-half_box,-half_box,-half_box], [half_box,half_box,half_box]
+	DEFINE_SURFACE_REGIONS {
+		   r1{
+			ELEMENT_LIST = [TOP,BOTTOM,LEFT,RIGHT,FRONT,BACK]
+			SURFACE_CLASS = absorp_CD
+		     }
+	}
+}
+
+INSTANTIATE world OBJECT 
+{
+	vm_X_release OBJECT vm_X_release{}
+	vm_Y_release OBJECT vm_Y_release{}
+	vm_Z_release OBJECT vm_Z_release{}
+
+	box OBJECT box {}
+}
+/*
+VIZ_OUTPUT {
+	MODE = DREAMM_V3
+	FILENAME = "Oreg"
+
+	MOLECULES {
+		NAME_LIST {ALL_MOLECULES}
+		ITERATION_NUMBERS {ALL_DATA @ ALL_ITERATIONS}
+	}
+
+	MESHES {
+		NAME_LIST {ALL_MESHES}
+		ITERATION_NUMBERS {ALL_DATA @ [0]}
+	}
+}
+*/
+
+REACTION_DATA_OUTPUT
+{
+	OUTPUT_BUFFER_SIZE = 10
+	STEP = 1*dt
+
+	{COUNT [C, WORLD]} => "./reaction_data/C.dat"
+	{COUNT [D, WORLD]} => "./reaction_data/D.dat"
+	{COUNT [vm_X, WORLD]} => "./reaction_data/X.dat"
+	{COUNT [vm_Y, WORLD]} => "./reaction_data/Y.dat"
+	{COUNT [vm_Z, WORLD]} => "./reaction_data/Z.dat"
+}
+

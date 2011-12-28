@@ -1,0 +1,238 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      4669,        161]*)
+(*NotebookOutlinePosition[      5299,        183]*)
+(*  CellTagsIndexPosition[      5255,        179]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+    \(Dm[t_, i_] := t[\([i]\)] - t[\([i - 1]\)]\), "\[IndentingNewLine]", 
+    \(\(\(Dp[t_, i_] := t[\([i + 1]\)] - t[\([i]\)]\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(i = 6;\)\), "\[IndentingNewLine]", 
+    \(\(t = {\(-9\), \(-9\), \(-9\), \(-3\), \(-2\), \(-1\), 0, 1, 2, 3, 9, 
+          9, 9};\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(ListPlot[t];\)\), "\[IndentingNewLine]", 
+    \({d = Dm[t, i], Max[d, 0]}\), "\n", 
+    \({d = Dp[t, i], Min[d, 0], Max[\(-d\), 0]}\)}], "Input"],
+
+Cell[BoxData[
+    \({1, 1}\)], "Output"],
+
+Cell[BoxData[
+    \({1, 0, 0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\[Alpha] = 1;\)\), "\[IndentingNewLine]", 
+    \(\[Beta] = \(-2\)\ t[\([i - 1]\)]*\[Alpha]\), "\[IndentingNewLine]", 
+    \(\[Gamma] = t[\([i - 1]\)]\^2*\[Alpha]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-6\)\)], "Output"],
+
+Cell[BoxData[
+    \(9\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(tp = \((4  t[\([i - 1]\)] - t[\([i - 2]\)])\)/
+          3;\)\), "\[IndentingNewLine]", 
+    \(\(\[Alpha] = 9/4. ;\)\), "\[IndentingNewLine]", 
+    \(\[Beta] = \(-2\)\ \[Alpha]*tp\), "\[IndentingNewLine]", 
+    \(\[Gamma] = tp\^2*\[Alpha]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-15.`\)\)], "Output"],
+
+Cell[BoxData[
+    \(25.`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(a = \[Alpha];\)\), "\[IndentingNewLine]", 
+    \(\(b = \[Beta];\)\), "\[IndentingNewLine]", 
+    \(\(\(c = \[Gamma] - 1;\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \({\(\(-b\) + \@\(b\^2 - 4*a*c\)\)\/\(2*a\), \(\(-b\) - \@\(b\^2 - \
+4*a*c\)\)\/\(2*a\)}\)}], "Input"],
+
+Cell[BoxData[
+    \({4.`, 2.6666666666666665`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(nx = 0;\)\), "\[IndentingNewLine]", 
+    \(\(ox = \(- .4\);\)\), "\[IndentingNewLine]", 
+    \(\(px = 0;\)\), "\[IndentingNewLine]", 
+    \(\(sh = 0.5;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(X = nx + ox + px\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(xs = Floor[X + sh];\)\), "\[IndentingNewLine]", 
+    \({xs, xs + 1}\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-0.4`\)\)], "Output"],
+
+Cell[BoxData[
+    \({0, 1}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Derivation", "Subsection"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\((t[i, j] - t[i - 1, j])\)\^2 // Expand\) // 
+        CoefficientList[#, t[i, j]] &\) // Reverse\)], "Input"],
+
+Cell[BoxData[
+    \({1, \(-2\)\ t[\(-1\) + i, j], t[\(-1\) + i, j]\^2}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\((t[i + 1, j] - t[i, j])\)\^2 // Expand\) // 
+        CoefficientList[#, t[i, j]] &\) // Reverse\)], "Input"],
+
+Cell[BoxData[
+    \({1, \(-2\)\ t[1 + i, j], t[1 + i, j]\^2}\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1920}, {0, 1105}},
+WindowSize->{803, 1026},
+WindowMargins->{{0, Automatic}, {Automatic, 25}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 540, 9, 155, "Input"],
+Cell[2319, 64, 40, 1, 27, "Output"],
+Cell[2362, 67, 43, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2442, 73, 198, 3, 61, "Input"],
+Cell[2643, 78, 40, 1, 27, "Output"],
+Cell[2686, 81, 35, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2758, 87, 275, 5, 77, "Input"],
+Cell[3036, 94, 43, 1, 27, "Output"],
+Cell[3082, 97, 38, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3157, 103, 309, 6, 115, "Input"],
+Cell[3469, 111, 60, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3566, 117, 381, 7, 155, "Input"],
+Cell[3950, 126, 43, 1, 27, "Output"],
+Cell[3996, 129, 40, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4073, 135, 32, 0, 38, "Subsection"],
+Cell[4108, 137, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4172, 142, 134, 2, 29, "Input"],
+Cell[4309, 146, 84, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4430, 152, 134, 2, 29, "Input"],
+Cell[4567, 156, 74, 1, 29, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

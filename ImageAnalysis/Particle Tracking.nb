@@ -1,0 +1,820 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     21053,        621]*)
+(*NotebookOutlinePosition[     21739,        645]*)
+(*  CellTagsIndexPosition[     21695,        641]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(<< "\</home/abergman/Research/Image\ \
+Analysis/AlternativeDisplay.m\>"\)], "Input"],
+
+Cell[BoxData[
+    \(<< "\</home/abergman/Research/Image\ Analysis/GridSnake.m\>"\)], "Input"],
+
+Cell[BoxData[
+    \(\($IMAGESIZE = 700;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["ParticleKernel", "Subsection"],
+
+Cell[BoxData[
+    \(Module[{w = 5, window, B, K0w}, \[IndentingNewLine]window = 
+        Range[\(-w\), w]; \[IndentingNewLine]B = 
+        Total[Exp[\(-\(window\^2\/4. \)\)]]\^2; \[IndentingNewLine]K0w = \
+\(1\/B\) Total[Exp[\(-\(window\^2\/2. \)\)]]\^2 - 
+          B\/\((2  w + 1)\)\^2; \[IndentingNewLine]ParticleKernel = 
+        Table[\(1\/K0w\) \((\(1\/B\) Exp[\(-\(\(i\^2 + j\^2\)\/4\)\)] - 
+                1\/\((2  w + 1)\)\^2)\), {j, \(-w\), w}, {i, \(-w\), 
+            w}];\[IndentingNewLine]]\)], "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["ShawdowKernel", "Subsection"],
+
+Cell[BoxData[{
+    \(Module[{w}, \[IndentingNewLine]w = 
+        5; \[IndentingNewLine]ShawdowKernel = 
+        N@Table[2\ \[ExponentialE]\^\(\(\(-x\^2\) - y\^2\)\/w\)\ \((x + y + 
+                    1)\) - 1\/\((2  w + 1)\)\^2, {x, \(-w\), w}, {y, \(-w\), 
+              w}]; \[IndentingNewLine]ShawdowKernel /= 
+        Total[Flatten[ShawdowKernel]];\[IndentingNewLine]]\), "\n", 
+    \(ListDensityPlot[ShawdowKernel]\)}], "Input"],
+
+Cell[BoxData[
+    \(ListPlot[ShawdowKernel[\([7]\)]]\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Testing Kernels", "Subsection"],
+
+Cell[BoxData[
+    \(\(files = 
+        FileNames["\</home/abergman/Images/2mm Angle/*\>"];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(img = 
+        Import["\</home/abergman/Images/2mm Angle/V-0.spl.b.1\>", \
+"\<UnsignedInteger16\>"];\)\), "\n", 
+    \(\(img = Reverse@Partition[img, 512];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[img]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(AbsoluteTiming[\[IndentingNewLine]\(kimg = 
+          ListConvolve[ParticleKernel, 
+            Developer`ToPackedArray@
+              Nest[MirrorBC, img, 5]];\)\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({1.204295`6.532277876746138\ Second, Null}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MyConv = 
+      Compile[{{ker, _Real, 2}, {img, _Real, 
+            2}}, \[IndentingNewLine]ListConvolve[ker, 
+          img]\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(CompiledFunction[{ker, img}, ListConvolve[ker, img], 
+        "-CompiledCode-"]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(AbsoluteTiming[\[IndentingNewLine]\(kimg = 
+          MyConv[ParticleKernel, img];\)\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({1.108603`6.496321043001986\ Second, Null}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(kimg = 
+        ListConvolve[ParticleKernel, Nest[MirrorBC, img, 5]];\)\), "\n", 
+    \(\(s = \(Sign[kimg] + 1. \)\/2;\)\)}], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[kimg]\)], "Input"],
+
+Cell[BoxData[
+    \(\(skimg = s\ kimg;\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[skimg]\)], "Input"],
+
+Cell[BoxData[
+    \(\(w = 5;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(peaks = 
+        BlockFunc[
+          Function[
+            block, \[IndentingNewLine]m = Max[block]; \[IndentingNewLine]If[
+              block[\([w + 1, w + 1]\)] \[Equal] m, 
+              If[m \[NotEqual] 0, 1, 0], 0]\[IndentingNewLine]], 2  w + 1, 
+          Nest[MirrorBC, skimg, 5]];\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(block\\)\\\" is similar to existing symbol \
+\\\"\\!\\(Block\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Partition::"ilsmn"\), \(\(:\)\(\ \)\), "\<\"Single or list of \
+non-negative machine-size integers expected at position \\!\\(2\\) of \
+\\!\\(Partition[\\(\\(\\(\\({\\(\[LeftSkeleton] 1 \[RightSkeleton]\\)}\\)\\), \
+\\(\\({\\(\\(1 + \\(\\(2\\\\ w\\)\\)\\)\\), \\(\\(1 + \\(\\(2\\\\ \
+w\\)\\)\\)\\)}\\)\\), \\(\\({1, 1}\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::ilsmn\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + w\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + w\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + w\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"pspec\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Partition::"ilsmn"\), \(\(:\)\(\ \)\), "\<\"Single or list of \
+non-negative machine-size integers expected at position \\!\\(2\\) of \
+\\!\\(Partition[\\(\\(\\(\\({\\(\\(If[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(\[LeftSkeleton] 9 \
+\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 745 \
+\[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\\(If[\\(\\(\\(\\(\\(\\(1 \
+\[LeftDoubleBracket] \\(\\(\\(\\(1 + w\\)\\), \\(\\(1 + w\\)\\)\\)\\) \
+\[RightDoubleBracket]\\)\\) \[Equal] 1\\)\\), \\(\\(If[\\(\\(\\(\\(m \
+\[NotEqual] 0\\)\\), 1, 0\\)\\)]\\)\\), 0\\)\\)]\\)\\), \\(\\(If[\\(\\(\\(\\(\
+\\(\\(1 \[LeftDoubleBracket] \\(\\(\\(\\(1 + w\\)\\), \\(\\(1 + w\\)\\)\\)\\) \
+\[RightDoubleBracket]\\)\\) \[Equal] 1\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\), 0\\)\\)]\\)\\)}\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::ilsmn\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Partition::"ilsmn"\), \(\(:\)\(\ \)\), "\<\"Single or list of \
+non-negative machine-size integers expected at position \\!\\(2\\) of \
+\\!\\(Partition[\\(\\(\\(\\({\\(\\(If[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(\[LeftSkeleton] 9 \
+\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 745 \
+\[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\\(If[\\(\\(\\(\\(\\(\\(1 \
+\[LeftDoubleBracket] \\(\\(\\(\\(1 + w\\)\\), \\(\\(1 + w\\)\\)\\)\\) \
+\[RightDoubleBracket]\\)\\) \[Equal] 1\\)\\), \\(\\(If[\\(\\(\\(\\(m \
+\[NotEqual] 0\\)\\), 1, 0\\)\\)]\\)\\), 0\\)\\)]\\)\\), \\(\\(If[\\(\\(\\(\\(\
+\\(\\(1 \[LeftDoubleBracket] \\(\\(\\(\\(1 + w\\)\\), \\(\\(1 + w\\)\\)\\)\\) \
+\[RightDoubleBracket]\\)\\) \[Equal] 1\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\), 0\\)\\)]\\)\\)}\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::ilsmn\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Partition :: \\\"ilsmn\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(PeakQ = 
+      Compile[{{block, _Real, 
+            2}}, \[IndentingNewLine]With[{m = 
+              Max[block]}, \
+\[IndentingNewLine]If[\[IndentingNewLine]block[\([6, 6]\)] \[Equal] 
+              m, \[IndentingNewLine]If[m \[NotEqual] 0, 1, 
+              0], \[IndentingNewLine]0]\[IndentingNewLine]]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(CompiledFunction[{block}, 
+        With[{m = Max[block]}, 
+          If[block\[LeftDoubleBracket]6, 6\[RightDoubleBracket] \[Equal] m, 
+            If[m \[NotEqual] 0, 1, 0], 0]], "-CompiledCode-"]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(w = 5;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(AbsoluteTiming[\[IndentingNewLine]\(peaks = 
+          Developer`PartitionMap[\[IndentingNewLine]Max, 
+            Developer`ToPackedArray@Nest[MirrorBC, skimg, 5], {2  w + 1, 
+              2  w + 1}, {1, 1}];\)\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \({3.0949`6.942191614493527\ Second, Null}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(pos = Position[peaks - skimg, 0. ];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[peaks]\)], "Input"],
+
+Cell[BoxData[
+    \({512, 512}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[peaks]\)], "Input"],
+
+Cell[BoxData[
+    \(\(pos = Position[peaks, 1];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(Extract[skimg, pos] // Sort\) // ListPlot\)], "Input"],
+
+Cell[BoxData[
+    \(\(p = Select[pos, Extract[skimg, #] > 4000 &];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(w = 5;\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[img, \ ImageSize \[Rule] 2000, 
+      Epilog \[Rule] {Hue[0], 
+          PointSize[ .005], \(Circle[# - 0.5, w] &\) /@ pf, Hue[ .5]}, 
+      TextStyle \[Rule] mytextstyle, 
+      FrameTicks \[Rule] {\[IndentingNewLine]\({#, 
+                ToString[Round[3.25  #]] <> "\< \[Mu]m\>"} &\) /@ \(Range[
+                  0\ , 5700, 1000]\/3.25\), \[IndentingNewLine]\({#, 
+                ToString[Round[3.25  #]] <> "\< \[Mu]m\>"} &\) /@ \(Range[
+                  0\ , 2000, 500]\/3.25\), None, None}]\)], "Input"],
+
+Cell[BoxData[
+    \(Histogram[Extract[skimg, pos], HistogramRange \[Rule] {50, 2000}, 
+      ImageSize \[Rule] $IMAGESIZE]\)], "Input"],
+
+Cell[BoxData[
+    \(circleWindow = 
+      Select[\[IndentingNewLine]Outer[List, window, window]~Flatten~
+          1, \[IndentingNewLine]Plus @@ \((#\^2)\) \[LessEqual] 
+            w\^2 &]\)], "Input"],
+
+Cell[BoxData[
+    \(ListPlot[circleWindow, AspectRatio \[Rule] Automatic]\)], "Input"],
+
+Cell[BoxData[
+    \(\(m0 = 
+        ListConvolve[\[IndentingNewLine]Table[
+              1. , {2  w + 1}, {2  w + 1}], \[IndentingNewLine]Nest[MirrorBC, 
+              skimg, 5]\[IndentingNewLine]]/\((2  w + 1)\)\^2;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[m0]\)], "Input"],
+
+Cell[BoxData[
+    \({512, 512}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(DisplayTogetherArray[\[IndentingNewLine]{{Histogram[
+            Extract[skimg, p]]}, \[IndentingNewLine]{Histogram[
+            Extract[skimg, pos]]}}]\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[m0]\)], "Input"],
+
+Cell[BoxData[
+    \(\(ListPlot[Sort@Extract[m0, pos]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListPlot[{Extract[skimg, pos], 
+          Extract[m0, pos]}\[Transpose] ]\)], "Input"],
+
+Cell[BoxData[
+    \(\(Histogram[Extract[m2, pos]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(m2 = 
+        ListConvolve[\[IndentingNewLine]N@
+                Table[\((i\^2 + j\^2)\), {i, \(-w\), w}, {j, \(-w\), 
+                    w}], \[IndentingNewLine]Nest[MirrorBC, skimg, 
+                5]\[IndentingNewLine]]/m0 /. 
+          ComplexInfinity \[Rule] 0;\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Power::"infy"\), \(\(:\)\(\ \)\), "\<\"Infinite expression \
+\\!\\(1\\/0.`\\) encountered. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Power::infy\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Power::"infy"\), \(\(:\)\(\ \)\), "\<\"Infinite expression \
+\\!\\(1\\/0.`\\) encountered. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Power::infy\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Power::"infy"\), \(\(:\)\(\ \)\), "\<\"Infinite expression \
+\\!\\(1\\/0.`\\) encountered. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Power::infy\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Power :: \\\"infy\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[m2]\)], "Input"],
+
+Cell[BoxData[
+    \(\(m0m2 = 
+        Transpose[
+          Flatten /@ {Extract[m0, pos], Extract[m2, pos]}];\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListPlot[m0m2, PlotRange \[Rule] All]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Position[m0m2, _?\((#[\([1]\)] > 1 && #[\([2]\)] > 2500 &)\), {1}, 
+      Heads \[Rule] False]\)], "Input"],
+
+Cell[BoxData[
+    \({{1396}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(m0m2[\([1396]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({218.56207536835637`, 2799.5620884000978`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[img, \ ImageSize \[Rule] 2000, PlotRange \[Rule] All, 
+      Epilog \[Rule] {Hue[0], PointSize[ .005], 
+          Circle[pos[\([1396]\)] - 0.5 // Reverse, w]}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(skimg[\([Sequence @@ pos[\([1396]\)]]\)]\)], "Input"],
+
+Cell[BoxData[
+    \(1191.1757304742002`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(temp = 
+        Take[img, {\(-w\), w} + pos[\([1396, 1]\)], {\(-w\), w} + 
+            pos[\([1396, 2]\)]];\)\), "\[IndentingNewLine]", 
+    \(\(MatrixForm[temp];\)\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[temp]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Max[temp]\)], "Input"],
+
+Cell[BoxData[
+    \(1191.1757304742002`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(graphs = 
+        Function[
+            p, \[IndentingNewLine]\[IndentingNewLine]ListDensityPlot[
+              Take[skimg, Clip[{\(-w\), w} + p[\([1]\)], {1, 512}], 
+                Clip[{\(-w\), w} + p[\([2]\)], {1, 512}]], 
+              DisplayFunction \[Rule] Identity]\[IndentingNewLine]] /@ 
+          p;\)\)], "Input"],
+
+Cell[BoxData[
+    \(Partition[graphs, 10, 10] // DisplayTogetherArray\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Compiled", "Subsection"],
+
+Cell[BoxData[
+    \(\(SetDirectory["\</home/abergman/Images/20070223/2mm Angel/\>"];\)\)], \
+"Input"],
+
+Cell[BoxData[{
+    \(\(ParticlePositions = {};\)\), "\[IndentingNewLine]", 
+    \(Do[\[IndentingNewLine]img = 
+        Import["\<V-0.spl.b.\>" <> 
+            ToString[
+              file], "\<UnsignedInteger16\>"]; \[IndentingNewLine]img = 
+        Reverse@Partition[img, 512]; \[IndentingNewLine]kimg = 
+        ListConvolve[ParticleKernel, 
+          Nest[MirrorBC, img, 
+            5]]; \[IndentingNewLine]s = \(Sign[kimg] + 1\)\/2; \
+\[IndentingNewLine]skimg = s\ kimg; \[IndentingNewLine]peaks = 
+        BlockFunc[
+          Function[
+            block, \[IndentingNewLine]m = Max[block]; \[IndentingNewLine]If[
+              block[\([w + 1, w + 1]\)] \[Equal] m, 
+              If[m \[NotEqual] 0, 1, 0], 0]\[IndentingNewLine]], 2  w + 1, 
+          Nest[MirrorBC, skimg, 5]]; \[IndentingNewLine]pos = 
+        Position[peaks, 1]; \[IndentingNewLine]p = 
+        Select[pos, Extract[skimg, #] > 4000 &]; \[IndentingNewLine]AppendTo[
+        ParticlePositions, p];\[IndentingNewLine], {file, 0, 49}]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(DetectFeaturePoints = 
+        Function[
+          img, \[IndentingNewLine]Module[{kimg, s, skimg, peaks, pos, p, 
+              w = 5}, \[IndentingNewLine]kimg = 
+              ListConvolve[ParticleKernel, 
+                Nest[MirrorBC, img, 
+                  5]]; \[IndentingNewLine]s = \(Sign[kimg] + 1. \)\/2; \
+\[IndentingNewLine]skimg = s\ kimg; \[IndentingNewLine]peaks = 
+              Developer`PartitionMap[\[IndentingNewLine]Max, 
+                Developer`ToPackedArray@Nest[MirrorBC, skimg, 5], {2  w + 1, 
+                  2  w + 1}, {1, 1}]; \[IndentingNewLine]pos = 
+              Position[peaks - skimg, 0. ]; \[IndentingNewLine]p = 
+              Select[pos, 
+                Extract[skimg, #] > 
+                    4000 &]; \[IndentingNewLine]p]];\)\)], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(kimg\\)\\\" is similar to existing symbols \
+\\!\\({img, mimg}\\). \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(skimg\\)\\\" is similar to existing symbol \
+\\\"\\!\\(kimg\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[img, 
+      Epilog \[Rule] {Hue[0], 
+          PointSize[ .001], \(Point[Reverse@#] &\) /@ p}]\)], "Input"],
+
+Cell[BoxData[
+    \(Flatten[ParticlePositions, 1] // ListPlot\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length@ParticlePositions\)], "Input"],
+
+Cell[BoxData[
+    \(50\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length /@ ParticlePositions // Max\)], "Input"],
+
+Cell[BoxData[
+    \(279\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Export["\</home/abergman/pts\>", 
+      ParticlePositions, "\<Table\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("/home/abergman/pts"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(Do[
+      Do[\[IndentingNewLine]\(ToString@
+                ParticlePositions[\([i, j, 1]\)] <> "\< \>" <> 
+              ToString@
+                ParticlePositions[\([i, j, 
+                    2]\)] >>> "\</home/abergman/pts\>";\)\[IndentingNewLine], \
+{j, Length[
+            ParticlePositions[\([i]\)]]}]; \[IndentingNewLine]"\<\>" >>> \
+"\</home/abergman/pts\>";\[IndentingNewLine], {i, 
+        Length[ParticlePositions]}]\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length[ParticlePositions]\)], "Input"],
+
+Cell[BoxData[
+    \(9\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(rows : 512\), "\n", 
+    \(cols : 512\), "\n", 
+    \(frames : 9\), "\n", 
+    \(points : 275\)}], "Input"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 3200}, {0, 1200}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{564, 1148},
+WindowMargins->{{569, Automatic}, {-1, Automatic}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 104, 2, 27, "Input"],
+Cell[1861, 55, 93, 1, 27, "Input"],
+Cell[1957, 58, 54, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2036, 63, 36, 0, 38, "Subsection"],
+Cell[2075, 65, 546, 9, 213, "Input",
+  InitializationCell->True]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2658, 79, 35, 0, 38, "Subsection"],
+Cell[2696, 81, 434, 7, 177, "Input"],
+Cell[3133, 90, 65, 1, 27, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3235, 96, 37, 0, 38, "Subsection"],
+Cell[3275, 98, 105, 2, 27, "Input"],
+Cell[3383, 102, 194, 4, 59, "Input"],
+Cell[3580, 108, 53, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[3658, 113, 214, 4, 75, "Input"],
+Cell[3875, 119, 76, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3988, 125, 178, 4, 59, "Input"],
+Cell[4169, 131, 157, 4, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4363, 140, 137, 2, 59, "Input"],
+Cell[4503, 144, 76, 1, 27, "Output"]
+}, Open  ]],
+Cell[4594, 148, 157, 3, 62, "Input"],
+Cell[4754, 153, 54, 1, 27, "Input"],
+Cell[4811, 156, 53, 1, 27, "Input"],
+Cell[4867, 159, 55, 1, 27, "Input"],
+Cell[4925, 162, 43, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4993, 167, 327, 7, 75, "Input"],
+Cell[5323, 176, 358, 5, 33, "Message"],
+Cell[5684, 183, 530, 8, 46, "Message"],
+Cell[6217, 193, 315, 5, 33, "Message"],
+Cell[6535, 200, 315, 5, 33, "Message"],
+Cell[6853, 207, 315, 5, 33, "Message"],
+Cell[7171, 214, 329, 5, 33, "Message"],
+Cell[7503, 221, 1061, 16, 72, "Message"],
+Cell[8567, 239, 1061, 16, 72, "Message"],
+Cell[9631, 257, 334, 5, 33, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10002, 267, 338, 7, 123, "Input"],
+Cell[10343, 276, 275, 6, 43, "Output"]
+}, Open  ]],
+Cell[10633, 285, 43, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[10701, 290, 265, 4, 91, "Input"],
+Cell[10969, 296, 74, 1, 27, "Output"]
+}, Open  ]],
+Cell[11058, 300, 72, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[11155, 305, 50, 1, 27, "Input"],
+Cell[11208, 308, 44, 1, 27, "Output"]
+}, Open  ]],
+Cell[11267, 312, 55, 1, 27, "Input"],
+Cell[11325, 315, 62, 1, 27, "Input"],
+Cell[11390, 318, 76, 1, 27, "Input"],
+Cell[11469, 321, 81, 1, 27, "Input"],
+Cell[11553, 324, 43, 1, 27, "Input"],
+Cell[11599, 327, 549, 9, 205, "Input"],
+Cell[12151, 338, 135, 2, 43, "Input"],
+Cell[12289, 342, 202, 4, 66, "Input"],
+Cell[12494, 348, 86, 1, 27, "Input"],
+Cell[12583, 351, 231, 4, 77, "Input"],
+
+Cell[CellGroupData[{
+Cell[12839, 359, 47, 1, 27, "Input"],
+Cell[12889, 362, 44, 1, 27, "Output"]
+}, Open  ]],
+Cell[12948, 366, 185, 3, 59, "Input"],
+Cell[13136, 371, 52, 1, 27, "Input"],
+Cell[13191, 374, 69, 1, 27, "Input"],
+Cell[13263, 377, 106, 2, 27, "Input"],
+Cell[13372, 381, 65, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[13462, 386, 305, 6, 85, "Input"],
+Cell[13770, 394, 280, 4, 37, "Message"],
+Cell[14053, 400, 280, 4, 37, "Message"],
+Cell[14336, 406, 280, 4, 37, "Message"],
+Cell[14619, 412, 329, 5, 33, "Message"]
+}, Open  ]],
+Cell[14963, 420, 52, 1, 27, "Input"],
+Cell[15018, 423, 123, 3, 27, "Input"],
+Cell[15144, 428, 70, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[15239, 433, 127, 2, 43, "Input"],
+Cell[15369, 437, 42, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15448, 443, 49, 1, 27, "Input"],
+Cell[15500, 446, 76, 1, 27, "Output"]
+}, Open  ]],
+Cell[15591, 450, 208, 3, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[15824, 457, 73, 1, 27, "Input"],
+Cell[15900, 460, 53, 1, 27, "Output"]
+}, Open  ]],
+Cell[15968, 464, 256, 5, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[16249, 473, 42, 1, 27, "Input"],
+Cell[16294, 476, 53, 1, 27, "Output"]
+}, Open  ]],
+Cell[16362, 480, 348, 7, 107, "Input"],
+Cell[16713, 489, 82, 1, 27, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16832, 495, 30, 0, 38, "Subsection"],
+Cell[16865, 497, 101, 2, 27, "Input"],
+Cell[16969, 501, 1021, 19, 295, "Input"],
+
+Cell[CellGroupData[{
+Cell[18015, 524, 835, 16, 233, "Input",
+  InitializationCell->True],
+Cell[18853, 542, 354, 5, 33, "Message"],
+Cell[19210, 549, 357, 5, 33, "Message"]
+}, Open  ]],
+Cell[19582, 557, 143, 3, 43, "Input"],
+Cell[19728, 562, 74, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[19827, 567, 57, 1, 27, "Input"],
+Cell[19887, 570, 36, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19960, 576, 67, 1, 27, "Input"],
+Cell[20030, 579, 37, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20104, 585, 104, 2, 27, "Input"],
+Cell[20211, 589, 54, 1, 27, "Output"]
+}, Open  ]],
+Cell[20280, 593, 493, 10, 139, "Input"],
+
+Cell[CellGroupData[{
+Cell[20798, 607, 58, 1, 27, "Input"],
+Cell[20859, 610, 35, 1, 27, "Output"]
+}, Open  ]],
+Cell[20909, 614, 128, 4, 75, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

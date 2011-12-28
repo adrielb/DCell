@@ -1,0 +1,5 @@
+su -c ' \
+mount /dev/sdd1 /media/backup \
+su abergman -c 'rsync -avh --delete --progress --stats --exclude ".zfs/" --inplace abergman@128.220.138.91:.. /media/backup/levlabnas/' \
+umount /media/backup '
+

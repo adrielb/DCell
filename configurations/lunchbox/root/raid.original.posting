@@ -1,0 +1,161 @@
+http://linux.dell.com/files/aacraid/aacraid_monitoring_script.txt
+
+From: Domsch, Matt
+Sent: Tuesday, April 10, 2001 11:26 AM
+To: 'linux-aacraid-devel@domsch.com'
+Subject: aacraid monitoring script
+
+Greetings.  Kent Ziebell has graciously provided a quick aacraid
+monitoring script which system administrators may be interested in.
+It's designed to detect changes in the array configuration and send an
+email.  It also checks /var/log/messages for error messages from the
+driver.  If you find this useful, or would like to suggest
+improvements, please contact either Kent or me.
+
+Thanks,
+Matt
+
+--
+Matt Domsch
+Sr. Software Engineer
+Dell Linux Systems Group
+Linux OS Development
+www.dell.com/linux
+
+
+
+-----Original Message-----
+From: Kent Ziebell [mailto:ziebell@iastate.edu]
+Sent: Tuesday, April 10, 2001 10:42 AM
+
+Matt,
+
+  OK, here's the script. You're welcome
+to post it anywhere you feel is appropriate.
+
+Kent Ziebell
+
+#!/bin/sh
+#
+# Shell script for checking for raid problems
+# by Kent Ziebell 10-April-2001
+#
+# raid.cron.script
+#
+#
+# Example cron entry:
+#
+# check the raid out
+#
+#56 3,9,16 * * * /usr/local/src/raid/raid.cron.script > /dev/null 2>&1
+#
+#
+#
+# ======> Preliminary setup work starts here
+# Before placing this script into cron, be sure to "seed" the check so that
+#   you have a permanent copy of what your raid config should look like if
+#   all is well.  Do that by issuing the following:
+#
+#   cd /usr/local/src/raid   (or where ever you want this stuff to live)
+#
+#   now use your favorite editor to create a file called "raid.commands" with
+#      the following six commands (without leading # character, of course):
+#   
+#      open afa0
+#      logfile start raid.current.config
+#      container list
+#      disk list
+#      logfile end 
+#      exit
+#
+#   /usr/sbin/afacli < raid.commands 
+#   mv raid.current.config raid.production.config
+#
+#   Dale Blount reports that you may need leading whitespace before
+#   the commands if running this out of crond, else the commands get
+#   munged together somehow.
+#
+#
+# End of preliminary setup.
+#
+#
+# Who's watching - whom to send the notification 
+# 
+# =====> Change the following line to whom should be notified
+#
+mailwatch=joe_mailadmin@yourdomain
+#
+host=`hostname`
+#
+#
+#  CHECK 1
+#
+#
+cd /usr/local/src/raid
+rm raid.current.config
+/usr/sbin/afacli < raid.commands 
+curdiff=`/usr/bin/diff raid.current.config raid.production.config`
+#
+raiderr=`/bin/cat raid.current.config`
+#
+if [ "$curdiff" != "" ] ; then
+#  notify mailwatch team - raid 5 may be broken
+   /usr/lib/sendmail -f devnull@$host -t << RedCatSun
+To: $mailwatch
+From: root@$host     
+Subject: Raid 5 may be broken on $host 
+Errors-To: devnull
+Raid 5 may be broken on $host. 
+
+====> A diff between production and current is:
+
+$curdiff
+
+====> The current container list and disk list is:
+
+$raiderr
+
+RedCatSun
+fi
+
+#
+#
+#  CHECK 2
+#
+#
+#  The next check is just looking for AAC: messages in /var/log/messages
+#
+#  Raid error messages look something like the following:
+#
+#  AAC:ID(0:02:0); Selection Timeout [command:0x28]
+#  AAC:Drive 0:2:0 returning error
+#  AAC:ID(0:02:0) - drive failure (retries exhausted)
+#  AAC:RAID5 Container 0 Drive 0:2:0 Failure
+#  AAC:ID(0:02:0) [DC_Ioctl] DiskSpinControl: Drive spindown failure
+#  AAC:RAID5 Failover Container 0 No Failover Assigned
+#  AAC:Drive 0:2:0 offline on container 0:
+#  AAC:RAID5 Failover Container 0 No Failover Assigned
+
+
+AACerr=`/usr/bin/egrep "(AAC|aacraid):" /var/log/messages`
+
+if [ "$AACerr" != "" ] ; then
+#  notify mailwatch team - raid 5 may be broken
+   /usr/lib/sendmail -f devnull@$host -t << RedDogSun
+To: $mailwatch
+From: root@$host       
+Subject: Raid 5 may be broken on $host      
+Errors-To: devnull
+Raid 5 may be broken on $host.      
+
+====> A grep for ACC: in /var/log/messages:
+
+$AACerr
+
+
+RedDogSun
+fi
+
+exit 0
+
+

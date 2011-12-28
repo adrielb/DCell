@@ -1,0 +1,2 @@
+ls /dev/ > current.dev
+diff current.dev orig.dev

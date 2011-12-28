@@ -1,0 +1,13 @@
+.ignore
+*.dat
+*.bin
+*.Real64
+a.out
+*.gray
+*.a
+*.so
+*.dx
+*.dvi
+tempPartial*
+routing_file
+src

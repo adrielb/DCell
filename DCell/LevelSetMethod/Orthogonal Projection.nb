@@ -1,0 +1,2907 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     84303,       2456]*)
+(*NotebookOutlinePosition[     84951,       2479]*)
+(*  CellTagsIndexPosition[     84907,       2475]*)
+(*WindowFrame->Generic*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(Get[Environment["\<ALT_DISP\>"]]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"\[Phi]", "=", 
+        TagBox[GridBox[{
+              {\(-1\), \(-1\), \(-1\)},
+              {\(-1\), "1", "1"},
+              {\(-1\), "1", "1"}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]]}], 
+      ";"}], "\[IndentingNewLine]", \(MatrixForm[\[Phi]]\), "\
+\[IndentingNewLine]", \(f = 
+        ListInterpolation[\[Phi], InterpolationOrder \[Rule] 2];\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(-1\), \(-1\), \(-1\)},
+            {\(-1\), "1", "1"},
+            {\(-1\), "1", "1"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              "0.34281289217941835`", \(-0.20818608281145068`\), \
+\(-0.7738703267224366`\)},
+            {\(-0.1330437192524971`\), \(-0.4302533529303523`\), \
+\(-0.8727616239969632`\)},
+            {"0.39731235102921897`", 
+              "0.049596586672253085`", \(-0.055774297626000655`\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output",
+  GeneratedCell->False,
+  CellAutoOverwrite->False]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[f[x, y], {{x, y}}] /. {x \[Rule] 1, y \[Rule] 1}\)], "Input"],
+
+Cell[BoxData[
+    \({\(-0.9789629522887313`\), \(-0.5436563405308106`\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\[Phi]x\), "\[IndentingNewLine]", 
+    \(\[Phi]y\)}], "Input"],
+
+Cell[BoxData[
+    \(0.12889133474185188`\)], "Output"],
+
+Cell[BoxData[
+    \(\(-0.36985895237223304`\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(\[Phi] = 
+        Partition[{\(-0.017890\), \(-0.009378\), 0.000126, 0.081791, 
+            0.090219, 0.099630, 0.181479, 0.189824, 0.199143}, 
+          3];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[\[Phi]]\), "\[IndentingNewLine]", 
+    \(\(f = 
+        ListInterpolation[\[Phi], 
+          InterpolationOrder \[Rule] 2];\)\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(-0.01789`\), \(-0.009378`\), "0.000126`"},
+            {"0.081791`", "0.090219`", "0.09963`"},
+            {"0.181479`", "0.189824`", "0.199143`"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(g = Plot3D[f[x, y], {x, 1, 3}, {y, 1, 3}];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(g = DensityPlot[f[x, y], {x, 1, 3}, {y, 1, 3}];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(ListDensityPlot[\[Phi]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(i = \(j = 2\);\)\), "\n", 
+    \(\(p = \[Phi][\([i, j]\)];\)\), "\[IndentingNewLine]", 
+    \(\(\[Phi]x = \((\[Phi][\([i + 1, j]\)] - \[Phi][\([i - 1, j]\)])\)/
+          2;\)\), "\n", 
+    \(\(\[Phi]y = \((\[Phi][\([i, j + 1]\)] - \[Phi][\([i, j - 1]\)])\)/
+          2;\)\), "\n", 
+    \(\(\[Phi]n = \@\(\[Phi]x\^2 + \[Phi]y\^2\);\)\), "\n", 
+    \(\(\[Phi]xx = \[Phi][\([i - 1, j]\)] - 
+          2  \[Phi][\([i, j]\)] + \[Phi][\([i + 1, j]\)];\)\), "\n", 
+    \(\(\[Phi]yy = \[Phi][\([i, j - 1]\)] - 
+          2  \[Phi][\([i, j]\)] + \[Phi][\([i, j + 1]\)];\)\), "\n", 
+    \(\(\[Phi]xy = \((\[Phi][\([i - 1, j - 1]\)] + \[Phi][\([i + 1, 
+                  j + 1]\)] - \[Phi][\([i - 1, j + 1]\)] - \[Phi][\([i + 1, 
+                  j - 1]\)])\)/4. ;\)\), "\n", 
+    \(\(\(\[Phi]n = \@\(\[Phi]x\^2 + \[Phi]y\^2\);\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(b = \[Phi]n\), "\[IndentingNewLine]", 
+    \(\(c = 
+        0.5 \((\(\[Phi]x\^2\) \[Phi]xx + 
+                2  \[Phi]x\ \[Phi]y\ \[Phi]xy + \ \(\[Phi]y\^2\) \[Phi]yy)\)/\
+\((\[Phi]x\^2 + \[Phi]y\^2)\);\)\), "\[IndentingNewLine]", 
+    \(\(discr = b\^2 - 4  p\ c;\)\), "\[IndentingNewLine]", 
+    \(\(\[Alpha]1 = \(-b\) + \@discr/c;\)\), "\[IndentingNewLine]", 
+    \(Print["\<a: \>", a, "\<, b: \>", b, "\<, c: \>", c, "\<, d: \>", 
+      discr, \ "\<  (\>", a\ \[Phi]x, "\<, \>", 
+      a\ \[Phi]y, "\<)\>"]\), "\[IndentingNewLine]", 
+    \(sol = 
+      Solve[0.  == \[Phi][\([i, 
+                j]\)] + \((\[Phi]x\^2 + \[Phi]y\^2)\) \[Alpha] + \(1\/2\) \((\
+\(\[Phi]x\^2\) \[Phi]xx + 
+                  2  \[Phi]x\ \[Phi]y\ \[Phi]xy + \(\[Phi]y\^2\) \[Phi]yy)\) \
+\[Alpha]\^2]\), "\[IndentingNewLine]", 
+    \(sol[\([If[\[Phi][\([i, j]\)] > 0. , 1, 
+          2]]\)]\), "\[IndentingNewLine]", 
+    \(pts = {i, j} + \[Alpha]\ {\[Phi]x, \[Phi]y} /. 
+        sol[\([If[\[Phi][\([i, j]\)] > 0. , 1, 
+              2]]\)]\), "\[IndentingNewLine]", 
+    \(Print["\<Sol:\>", \@Total[\((\[Alpha]\ {\[Phi]x, \[Phi]y})\)\^2] /. 
+        sol[\([If[\[Phi][\([i, j]\)] > 0. , 1, 
+              2]]\)]]\), "\[IndentingNewLine]", 
+    \(\(Print["\<b:\>", 
+        b = \(-\((\[Phi]x\^2 + \[Phi]y\^2)\)\)];\)\), "\[IndentingNewLine]", 
+    \(Print["\<c:\>", 
+      c = \((\(\[Phi]x\^2\) \[Phi]xx + 
+            2  \[Phi]x\ \[Phi]y\ \[Phi]xy + \(\[Phi]y\^2\) \[Phi]yy)\)]\), "\
+\[IndentingNewLine]", 
+    \(Print["\<discr:\>", \ 
+      discr = \@\(b\^2 - 2. *p*c\)]\), "\[IndentingNewLine]", 
+    \(Print["\<a1: \>", \ \(b + \@discr\)\/c, "\<  a2: \>", \(b - \
+\@discr\)\/c]\)}], "Input"],
+
+Cell[BoxData[
+    \(0.3916741258002906`\)], "Output"],
+
+Cell[BoxData[
+    InterpretationBox[\("a: "\[InvisibleSpace]a\[InvisibleSpace]", b: "\
+\[InvisibleSpace]0.3916741258002906`\[InvisibleSpace]", c: "\[InvisibleSpace]\
+\(-0.07832886622298287`\)\[InvisibleSpace]", d: \
+"\[InvisibleSpace]0.018603591526736296`\[InvisibleSpace]"  \
+("\[InvisibleSpace]\(0.12889133474185188`\ a\)\[InvisibleSpace]", "\
+\[InvisibleSpace]\(\(-0.36985895237223304`\)\ a\)\[InvisibleSpace]")"\),
+      SequenceForm[ 
+      "a: ", a, ", b: ", 0.3916741258002906, ", c: ", -0.078328866222982865, 
+        ", d: ", 0.018603591526736296, "  (", 
+        Times[ 0.12889133474185188, a], ", ", 
+        Times[ -0.36985895237223304, a], ")"],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    \({{\[Alpha] \[Rule] 4.1604337733334695`}, {\[Alpha] \[Rule] 
+          8.606251718490808`}}\)], "Output"],
+
+Cell[BoxData[
+    \({\[Alpha] \[Rule] 8.606251718490808`}\)], "Output"],
+
+Cell[BoxData[
+    \({3.1092712711206367`, \(-1.1830992444527406`\)}\)], "Output"],
+
+Cell[BoxData[
+    InterpretationBox[\("Sol:"\[InvisibleSpace]3.370846118257136`\),
+      SequenceForm[ "Sol:", 3.3708461182571359],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("b:"\[InvisibleSpace]\(-0.15340862082142187`\)\),
+      SequenceForm[ "b:", -0.15340862082142187],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("c:"\[InvisibleSpace]\(-0.024032646675546915`\)\),
+      SequenceForm[ "c:", -0.024032646675546915],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("discr:"\[InvisibleSpace]0.053422385929886206`\),
+      SequenceForm[ "discr:", 0.053422385929886206],
+      Editable->False]], "Print"],
+
+Cell[BoxData[
+    InterpretationBox[\("a1: "\[InvisibleSpace]\(-3.23410950175041`\)\
+\[InvisibleSpace]"  a2: "\[InvisibleSpace]16.000794993574686`\),
+      SequenceForm[ 
+      "a1: ", -3.2341095017504098, "  a2: ", 16.000794993574686],
+      Editable->False]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(c =. ; b =. ; p =. ; a =. ;\), "\[IndentingNewLine]", 
+    \(Solve[c\ a\^2 + b\ a + p \[Equal] 0, a]\)}], "Input"],
+
+Cell[BoxData[
+    \({{a \[Rule] \(\(-b\) - \@\(b\^2 - 4\ c\ p\)\)\/\(2\ c\)}, {a \[Rule] \(\
+\(-b\) + \@\(b\^2 - 4\ c\ p\)\)\/\(2\ c\)}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(f[Sequence @@ \((pts +  .5)\)]\)], "Input"],
+
+Cell[BoxData[
+    \(0.724061132520273`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(DensityPlot[f[x, y], {x, 1, 3}, {y, 1, 3}, 
+        PlotRange \[Rule]  .1 {\(- .1\),  .1}, 
+        Epilog \[Rule] {PointSize[ .05], Hue[0], Point[pts], 
+            Line[\({2, 2} + # {\[Phi]x, \[Phi]y} &\) /@ {\(-10\), 10}]}, 
+        Mesh \[Rule] False, PlotPoints \[Rule] 50];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(oo = {\(-0.929747\)\ , 0.000000};\)\), "\[IndentingNewLine]", 
+    \(\(DensityPlot[f[x, y], {x, 1, 3}, {y, 1, 3}, 
+        PlotRange \[Rule]  .1 {\(- .1\),  .1}, 
+        Epilog \[Rule] {PointSize[ .05], Blue, Point[Reverse@oo + 2], Hue[0], 
+            Point[Re@pts], 
+            Line[\({2, 2} + # {\[Phi]x, \[Phi]y} &\) /@ {\(-10\), 10}]}, 
+        Mesh \[Rule] False, PlotPoints \[Rule] 50];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pts\)], "Input"],
+
+Cell[BoxData[
+    \({\(-0.08673410792777059`\), 1.790447408780537`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\@\(\((pts - {2, 2})\)\^2 // Total\)\)], "Input"],
+
+Cell[BoxData[
+    \(0.9840172135443861`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Alpha]\ {\[Phi]x, \[Phi]y} /. sol\)], "Input"],
+
+Cell[BoxData[
+    \({{0, \(-0.7320508075688773`\)}, {0, 2.732050807568877`}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\@Map[Total, \((\[Alpha]\ {\[Phi]x, \[Phi]y})\)\^2 /. sol]\)], "Input"],
+
+Cell[BoxData[
+    \({0.7320508075688773`, 2.732050807568877`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListDensityPlot[\[Phi], 
+      Epilog \[Rule] {Hue[0], PointSize[ .05], 
+          Point[Reverse@pts[\([2]\)]]}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Show[g, Plot3D[f[x, y], {x, 1, 3}, {y, 1, 3}]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics3D  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"ListContourPlot", "[", 
+      RowBox[{
+        RowBox[{"(", GridBox[{
+              {"1.5", \(-1\)},
+              {\(-2\), "1"}
+              }], ")"}], ",", \(Contours \[Rule] {0}\)}], "]"}]], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  ContourGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Phi] // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(-1\), \(-2\), \(-1\)},
+            {\(-2\), "1", \(-2\)},
+            {\(-1\), \(-2\), \(-1\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(f = Take[\[Phi], 2, 2];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[f]\), "\[IndentingNewLine]", 
+    \(fx = \(\(f\)\([\)\([\)\)\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(-1\), \(-2\)},
+            {\(-2\), "1"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(Syntax::"tsntxi"\), \(\(:\)\(\ \)\), "\<\"\\\"\\!\\(fx =\\)\\\" \
+is incomplete; more input is needed.\\!\\(\\\"\\\"\\) \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::tsntxi\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    StyleBox[
+      ErrorBox[\(\(fx\)\(=\)\)],
+      ShowStringCharacters->True]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["OrthogonalProjection3D", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(He = 
+        Table[\[Phi][i, j], {i, 3}, {j, 3}] /. {1 \[Rule] x, 2 \[Rule] y, 
+            3 \[Rule] z};\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[He]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(\[Phi][x, x]\), \(\[Phi][x, y]\), \(\[Phi][x, z]\)},
+            {\(\[Phi][y, x]\), \(\[Phi][y, y]\), \(\[Phi][y, z]\)},
+            {\(\[Phi][z, x]\), \(\[Phi][z, y]\), \(\[Phi][z, z]\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"He", "=", 
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {\(\[Phi][x, x]\), \(\[Phi][x, y]\), \(\[Phi][x, z]\)},
+                {\(\[Phi][x, y]\), \(\[Phi][y, y]\), \(\[Phi][y, z]\)},
+                {\(\[Phi][x, z]\), \(\[Phi][y, z]\), \(\[Phi][z, z]\)}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]]}], ";"}]], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(p = {{\[Phi][x], \[Phi][y], \[Phi][
+                z]}}\[Transpose] ;\)\), "\[IndentingNewLine]", 
+    \(p\[Transpose]  . He . p // Expand\)}], "Input"],
+
+Cell[BoxData[
+    \({{\[Phi][x]\^2\ \[Phi][x, x] + 2\ \[Phi][x]\ \[Phi][y]\ \[Phi][x, y] + 
+          2\ \[Phi][x]\ \[Phi][z]\ \[Phi][x, z] + \[Phi][y]\^2\ \[Phi][y, 
+              y] + 2\ \[Phi][y]\ \[Phi][z]\ \[Phi][y, 
+              z] + \[Phi][z]\^2\ \[Phi][z, z]}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\ \ \)\(2\ \[Phi][x]\ \[Phi][y]\ \[Phi][x, 
+          y] + \[IndentingNewLine]2\ \[Phi][x]\ \[Phi][z]\ \[Phi][x, 
+          z] + \[IndentingNewLine]2\ \[Phi][y]\ \[Phi][z]\ \[Phi][y, 
+          z] + \[IndentingNewLine]\[Phi][x]\^2\ \[Phi][x, 
+          x] + \[IndentingNewLine]\[Phi][y]\^2\ \[Phi][y, 
+          y] + \[IndentingNewLine]\[Phi][z]\^2\ \[Phi][z, z]\)\)\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Ortho Proj 1st order", "Section"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sol = Series[\[Phi][x], {x, xi, 1}] // Normal\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi]\), "+", 
+      RowBox[{\((x - xi)\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", "\[Prime]",
+            MultilineFunction->None], "[", "xi", "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{"sol", "/.", 
+        RowBox[{"x", "\[Rule]", 
+          RowBox[{"xi", "+", 
+            RowBox[{"\[Alpha]", " ", 
+              RowBox[{
+                SuperscriptBox["\[Phi]", "\[Prime]",
+                  MultilineFunction->None], "[", "xi", 
+                "]"}]}]}]}]}]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi]\), "+", 
+      RowBox[{"\[Alpha]", " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", "\[Prime]",
+              MultilineFunction->None], "[", "xi", "]"}], "2"]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[sol \[Equal] 0, \[Alpha]]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{"{", 
+        RowBox[{"\[Alpha]", "\[Rule]", 
+          RowBox[{"-", 
+            FractionBox[\(\[Phi][xi]\), 
+              SuperscriptBox[
+                RowBox[{
+                  SuperscriptBox["\[Phi]", "\[Prime]",
+                    MultilineFunction->None], "[", "xi", "]"}], "2"]]}]}], 
+        "}"}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{
+        RowBox[{\(Series[\[Phi][x, y], {x, xi, 1}, {y, yi, 1}]\), "/.", 
+          RowBox[{
+            RowBox[{
+              SuperscriptBox["\[Phi]", 
+                TagBox[\((1, 1)\),
+                  Derivative],
+                MultilineFunction->None], "[", \(xi, yi\), "]"}], "\[Rule]", 
+            "0"}]}], "//", "Normal"}]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi, yi]\), "+", 
+      RowBox[{\((y - yi)\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((0, 1)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, yi\), "]"}]}], "+", 
+      RowBox[{\((x - xi)\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, yi\), "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{
+        RowBox[{"sol", "/.", 
+          RowBox[{"x", "\[Rule]", 
+            RowBox[{"xi", "+", 
+              RowBox[{"\[Alpha]", " ", 
+                RowBox[{
+                  SuperscriptBox["\[Phi]", 
+                    TagBox[\((1, 0)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(xi, yi\), "]"}]}]}]}]}], 
+        "/.", 
+        RowBox[{"y", "\[Rule]", 
+          RowBox[{"yi", "+", 
+            RowBox[{"\[Alpha]", " ", 
+              RowBox[{
+                SuperscriptBox["\[Phi]", 
+                  TagBox[\((0, 1)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(xi, yi\), 
+                "]"}]}]}]}]}]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi, yi]\), "+", 
+      RowBox[{"\[Alpha]", " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", 
+              TagBox[\((0, 1)\),
+                Derivative],
+              MultilineFunction->None], "[", \(xi, yi\), "]"}], "2"]}], "+", 
+      RowBox[{"\[Alpha]", " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", 
+              TagBox[\((1, 0)\),
+                Derivative],
+              MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+          "2"]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[sol \[Equal] 0, \[Alpha]]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{"{", 
+        RowBox[{"\[Alpha]", "\[Rule]", 
+          RowBox[{"-", 
+            FractionBox[\(\[Phi][xi, yi]\), 
+              RowBox[{
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((0, 1)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}], "2"], 
+                "+", 
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+                  "2"]}]]}]}], "}"}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"\[Phi]", "=", 
+        RowBox[{"(", GridBox[{
+              {"2.005", "1.005", "0.005"},
+              {\(-1.5\), \(-0.5\), \(-1.5\)},
+              {"2.005", "1.000", "0.005"}
+              }], ")"}]}], 
+      ";"}], "\[IndentingNewLine]", \(f = 
+        ListInterpolation[\[Phi], 
+          InterpolationOrder \[Rule] 
+            2];\), "\[IndentingNewLine]", \(ListDensityPlot[\[Phi], 
+        Mesh \[Rule] True];\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(i = \(j = 2\);\)\), "\[IndentingNewLine]", 
+    \(\(p = \[Phi][\([i, j]\)];\)\), "\[IndentingNewLine]", 
+    \(\[Phi]x = \((\[Phi][\([i + 1, j]\)] - \[Phi][\([i - 1, j]\)])\)/
+        2\), "\n", 
+    \(\[Phi]y = \((\[Phi][\([i, j + 1]\)] - \[Phi][\([i, j - 1]\)])\)/
+        2\), "\n", 
+    \(\[Phi]n = \[Phi]x\^2 + \[Phi]y\^2\), "\[IndentingNewLine]", 
+    \(\(x = \(\(-p\)\/\[Phi]n\) \[Phi]x;\)\), "\[IndentingNewLine]", 
+    \(\(y = \(\(-p\)\/\[Phi]n\) \[Phi]y;\)\), "\[IndentingNewLine]", 
+    \({x, y}\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-0.0024999999999999467`\)\)], "Output"],
+
+Cell[BoxData[
+    \(0.`\)], "Output"],
+
+Cell[BoxData[
+    \(6.2499999999997335`*^-6\)], "Output"],
+
+Cell[BoxData[
+    \({\(-200.00000000000426`\), 0.`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(i = \(j = 2\);\)\), "\[IndentingNewLine]", 
+    \(\(p = \[Phi][\([\)\(i, j\)\(]\)];\)\), "\[IndentingNewLine]", 
+    \(\[Phi]x = \((\[Phi][\([\)\(i + 1, j\)\(]\)] - \[Phi][\([i, j]\)])\)/
+        2\), "\n", 
+    \(\[Phi]y = \((\[Phi][\([\)\(i, j + 1\)\(]\)] - \[Phi][\([i, j]\)])\)/
+        2\), "\n", 
+    \(\[Phi]n = \[Phi]x\^2 + \[Phi]y\^2\), "\[IndentingNewLine]", 
+    \(\(x = \(\(-p\)\/\[Phi]n\) \[Phi]x;\)\), "\[IndentingNewLine]", 
+    \(\(y = \(\(-p\)\/\[Phi]n\) \[Phi]y;\)\), "\[IndentingNewLine]", 
+    \({x, y}\)}], "Input"],
+
+Cell[BoxData[
+    \(0.75`\)], "Output"],
+
+Cell[BoxData[
+    \(\(-0.5`\)\)], "Output"],
+
+Cell[BoxData[
+    \(0.8125`\)], "Output"],
+
+Cell[BoxData[
+    \({0.46153846153846156`, \(-0.3076923076923077`\)}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Ortho Proj 2nd order", "Section"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sol = Series[\[Phi][x], {x, xi, 2}] // Normal\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi]\), "+", 
+      RowBox[{\((x - xi)\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", "\[Prime]",
+            MultilineFunction->None], "[", "xi", "]"}]}], "+", 
+      RowBox[{\(1\/2\), " ", \(\((x - xi)\)\^2\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+            MultilineFunction->None], "[", "xi", "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{"sol", "/.", 
+        RowBox[{"x", "\[Rule]", 
+          RowBox[{"xi", "+", 
+            RowBox[{"\[Alpha]", " ", 
+              RowBox[{
+                SuperscriptBox["\[Phi]", "\[Prime]",
+                  MultilineFunction->None], "[", "xi", 
+                "]"}]}]}]}]}]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi]\), "+", 
+      RowBox[{"\[Alpha]", " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", "\[Prime]",
+              MultilineFunction->None], "[", "xi", "]"}], "2"]}], "+", 
+      RowBox[{\(1\/2\), " ", \(\[Alpha]\^2\), " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", "\[Prime]",
+              MultilineFunction->None], "[", "xi", "]"}], "2"], " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+            MultilineFunction->None], "[", "xi", "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[sol \[Equal] 0, \[Alpha]]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{"{", 
+          RowBox[{"\[Alpha]", "\[Rule]", 
+            FractionBox[
+              RowBox[{
+                RowBox[{"-", 
+                  SuperscriptBox[
+                    RowBox[{
+                      SuperscriptBox["\[Phi]", "\[Prime]",
+                        MultilineFunction->None], "[", "xi", "]"}], "2"]}], 
+                "-", 
+                SqrtBox[
+                  RowBox[{
+                    SuperscriptBox[
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", "\[Prime]",
+                          MultilineFunction->None], "[", "xi", "]"}], "4"], 
+                    "-", 
+                    RowBox[{"2", " ", \(\[Phi][xi]\), " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", "\[Prime]",
+                            MultilineFunction->None], "[", "xi", "]"}], "2"], 
+                      " ", 
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+                          MultilineFunction->None], "[", "xi", "]"}]}]}]]}], 
+              RowBox[{
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", "\[Prime]",
+                      MultilineFunction->None], "[", "xi", "]"}], "2"], " ", 
+                RowBox[{
+                  SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+                    MultilineFunction->None], "[", "xi", "]"}]}]]}], "}"}], 
+        ",", 
+        RowBox[{"{", 
+          RowBox[{"\[Alpha]", "\[Rule]", 
+            FractionBox[
+              RowBox[{
+                RowBox[{"-", 
+                  SuperscriptBox[
+                    RowBox[{
+                      SuperscriptBox["\[Phi]", "\[Prime]",
+                        MultilineFunction->None], "[", "xi", "]"}], "2"]}], 
+                "+", 
+                SqrtBox[
+                  RowBox[{
+                    SuperscriptBox[
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", "\[Prime]",
+                          MultilineFunction->None], "[", "xi", "]"}], "4"], 
+                    "-", 
+                    RowBox[{"2", " ", \(\[Phi][xi]\), " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", "\[Prime]",
+                            MultilineFunction->None], "[", "xi", "]"}], "2"], 
+                      " ", 
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+                          MultilineFunction->None], "[", "xi", "]"}]}]}]]}], 
+              RowBox[{
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", "\[Prime]",
+                      MultilineFunction->None], "[", "xi", "]"}], "2"], " ", 
+                RowBox[{
+                  SuperscriptBox["\[Phi]", "\[Prime]\[Prime]",
+                    MultilineFunction->None], "[", "xi", "]"}]}]]}], "}"}]}], 
+      "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sol = Series[\[Phi][x, y], {x, xi, 2}] // Normal\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi, y]\), "+", 
+      RowBox[{\((x - xi)\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, y\), "]"}]}], "+", 
+      RowBox[{\(1\/2\), " ", \(\((x - xi)\)\^2\), " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((2, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, y\), "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{"sol", "/.", 
+        RowBox[{"x", "\[Rule]", 
+          RowBox[{"xi", "+", 
+            RowBox[{"\[Alpha]", " ", 
+              RowBox[{
+                SuperscriptBox["\[Phi]", 
+                  TagBox[\((1, 0)\),
+                    Derivative],
+                  MultilineFunction->None], "[", \(xi, yi\), 
+                "]"}]}]}]}]}]}]], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(\[Phi][xi, y]\), "+", 
+      RowBox[{"\[Alpha]", " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, y\), "]"}], " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((1, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, yi\), "]"}]}], "+", 
+      RowBox[{\(1\/2\), " ", \(\[Alpha]\^2\), " ", 
+        SuperscriptBox[
+          RowBox[{
+            SuperscriptBox["\[Phi]", 
+              TagBox[\((1, 0)\),
+                Derivative],
+              MultilineFunction->None], "[", \(xi, yi\), "]"}], "2"], " ", 
+        RowBox[{
+          SuperscriptBox["\[Phi]", 
+            TagBox[\((2, 0)\),
+              Derivative],
+            MultilineFunction->None], "[", \(xi, y\), "]"}]}]}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[sol \[Equal] 0, \[Alpha]]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{"{", 
+          RowBox[{"\[Alpha]", "\[Rule]", 
+            FractionBox[
+              RowBox[{
+                RowBox[{
+                  RowBox[{"-", 
+                    RowBox[{
+                      SuperscriptBox["\[Phi]", 
+                        TagBox[\((1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(xi, y\), "]"}]}], 
+                  " ", 
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}]}], "-",
+                 
+                SqrtBox[
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, y\), "]"}], 
+                        "2"], " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+                        "2"]}], "-", 
+                    RowBox[{"2", " ", \(\[Phi][xi, y]\), " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+                        "2"], " ", 
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", 
+                          TagBox[\((2, 0)\),
+                            Derivative],
+                          MultilineFunction->None], "[", \(xi, y\), 
+                        "]"}]}]}]]}], 
+              RowBox[{
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}], "2"], 
+                " ", 
+                RowBox[{
+                  SuperscriptBox["\[Phi]", 
+                    TagBox[\((2, 0)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(xi, y\), "]"}]}]]}], 
+          "}"}], ",", 
+        RowBox[{"{", 
+          RowBox[{"\[Alpha]", "\[Rule]", 
+            FractionBox[
+              RowBox[{
+                RowBox[{
+                  RowBox[{"-", 
+                    RowBox[{
+                      SuperscriptBox["\[Phi]", 
+                        TagBox[\((1, 0)\),
+                          Derivative],
+                        MultilineFunction->None], "[", \(xi, y\), "]"}]}], 
+                  " ", 
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}]}], "+",
+                 
+                SqrtBox[
+                  RowBox[{
+                    RowBox[{
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, y\), "]"}], 
+                        "2"], " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+                        "2"]}], "-", 
+                    RowBox[{"2", " ", \(\[Phi][xi, y]\), " ", 
+                      SuperscriptBox[
+                        RowBox[{
+                          SuperscriptBox["\[Phi]", 
+                            TagBox[\((1, 0)\),
+                              Derivative],
+                            MultilineFunction->None], "[", \(xi, yi\), "]"}], 
+                        "2"], " ", 
+                      RowBox[{
+                        SuperscriptBox["\[Phi]", 
+                          TagBox[\((2, 0)\),
+                            Derivative],
+                          MultilineFunction->None], "[", \(xi, y\), 
+                        "]"}]}]}]]}], 
+              RowBox[{
+                SuperscriptBox[
+                  RowBox[{
+                    SuperscriptBox["\[Phi]", 
+                      TagBox[\((1, 0)\),
+                        Derivative],
+                      MultilineFunction->None], "[", \(xi, yi\), "]"}], "2"], 
+                " ", 
+                RowBox[{
+                  SuperscriptBox["\[Phi]", 
+                    TagBox[\((2, 0)\),
+                      Derivative],
+                    MultilineFunction->None], "[", \(xi, y\), "]"}]}]]}], 
+          "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\({\[Phi]1, \[Phi]2, \[Phi]3} = {\(-1\), 0.000001, 
+          1};\)\), "\[IndentingNewLine]", 
+    \(b = \@\((\(\[Phi]3 - \[Phi]1\)\/2)\)\^2\), "\[IndentingNewLine]", 
+    \(c = 0.5 \((\[Phi]1 - 2  \[Phi]2 + \[Phi]3)\)\), "\[IndentingNewLine]", 
+    \(\(\(\(-b\) + # \@\( b\^2 - 4\ \[Phi]2\ c\)\)\/\(2  c\) &\) /@ {\(-1\), 
+        1}\), "\[IndentingNewLine]", 
+    \(\(Plot[\[Phi]2 + b\ \[Alpha] + c\ \[Alpha]\^2, {\[Alpha], \(-1\), 1}, 
+        Epilog \[Rule] {PointSize[0.05], 
+            Point /@ Transpose@{{\(-1\), 0, 
+                    1}, {\[Phi]1, \[Phi]2, \[Phi]3}}}];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(1\)], "Output"],
+
+Cell[BoxData[
+    \(\(-1.0000000000287557`*^-6\)\)], "Output"],
+
+Cell[BoxData[
+    \({999999.9999722445`, \(-9.999778782511234`*^-7\)}\)], "Output"],
+
+Cell[GraphicsData["PostScript", "\<\
+%!
+%%Creator: Mathematica
+%%AspectRatio: .61803 
+MathPictureStart
+/Mabs {
+Mgmatrix idtransform
+Mtmatrix dtransform
+} bind def
+/Mabsadd { Mabs
+3 -1 roll add
+3 1 roll add
+exch } bind def
+%% Graphics
+%%IncludeResource: font Courier
+%%IncludeFont: Courier
+/Courier findfont 10  scalefont  setfont
+% Scaling calculations
+0.5 0.476191 0.309017 0.294302 [
+[.02381 .29652 -6 -9 ]
+[.02381 .29652 6 0 ]
+[.2619 .29652 -12 -9 ]
+[.2619 .29652 12 0 ]
+[.7381 .29652 -9 -9 ]
+[.7381 .29652 9 0 ]
+[.97619 .29652 -3 -9 ]
+[.97619 .29652 3 0 ]
+[.4875 .01472 -12 -4.5 ]
+[.4875 .01472 0 4.5 ]
+[.4875 .16187 -24 -4.5 ]
+[.4875 .16187 0 4.5 ]
+[.4875 .45617 -18 -4.5 ]
+[.4875 .45617 0 4.5 ]
+[.4875 .60332 -6 -4.5 ]
+[.4875 .60332 0 4.5 ]
+[ 0 0 0 0 ]
+[ 1 .61803 0 0 ]
+] MathScale
+% Start of Graphics
+1 setlinecap
+1 setlinejoin
+newpath
+0 g
+.25 Mabswid
+[ ] 0 setdash
+.02381 .30902 m
+.02381 .31527 L
+s
+[(-1)] .02381 .29652 0 1 Mshowa
+.2619 .30902 m
+.2619 .31527 L
+s
+[(-0.5)] .2619 .29652 0 1 Mshowa
+.7381 .30902 m
+.7381 .31527 L
+s
+[(0.5)] .7381 .29652 0 1 Mshowa
+.97619 .30902 m
+.97619 .31527 L
+s
+[(1)] .97619 .29652 0 1 Mshowa
+.125 Mabswid
+.07143 .30902 m
+.07143 .31277 L
+s
+.11905 .30902 m
+.11905 .31277 L
+s
+.16667 .30902 m
+.16667 .31277 L
+s
+.21429 .30902 m
+.21429 .31277 L
+s
+.30952 .30902 m
+.30952 .31277 L
+s
+.35714 .30902 m
+.35714 .31277 L
+s
+.40476 .30902 m
+.40476 .31277 L
+s
+.45238 .30902 m
+.45238 .31277 L
+s
+.54762 .30902 m
+.54762 .31277 L
+s
+.59524 .30902 m
+.59524 .31277 L
+s
+.64286 .30902 m
+.64286 .31277 L
+s
+.69048 .30902 m
+.69048 .31277 L
+s
+.78571 .30902 m
+.78571 .31277 L
+s
+.83333 .30902 m
+.83333 .31277 L
+s
+.88095 .30902 m
+.88095 .31277 L
+s
+.92857 .30902 m
+.92857 .31277 L
+s
+.25 Mabswid
+0 .30902 m
+1 .30902 L
+s
+.5 .01472 m
+.50625 .01472 L
+s
+[(-1)] .4875 .01472 1 0 Mshowa
+.5 .16187 m
+.50625 .16187 L
+s
+[(-0.5)] .4875 .16187 1 0 Mshowa
+.5 .45617 m
+.50625 .45617 L
+s
+[(0.5)] .4875 .45617 1 0 Mshowa
+.5 .60332 m
+.50625 .60332 L
+s
+[(1)] .4875 .60332 1 0 Mshowa
+.125 Mabswid
+.5 .04415 m
+.50375 .04415 L
+s
+.5 .07358 m
+.50375 .07358 L
+s
+.5 .10301 m
+.50375 .10301 L
+s
+.5 .13244 m
+.50375 .13244 L
+s
+.5 .1913 m
+.50375 .1913 L
+s
+.5 .22073 m
+.50375 .22073 L
+s
+.5 .25016 m
+.50375 .25016 L
+s
+.5 .27959 m
+.50375 .27959 L
+s
+.5 .33845 m
+.50375 .33845 L
+s
+.5 .36788 m
+.50375 .36788 L
+s
+.5 .39731 m
+.50375 .39731 L
+s
+.5 .42674 m
+.50375 .42674 L
+s
+.5 .4856 m
+.50375 .4856 L
+s
+.5 .51503 m
+.50375 .51503 L
+s
+.5 .54446 m
+.50375 .54446 L
+s
+.5 .57389 m
+.50375 .57389 L
+s
+.25 Mabswid
+.5 0 m
+.5 .61803 L
+s
+0 0 m
+1 0 L
+1 .61803 L
+0 .61803 L
+closepath
+clip
+newpath
+.5 Mabswid
+.02381 .01472 m
+.06244 .03859 L
+.10458 .06463 L
+.14415 .08909 L
+.18221 .11261 L
+.22272 .13765 L
+.26171 .16175 L
+.30316 .18736 L
+.34309 .21204 L
+.3815 .23578 L
+.42237 .26104 L
+.46172 .28536 L
+.49955 .30874 L
+.53984 .33364 L
+.57861 .3576 L
+.61984 .38308 L
+.65954 .40762 L
+.69774 .43123 L
+.73838 .45635 L
+.77751 .48053 L
+.81909 .50623 L
+.85916 .53099 L
+.89771 .55482 L
+.93871 .58016 L
+.97619 .60332 L
+s
+.05 w
+.02381 .01472 Mdot
+.5 .30902 Mdot
+.97619 .60332 Mdot
+% End of Graphics
+MathPictureEnd
+\
+\>"], "Graphics",
+  ImageSize->{288, 177.938},
+  ImageMargins->{{43, 0}, {0, 0}},
+  ImageRegion->{{0, 1}, {0, 1}},
+  ImageCache->GraphicsData["Bitmap", "\<\
+CF5dJ6E]HGAYHf4PAg9QL6QYHg<PAVmbKF5d0`40004P0000/B000`400?l00000o`00003o0`3oool;
+00000840oooo00<000000?ooo`3oool0SP3oool00080oooo3@0000200?ooo`030000003oool0oooo
+08h0oooo00020?ooo`d00000M`3oool4000000D0oooo00<000000?ooo`3oool0SP3oool00080oooo
+3@00001i0?ooo`030000003oool0oooo00@0oooo00<000000?ooo`3oool0SP3oool000030?ooo`00
+0000000000`00000N@3oool00`000000oooo0?ooo`040?ooo`<00000SP3oool00080oooo3@00001a
+0?ooo`@00000103oool00`000000oooo0?ooo`040?ooo`030000003oool0oooo08h0oooo00020?oo
+o`d00000N@3oool00`000000oooo0?ooo`040?ooo`030000003oool0oooo08h0oooo00020?ooo`d0
+0000M`3oool3000000H0oooo00<000000?ooo`3oool0SP3oool000<0oooo3000001i0?ooo`030000
+003oool0oooo00@0oooo00<000000?ooo`3oool0SP3oool000@0oooo2@0000020?ooo`030000003o
+ool0oooo07d0oooo00<000000?ooo`3oool0SP3oool000D0oooo1`0000040?ooo`800000O@3oool0
+0`000000oooo0?ooo`2>0?ooo`00203oool00`000000oooo0?ooo`070?ooo`030000003oool0oooo
+07X0oooo00<000000?ooo`3oool0SP3oool001<0oooo0P00001j0?ooo`800000S`3oool001D0oooo
+0P00001h0?ooo`030000003oool0oooo08h0oooo000G0?ooo`030000003oool0oooo07D0oooo00<0
+00000?ooo`3oool0SP3oool001P0oooo0P00001e0?ooo`030000003oool0oooo08h0oooo000J0?oo
+o`800000L`3oool00`000000oooo0?ooo`2>0?ooo`00703oool200000740oooo00<000000?ooo`3o
+ool0SP3oool001h0oooo00<000000?ooo`3oool0KP3oool00`000000oooo0?ooo`2>0?ooo`007`3o
+ool2000006h0oooo00<000000?ooo`3oool0SP3oool00240oooo00<000000?ooo`3oool0J`3oool0
+0`000000oooo0?ooo`2>0?ooo`008P3oool2000006/0oooo0P00002?0?ooo`00903oool2000006T0
+oooo00<000000?ooo`3oool0SP3oool002H0oooo00<000000?ooo`3oool0IP3oool00`000000oooo
+0?ooo`2>0?ooo`009`3oool2000006H0oooo00<000000?ooo`3oool0SP3oool002T0oooo00<00000
+0?ooo`3oool0H`3oool00`000000oooo0?ooo`2>0?ooo`00:P3oool2000006<0oooo00<000000?oo
+o`3oool0SP3oool002`0oooo00<000000?ooo`3oool0H03oool00`000000oooo0?ooo`2>0?ooo`00
+;@3oool200000600oooo00<000000?ooo`3oool0SP3oool002l0oooo0P00001N0?ooo`800000S`3o
+ool00340oooo00<000000?ooo`3oool0F`3oool00`000000oooo0?ooo`2>0?ooo`00<P3oool20000
+05/0oooo00<000000?ooo`3oool0SP3oool003@0oooo00<000000?ooo`3oool0F03oool00`000000
+oooo0?ooo`2>0?ooo`00=@3oool2000005P0oooo00<000000?ooo`3oool0SP3oool003L0oooo0P00
+001F0?ooo`030000003oool0oooo08h0oooo000i0?ooo`030000003oool0oooo05<0oooo00<00000
+0?ooo`3oool0SP3oool003X0oooo0P00001C0?ooo`030000003oool0oooo08h0oooo000l0?ooo`80
+0000D@3oool00`000000oooo0?ooo`2>0?ooo`00?P3oool2000004l0oooo0P00002?0?ooo`00@03o
+ool00`000000oooo0?ooo`1<0?ooo`030000003oool0oooo08h0oooo00110?ooo`800000C03oool0
+0`000000oooo0?ooo`2>0?ooo`00@`3oool00`000000oooo0?ooo`190?ooo`030000003oool0oooo
+08h0oooo00140?ooo`800000B@3oool00`000000oooo0?ooo`2>0?ooo`00AP3oool2000004L0oooo
+00<000000?ooo`3oool0SP3oool004P0oooo00<000000?ooo`3oool0<03oool2000000@0oooo00<0
+00000?ooo`3oool00P3oool3000000H0oooo00<000000?ooo`3oool0SP3oool004T0oooo0P00000_
+0?ooo`040000003oool0oooo000000/0oooo00<000000?ooo`3oool00`3oool00`000000oooo0?oo
+o`2>0?ooo`00B`3oool00`000000oooo0?ooo`0/0?ooo`040000003oool0oooo000000/0oooo00<0
+00000?ooo`3oool00`3oool3000008h0oooo001<0?ooo`8000009P3oool400000080oooo00@00000
+0?ooo`3oool00000203oool3000000H0oooo00<000000?ooo`3oool0SP3oool004h0oooo0P00000Z
+0?ooo`040000003oool0oooo000000P0oooo00<000000?ooo`3oool01P3oool00`000000oooo0?oo
+o`2>0?ooo`00D03oool00`000000oooo0?ooo`0W0?ooo`040000003oool0oooo000000P0oooo00<0
+00000?ooo`3oool01P3oool00`000000oooo0?ooo`2>0?ooo`00D@3oool2000002P0oooo0P000009
+0?ooo`@000001@3oool00`000000oooo0?ooo`2>0?ooo`00D`3oool2000003X0oooo00<000000?oo
+o`3oool0SP3oool005D0oooo0P00000h0?ooo`030000003oool0oooo08h0oooo001G0?ooo`030000
+003oool0oooo03D0oooo00<000000?ooo`3oool0SP3oool005P0oooo0P00000e0?ooo`800000S`3o
+ool005X0oooo00<000000?ooo`3oool0<P3oool00`000000oooo0?ooo`2>0?ooo`00F`3oool20000
+0380oooo00<000000?ooo`3oool0SP3oool005d0oooo0P00000`0?ooo`030000003oool0oooo08h0
+oooo001O0?ooo`030000003oool0oooo02d0oooo00<000000?ooo`3oool0SP3oool00600oooo0P00
+000]0?ooo`030000003oool0oooo08h0oooo001R0?ooo`030000003oool0oooo02X0oooo00<00000
+0?ooo`3oool0SP3oool006<0oooo0P00000Z0?ooo`030000003oool0oooo08h0oooo001U0?ooo`03
+0000003oool0oooo02L0oooo00<000000?ooo`3oool0SP3oool006H0oooo0P00000W0?ooo`800000
+S`3oool006P0oooo0P00000U0?ooo`030000003oool0oooo08h0oooo001Z0?ooo`030000003oool0
+oooo0280oooo00<000000?ooo`3oool0SP3oool006/0oooo0P00000R0?ooo`030000003oool0oooo
+08h0oooo001]0?ooo`030000003oool0oooo01l0oooo00<000000?ooo`3oool0SP3oool006h0oooo
+0P00000O0?ooo`030000003oool0oooo08h0oooo001`0?ooo`8000007@3oool00`000000oooo0?oo
+o`2>0?ooo`00LP3oool00`000000oooo0?ooo`0J0?ooo`030000003oool0oooo08h0oooo001c0?oo
+o`8000006P3oool2000008l0oooo001e0?ooo`800000603oool00`000000oooo0?ooo`2>0?ooo`00
+M`3oool2000001H0oooo00<000000?ooo`3oool0SP3oool007T0oooo00<000000?ooo`3oool04`3o
+ool00`000000oooo0?ooo`2>0?ooo`00NP3oool2000001<0oooo00<000000?ooo`3oool0SP3oool0
+07`0oooo00<000000?ooo`3oool0403oool00`000000oooo0?ooo`2>0?ooo`00203oool4000003/0
+oooo0P0000040?ooo`030000003oool0oooo0080oooo0`00000X0?ooo`800000403oool00`000000
+oooo0?ooo`0j0?ooo`800000103oool00`000000oooo0?ooo`020?ooo`<00000>`3oool4000000L0
+oooo000:0?ooo`030000003oool0oooo03T0oooo00@000000?ooo`3oool000002`3oool00`000000
+oooo0?ooo`0W0?ooo`8000003P3oool00`000000oooo0?ooo`0i0?ooo`040000003oool0oooo0000
+00/0oooo00<000000?ooo`3oool0>P3oool00`000000oooo0?ooo`060?ooo`002P3oool00`000000
+oooo0?ooo`0i0?ooo`040000003oool0oooo000000/0oooo00<000000?ooo`3oool0:@3oool00`00
+0000oooo0?ooo`0;0?ooo`030000003oool0oooo03T0oooo00@000000?ooo`3oool000002`3oool0
+0`000000oooo0?ooo`0j0?ooo`030000003oool0oooo00H0oooo00020?ooo`@00000103oool00`00
+0000oooo0?ooo`0c0?ooo`@000000P3oool010000000oooo0?ooo`0000080?ooo`<00000;@3oool2
+000000/0oooo0P00000j0?ooo`040000003oool0oooo000000P0oooo0`00000m0?ooo`030000003o
+ool0oooo00H0oooo000:0?ooo`030000003oool0oooo03T0oooo00@000000?ooo`3oool00000203o
+ool00`000000oooo0?ooo`0_0?ooo`030000003oool0oooo00P0oooo00<000000?ooo`3oool0>@3o
+ool010000000oooo0?ooo`0000080?ooo`030000003oool0oooo03d0oooo00<000000?ooo`3oool0
+1P3oool000P0oooo0`00000k0?ooo`040000003oool0oooo000000P0oooo00<000000?ooo`3oool0
+<03oool2000000D0oooo1`00000h0?ooo`040000003oool0oooo000000P0oooo00<000000?ooo`3o
+ool0>`3oool3000000P0oooo000:0?ooo`030000003oool0oooo03X0oooo0P0000090?ooo`@00000
+<@3oool010000000oooo0?ooo`3oool9000003P0oooo0P0000090?ooo`@00000?03oool00`000000
+oooo0?ooo`060?ooo`00R03oool=000008/0oooo00290?ooo`d00000RP3oool008T0oooo3@00002:
+0?ooo`00R@3oool=000008X0oooo003o0000020000000@3oool000L0oooo00<000000?ooo`3oool0
+2`3oool00`000000oooo0?ooo`0:0?ooo`030000003oool0oooo00/0oooo00<000000?ooo`3oool0
+2P3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo00/0oooo00<000000?ooo`3oool0
+2P3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo00X0oooo00<000000?ooo`3oool0
+1@3oool=000000L0oooo00<000000?ooo`3oool02P3oool00`000000oooo0?ooo`0;0?ooo`030000
+003oool0oooo00X0oooo00<000000?ooo`3oool02`3oool00`000000oooo0?ooo`0;0?ooo`030000
+003oool0oooo00X0oooo00<000000?ooo`3oool02`3oool00`000000oooo0?ooo`0:0?ooo`030000
+003oool0oooo00/0oooo00<000000?ooo`3oool01P3oool000L0oooo00<000000?ooo`3oool0@@3o
+ool00`000000oooo0?ooo`0k0?ooo`d00000?@3oool00`000000oooo0?ooo`110?ooo`030000003o
+ool0oooo00H0oooo00290?ooo`d00000RP3oool008X0oooo3@0000290?ooo`00R`3oool9000000<0
+oooo00<000000?ooo`3oool0QP3oool008`0oooo1`0000050?ooo`800000QP3oool008l0oooo00<0
+00000?ooo`3oool0203oool00`000000oooo0?ooo`230?ooo`00S`3oool2000000X0oooo0P000023
+0?ooo`00S`3oool00`000000oooo0?ooo`0;0?ooo`030000003oool0oooo0800oooo002?0?ooo`03
+0000003oool0oooo00`0oooo0P0000200?ooo`00S`3oool00`000000oooo0?ooo`0>0?ooo`800000
+OP3oool008l0oooo00<000000?ooo`3oool0403oool00`000000oooo0?ooo`1k0?ooo`00S`3oool0
+0`000000oooo0?ooo`0A0?ooo`800000N`3oool008l0oooo00<000000?ooo`3oool04`3oool00`00
+0000oooo0?ooo`1h0?ooo`00S`3oool00`000000oooo0?ooo`0D0?ooo`800000N03oool008l0oooo
+00<000000?ooo`3oool05P3oool2000007H0oooo002?0?ooo`8000006@3oool00`000000oooo0?oo
+o`1c0?ooo`00S`3oool00`000000oooo0?ooo`0I0?ooo`800000L`3oool008l0oooo00<000000?oo
+o`3oool06`3oool200000740oooo002?0?ooo`030000003oool0oooo01d0oooo0P00001_0?ooo`00
+S`3oool00`000000oooo0?ooo`0O0?ooo`030000003oool0oooo06`0oooo002?0?ooo`030000003o
+ool0oooo0200oooo0P00001/0?ooo`00S`3oool00`000000oooo0?ooo`0R0?ooo`800000JP3oool0
+08l0oooo00<000000?ooo`3oool0903oool00`000000oooo0?ooo`1W0?ooo`00S`3oool2000002H0
+oooo0P00001W0?ooo`00S`3oool00`000000oooo0?ooo`0W0?ooo`800000I@3oool008l0oooo00<0
+00000?ooo`3oool0:@3oool2000006<0oooo002?0?ooo`030000003oool0oooo02/0oooo00<00000
+0?ooo`3oool0H03oool008l0oooo00<000000?ooo`3oool0;03oool200000600oooo002?0?ooo`03
+0000003oool0oooo02h0oooo00<000000?ooo`3oool0G@3oool008l0oooo00<000000?ooo`3oool0
+;`3oool00`000000oooo0?ooo`1L0?ooo`00S`3oool00`000000oooo0?ooo`0`0?ooo`800000G03o
+ool008l0oooo00<000000?ooo`3oool0<P3oool00`000000oooo0?ooo`1I0?ooo`00S`3oool20000
+03@0oooo0P00001I0?ooo`00S`3oool00`000000oooo0?ooo`0e0?ooo`030000003oool0oooo05H0
+oooo002?0?ooo`030000003oool0oooo03H0oooo0P00001F0?ooo`00S`3oool00`000000oooo0?oo
+o`0h0?ooo`800000E03oool008l0oooo00<000000?ooo`3oool0>P3oool00`000000oooo0?ooo`1A
+0?ooo`00S`3oool00`000000oooo0?ooo`0k0?ooo`800000D@3oool007/0oooo0P0000040?ooo`03
+0000003oool0oooo0080oooo0`0000060?ooo`030000003oool0oooo03d0oooo0P00001?0?ooo`00
+NP3oool010000000oooo0?ooo`00000;0?ooo`030000003oool0oooo00<0oooo00<000000?ooo`3o
+ool0?`3oool2000004d0oooo001j0?ooo`040000003oool0oooo000000/0oooo00<000000?ooo`3o
+ool00`3oool300000440oooo00<000000?ooo`3oool0BP3oool007X0oooo00@000000?ooo`3oool0
+0000203oool3000000H0oooo00<000000?ooo`3oool0@P3oool2000004X0oooo001j0?ooo`040000
+003oool0oooo000000P0oooo00<000000?ooo`3oool01P3oool00`000000oooo0?ooo`140?ooo`03
+0000003oool0oooo04L0oooo001j0?ooo`040000003oool0oooo000000P0oooo00<000000?ooo`3o
+ool01P3oool00`000000oooo0?ooo`150?ooo`800000A`3oool007/0oooo0P0000090?ooo`@00000
+1@3oool00`000000oooo0?ooo`170?ooo`800000A@3oool008l0oooo00<000000?ooo`3oool0B@3o
+ool00`000000oooo0?ooo`120?ooo`00S`3oool00`000000oooo0?ooo`1:0?ooo`800000@P3oool0
+08l0oooo00<000000?ooo`3oool0C03oool00`000000oooo0?ooo`0o0?ooo`00S`3oool2000004h0
+oooo0P00000o0?ooo`00S`3oool00`000000oooo0?ooo`1?0?ooo`800000?@3oool008l0oooo00<0
+00000?ooo`3oool0D@3oool00`000000oooo0?ooo`0j0?ooo`00S`3oool00`000000oooo0?ooo`1B
+0?ooo`800000>P3oool008l0oooo00<000000?ooo`3oool0E03oool2000003P0oooo002?0?ooo`03
+0000003oool0oooo05H0oooo0P00000f0?ooo`00S`3oool00`000000oooo0?ooo`1H0?ooo`030000
+003oool0oooo03<0oooo002?0?ooo`030000003oool0oooo05T0oooo0P00000c0?ooo`00S`3oool0
+0`000000oooo0?ooo`1K0?ooo`030000003oool0oooo0300oooo002?0?ooo`800000G@3oool20000
+0300oooo002?0?ooo`030000003oool0oooo05h0oooo0P00000^0?ooo`00S`3oool00`000000oooo
+0?ooo`1P0?ooo`030000003oool0oooo02/0oooo002?0?ooo`030000003oool0oooo0640oooo0P00
+000[0?ooo`00S`3oool00`000000oooo0?ooo`1S0?ooo`030000003oool0oooo02P0oooo002?0?oo
+o`030000003oool0oooo06@0oooo0P00000X0?ooo`00S`3oool00`000000oooo0?ooo`1V0?ooo`03
+0000003oool0oooo02D0oooo002?0?ooo`030000003oool0oooo06L0oooo0P00000U0?ooo`00S`3o
+ool2000006X0oooo0P00000S0?ooo`00S`3oool00`000000oooo0?ooo`1[0?ooo`030000003oool0
+oooo0200oooo002?0?ooo`030000003oool0oooo06`0oooo0P00000P0?ooo`00S`3oool00`000000
+oooo0?ooo`1^0?ooo`030000003oool0oooo01d0oooo002?0?ooo`030000003oool0oooo06l0oooo
+0P00000M0?ooo`00S`3oool00`000000oooo0?ooo`1a0?ooo`8000006`3oool008l0oooo00<00000
+0?ooo`3oool0L`3oool00`000000oooo0?ooo`0H0?ooo`00S`3oool00`000000oooo0?ooo`1d0?oo
+o`800000603oool008l0oooo00<000000?ooo`3oool0MP3oool2000001H0oooo002?0?ooo`800000
+N@3oool2000001@0oooo002?0?ooo`030000003oool0oooo07X0oooo00<000000?ooo`3oool04@3o
+ool008l0oooo00<000000?ooo`3oool0N`3oool200000140oooo002?0?ooo`030000003oool0oooo
+07d0oooo00<000000?ooo`3oool00P3oool7000000D0oooo002?0?ooo`030000003oool0oooo07h0
+oooo0P0000000`3oool0000000000007000000@0oooo002?0?ooo`030000003oool0oooo0800oooo
+2`0000030?ooo`00QP3oool4000000D0oooo00<000000?ooo`3oool0O`3oool=00000080oooo0028
+0?ooo`030000003oool0oooo00@0oooo00<000000?ooo`3oool0O`3oool=00000080oooo00280?oo
+o`030000003oool0oooo00@0oooo0`00001o0?ooo`d000000P3oool008P0oooo00<000000?ooo`3o
+ool0103oool00`000000oooo0?ooo`1n0?ooo`h000000P3oool008P0oooo00<000000?ooo`3oool0
+103oool00`000000oooo0?ooo`1o0?ooo`d000000P3oool008H0oooo0`0000060?ooo`030000003o
+ool0oooo07l0oooo3@0000020?ooo`00R03oool00`000000oooo0?ooo`040?ooo`030000003oool0
+oooo07l0oooo3@0000020?ooo`00\
+\>"],
+  ImageRangeCache->{{{0, 287}, {176.938, 0}} -> {-1.0562, -1.05358, \
+0.0073603, 0.0119092}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{
+        RowBox[{"(", GridBox[{
+              {"\[Phi]x", "\[Phi]y"}
+              }], ")"}], ".", 
+        RowBox[{"(", GridBox[{
+              {"\[Phi]xx", "\[Phi]xy"},
+              {"\[Phi]xy", "\[Phi]yy"}
+              }], ")"}], ".", 
+        RowBox[{"(", GridBox[{
+              {"\[Phi]x"},
+              {"\[Phi]y"}
+              }], ")"}]}], "//", "Expand"}]], "Input"],
+
+Cell[BoxData[
+    \({{\[Phi]x\^2\ \[Phi]xx + 
+          2\ \[Phi]x\ \[Phi]xy\ \[Phi]y + \[Phi]y\^2\ \[Phi]yy}}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Linear product", "Section"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(fitfunc = \((1 + x)\) \((1 + y)\) // Expand\), "\[IndentingNewLine]", 
+    \(fitfunclist = fitfunc /. Plus \[Rule] List\)}], "Input"],
+
+Cell[BoxData[
+    \(1 + x + y + x\ y\)], "Output"],
+
+Cell[BoxData[
+    \({1, x, y, x\ y}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{"\[Phi]", "=", GridBox[{
+          {"0.34281289217941835`", \(-0.20818608281145068`\)},
+          {\(-0.1330437192524971`\), \(-0.4302533529303523`\)}
+          },
+        RowSpacings->1,
+        ColumnSpacings->1,
+        ColumnAlignments->{
+          Left}]}], "\[IndentingNewLine]", \(MatrixForm[\[Phi]]\), "\
+\[IndentingNewLine]", \(f = 
+        ListInterpolation[\[Phi], InterpolationOrder \[Rule] 1];\)}], "Input"],
+
+Cell[BoxData[
+    \({{0.34281289217941835`, \(-0.20818608281145068`\)}, \
+{\(-0.1330437192524971`\), \(-0.4302533529303523`\)}}\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"0.34281289217941835`", \(-0.20818608281145068`\)},
+            {\(-0.1330437192524971`\), \(-0.4302533529303523`\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Table[\[IndentingNewLine]\(p0 = 
+          p + px*x + py*y + pxy*x*y;\)\[IndentingNewLine], {x, 0, 1}, {y, 0, 
+        1}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(DensityPlot[Sign@f[x, y], {x, 1, 2}, {y, 1, 2}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(fit = 
+      Fit[MapIndexed[Append[#2 - 1, #1] &, \[Phi], {2}] // Flatten[#, 1] &, 
+        fitfunclist, {x, y}]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(0.34281289217941835`\)\(\[InvisibleSpace]\)\) - 
+      0.47585661143191543`\ x - 0.5509989749908689`\ y + 
+      0.2537893413130136`\ x\ y\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(iX . Flatten@\[Phi]\)], "Input"],
+
+Cell[BoxData[
+    \({0.34281289217941835`, \(-0.4758566114319155`\), \
+\(-0.550998974990869`\), 0.2537893413130139`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Plot3D[fit - f[x + 1, y + 1], {y, 0, 1}, {x, 0, 1}]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{\(X = Table[{x, y}, {x, 0, 1}, {y, 0, 1}]\), "\n", \(X = 
+      Flatten[X, 1]\), "\n", \(X = \(Thread[{x, y} \[Rule] #] &\) /@ 
+        X\), "\n", \(X = fitfunclist /. X\), "\[IndentingNewLine]", \(iX = 
+      Inverse[X]\), "\n", \(MatrixForm[iX]\), "\[IndentingNewLine]", 
+    RowBox[{"iX", ".", 
+      RowBox[{"Flatten", "[", 
+        RowBox[{"(", GridBox[{
+              {"\[Phi]1", "\[Phi]2"},
+              {"\[Phi]3", "\[Phi]4"}
+              }], ")"}], "]"}]}]}], "Input"],
+
+Cell[BoxData[
+    \({{{0, 0}, {0, 1}}, {{1, 0}, {1, 1}}}\)], "Output"],
+
+Cell[BoxData[
+    \({{0, 0}, {0, 1}, {1, 0}, {1, 1}}\)], "Output"],
+
+Cell[BoxData[
+    \({{x \[Rule] 0, y \[Rule] 0}, {x \[Rule] 0, y \[Rule] 1}, {x \[Rule] 1, 
+        y \[Rule] 0}, {x \[Rule] 1, y \[Rule] 1}}\)], "Output"],
+
+Cell[BoxData[
+    \({{1, 0, 0, 0}, {1, 0, 1, 0}, {1, 1, 0, 0}, {1, 1, 1, 1}}\)], "Output"],
+
+Cell[BoxData[
+    \({{1, 0, 0, 0}, {\(-1\), 0, 1, 0}, {\(-1\), 1, 0, 
+        0}, {1, \(-1\), \(-1\), 1}}\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"1", "0", "0", "0"},
+            {\(-1\), "0", "1", "0"},
+            {\(-1\), "1", "0", "0"},
+            {"1", \(-1\), \(-1\), "1"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    \({\[Phi]1, \(-\[Phi]1\) + \[Phi]3, \(-\[Phi]1\) + \[Phi]2, \[Phi]1 - \
+\[Phi]2 - \[Phi]3 + \[Phi]4}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(phi =. \), "\n", 
+    \(phiidx = 
+      Table[\(phi[\([j + J]\)]\)[\([i + I]\)], {I, 0, 1}, {J, 0, 1}] // 
+        Flatten\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(j\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(i\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + j\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"pspec\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \({\(phi\[LeftDoubleBracket]j\[RightDoubleBracket]\)\[LeftDoubleBracket]
+        i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]1 + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]
+        i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]
+          j\[RightDoubleBracket]\)\[LeftDoubleBracket]1 + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]1 + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]1 + 
+          i\[RightDoubleBracket]}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Clear[p, px, py, pxy]\), "\[IndentingNewLine]", 
+    \(vars = {p, px, py, pxy}\), "\[IndentingNewLine]", 
+    \({fitfunclist, vars}\[Transpose] \)}], "Input"],
+
+Cell[BoxData[
+    \({p, px, py, pxy}\)], "Output"],
+
+Cell[BoxData[
+    \({{1, p}, {x, px}, {y, py}, {x\ y, pxy}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dat = \({#1, 
+              ToString[#3] <> "\< = \>" <> 
+                ToString@\(CForm@Expand[#2 . phiidx]\) <> "\<;\>"} &\)~
+          MapThread~{fitfunclist, iX, vars};\)\), "\[IndentingNewLine]", 
+    \(TableForm[dat]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[GridBox[{
+          {"1", "\<\"p = phi[j][i];\"\>"},
+          {"x", "\<\"px = -phi[j][i] + phi[j][1 + i];\"\>"},
+          {"y", "\<\"py = -phi[j][i] + phi[1 + j][i];\"\>"},
+          {\(x\ y\), "\<\"pxy = phi[j][i] - phi[j][1 + i] - phi[1 + j][i] + \
+phi[1 + j][1 + i];\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      Function[ BoxForm`e$, 
+        TableForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(X = fitfunclist;\)\), "\[IndentingNewLine]", 
+    \(\(X = X\ vars;\)\), "\[IndentingNewLine]", 
+    \(\(X = Plus @@ X;\)\), "\[IndentingNewLine]", 
+    \(CForm@D[X, x]\), "\[IndentingNewLine]", 
+    \(\(CForm@D[X, y];\)\), "\[IndentingNewLine]", 
+    \(Map[CForm, \[PartialD]\_{{x, y}, 2}X, {2}]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{"{", 
+          RowBox[{
+            InterpretationBox[
+              StyleBox["0",
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 0],
+              Editable->True,
+              AutoDelete->True], ",", 
+            InterpretationBox[
+              StyleBox["pxy",
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ pxy],
+              Editable->True,
+              AutoDelete->True]}], "}"}], ",", 
+        RowBox[{"{", 
+          RowBox[{
+            InterpretationBox[
+              StyleBox["pxy",
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ pxy],
+              Editable->True,
+              AutoDelete->True], ",", 
+            InterpretationBox[
+              StyleBox["0",
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 0],
+              Editable->True,
+              AutoDelete->True]}], "}"}]}], "}"}]], "Output"],
+
+Cell["px + pxy*y", "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\((\[PartialD]\_{{x, y}, 2}X)\) // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"0", "pxy"},
+            {"pxy", "0"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(nx = D[X, x]\), "\[IndentingNewLine]", 
+    \(ny = D[X, y]\), "\[IndentingNewLine]", 
+    \(H = \[PartialD]\_{{x, y}, 2}X\), "\[IndentingNewLine]", 
+    \(\(D[X, {{x, y}, 1}] . H . D[X, {{x, y}, 1}] // CForm\) // 
+      ToString\)}], "Input"],
+
+Cell[BoxData[
+    \(px + pxy\ y\)], "Output"],
+
+Cell[BoxData[
+    \(py + pxy\ x\)], "Output"],
+
+Cell[BoxData[
+    \({{0, pxy}, {pxy, 0}}\)], "Output"],
+
+Cell[BoxData[
+    \("2*pxy*(py + pxy*x)*(px + pxy*y)"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{\(nx =. \), "\[IndentingNewLine]", \(ny =. \), "\
+\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"g", "=", 
+        RowBox[{"(", GridBox[{
+              {"nx"},
+              {"ny"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"H", "=", 
+        RowBox[{"(", GridBox[{
+              {"hxx", "hxy"},
+              {"hxy", "hyy"}
+              }], ")"}]}], 
+      ";"}], "\[IndentingNewLine]", \(g\[Transpose]  . H . g // 
+      Expand\)}], "Input"],
+
+Cell[BoxData[
+    \({{hxx\ nx\^2 + 2\ hxy\ nx\ ny + hyy\ ny\^2}}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Parabolic product", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(fitfunc = \((1 + x + x\^2)\) \((1 + y + y\^2)\) // Expand\)], "Input"],
+
+Cell[BoxData[
+    \(1 + x + x\^2 + y + x\ y + x\^2\ y + y\^2 + x\ y\^2 + 
+      x\^2\ y\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(g = D[fitfunc, {{x, y}, 2}]\), "\[IndentingNewLine]", 
+    \(CForm /@ g\)}], "Input"],
+
+Cell[BoxData[
+    \({{2 + 2\ y + 2\ y\^2, 
+        1 + 2\ x + 2\ y + 4\ x\ y}, {1 + 2\ x + 2\ y + 4\ x\ y, 
+        2 + 2\ x + 2\ x\^2}}\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        InterpretationBox[
+          
+          StyleBox[\(List \((2\  + \ 2*y\  + \ 2*Power \((y, 2)\), 
+                1\  + \ 2*x\  + \ 2*y\  + \ 4*x*y)\)\),
+            ShowStringCharacters->True,
+            NumberMarks->True],
+          CForm[ {
+            Plus[ 2, 
+              Times[ 2, y], 
+              Times[ 2, 
+                Power[ y, 2]]], 
+            Plus[ 1, 
+              Times[ 2, x], 
+              Times[ 2, y], 
+              Times[ 4, x, y]]}],
+          Editable->True,
+          AutoDelete->True], ",", 
+        InterpretationBox[
+          
+          StyleBox[\(List \((1\  + \ 2*x\  + \ 2*y\  + \ 4*x*y, 
+                2\  + \ 2*x\  + \ 2*Power \((x, 2)\))\)\),
+            ShowStringCharacters->True,
+            NumberMarks->True],
+          CForm[ {
+            Plus[ 1, 
+              Times[ 2, x], 
+              Times[ 2, y], 
+              Times[ 4, x, y]], 
+            Plus[ 2, 
+              Times[ 2, x], 
+              Times[ 2, 
+                Power[ x, 2]]]}],
+          Editable->True,
+          AutoDelete->True]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"\[Phi]", "=", 
+        TagBox[GridBox[{
+              {
+                "0.34281289217941835`", \(-0.20818608281145068`\), \
+\(-0.7738703267224366`\)},
+              {\(-0.1330437192524971`\), \(-0.4302533529303523`\), \
+\(-0.8727616239969632`\)},
+              {"0.39731235102921897`", 
+                "0.049596586672253085`", \(-0.055774297626000655`\)}
+              },
+            RowSpacings->1,
+            ColumnSpacings->1,
+            ColumnAlignments->{Left}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]]}], 
+      ";"}], "\[IndentingNewLine]", \(MatrixForm[\[Phi]]\), "\
+\[IndentingNewLine]", \(f = 
+        ListInterpolation[\[Phi], InterpolationOrder \[Rule] 2];\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {
+              "0.34281289217941835`", \(-0.20818608281145068`\), \
+\(-0.7738703267224366`\)},
+            {\(-0.1330437192524971`\), \(-0.4302533529303523`\), \
+\(-0.8727616239969632`\)},
+            {"0.39731235102921897`", 
+              "0.049596586672253085`", \(-0.055774297626000655`\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Plot3D[f[x, y], {x, 1, 3}, {y, 1, 3}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MapIndexed[Append[#2 - 2, #1] &, \[Phi], {2}]\)], "Input"],
+
+Cell[BoxData[
+    \({{{\(-1\), \(-1\), 0.34281289217941835`}, {\(-1\), 
+          0, \(-0.20818608281145068`\)}, {\(-1\), 
+          1, \(-0.7738703267224366`\)}}, {{0, \(-1\), \
+\(-0.1330437192524971`\)}, {0, 0, \(-0.4302533529303523`\)}, {0, 
+          1, \(-0.8727616239969632`\)}}, {{1, \(-1\), 
+          0.39731235102921897`}, {1, 0, 0.049596586672253085`}, {1, 
+          1, \(-0.055774297626000655`\)}}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(fit = 
+      Fit[MapIndexed[Append[#2 - 2, #1] &, \[Phi], {2}] // Flatten[#, 1] &, 
+        fitfunc /. Plus \[Rule] List, {x, y}]\)], "Input"],
+
+Cell[BoxData[
+    \(\(-0.43025335293035183`\) + 0.12889133474185177`\ x + 
+      0.350958604860753`\ x\^2 - 0.3698589523722328`\ y + 
+      0.16589914256165864`\ x\ y - 0.022583514517035545`\ x\^2\ y - 
+      0.07264931869437809`\ y\^2 + 0.06425753724470723`\ x\ y\^2 + 
+      0.12956422147902688`\ x\^2\ y\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Plot3D[
+      fit - f[x + 2, y + 2], {x, \(-1\), 1}, {y, \(-1\), 1}]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(X = Table[{x, y}, {x, \(-1\), 1}, {y, \(-1\), 1}];\)\), "\n", 
+    \(X = Flatten[X, 1]; \), "\n", 
+    \(X = \(Thread[{x, y} \[Rule] #] &\) /@ X; \), "\n", 
+    \(\(X = \(fitfunc /. Plus \[Rule] List\) /. 
+          X;\)\), "\[IndentingNewLine]", 
+    \(\(iX = Inverse[X];\)\), "\n", 
+    \(iX . Flatten[\[Phi]]\)}], "Input"],
+
+Cell[BoxData[
+    \({\(-0.4302533529303523`\), 0.12889133474185188`, 
+      0.3509586048607535`, \(-0.36985895237223304`\), 
+      0.16589914256165886`, \(-0.022583514517035604`\), \
+\(-0.0726493186943779`\), 0.06425753724470726`, 
+      0.12956422147902671`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(fitfunclist = fitfunc /. Plus \[Rule] List\)], "Input"],
+
+Cell[BoxData[
+    \({1, x, x\^2, y, x\ y, x\^2\ y, y\^2, x\ y\^2, x\^2\ y\^2}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(phi =. \), "\n", 
+    \(phiidx = 
+      Table[\(phi[\([\)\(j + J\)\(]\)]\)[\([\)\(i + I\)\(]\)], {I, \(-1\), 
+            1}, {J, \(-1\), 1}] // Flatten\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(\\(\\(-1\\)\\) + j\\) is neither an integer nor a list of integers. \\!\
+\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(\\(\\(-1\\)\\) + i\\) is neither an integer nor a list of integers. \\!\
+\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(j\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"pspec\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \({\(phi\[LeftDoubleBracket]\(-1\) + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]\(-1\) + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]
+          j\[RightDoubleBracket]\)\[LeftDoubleBracket]\(-1\) + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]1 + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]\(-1\) + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]\(-1\) + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]
+        i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]
+          j\[RightDoubleBracket]\)\[LeftDoubleBracket]
+        i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]1 + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]
+        i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]\(-1\) + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]1 + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]
+          j\[RightDoubleBracket]\)\[LeftDoubleBracket]1 + 
+          i\[RightDoubleBracket], \(phi\[LeftDoubleBracket]1 + 
+            j\[RightDoubleBracket]\)\[LeftDoubleBracket]1 + 
+          i\[RightDoubleBracket]}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Clear[p, px, pxx, py, pxy, pxxy, pyy, pxyy, 
+      pxxyy]\), "\[IndentingNewLine]", 
+    \(vars = {p, px, pxx, py, pxy, pxxy, pyy, pxyy, 
+        pxxyy}\), "\[IndentingNewLine]", 
+    \({fitfunclist, vars}\[Transpose] \)}], "Input"],
+
+Cell[BoxData[
+    \({p, px, pxx, py, pxy, pxxy, pyy, pxyy, pxxyy}\)], "Output"],
+
+Cell[BoxData[
+    \({{1, p}, {x, px}, {x\^2, pxx}, {y, py}, {x\ y, pxy}, {x\^2\ y, 
+        pxxy}, {y\^2, pyy}, {x\ y\^2, pxyy}, {x\^2\ y\^2, pxxyy}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dat = \({#1, MatrixForm[Partition[#2, 3]], 
+              ToString[#4] <> "\< = (\>" <> 
+                ToString@\(CForm@Expand[#2 . phiidx  #3]\) <> "\<) / \>" <> 
+                ToString[#3] <> "\<;\>"} &\)~
+          MapThread~{fitfunclist, iX, {1, 2, 2, 2, 4, 4, 2, 4, 4}, 
+            vars};\)\), "\[IndentingNewLine]", 
+    \(TableForm[dat]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[GridBox[{
+          {"1", 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"0", "0", "0"},
+                    {"0", "1", "0"},
+                    {"0", "0", "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ BoxForm`e$]]], "\<\"p = (phi[j][i]) / 1;\"\>"},
+          {"x", 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"0", \(-\(1\/2\)\), "0"},
+                    {"0", "0", "0"},
+                    {"0", \(1\/2\), "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"px = (-phi[j][-1 + i] + phi[j][1 + i]) / \
+2;\"\>"},
+          {\(x\^2\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"0", \(1\/2\), "0"},
+                    {"0", \(-1\), "0"},
+                    {"0", \(1\/2\), "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pxx = (phi[j][-1 + i] - 2*phi[j][i] + \
+phi[j][1 + i]) / 2;\"\>"},
+          {"y", 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"0", "0", "0"},
+                    {\(-\(1\/2\)\), "0", \(1\/2\)},
+                    {"0", "0", "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"py = (-phi[-1 + j][i] + phi[1 + j][i]) / \
+2;\"\>"},
+          {\(x\ y\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(1\/4\), "0", \(-\(1\/4\)\)},
+                    {"0", "0", "0"},
+                    {\(-\(1\/4\)\), "0", \(1\/4\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pxy = (phi[-1 + j][-1 + i] - phi[-1 + \
+j][1 + i] - phi[1 + j][-1 + i] + phi[1 + j][1 + i]) / 4;\"\>"},
+          {\(x\^2\ y\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(-\(1\/4\)\), "0", \(1\/4\)},
+                    {\(1\/2\), "0", \(-\(1\/2\)\)},
+                    {\(-\(1\/4\)\), "0", \(1\/4\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pxxy = (-phi[-1 + j][-1 + i] + 2*phi[-1 + \
+j][i] - phi[-1 + j][1 + i] + phi[1 + j][-1 + i] - 2*phi[1 + j][i] + phi[1 + \
+j][1 + i]) / 4;\"\>"},
+          {\(y\^2\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {"0", "0", "0"},
+                    {\(1\/2\), \(-1\), \(1\/2\)},
+                    {"0", "0", "0"}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pyy = (phi[-1 + j][i] - 2*phi[j][i] + \
+phi[1 + j][i]) / 2;\"\>"},
+          {\(x\ y\^2\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(-\(1\/4\)\), \(1\/2\), \(-\(1\/4\)\)},
+                    {"0", "0", "0"},
+                    {\(1\/4\), \(-\(1\/2\)\), \(1\/4\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pxyy = (-phi[-1 + j][-1 + i] + phi[-1 + \
+j][1 + i] + 2*phi[j][-1 + i] - 2*phi[j][1 + i] - phi[1 + j][-1 + i] + phi[1 + \
+j][1 + i]) / 4;\"\>"},
+          {\(x\^2\ y\^2\), 
+            TagBox[
+              RowBox[{"(", "\[NoBreak]", GridBox[{
+                    {\(1\/4\), \(-\(1\/2\)\), \(1\/4\)},
+                    {\(-\(1\/2\)\), "1", \(-\(1\/2\)\)},
+                    {\(1\/4\), \(-\(1\/2\)\), \(1\/4\)}
+                    },
+                  RowSpacings->1,
+                  ColumnSpacings->1,
+                  ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+              Function[ BoxForm`e$, 
+                MatrixForm[ 
+                BoxForm`e$]]], "\<\"pxxyy = (phi[-1 + j][-1 + i] - 2*phi[-1 + \
+j][i] + phi[-1 + j][1 + i] - 2*phi[j][-1 + i] + 4*phi[j][i] - 2*phi[j][1 + i] \
++ phi[1 + j][-1 + i] - 2*phi[1 + j][i] + phi[1 + j][1 + i]) / 4;\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      Function[ BoxForm`e$, 
+        TableForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(dat[\([All, \(-1\)]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({"p = (phi[j][i]) / 1;", "px = (-phi[j][-1 + i] + phi[j][1 + i]) / 2;", 
+      "pxx = (phi[j][-1 + i] - 2 phi[j][i] + phi[j][1 + i]) / 2;", 
+      "py = (-phi[-1 + j][i] + phi[1 + j][i]) / 2;", 
+      "pxy = (phi[-1 + j][-1 + i] - phi[-1 + j][1 + i] - phi[1 + j][-1 + i] + \
+phi[1 + j][1 + i]) / 4;", 
+      "pxxy = (-phi[-1 + j][-1 + i] + 2 phi[-1 + j][i] - phi[-1 + j][1 + i] + \
+phi[1 + j][-1 + i] - 2 phi[1 + j][i] + phi[1 + j][1 + i]) / 4;", 
+      "pyy = (phi[-1 + j][i] - 2 phi[j][i] + phi[1 + j][i]) / 2;", 
+      "pxyy = (-phi[-1 + j][-1 + i] + phi[-1 + j][1 + i] + 2 phi[j][-1 + i] - \
+2 phi[j][1 + i] - phi[1 + j][-1 + i] + phi[1 + j][1 + i]) / 4;", 
+      "pxxyy = (phi[-1 + j][-1 + i] - 2 phi[-1 + j][i] + phi[-1 + j][1 + i] - \
+2 phi[j][-1 + i] + 4 phi[j][i] - 2 phi[j][1 + i] + phi[1 + j][-1 + i] - 2 \
+phi[1 + j][i] + phi[1 + j][1 + i]) / 4;"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(iX[\([2]\)] . phiidx // Expand\)], "Input"],
+
+Cell[BoxData[
+    \(\(-\(1\/2\)\)\ \(phi[\(-1\) + j]\)[i] + 
+      1\/2\ \(phi[1 + j]\)[i]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(X = fitfunclist;\)\), "\[IndentingNewLine]", 
+    \(\(X = X\ vars;\)\), "\[IndentingNewLine]", 
+    \(\(X = Plus @@ X;\)\), "\[IndentingNewLine]", 
+    \(\(CForm@D[X, x];\)\), "\[IndentingNewLine]", 
+    \(\(CForm@D[X, y];\)\), "\[IndentingNewLine]", 
+    \(Map[CForm, \[PartialD]\_{{x, y}, 2}X, {2}]\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        RowBox[{"{", 
+          RowBox[{
+            InterpretationBox[
+              
+              StyleBox[\(2*pxx\  + \ 2*pxxy*y\  + \ 
+                  2*pxxyy*Power \((y, 2)\)\),
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 
+                Plus[ 
+                  Times[ 2, pxx], 
+                  Times[ 2, pxxy, y], 
+                  Times[ 2, pxxyy, 
+                    Power[ y, 2]]]],
+              Editable->True,
+              AutoDelete->True], ",", 
+            InterpretationBox[
+              
+              StyleBox[\(pxy\  + \ 2*pxxy*x\  + \ 2*pxyy*y\  + \ 
+                  4*pxxyy*x*y\),
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 
+                Plus[ pxy, 
+                  Times[ 2, pxxy, x], 
+                  Times[ 2, pxyy, y], 
+                  Times[ 4, pxxyy, x, y]]],
+              Editable->True,
+              AutoDelete->True]}], "}"}], ",", 
+        RowBox[{"{", 
+          RowBox[{
+            InterpretationBox[
+              
+              StyleBox[\(pxy\  + \ 2*pxxy*x\  + \ 2*pxyy*y\  + \ 
+                  4*pxxyy*x*y\),
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 
+                Plus[ pxy, 
+                  Times[ 2, pxxy, x], 
+                  Times[ 2, pxyy, y], 
+                  Times[ 4, pxxyy, x, y]]],
+              Editable->True,
+              AutoDelete->True], ",", 
+            InterpretationBox[
+              
+              StyleBox[\(2*pyy\  + \ 2*pxyy*x\  + \ 
+                  2*pxxyy*Power \((x, 2)\)\),
+                ShowStringCharacters->True,
+                NumberMarks->True],
+              CForm[ 
+                Plus[ 
+                  Times[ 2, pyy], 
+                  Times[ 2, pxyy, x], 
+                  Times[ 2, pxxyy, 
+                    Power[ x, 2]]]],
+              Editable->True,
+              AutoDelete->True]}], "}"}]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\((\[PartialD]\_{{x, y}, 2}X)\) // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(2\ pxx + 2\ pxxy\ y + 2\ pxxyy\ y\^2\), \(pxy + 2\ pxxy\ x + 
+                2\ pxyy\ y + 4\ pxxyy\ x\ y\)},
+            {\(pxy + 2\ pxxy\ x + 2\ pxyy\ y + 4\ pxxyy\ x\ y\), \(2\ pyy + 
+                2\ pxyy\ x + 2\ pxxyy\ x\^2\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(nx = D[X, x];\)\), "\[IndentingNewLine]", 
+    \(\(ny = D[X, y];\)\), "\[IndentingNewLine]", 
+    \(\(H = \[PartialD]\_{{x, y}, 2}X;\)\), "\[IndentingNewLine]", 
+    \(\(D[X, {{x, y}, 1}] . H . D[X, {{x, y}, 1}] // CForm\) // 
+      ToString\)}], "Input"],
+
+Cell[BoxData[
+    \("(py + pxy*x + pxxy*Power(x,2) + 2*pyy*y + 2*pxyy*x*y + \
+2*pxxyy*Power(x,2)*y)*((2*pyy + 2*pxyy*x + 2*pxxyy*Power(x,2))*(py + pxy*x + \
+pxxy*Power(x,2) + 2*pyy*y + 2*pxyy*x*y + 2*pxxyy*Power(x,2)*y) + (pxy + \
+2*pxxy*x + 2*pxyy*y + 4*pxxyy*x*y)*(px + 2*pxx*x + pxy*y + 2*pxxy*x*y + \
+pxyy*Power(y,2) + 2*pxxyy*x*Power(y,2))) + (px + 2*pxx*x + pxy*y + 2*pxxy*x*y \
++ pxyy*Power(y,2) + 2*pxxyy*x*Power(y,2))*((pxy + 2*pxxy*x + 2*pxyy*y + \
+4*pxxyy*x*y)*(py + pxy*x + pxxy*Power(x,2) + 2*pyy*y + 2*pxyy*x*y + \
+2*pxxyy*Power(x,2)*y) + (2*pxx + 2*pxxy*y + 2*pxxyy*Power(y,2))*(px + 2*pxx*x \
++ pxy*y + 2*pxxy*x*y + pxyy*Power(y,2) + 2*pxxyy*x*Power(y,2)))"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(H\)], "Input"],
+
+Cell[BoxData[
+    \({{2\ pxx + 2\ pxxy\ y + 2\ pxxyy\ y\^2, 
+        pxy + 2\ pxxy\ x + 2\ pxyy\ y + 4\ pxxyy\ x\ y}, {pxy + 2\ pxxy\ x + 
+          2\ pxyy\ y + 4\ pxxyy\ x\ y, 
+        2\ pyy + 2\ pxyy\ x + 2\ pxxyy\ x\^2}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{\(nx =. \), "\[IndentingNewLine]", \(ny =. \), "\
+\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"g", "=", 
+        RowBox[{"(", GridBox[{
+              {"nx"},
+              {"ny"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"H", "=", 
+        RowBox[{"(", GridBox[{
+              {"hxx", "hxy"},
+              {"hxy", "hyy"}
+              }], ")"}]}], 
+      ";"}], "\[IndentingNewLine]", \(g\[Transpose]  . H . g // 
+      Expand\)}], "Input"],
+
+Cell[BoxData[
+    \({{hxx\ nx\^2 + 2\ hxy\ nx\ ny + hyy\ ny\^2}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Table[a, {j, \(-1\), 1,  .25}, {i, \(-1\), 1,  .25}] // 
+      TableForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[GridBox[{
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"},
+          {"a", "a", "a", "a", "a", "a", "a", "a", "a"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      Function[ BoxForm`e$, 
+        TableForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1550},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+Magnification->1
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1755, 51, 65, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[1845, 56, 550, 15, 92, "Input"],
+Cell[2398, 73, 372, 11, 55, "Output"],
+Cell[2773, 86, 630, 17, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3440, 108, 83, 1, 27, "Input"],
+Cell[3526, 111, 86, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3649, 117, 83, 2, 43, "Input"],
+Cell[3735, 121, 54, 1, 26, "Output"],
+Cell[3792, 124, 59, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3888, 130, 366, 8, 59, "Input"],
+Cell[4257, 140, 433, 11, 55, "Output"]
+}, Open  ]],
+Cell[4705, 154, 79, 1, 27, "Input"],
+Cell[4787, 157, 84, 1, 27, "Input"],
+Cell[4874, 160, 61, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4960, 165, 2583, 50, 484, "Input"],
+Cell[7546, 217, 53, 1, 26, "Output"],
+Cell[7602, 220, 692, 12, 22, "Print"],
+Cell[8297, 234, 124, 2, 26, "Output"],
+Cell[8424, 238, 71, 1, 26, "Output"],
+Cell[8498, 241, 81, 1, 26, "Output"],
+Cell[8582, 244, 165, 3, 22, "Print"],
+Cell[8750, 249, 170, 3, 22, "Print"],
+Cell[8923, 254, 172, 3, 22, "Print"],
+Cell[9098, 259, 174, 3, 22, "Print"],
+Cell[9275, 264, 270, 5, 22, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9582, 274, 135, 2, 47, "Input"],
+Cell[9720, 278, 150, 2, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9907, 285, 63, 1, 27, "Input"],
+Cell[9973, 288, 52, 1, 26, "Output"]
+}, Open  ]],
+Cell[10040, 292, 316, 5, 43, "Input"],
+Cell[10359, 299, 434, 7, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[10818, 310, 36, 1, 27, "Input"],
+Cell[10857, 313, 81, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10975, 319, 69, 1, 35, "Input"],
+Cell[11047, 322, 53, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11137, 328, 68, 1, 27, "Input"],
+Cell[11208, 331, 90, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11335, 337, 91, 1, 35, "Input"],
+Cell[11429, 340, 75, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11541, 346, 145, 3, 27, "Input"],
+Cell[11689, 351, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11863, 359, 79, 1, 27, "Input"],
+Cell[11945, 362, 132, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12114, 370, 230, 6, 41, "Input"],
+Cell[12347, 378, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12521, 386, 53, 1, 27, "Input"],
+Cell[12577, 389, 381, 11, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12995, 405, 167, 3, 59, "Input"],
+Cell[13165, 410, 327, 10, 39, "Output"],
+Cell[13495, 422, 315, 5, 20, "Message"],
+Cell[13813, 429, 107, 3, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13957, 437, 41, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[14023, 441, 193, 4, 43, "Input"],
+Cell[14219, 447, 474, 11, 55, "Output"]
+}, Open  ]],
+Cell[14708, 461, 565, 13, 57, "Input"],
+
+Cell[CellGroupData[{
+Cell[15298, 478, 176, 3, 43, "Input"],
+Cell[15477, 483, 283, 4, 27, "Output"]
+}, Open  ]],
+Cell[15775, 490, 403, 6, 110, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16215, 501, 39, 0, 74, "Section"],
+Cell[16257, 503, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[16321, 508, 78, 1, 27, "Input"],
+Cell[16402, 511, 216, 5, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16655, 521, 342, 9, 27, "Input"],
+Cell[17000, 532, 250, 6, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17287, 543, 64, 1, 27, "Input"],
+Cell[17354, 546, 375, 10, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17766, 561, 401, 10, 28, "Input"],
+Cell[18170, 573, 488, 13, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18695, 591, 768, 21, 28, "Input"],
+Cell[19466, 614, 575, 16, 28, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20078, 635, 64, 1, 27, "Input"],
+Cell[20145, 638, 779, 20, 45, "Output"]
+}, Open  ]],
+Cell[20939, 661, 39, 1, 27, "Input"],
+Cell[20981, 664, 474, 12, 92, "Input"],
+
+Cell[CellGroupData[{
+Cell[21480, 680, 543, 10, 177, "Input"],
+Cell[22026, 692, 61, 1, 26, "Output"],
+Cell[22090, 695, 37, 1, 26, "Output"],
+Cell[22130, 698, 57, 1, 27, "Output"],
+Cell[22190, 701, 65, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[22292, 707, 559, 10, 177, "Input"],
+Cell[22854, 719, 39, 1, 26, "Output"],
+Cell[22896, 722, 43, 1, 26, "Output"],
+Cell[22942, 725, 41, 1, 26, "Output"],
+Cell[22986, 728, 82, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23117, 735, 39, 0, 74, "Section"],
+Cell[23159, 737, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[23223, 742, 78, 1, 27, "Input"],
+Cell[23304, 745, 408, 9, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23749, 759, 342, 9, 27, "Input"],
+Cell[24094, 770, 600, 14, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[24731, 789, 64, 1, 27, "Input"],
+Cell[24798, 792, 3100, 72, 49, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[27935, 869, 81, 1, 27, "Input"],
+Cell[28019, 872, 507, 13, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28563, 890, 407, 11, 28, "Input"],
+Cell[28973, 903, 899, 24, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[29909, 932, 64, 1, 27, "Input"],
+Cell[29976, 935, 5316, 128, 104, "Output"]
+}, Open  ]],
+Cell[35307, 1066, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[35371, 1071, 618, 10, 149, "Input"],
+Cell[35992, 1083, 35, 1, 26, "Output"],
+Cell[36030, 1086, 62, 1, 27, "Output"],
+Cell[36095, 1089, 83, 1, 27, "Output"],
+Cell[36181, 1092, 15330, 380, 186, 3073, 224, "GraphicsData", "PostScript", \
+"Graphics"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[51548, 1477, 420, 13, 41, "Input"],
+Cell[51971, 1492, 124, 2, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[52144, 1500, 33, 0, 74, "Section"],
+Cell[52180, 1502, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[52244, 1507, 154, 2, 43, "Input"],
+Cell[52401, 1511, 50, 1, 26, "Output"],
+Cell[52454, 1514, 49, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[52540, 1520, 447, 10, 74, "Input"],
+Cell[52990, 1532, 141, 2, 26, "Output"],
+Cell[53134, 1536, 401, 10, 52, "Output"]
+}, Open  ]],
+Cell[53550, 1549, 155, 3, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[53730, 1556, 80, 1, 27, "Input"],
+Cell[53813, 1559, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[53987, 1567, 145, 3, 27, "Input"],
+Cell[54135, 1572, 176, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[54348, 1580, 52, 1, 27, "Input"],
+Cell[54403, 1583, 130, 2, 26, "Output"]
+}, Open  ]],
+Cell[54548, 1588, 84, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[54657, 1593, 493, 9, 138, "Input"],
+Cell[55153, 1604, 70, 1, 26, "Output"],
+Cell[55226, 1607, 66, 1, 26, "Output"],
+Cell[55295, 1610, 155, 2, 26, "Output"],
+Cell[55453, 1614, 90, 1, 26, "Output"],
+Cell[55546, 1617, 119, 2, 26, "Output"],
+Cell[55668, 1621, 418, 12, 82, "Output"],
+Cell[56089, 1635, 132, 2, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[56258, 1642, 157, 4, 43, "Input"],
+Cell[56418, 1648, 311, 5, 20, "Message"],
+Cell[56732, 1655, 311, 5, 20, "Message"],
+Cell[57046, 1662, 315, 5, 20, "Message"],
+Cell[57364, 1669, 329, 5, 20, "Message"],
+Cell[57696, 1676, 499, 8, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[58232, 1689, 179, 3, 59, "Input"],
+Cell[58414, 1694, 50, 1, 26, "Output"],
+Cell[58467, 1697, 73, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[58577, 1703, 261, 5, 43, "Input"],
+Cell[58841, 1710, 508, 13, 82, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[59386, 1728, 332, 6, 110, "Input"],
+Cell[59721, 1736, 1100, 34, 26, "Output"],
+Cell[60824, 1772, 28, 0, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[60889, 1777, 78, 1, 29, "Input"],
+Cell[60970, 1780, 322, 10, 39, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[61329, 1795, 263, 5, 79, "Input"],
+Cell[61595, 1802, 45, 1, 26, "Output"],
+Cell[61643, 1805, 45, 1, 26, "Output"],
+Cell[61691, 1808, 54, 1, 26, "Output"],
+Cell[61748, 1811, 67, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[61852, 1817, 504, 15, 124, "Input"],
+Cell[62359, 1834, 78, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62486, 1841, 36, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[62547, 1845, 90, 1, 31, "Input"],
+Cell[62640, 1848, 104, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[62781, 1855, 106, 2, 43, "Input"],
+Cell[62890, 1859, 150, 3, 27, "Output"],
+Cell[63043, 1864, 1134, 36, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64214, 1905, 760, 19, 92, "Input"],
+Cell[64977, 1926, 578, 15, 55, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65592, 1946, 70, 1, 27, "Input"],
+Cell[65665, 1949, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65839, 1957, 78, 1, 27, "Input"],
+Cell[65920, 1960, 425, 7, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66382, 1972, 162, 3, 27, "Input"],
+Cell[66547, 1977, 323, 5, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[66907, 1987, 101, 2, 27, "Input"],
+Cell[67011, 1991, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[67185, 1999, 348, 7, 107, "Input"],
+Cell[67536, 2008, 273, 5, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[67846, 2018, 75, 1, 27, "Input"],
+Cell[67924, 2021, 91, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[68052, 2027, 187, 4, 43, "Input"],
+Cell[68242, 2033, 328, 5, 20, "Message"],
+Cell[68573, 2040, 328, 5, 20, "Message"],
+Cell[68904, 2047, 311, 5, 20, "Message"],
+Cell[69218, 2054, 329, 5, 20, "Message"],
+Cell[69550, 2061, 1153, 19, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[70740, 2085, 253, 5, 59, "Input"],
+Cell[70996, 2092, 79, 1, 26, "Output"],
+Cell[71078, 2095, 163, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[71278, 2102, 385, 7, 59, "Input"],
+Cell[71666, 2111, 5498, 135, 559, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[77201, 2251, 55, 1, 27, "Input"],
+Cell[77259, 2254, 893, 13, 116, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[78189, 2272, 63, 1, 27, "Input"],
+Cell[78255, 2275, 104, 2, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[78396, 2282, 337, 6, 110, "Input"],
+Cell[78736, 2290, 2064, 60, 41, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[80837, 2355, 78, 1, 29, "Input"],
+Cell[80918, 2358, 520, 12, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[81475, 2375, 278, 5, 79, "Input"],
+Cell[81756, 2382, 687, 9, 86, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[82480, 2396, 34, 1, 27, "Input"],
+Cell[82517, 2399, 239, 4, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[82793, 2408, 504, 15, 124, "Input"],
+Cell[83300, 2425, 78, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[83415, 2431, 105, 2, 27, "Input"],
+Cell[83523, 2435, 752, 17, 145, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

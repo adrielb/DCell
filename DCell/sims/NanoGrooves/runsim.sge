@@ -1,0 +1,40 @@
+#!/bin/bash
+# request Bourne again shell as shell for job
+#$ -S /bin/bash
+# merge stderr with stdout
+#$ -j y
+# assign a name to submitted job
+#$ -N biggerParticles
+# change output file name
+#$ -o $HOME/output/$JOB_ID.$JOB_NAME
+# export environment variables
+#$ -V
+# only output JOB_ID upon submission
+#$ -terse
+
+# how to run: qsub runsim.sge 1
+
+echo $HOSTNAME
+
+export PETSC_TMP=/nas-0-0/abergman/sims/$JOB_ID.$JOB_NAME
+mkdir -p $PETSC_TMP
+ln -s $HOME/output/$JOB_ID.$JOB_NAME $PETSC_TMP/output
+
+# run the simulation
+${DCELL_DIR}/sims/a.out \
+-Fa $1 \
+-Fk 1 \
+-Fn 0 \
+-kclip 0.1 \
+-groove_width 2 \
+-timax 10000 \
+-CFL 0.1 \
+-dtmax 1 \
+-pls_rmin 0.5 \
+-pls_rmax 0.9 \
+-ksp_monitor \
+-ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_1_ksp_max_it 4 -ksp_max_it 100 \
+-log_summary -viewer_binary_skip_info \
+-info $PETSC_TMP/info.log
+#-log_trace $PETSC_TMP/trace.log
+#-dtframe 0.5 \

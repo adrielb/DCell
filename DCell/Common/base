@@ -1,0 +1,34 @@
+include ${PETSC_DIR}/conf/variables
+include ${PETSC_DIR}/conf/rules
+
+CFLAGS = ${DCELL_INCLUDE} -Wall
+GA_LIB = -L/share/apps/lib -lga -lfblas
+PETSC_LIB := ${PETSC_LIB} ${GA_LIB}
+DCELL_LIB = -L${DCELL_DIR}/lib/${PETSC_ARCH} -Wl,-rpath,${DCELL_DIR}/lib/${PETSC_ARCH}
+DCELL_INCLUDE = \
+         -I${DCELL_DIR}/Common \
+         -I${DCELL_DIR}/LevelSetMethod \
+         -I${DCELL_DIR}/IIM \
+         -I${DCELL_DIR}/DWorld \
+         -I${DCELL_DIR}/FluidField \
+         -I${DCELL_DIR}/FiberField \
+         -I/share/apps/include/
+
+cleanLib:
+	rm -f ${DCELL_DIR}/lib/${PETSC_ARCH}/lib*
+
+makeLib: ${OBJSC}
+#	@${CLINKER} -shared -o ${DCELL_DIR}/lib/${PETSC_ARCH}/lib${LIBNAME}.so ${OBJSC}
+	@${AR} ${AR_FLAGS}     ${DCELL_DIR}/lib/${PETSC_ARCH}/lib${LIBNAME}.a  ${OBJSC}
+	@${AR} ${AR_FLAGS}     ${DCELL_DIR}/lib/${PETSC_ARCH}/libDCell.a       ${OBJSC}
+	@echo        "Library: ${DCELL_DIR}/lib/${PETSC_ARCH}/lib${LIBNAME}   [${OBJSC}]"
+
+rmTemp:
+	-rm -rf ${PETSC_TMP}/*
+
+run:
+	@${MPIEXEC} -np ${NP} ./a.out ${RUNOPTS}
+NP ?= 1
+
+dcellshared:
+	${CLINKER} -shared -o ${DCELL_DIR}/lib/${PETSC_ARCH}/libDCell.so ${patsubst %, ${DCELL_DIR}/%/*.o, ${MODULES} }

@@ -1,0 +1,1124 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     44188,        951]*)
+(*NotebookOutlinePosition[     44872,        975]*)
+(*  CellTagsIndexPosition[     44828,        971]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(AppendTo[$Echo, "\<stdout\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    \(Get[Environment["\<ALT_DISP\>"]]\), "\[IndentingNewLine]", 
+    \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"grid.10000.Real64", "grid.10001.Real64", "grid.pos", "grid.size", 
+      "irregNode.10000.array", "irregNode.10001.array", "lost+found", 
+      "temporal.dat", "uvp.10000.Real64", "uvp.10001.Real64"}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]vscale = 
+              10^5; \[IndentingNewLine]fscale = 
+              5\ 10^4; \[IndentingNewLine]MX = 50; \[IndentingNewLine]MY = 
+              25; \[IndentingNewLine]uvp = 
+              ImportVec2[MX, 
+                3, "\<uvp.\>" <> 
+                  ToString[
+                    time] <> "\<.Real64\>"]; \[IndentingNewLine]ImportIrreg["\
+\<irregNode.\>" <> ToString[time] <> "\<.array\>"]; \[IndentingNewLine]uvel = 
+              ListInterpolation[uvp[\([1]\)], {{1, MY} - 1, {1, MX} - 1.5}, 
+                InterpolationOrder \[Rule] 1]; \[IndentingNewLine]vvel = 
+              ListInterpolation[uvp[\([2]\)], {{1, MY} - 1.5, {1, MX} - 1}, 
+                InterpolationOrder \[Rule] 1]; \[IndentingNewLine]g = 
+              PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, 0, MX - 2}, {y, 
+                  0, MY - 2}, 
+                PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}}, 
+                ScaleFactor \[Rule] None, 
+                ScaleFunction \[Rule] \((#*vscale &)\), 
+                PlotPoints \[Rule] {MX, MY}, Frame \[Rule] False, 
+                ImageSize \[Rule] 1000, HeadLength \[Rule] 0.2*10^\(-2. \), 
+                Epilog \[Rule] {Blue, PointSize[0.008], 
+                    Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                      MapThread~{ir`X + 0.5, ir`nv, fscale*ir`f1}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {18, 
+                        6}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\[IndentingNewLine]", 
+    \(clear\), "\n", 
+    \(\(idx = 23;\)\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[idx - 1]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[uvp]\)], "Input"],
+
+Cell[BoxData[
+    \({3, 250, 499}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Max[uvp[\([2]\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(0.05798160085286623`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(sge`ID\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[sge`ID]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(StartRealtimeGraph[1, RealtimeGraph]\)], "Input"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Histogram[ir`f1]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(temporal = Import["\<temporal.dat\>"];\)\), "\[IndentingNewLine]", 
+    \(Print[temporal[\([1]\)]]\), "\[IndentingNewLine]", 
+    \(\({ti, TIME, dt, dtcfl} = 
+        Transpose@Rest[temporal];\)\), "\[IndentingNewLine]", 
+    \(\(SetOptions[ListPlot, 
+        PlotJoined \[Rule] True];\)\), "\[IndentingNewLine]", 
+    \(DisplayTogether[
+      ListPlot[dt, PlotStyle \[Rule] Thickness[0.004], 
+        PlotRange \[Rule] All], 
+      ListPlot[dtcfl, PlotStyle \[Rule] Red]]\)}], "Input"],
+
+Cell[BoxData[
+    \({"iter,t,dt,dtcfl"}\)], "Print"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\({phi, pos} = ImportGrid["\<grid\>"];\)\), "\[IndentingNewLine]", 
+    \(Length[phi]\)}], "Input"],
+
+Cell[BoxData[
+    \(3\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[phi[\([idx]\)], 
+        Epilog \[Rule] {Blue, 
+            PointSize[0.001], \(Point[# + 0.5 - pos[\([idx]\)]] &\) /@ ir`X}, 
+        ImageSize \[Rule] 3000];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(pts = {12.3629, 112.228};\)\), "\[IndentingNewLine]", 
+    \(\(m = 5;\)\), "\[IndentingNewLine]", 
+    \(\[Phi] = \(Function[
+          pts, \[IndentingNewLine]Module[{p = 
+                Reverse@Round[pts]}, \[IndentingNewLine]Take[
+              phi[\([idx]\)], {p[\([1]\)] - m, 
+                p[\([1]\)] + m}, {p[\([2]\)] - m, 
+                p[\([2]\)] + m}]\[IndentingNewLine]]]\)[
+        pts]\), "\[IndentingNewLine]", 
+    \(MatrixForm[\[Phi]]\), "\[IndentingNewLine]", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[\[Phi], 
+      PlotRange \[Rule] {\(-7.5\), 7.5}]\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[Sign@phi[\([idx]\)], 
+      Epilog \[Rule] {Blue, 
+          PointSize[0.01], \(Point[# + 0.5 - pos[\([idx]\)]] &\) /@ ir`X}, 
+      PlotRange \[Rule] {{\(-m\) - 1, m} + pts[\([1]\)], {\(-m\) - 1, m} + 
+            pts[\([2]\)], All}]\)}], "Input"],
+
+Cell[BoxData[
+    \({{6.118652774942355`, 5.120554181407984`, 4.121959661381234`, 
+        3.1231111831608076`, 2.124154409137703`, 1.1251665681280039`, 
+        0.12618225271957548`, \(-0.8725321106593784`\), \
+\(-1.8709251818157266`\), \(-2.869281230256809`\), \(-3.8675990002460727`\)}, \
+{6.057015143703724`, 5.067554326950104`, 4.073983442723096`, 
+        3.077445401295697`, 2.0791733740809173`, 1.080107300846412`, 
+        0.08077515954735627`, \(-0.9184014845580271`\), \
+\(-1.9173244581432198`\), \(-2.916222126696624`\), \(-3.9150936204588804`\)}, \
+{5.912214273163291`, 4.95434258720393`, 3.9908454129891284`, 
+        3.018683511600986`, 2.035964794935283`, 1.0435659357016307`, 
+        0.04544412763729659`, \(-0.9540924371788735`\), \
+\(-1.9534400561680365`\), \(-2.9527718903342604`\), \(-3.952087386691603`\)}, \
+{5.625017766852061`, 4.686624087133261`, 3.756535281988799`, 
+        2.833578341724745`, 1.9129017859043502`, 0.9823053752537814`, 
+        0.0201999863458653`, \(-0.9795939974114616`\), \(-1.9792605918016095`\
+\), \(-2.9789187053896806`\), \(-3.978568031625574`\)}, {5.279449681138381`, 
+        4.319289342595045`, 3.371632065038847`, 2.4432519660303846`, 
+        1.54685490299961`, 0.7096275055350462`, 
+        0.005050466888378494`, \(-0.9948979839921381`\), \
+\(-1.9947775881566194`\), \(-2.994653784141245`\), \(-3.994526440624174`\)}, \
+{5.`, 4.`, 3.`, 2.`, 1.`, 0.`, 
+        0.`, \(-1.`\), \(-1.9999730072560773`\), \(-2.9999450097952263`\), \
+\(-3.99991596242808`\)}, {5.279449681138381`, 4.319289342595045`, 
+        3.371632065038847`, 2.4432519660303846`, 1.54685490299961`, 
+        0.7096275055350462`, 
+        0.005050466888378494`, \(-0.9948979839921381`\), \
+\(-1.9947775881566194`\), \(-2.9946537841412435`\), \(-3.994526440624173`\)}, \
+{5.625017766852061`, 4.686624087133261`, 3.756535281988799`, 
+        2.833578341724745`, 1.9129017859043502`, 0.9823053752537814`, 
+        0.0201999863458653`, \(-0.9795939974114616`\), \(-1.9792605918016095`\
+\), \(-2.9789187053896784`\), \(-3.978568031625573`\)}, {5.912214273163291`, 
+        4.95434258720393`, 3.9908454129891284`, 3.018683511600986`, 
+        2.035964794935283`, 1.0435659357016307`, 
+        0.04544412763729659`, \(-0.9540924371788735`\), \
+\(-1.9534400561680365`\), \(-2.9527718903342617`\), \
+\(-3.9520873866916033`\)}, {6.057015143703724`, 5.067554326950104`, 
+        4.073983442723096`, 3.077445401295697`, 2.0791733740809173`, 
+        1.080107300846412`, 
+        0.08077515954735627`, \(-0.9184014845580271`\), \
+\(-1.9173244581432196`\), \(-2.916222126696623`\), \(-3.9150936204588733`\)}, \
+{6.118652774942355`, 5.120554181407984`, 4.121959661381234`, 
+        3.1231111831608076`, 2.124154409137703`, 1.1251665681280039`, 
+        0.12618225271957548`, \(-0.8725321106593784`\), \
+\(-1.8709251818157195`\), \(-2.869281230256771`\), \(-3.8675990002459444`\)}}\
+\)], "Output"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"6.118652774942355`", "5.120554181407984`", "4.121959661381234`",
+               "3.1231111831608076`", "2.124154409137703`", 
+              "1.1251665681280039`", 
+              "0.12618225271957548`", \(-0.8725321106593784`\), \
+\(-1.8709251818157266`\), \(-2.869281230256809`\), \(-3.8675990002460727`\)},
+            {"6.057015143703724`", "5.067554326950104`", "4.073983442723096`",
+               "3.077445401295697`", "2.0791733740809173`", 
+              "1.080107300846412`", 
+              "0.08077515954735627`", \(-0.9184014845580271`\), \
+\(-1.9173244581432198`\), \(-2.916222126696624`\), \(-3.9150936204588804`\)},
+            {"5.912214273163291`", "4.95434258720393`", "3.9908454129891284`",
+               "3.018683511600986`", "2.035964794935283`", 
+              "1.0435659357016307`", 
+              "0.04544412763729659`", \(-0.9540924371788735`\), \
+\(-1.9534400561680365`\), \(-2.9527718903342604`\), \(-3.952087386691603`\)},
+            {"5.625017766852061`", "4.686624087133261`", "3.756535281988799`",
+               "2.833578341724745`", "1.9129017859043502`", 
+              "0.9823053752537814`", 
+              "0.0201999863458653`", \(-0.9795939974114616`\), \
+\(-1.9792605918016095`\), \(-2.9789187053896806`\), \(-3.978568031625574`\)},
+            {"5.279449681138381`", "4.319289342595045`", "3.371632065038847`",
+               "2.4432519660303846`", "1.54685490299961`", 
+              "0.7096275055350462`", 
+              "0.005050466888378494`", \(-0.9948979839921381`\), \
+\(-1.9947775881566194`\), \(-2.994653784141245`\), \(-3.994526440624174`\)},
+            {"5.`", "4.`", "3.`", "2.`", "1.`", "0.`", 
+              "0.`", \(-1.`\), \(-1.9999730072560773`\), \
+\(-2.9999450097952263`\), \(-3.99991596242808`\)},
+            {"5.279449681138381`", "4.319289342595045`", "3.371632065038847`",
+               "2.4432519660303846`", "1.54685490299961`", 
+              "0.7096275055350462`", 
+              "0.005050466888378494`", \(-0.9948979839921381`\), \
+\(-1.9947775881566194`\), \(-2.9946537841412435`\), \(-3.994526440624173`\)},
+            {"5.625017766852061`", "4.686624087133261`", "3.756535281988799`",
+               "2.833578341724745`", "1.9129017859043502`", 
+              "0.9823053752537814`", 
+              "0.0201999863458653`", \(-0.9795939974114616`\), \
+\(-1.9792605918016095`\), \(-2.9789187053896784`\), \(-3.978568031625573`\)},
+            {"5.912214273163291`", "4.95434258720393`", "3.9908454129891284`",
+               "3.018683511600986`", "2.035964794935283`", 
+              "1.0435659357016307`", 
+              "0.04544412763729659`", \(-0.9540924371788735`\), \
+\(-1.9534400561680365`\), \(-2.9527718903342617`\), \
+\(-3.9520873866916033`\)},
+            {"6.057015143703724`", "5.067554326950104`", "4.073983442723096`",
+               "3.077445401295697`", "2.0791733740809173`", 
+              "1.080107300846412`", 
+              "0.08077515954735627`", \(-0.9184014845580271`\), \
+\(-1.9173244581432196`\), \(-2.916222126696623`\), \(-3.9150936204588733`\)},
+            {"6.118652774942355`", "5.120554181407984`", "4.121959661381234`",
+               "3.1231111831608076`", "2.124154409137703`", 
+              "1.1251665681280039`", 
+              "0.12618225271957548`", \(-0.8725321106593784`\), \
+\(-1.8709251818157195`\), \(-2.869281230256771`\), \(-3.8675990002459444`\)}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["RHS", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]vscale = 
+              10^3; \[IndentingNewLine]fscale = 
+              5\ 10^4; \[IndentingNewLine]MX = 50; \[IndentingNewLine]MY = 
+              25; \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[time] <> "\<.array\>"]; \[IndentingNewLine]rhs = 
+              ImportVec2[MX, 
+                3, "\<rhs.\>" <> 
+                  ToString[time] <> "\<.Real64\>"]; \[IndentingNewLine]urhs = 
+              ListInterpolation[rhs[\([1]\)], {{1, MY} - 1, {1, MX} - 1.5}, 
+                InterpolationOrder \[Rule] 0]; \[IndentingNewLine]vrhs = 
+              ListInterpolation[rhs[\([2]\)], {{1, MY} - 1.5, {1, MX} - 1}, 
+                InterpolationOrder \[Rule] 0]; \[IndentingNewLine]g = 
+              DensityPlot[urhs[y, x], {x, 0, MX - 2}, {y, 0, MY - 2}, 
+                PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}, {\(-1\), 1} 
+                      10^\(-4\)}, PlotPoints \[Rule] 5 {MX, MY}, 
+                Frame \[Rule] False, ImageSize \[Rule] 1000, 
+                AspectRatio \[Rule] Automatic, 
+                Epilog \[Rule] {Blue, PointSize[0.008], 
+                    Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                      MapThread~{ir`X - 0.5, ir`nv, fscale*ir`f1}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {18, 
+                        6}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]Print[
+              Max[Abs@rhs[\([\)\(2\)\(]\)]] // 
+                ScientificForm]\[IndentingNewLine]]];\)\), "\
+\[IndentingNewLine]", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(RealtimeGraph /@ {9, 10, 11, 12};\)\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      InterpretationBox[\("1.27124"\[Times]10\^"-4"\),
+        0.00012712445198735143,
+        AutoDelete->True],
+      ScientificForm]], "Print"],
+
+Cell[BoxData[
+    TagBox[
+      InterpretationBox[\("1.45799"\[Times]10\^"-4"\),
+        0.00014579932334666515,
+        AutoDelete->True],
+      ScientificForm]], "Print"],
+
+Cell[BoxData[
+    TagBox[
+      InterpretationBox[\("1.65116"\[Times]10\^"-4"\),
+        0.00016511570835968831,
+        AutoDelete->True],
+      ScientificForm]], "Print"],
+
+Cell[BoxData[
+    TagBox[
+      InterpretationBox[\("1.81058"\[Times]10\^"-4"\),
+        0.00018105844668374978,
+        AutoDelete->True],
+      ScientificForm]], "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length[ir`X]\)], "Input"],
+
+Cell[BoxData[
+    \(144\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListDensityPlot[rhs[\([3]\)]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Particles", "Section"],
+
+Cell[BoxData[{
+    \(clear\), "\n", 
+    \(\(ImportParticles = 
+        Function[t, 
+          file = "\<particles.\>" <> 
+              ToString[t + 10000] <> "\<.array\>"; \[IndentingNewLine]dat = 
+            BinaryReadList[
+              file, {"\<Real64\>", "\<Real64\>", "\<Real64\>", "\<Real64\>", \
+"\<Integer32\>"}]; \[IndentingNewLine]dat = 
+            Transpose[Most@dat]; \[IndentingNewLine]X = 
+            dat[\([{1, 2}]\)] // Transpose; \[IndentingNewLine]radius = 
+            dat[\([4]\)]; \[IndentingNewLine]sign = 
+            dat[\([5]\)];\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(clear\), "\n", 
+    \(\(g = 
+        Function[t, 
+            ImportParticles[
+              t]; \[IndentingNewLine]ImportIrreg["\<irregNode.\>" <> 
+                ToString[
+                  10000 + 
+                    t] <> "\<.array\>"]; \[IndentingNewLine]circles = {X, 
+                  radius, sign}\[Transpose] ; \[IndentingNewLine]circles = 
+              Select[circles, 
+                0.1 < #[\([\)\(2\)\(]\)] < 
+                    0.2 &]; \[IndentingNewLine]circles = 
+              Take[circles, {1, \(-1\), 1}]; \[IndentingNewLine]ListPlot[
+              ir`X, PlotStyle \[Rule] PointSize[0.01], ImageSize \[Rule] 800, 
+              Frame \[Rule] False, 
+              Epilog \[Rule] {Blue, Disk[circles[\([1, 1]\)], 1], 
+                  MapThread[{If[#3 \[Equal] 1, Green, Red], 
+                        Circle[#1, #2]} &, circles\[Transpose] ]}, 
+              AspectRatio \[Rule] 1, 
+              PlotRange \[Rule] {{\(-2\), 24}, {\(-2\), 24}}]] /@ 
+          Range[0, 2, 1];\)\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(OpenRead::"noopen"\), \(\(:\)\(\ \)\), "\<\"Cannot open \
+\\!\\(\\\"particles.10001.array\\\"\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::noopen\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Most::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Most[$Failed]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\({1, 2}\\) of \
+\\!\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\) does not exist. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(4\\) of \
+\\!\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\) does not exist. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(5\\) of \
+\\!\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\) does not exist. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partw\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10001.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \
+\\!\\({\\(\\(Transpose[\\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\), \
+\\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\)\\) \[LeftDoubleBracket] 4 \
+\[RightDoubleBracket]\\)\\), \\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\
+\\)\\) \[LeftDoubleBracket] 5 \[RightDoubleBracket]\\)\\)}\\) cannot be \
+transposed. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"argt"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Transpose\\) \
+called with \\!\\(0\\) arguments; \\!\\(1\\) or \\!\\(2\\) arguments are \
+expected. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"argt"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Transpose\\) \
+called with \\!\\(0\\) arguments; \\!\\(1\\) or \\!\\(2\\) arguments are \
+expected. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"list"\), \(\(:\)\(\ \)\), "\<\"List expected at \
+position \\!\\(2\\) in \
+\\!\\(MapThread[\\(\\(\\(\\(\\(\\({\\(\\(If[\\(\\(\\(\\(#3 \[Equal] 1\\)\\), \
+Green, Red\\)\\)]\\)\\), \\(\\(Circle[\\(\\(#1, #2\\)\\)]\\)\\)}\\)\\) \
+&\\)\\), \\(\\(Transpose[\\(\\(Transpose[]\\)\\)]\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::list\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListPlot::"list"\), \(\(:\)\(\ \)\), "\<\"List expected at \
+position \\!\\(1\\) in \
+\\!\\(ListPlot[\\(\\(\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \
+\[LeftDoubleBracket] \\(\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\), \
+\\(\\(PlotStyle \[Rule] \\(\\(PointSize[0.01`]\\)\\)\\)\\), \\(\\(ImageSize \
+\[Rule] 800\\)\\), \\(\\(\\(\\(\[LeftSkeleton] 5 \[RightSkeleton]\\)\\) \
+\[Rule] \\(\\(\[LeftSkeleton] 5 \[RightSkeleton]\\)\\)\\)\\), \\(\\(Epilog \
+\[Rule] \\(\\({\\(\\(RGBColor[\\(\\(0, 0, 1\\)\\)]\\)\\), \\(\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)\\), \\(\\(MapThread[\\(\\(\\(\\(\\(\\({\
+\\(\\(If[\\(\\(\\(\\(Equal[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\
+\\), Green, Red\\)\\)]\\)\\), \\(\\(Circle[\\(\\(\\(\\(Slot[\\(\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\)\\) &\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\)\\)\\)\\), \\(\\(AspectRatio \[Rule] 1\
+\\)\\), \\(\\(PlotRange \[Rule] \\(\\({\\(\\({\\(\\(-2\\)\\), 24}\\)\\), \
+\\(\\({\\(\\(-2\\)\\), 24}\\)\\)}\\)\\)\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::list\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(OpenRead::"noopen"\), \(\(:\)\(\ \)\), "\<\"Cannot open \
+\\!\\(\\\"particles.10002.array\\\"\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::noopen\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Most::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Most[$Failed]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10002.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \
+\\!\\({\\(\\(Transpose[\\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\)\\) \
+\[LeftDoubleBracket] \\(\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\), \
+\\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\\)\\) \[LeftDoubleBracket] 4 \
+\[RightDoubleBracket]\\)\\), \\(\\(\\(\\(Transpose[\\(\\(Most[$Failed]\\)\\)]\
+\\)\\) \[LeftDoubleBracket] 5 \[RightDoubleBracket]\\)\\)}\\) cannot be \
+transposed. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"argt"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Transpose\\) \
+called with \\!\\(0\\) arguments; \\!\\(1\\) or \\!\\(2\\) arguments are \
+expected. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Transpose :: \\\"argt\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"list"\), \(\(:\)\(\ \)\), "\<\"List expected at \
+position \\!\\(2\\) in \
+\\!\\(MapThread[\\(\\(\\(\\(\\(\\({\\(\\(If[\\(\\(\\(\\(#3 \[Equal] 1\\)\\), \
+Green, Red\\)\\)]\\)\\), \\(\\(Circle[\\(\\(#1, #2\\)\\)]\\)\\)}\\)\\) \
+&\\)\\), \\(\\(Transpose[\\(\\(Transpose[]\\)\\)]\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::list\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListPlot::"list"\), \(\(:\)\(\ \)\), "\<\"List expected at \
+position \\!\\(1\\) in \
+\\!\\(ListPlot[\\(\\(\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \
+\[LeftDoubleBracket] \\(\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\), \
+\\(\\(PlotStyle \[Rule] \\(\\(PointSize[0.01`]\\)\\)\\)\\), \\(\\(ImageSize \
+\[Rule] 800\\)\\), \\(\\(\\(\\(\[LeftSkeleton] 5 \[RightSkeleton]\\)\\) \
+\[Rule] \\(\\(\[LeftSkeleton] 5 \[RightSkeleton]\\)\\)\\)\\), \\(\\(Epilog \
+\[Rule] \\(\\({\\(\\(RGBColor[\\(\\(0, 0, 1\\)\\)]\\)\\), \\(\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)\\), \\(\\(MapThread[\\(\\(\\(\\(\\(\\({\
+\\(\\(If[\\(\\(\\(\\(Equal[\\(\\(\[LeftSkeleton] 2 \[RightSkeleton]\\)\\)]\\)\
+\\), Green, Red\\)\\)]\\)\\), \\(\\(Circle[\\(\\(\\(\\(Slot[\\(\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)\\)]\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\)\\) &\\)\\), \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\)\\)\\)\\), \\(\\(AspectRatio \[Rule] 1\
+\\)\\), \\(\\(PlotRange \[Rule] \\(\\({\\(\\({\\(\\(-2\\)\\), 24}\\)\\), \
+\\(\\({\\(\\(-2\\)\\), 24}\\)\\)}\\)\\)\\)\\)\\)\\)]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::list\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(RealtimeGraph = 
+        Function[t, 
+          Module[{time = t + 10000}, \[IndentingNewLine]vscale = 
+              10^4; \[IndentingNewLine]fscale = 10^4; \[IndentingNewLine]MX = 
+              50; \[IndentingNewLine]MY = 25; \[IndentingNewLine]uvp = 
+              ImportVec2[MX, 
+                3, "\<uvp.\>" <> 
+                  ToString[
+                    time] <> "\<.Real64\>"]; \[IndentingNewLine]ImportIrreg["\
+\<irregNode.\>" <> ToString[time] <> "\<.array\>"]; \[IndentingNewLine]uvel = 
+              ListInterpolation[uvp[\([1]\)], {{1, MY} - 1, {1, MX} - 1.5}, 
+                InterpolationOrder \[Rule] 1]; \[IndentingNewLine]vvel = 
+              ListInterpolation[uvp[\([2]\)], {{1, MY} - 1.5, {1, MX} - 1}, 
+                InterpolationOrder \[Rule] 1]; \[IndentingNewLine]g = 
+              PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, 0, MX - 2}, {y, 
+                  0, MY - 2}, 
+                PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}}, 
+                ScaleFactor \[Rule] None, 
+                ScaleFunction \[Rule] \((#*vscale &)\), 
+                PlotPoints \[Rule] {64, 32}, Frame \[Rule] False, 
+                ImageSize \[Rule] 1000, HeadLength \[Rule] 0.2*10^\(-2. \), 
+                Epilog \[Rule] {Blue, PointSize[0.008], 
+                    Function[{p, n, k}, {Point[p], Line[{p, p + n*k}]}]~
+                      MapThread~{ir`X + 0.5, ir`nv, fscale*ir`f1}, Orange, 
+                    Text[StyleForm[t, FontFamily \[Rule] "\<Courier\>", 
+                        FontSize \[Rule] 44, 
+                        FontWeight \[Rule] "\<Bold\>"], {18, 
+                        6}]}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
+                    ToString[time] <> "\<.png\>", 
+                  g];\)*) \[IndentingNewLine]]];\)\), "\n", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(idx = 400;\)\), "\[IndentingNewLine]", 
+    \(RealtimeGraph[idx - 1]\)}], "Input",
+  InitializationCell->True],
+
+Cell[BoxData[
+    RowBox[{\(Import::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found during \
+\\!\\(Import[\\(\\(\\\"uvp.10399.Real64\\\", \\\"Real64\\\", \
+\\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Import::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"normal"\), \(\(:\)\(\ \)\), "\<\"Nonatomic expression \
+expected at position \\!\\(1\\) in \\!\\(Rest[$Failed]\\). \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::normal\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"argx"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Rest\\) called with \
+\\!\\(0\\) arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Rest::"argx"\), \(\(:\)\(\ \)\), "\<\"\\!\\(Rest\\) called with \
+\\!\\(0\\) arguments; 1 argument is expected. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::argx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
+during \\!\\(BinaryReadList[\\(\\(\\\"irregNode.10399.array\\\", \\\"Real64\\\
+\", \\(\\(ByteOrdering \[Rule] 1\\)\\)\\)\\)]\\). \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::nffil\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\({1, 2}\\) of \
+\\!\\(Transpose[$Failed]\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\({3, 4}\\) of \
+\\!\\(Transpose[$Failed]\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(5\\) of \
+\\!\\(Transpose[$Failed]\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"partw\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(Rest[]\\) does not contain a list of data and coordinates. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"mptd"\), \(\(:\)\(\ \)\), "\<\"Object \
+\\!\\(\\(\\(0.5`\[InvisibleSpace]\\)\\) + \
+\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \[LeftDoubleBracket] \\(\
+\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\)\\) at position {2, \\!\\(1\
+\\)} in \\!\\(MapThread[\\(\\(\\(\\(Function[\\(\\(\\(\\({p, n, k}\\)\\), \\(\
+\\({\\(\\(Point[p]\\)\\), \\(\\(Line[\\(\\({p, \\(\\(p + \\(\\(n\\\\ \
+k\\)\\)\\)\\)}\\)\\)]\\)\\)}\\)\\)\\)\\)]\\)\\), \\(\\({\\(\\(\\(\\(0.5`\
+\[InvisibleSpace]\\)\\) + \
+\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \[LeftDoubleBracket] \\(\
+\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\)\\)\\), \\(\\(\\(\\(\
+\[LeftSkeleton] 9 \[RightSkeleton]\\)\\)[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(10000\\\\ \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)}\\)\\)\\)\\)]\\) has only \\!\\(0\\) of required \
+\\!\\(1\\) dimensions. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"MapThread::mptd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"mptd"\), \(\(:\)\(\ \)\), "\<\"Object \
+\\!\\(\\(\\(0.5`\[InvisibleSpace]\\)\\) + \
+\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \[LeftDoubleBracket] \\(\
+\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\)\\) at position {2, \\!\\(1\
+\\)} in \\!\\(MapThread[\\(\\(\\(\\(Function[\\(\\(\\(\\({p, n, k}\\)\\), \\(\
+\\({\\(\\(Point[p]\\)\\), \\(\\(Line[\\(\\({p, \\(\\(p + \\(\\(n\\\\ \
+k\\)\\)\\)\\)}\\)\\)]\\)\\)}\\)\\)\\)\\)]\\)\\), \\(\\({\\(\\(\\(\\(0.5`\
+\[InvisibleSpace]\\)\\) + \
+\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \[LeftDoubleBracket] \\(\
+\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\)\\)\\), \\(\\(\\(\\(\
+\[LeftSkeleton] 9 \[RightSkeleton]\\)\\)[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(10000\\\\ \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)}\\)\\)\\)\\)]\\) has only \\!\\(0\\) of required \
+\\!\\(1\\) dimensions. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"MapThread::mptd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(Rest[]\\) does not contain a list of data and coordinates. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Interpolation::"innd"\), \(\(:\)\(\ \)\), "\<\"First argument \
+in \\!\\(Rest[]\\) does not contain a list of data and coordinates. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Interpolation::innd\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Interpolation :: \\\"innd\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ListInterpolation::"ingrdm"\), \(\(:\)\(\ \)\), "\<\"The \
+dimension of the data to be interpolated in the first argument is \
+inconsistent with the dimension of the grid in the second argument. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, \
+ButtonData:>\\\"ListInterpolation::ingrdm\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(ListInterpolation :: \\\"ingrdm\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\({}\\) cannot be transposed. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Set::"shape"\), \(\(:\)\(\ \)\), "\<\"Lists \
+\\!\\({Graphics`PlotField`Private`points$2666, \
+Graphics`PlotField`Private`vectors$2666}\\) and \
+\\!\\(Transpose[\\(\\({}\\)\\)]\\) are not the same shape. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Set::shape\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(MapThread::"mptd"\), \(\(:\)\(\ \)\), "\<\"Object \
+\\!\\(Graphics`PlotField`Private`vectors$2666\\) at position {2, \\!\\(1\\)} \
+in \\!\\(MapThread[\\(\\(\\(\\(\\(\\(If[\\(\\(\\(\\(\\(\\(#3 \[Equal] 0\\)\\) \
+|| \\(\\(! \\(\\(Graphics`PlotField`Private`numberQ[#2]\\)\\)\\)\\)\\)\\), \
+\\(\\({\\(\\({0, 0}\\)\\), 0}\\)\\), \\(\\({\\(#1\\\\ #2\\)\\/#3, \
+#2}\\)\\)\\)\\)]\\)\\) &\\)\\), \\(\\({\\(\\(\[LeftSkeleton] 39 \
+\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 39 \[RightSkeleton]\\)\\), \
+\\(\\(\[LeftSkeleton] 39 \[RightSkeleton]\\)\\)}\\)\\)\\)\\)]\\) has only \\!\
+\\(0\\) of required \\!\\(1\\) dimensions. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"MapThread::mptd\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(MapThread :: \\\"mptd\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Set::"shape"\), \(\(:\)\(\ \)\), "\<\"Lists \
+\\!\\({Graphics`PlotField`Private`vectors$2666, \
+Graphics`PlotField`Private`mags$2666}\\) and \\!\\(Transpose[\\(\\(MapThread[\
+\\(\\(\\(\\(\\(\\(If[\\(\\(\\(\\(\\(\\(#3 \[Equal] 0\\)\\) || \\(\\(! \
+\\(\\(Graphics`PlotField`Private`numberQ[\\(\\(Slot[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\)]\\)\\)\\)\\)\\)\\), \\(\\({\\(\\({0, 0}\\)\\), \
+0}\\)\\), \\(\\({\\(#1\\\\ #2\\)\\/\\(Slot[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\), #2}\\)\\)\\)\\)]\\)\\) &\\)\\), \\(\\({\\(\
+\[LeftSkeleton] 1 \[RightSkeleton]\\)}\\)\\)\\)\\)]\\)\\)]\\) are not the \
+same shape. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Set::shape\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\(\[LeftSkeleton] 1 \[RightSkeleton]\\) \
+cannot be transposed. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Transpose::"nmtx"\), \(\(:\)\(\ \)\), "\<\"The first two levels \
+of the one-dimensional list \\!\\({Graphics`PlotField`Private`colors$2666, \
+\\(\\(Arrow[\\(\\(Graphics`PlotField`Private`points$2666, \\(\\(\
+\[LeftSkeleton] 9 \[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 5 \
+\[RightSkeleton]\\)\\)\\)\\)]\\)\\)}\\) cannot be transposed. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"Transpose::nmtx\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Transpose :: \\\"nmtx\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \(Arrow::"bad" \(\(:\)\(\ \)\) 
+      "Arguments \!\({Graphics`PlotField`Private`points$2666, \(\(\
+\[LeftSkeleton] 9 \[RightSkeleton]\)\), \(\(\[LeftSkeleton] 5 \
+\[RightSkeleton]\)\)}\) to Arrow are not valid."\)], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), \
+"\<\"\\!\\(Transpose[\\(\\({Graphics`PlotField`Private`colors$2666, \
+\\(\\({}\\)\\)}\\)\\)]\\) was encountered where a \\!\\(Graphics\\) primitive \
+or directive was expected. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), \
+"\<\"\\!\\(MapThread[\\(\\(\\(\\(Function[\\(\\(\\(\\({p, n, k}\\)\\), \
+\\(\\({\\(\\(Point[p]\\)\\), \\(\\(Line[\\(\\({p, \\(\\(p + \\(\\(n\\\\ \
+k\\)\\)\\)\\)}\\)\\)]\\)\\)}\\)\\)\\)\\)]\\)\\), \\(\\({\\(\\(\\(\\(0.5`\
+\[InvisibleSpace]\\)\\) + \
+\\(\\(Transpose[\\(\\(\\(\\(Transpose[$Failed]\\)\\) \[LeftDoubleBracket] \\(\
+\\({1, 2}\\)\\) \[RightDoubleBracket]\\)\\)]\\)\\)\\)\\), \\(\\(\\(\\(\
+\[LeftSkeleton] 9 \[RightSkeleton]\\)\\)[\\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)]\\)\\), \\(\\(10000\\\\ \\(\\(\[LeftSkeleton] 1 \
+\[RightSkeleton]\\)\\)\\)\\)}\\)\\)\\)\\)]\\) was encountered where a \
+\\!\\(Graphics\\) primitive or directive was expected. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], \
+"Message"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1920}, {0, 1105}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{705, 1026},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 67, 1, 27, "Input"],
+Cell[1824, 54, 39, 1, 27, "Input"],
+Cell[1866, 57, 183, 3, 43, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[2074, 64, 44, 1, 27, "Input"],
+Cell[2121, 67, 235, 3, 43, "Output"]
+}, Open  ]],
+Cell[2371, 73, 1995, 35, 411, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[4391, 112, 48, 1, 27, "Input"],
+Cell[4442, 115, 47, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4526, 121, 50, 1, 27, "Input"],
+Cell[4579, 124, 54, 1, 27, "Output"]
+}, Open  ]],
+Cell[4648, 128, 96, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[4769, 134, 69, 1, 27, "Input"],
+Cell[4841, 137, 42, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4920, 143, 49, 1, 27, "Input"],
+Cell[4972, 146, 130, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5139, 154, 509, 10, 107, "Input"],
+Cell[5651, 166, 52, 1, 23, "Print"],
+Cell[5706, 169, 130, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5873, 177, 120, 2, 43, "Input"],
+Cell[5996, 181, 35, 1, 27, "Output"]
+}, Open  ]],
+Cell[6046, 185, 258, 5, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[6329, 194, 914, 18, 203, "Input"],
+Cell[7246, 214, 2904, 45, 283, "Output"],
+Cell[10153, 261, 3652, 62, 207, "Output"],
+Cell[13808, 325, 137, 3, 27, "Output"],
+Cell[13948, 330, 137, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14122, 338, 22, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[14169, 342, 1959, 33, 395, "Input"],
+Cell[16131, 377, 172, 5, 25, "Print"],
+Cell[16306, 384, 172, 5, 25, "Print"],
+Cell[16481, 391, 172, 5, 25, "Print"],
+Cell[16656, 398, 172, 5, 25, "Print"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16865, 408, 45, 1, 27, "Input"],
+Cell[16913, 411, 37, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16987, 417, 62, 1, 27, "Input"],
+Cell[17052, 420, 137, 3, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17238, 429, 28, 0, 74, "Section"],
+Cell[17269, 431, 597, 12, 139, "Input"],
+
+Cell[CellGroupData[{
+Cell[17891, 447, 1038, 21, 171, "Input"],
+Cell[18932, 470, 293, 5, 20, "Message"],
+Cell[19228, 477, 317, 5, 20, "Message"],
+Cell[19548, 484, 321, 5, 20, "Message"],
+Cell[19872, 491, 316, 5, 20, "Message"],
+Cell[20191, 498, 316, 5, 20, "Message"],
+Cell[20510, 505, 329, 5, 20, "Message"],
+Cell[20842, 512, 387, 5, 33, "Message"],
+Cell[21232, 519, 692, 10, 46, "Message"],
+Cell[21927, 531, 340, 5, 20, "Message"],
+Cell[22270, 538, 340, 5, 20, "Message"],
+Cell[22613, 545, 499, 8, 33, "Message"],
+Cell[23115, 555, 1318, 19, 59, "Message"],
+Cell[24436, 576, 293, 5, 20, "Message"],
+Cell[24732, 583, 317, 5, 20, "Message"],
+Cell[25052, 590, 387, 5, 33, "Message"],
+Cell[25442, 597, 692, 10, 46, "Message"],
+Cell[26137, 609, 340, 5, 20, "Message"],
+Cell[26480, 616, 333, 5, 33, "Message"],
+Cell[26816, 623, 499, 8, 33, "Message"],
+Cell[27318, 633, 1318, 19, 59, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[28673, 657, 1978, 34, 411, "Input",
+  InitializationCell->True],
+Cell[30654, 693, 365, 5, 20, "Message"],
+Cell[31022, 700, 317, 5, 20, "Message"],
+Cell[31342, 707, 303, 4, 20, "Message"],
+Cell[31648, 713, 303, 4, 20, "Message"],
+Cell[31954, 719, 387, 5, 33, "Message"],
+Cell[32344, 726, 301, 4, 20, "Message"],
+Cell[32648, 732, 301, 4, 20, "Message"],
+Cell[32952, 738, 296, 4, 20, "Message"],
+Cell[33251, 744, 329, 5, 20, "Message"],
+Cell[33583, 751, 331, 5, 33, "Message"],
+Cell[33917, 758, 400, 6, 46, "Message"],
+Cell[34320, 766, 1093, 16, 59, "Message"],
+Cell[35416, 784, 1093, 16, 59, "Message"],
+Cell[36512, 802, 331, 5, 33, "Message"],
+Cell[36846, 809, 400, 6, 46, "Message"],
+Cell[37249, 817, 331, 5, 33, "Message"],
+Cell[37583, 824, 337, 5, 33, "Message"],
+Cell[37923, 831, 400, 6, 46, "Message"],
+Cell[38326, 839, 343, 5, 33, "Message"],
+Cell[38672, 846, 323, 5, 20, "Message"],
+Cell[38998, 853, 392, 6, 46, "Message"],
+Cell[39393, 861, 812, 11, 69, "Message"],
+Cell[40208, 874, 333, 5, 33, "Message"],
+Cell[40544, 881, 821, 12, 82, "Message"],
+Cell[41368, 895, 355, 5, 33, "Message"],
+Cell[41726, 902, 534, 8, 46, "Message"],
+Cell[42263, 912, 333, 5, 33, "Message"],
+Cell[42599, 919, 245, 4, 33, "Message"],
+Cell[42847, 925, 409, 6, 33, "Message"],
+Cell[43259, 933, 901, 14, 46, "Message"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

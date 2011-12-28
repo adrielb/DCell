@@ -1,0 +1,106 @@
+time=60*1
+dt = 1e-2
+iterations = time / dt
+iterations = 12000
+halfbox = 10
+r_init = 10e-12 // M
+L_init = 1e-12 // 1 pM
+
+INTERACTION_RADIUS = halfbox
+/*
+PARTITION_X = [[-halfbox TO halfbox STEP halfbox/1]] // units um
+PARTITION_Y = [[-halfbox TO halfbox STEP halfbox/1]]
+PARTITION_Z = [[-halfbox TO halfbox STEP halfbox/1]]
+*/
+
+ta = 0.1
+ti = 0.01
+tr = 1e9
+kl = 1e2
+kd = 2
+
+ka = ta*kl
+da = ta*kd
+ki = ti*kl
+di = ti*kd
+
+/*
+k1r = 1
+k2r = 1
+k3r = 1
+k1i = 1
+k2i = 1
+k3i = 1
+*/
+
+TIME_STEP = dt
+ITERATIONS = iterations
+
+// Units of Diffusion are cm^2/sec
+d3d = 6e-6
+DEFINE_MOLECULES
+{
+	L {DIFFUSION_CONSTANT_3D = d3d} // ligand
+	A {DIFFUSION_CONSTANT_3D = d3d}
+	I {DIFFUSION_CONSTANT_3D = d3d}
+	r {DIFFUSION_CONSTANT_3D = d3d
+			TARGET_ONLY}    // inactive LEGI-response
+	R {DIFFUSION_CONSTANT_3D = d3d
+			TARGET_ONLY}    // active LEGI-response
+}
+
+
+DEFINE_REACTIONS {
+	L -> A + L [ka]
+	L -> I + L [ki]
+	A -> NULL [da]
+	I -> NULL [di]
+//	r -- A -> R [tr]
+	r + A -> R + A [tr]
+	R -- I -> r [tr]
+}
+
+my_box BOX 
+{
+	CORNERS = [-halfbox,-halfbox,-halfbox],[halfbox,halfbox,halfbox]
+}
+
+INSTANTIATE world OBJECT 
+{
+	system OBJECT my_box { }
+	r_release RELEASE_SITE
+	{
+		SHAPE = world.system
+		MOLECULE = r
+		CONCENTRATION = r_init
+	}
+	R_release RELEASE_SITE
+	{
+		SHAPE = world.system
+		MOLECULE = R
+		CONCENTRATION = r_init
+	}
+	camp_release RELEASE_SITE
+	{
+		SHAPE = world.system
+		MOLECULE = L
+		CONCENTRATION = L_init
+	}
+}
+
+REACTION_DATA_OUTPUT
+{
+	STEP = dt * 1
+	
+	{COUNT[L,WORLD], COUNT[A,WORLD],COUNT[I,WORLD],COUNT[R,WORLD]} => "./output/A.dat"
+}
+
+NOTIFICATIONS
+{
+	ALL_NOTIFICATIONS=ON
+}
+
+WARNINGS
+{
+	ALL_WARNINGS=WARNING
+}

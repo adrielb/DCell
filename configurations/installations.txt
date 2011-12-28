@@ -1,0 +1,939 @@
+Benchmarking
+yum install sysstat #for sar and iostat
+iperf # network benchmarking
+bonnie++ # hd benchmarking
+sysbench 
+yum install fftw fftw-devel
+
+Eclipse - eliminate yellow question mark on rhs and yellow squiggles
+Preferences > General > Editors > Text Editors > Annotations > C/C++ Indexer Markers > deselect all checkboxes
+Intel Compilers
+License files?
+currently, IA32 has eclipse support
+Eclipse > Help > Software Updates > Manange Configurations > Add an Extension Location
+Navigate to eclipse-support/eclipse directory
+Project properties > C Build > Settings > Error Parser > Intel error parser
+Preferences > General > Editors > Text Editors > Displayed tab width: 2, Show line #, 
+Preferences > C/C++ > Editor > Typing > uncheck Adjust indentation when pasting
+Preferences > C/C++ > Code Style > New from K&R
+  Tab Policy: spaces only; Indentation size: 2; Tab size: 2
+C/C++ > Editor > Templates
+  chk: "  ierr = ${cursor}; CHKERRQ(ierr);"
+Preferences > General > Editors > File Association > *.nb to /usr/local/bin/Mathematica
+PTP:
+1) Create OpenMPI resource manager
+2) Complie SDM
+/share/apps/eclipse/plugins/org.eclipse.ptp.linux.x86_4.0.0.201006142322
+sh BUILD
+3) Set debugger path
+/share/apps/eclipse/plugins/org.eclipse.ptp.linux.x86_4.0.0.201006142322/bin/sdm
+  
+
+MPlayer (http://www.mplayerhq.hu/DOCS/HTML-single/en)
+NEEDS the entire X11 Devel package
+tar xjf MPlayer-1.0rc2.tar.bz2
+./configure --with-extralibdir=/home/abergman/usr/lib --with-extraincdir=/home/abergman/usr/include
+./configure --prefix=/home/abergman/ProgramFiles/MPlayer-1.0rc2/install --cc="icc -O3 -xP " --host-cc="icc -O3 -xP " --disable-gcc-check
+
+x264 Codec (http://www.videolan.org/developers/x264.html)
+git clone git://git.videolan.org/x264.git
+yum install yasm
+./configure --disable-asm   #Couldnt get yasm to work
+make && make install
+recompile MPlayer
+
+XVid Codec (http://www.xvid.org/Downloads.43.0.html)
+cd xvidcore/build/generic
+./configure
+make && make install
+recompile MPlayer
+
+FFMPEG x264 yASM
+/share/apps/yasm-1.1.0/configure && make && make install
+/share/apps/x264-snapshot-20111002-2245/configure --prefix=/share/apps --enable-shared --enable-pic && make -j 2 && make install
+/share/apps/ffmpeg/configure --prefix=/share/apps --enable-libx264 --enable-gpl --extra-cflags="-I /share/apps/include" --extra-ldflags="-L /share/apps/lib"
+
+OpenCV
+./configure CC=icc CXX=/opt/intel/cce/10.0.023/bin/icpc CXXFLAGS="-xP" --prefix=/home/abergman/ProgramFiles/opencv-1.0.0/install
+
+Aqsis install
+scons install_prefix='/usr/local' build
+
+
+VTK Install
+chmod u+rw Utilities/vtktiff/tif_fax3sm.c
+VTK_USE_GLX_GET_PROC_ADDRESS_ARB:INTERNAL=0 <<<<< NEW NAME
+
+Mesa
+make linux-x86-64
+edit config/linux-icc-static
+changed "-axK -tpp6" to "-xP" in both CC and CXX
+added "-DUSE_MGL_NAMESPACE" to FLAGS
+renamed libMesa[...].a
+make linux-icc-static
+
+
+VTK (off-screen support)
+CMAKE_INSTALL_PREFIX  = /share/apps/VTK/bin
+VTK_OPENGL_HAS_OSMESA = ON
+OSMESA_INCLUDE_DIR    = /usr include
+OSMESA_LIBRARY        = /usr/X11R6/lib/libOSMesa.so
+VTK_USE_OFFSCREEN     = ON                                                                                                             
+VTK_USE_X             = ON
+
+http://gorerle.com/vlab-wiki/index.php?title=Offscreen_Vtk#.5BUPDATED.5D_MangledMesa_6.5.3_and_Vtk_5.0.3_-_5.2F16.2F2007
+#VTK_USE_MANGLED_MESA  =  ON
+OPENGL_gl_LIBRARY = /home/abergman/ProgramFiles/Mesa-7.0.2/lib/libMesaGL.a
+VTK_OPENGL_HAS_OSMESA = ON
+VTK_USE_OFFSCREEN  =  ON
+
+CGAL
+./install_cgal -i
+add BLAS location
+export CGAL_MAKEFILE="/home/abergman/ProgramFiles/CGAL-3.3.1/make/makefile_x86-64_Linux-2.6_g++-3.4.6"
+
+
+ITK
+yum install fftw fftw-devel
+../ccmake .
+Release
+edit CMakeFiles/CMakeCCompiler.cmake and CMakeCXXCompiler.cmake, c++ to icpc, gcc to icc
+ITK_               
+Add release flags: "-xP -export"
+export ITK_DIR=/home/abergman/ProgramFiles/InsightToolkit-3.4.0
+export PATH=/share/apps/InsightToolkit-3.16.0/bin:$PATH
+
+SUNDIALS
+./configure --prefix=/home/abergman/ProgramFiles/sundials-2.3.0/install --disable-mpi --enable-examples --enable-shared CC=icc F77=ifort CFLAGS="-O3 -xP -restrict" FFLAGS="-O3 -xP"
+
+
+
+emacs /etc/ssh/sshd_config
+# Add or uncomment this line:
+  PermitRootLogin no
+  Protocol 2
+service sshd restart
+From Dimension to Precis thru LevLabHN
+ssh -L3128:localhost:3128 -L3690:Precis:3690 -p 8022 abergman@localhost
+
+SSH Key Generation
+ssh-keygen -t rsa (on the client!!!)
+scp id_rsa.pub /tmp (to the remote server!!!)
+cat /tmp/id_rsa.pub >> authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+
+LevLabHN to Precis SCP
+useradd LevLabHN (on precis)
+passwd LevLabHN
+mkdir PrecisID
+add pub key to auth_keys in PrecisID
+chmod o=rx ImageDirectory
+scp -q -i ~/PrecisID/id_rsa_precis LevLabHN@10.16.107.22:/home/share/Images/20070803/DIR.test-0.spl/image.b.99.gray /state/partition1/temp
+
+MPI
+yum install lapack.i686 lapack-devel.i686 atlas.i686 compat-gcc-34-g77.i686
+yum install openmpi openmpi-libs openmpi-devel valgrind-openmpi xterm
+module load openmpi-i386
+secretword=tgfbeta > .mpd.conf
+mpd.hosts ---> compute-0-0...
+mpdboot -n 10 -r ssh -f ~/mpd.hosts
+
+mpiexec -nolocal -perhost 2 -n 18
+(or) mpirun [boot] [exec]
+mpirun -r ssh -f $TMP/machines -genv I_MPI_DEVICE ssm -perhost 1 -n $NSLOTS
+
+Subversion to LevLabHN
+rpm -i Collabnet-subversion
+export PATH=/opt/collab/bin:$PATH
+svn://localhost/Research
+
+Subversion in Lunchbox
+yum install subversion
+svnadmin recover /path/to/db
+svnserve -t -r /home/abergman/repositories
+svnadmin create --fs-type fsfs ~/repositories/ShapeAnalysis
+svn co svn+ssh://lunchbox/home/abergman/repositories/ShapeAnalysis
+svn import ShapeAnalysis svn+ssh://lunchbox/home/abergman/repositories/ShapeAnalysis
+in ~/public_data:
+svn co file:///home/abergman/repositories/ShapeAnalysis/
+svn propset svn:ignore -F ignore.txt
+
+Cluster Setup
+128.220.138.90	levlabhn.clark.jhu.edu
+10.255.255.1	
+255.255.255.0	public subnet
+10.255.255.254	compute-0-0
+255.255.255.0	private subnet
+128.220.2.7	Primary DNS
+128.220.2.82	Secondary DNS
+128.220.138.1	Default Gateway
+ClusterName: LevLabHPC
+
+Commands:
+service gmond restart
+service gmetad restart
+service autofs restart
+service syslog restart
+make -C /var/411 force
+cluster-fork 411get --all
+groupadd levlab
+useradd -g levlab abergman
+passwd abergman
+id abergman
+userdel abergman
+rocks sync users
+rocks list attr
+rocks set attr Kickstart_PublicDNSServers 128.220.2.7
+rocks set network servedns {network} {servedns} [servedns=bool] 
+rocks sync dns
+
+insert-ethers --dump > /export/my-insert-ethers.sh
+add-extra-nic --dump > /export/my-extra-nic.sh
+insert-ethers --update
+/boot/kickstart/cluster-kickstart
+
+cat /proc/devices |grep ipmi
+mknod /dev/ipmi0 c 254 0
+modprobe ipmi_si type="kcs" ports="0xca8" regspacings="4"
+ipmitool sensor
+
+mplayer -vf pp=lb,crop=528:352:90:60 dvd://
+mplayer -vf cropdetect dvd://
+mplayer -monitoraspect 3:4
+Edit ~/.mplayer/config
+monitoraspect=3:4
+
+clear kernels from /boot directory: 
+yum remove 'kernel*-2.6.9-55*'
+
+scheduling jobs with CRON
+export EDITOR=emacs
+crontab -e #edit user crontab file
+#mh hd dm my dw command
+minute hour day month 'day of week' <command>  #no spaces in time columns!
+rsync --verbose --stats --archive --checksum --delete --ignore-times /home/abergman /media/usbdisk
+--archive, -rlptgoD
+-r, --recursive
+-l, --links                 copy symlinks as symlinks
+-p, --perms                 preserve permissions
+-t, --times                 preserve times
+-g, --group                 preserve group
+-o, --owner                 preserve owner (root only)
+-D, --devices               preserve devices (root only)
+
+Disk partitioning and formatting
+parted
+select /dev/sdc
+print
+  Disk geometry for /dev/sdc: 0.000-476940.023 megabytes
+  Disk label type: msdos
+  Minor    Start       End     Type      Filesystem  Flags
+  1          0.031 476937.531  primary   fat32       lba
+rm 1
+(parted) mkpart primary ext3 0 480000
+quit
+/sbin/mkfs -t ext3 /dev/sdc1
+
+Software RAID 0 and RAID 1 setup in bios
+/sbin/mkfs -t ext3 /dev/mapper/isw_bfaaeheaf_MyMirror
+mkdir /mirror
+mount -t ext3 /dev/mapper/isw_bfaaeheaf_MyMirror /mirror/
+#ext2 does not have an additional write for the journal, hence faster
+/sbin/mkfs.ext2 /dev/mapper/isw_bfaaeheaf_MyStripe
+mkdir /stripe
+mount -t ext2  /dev/mapper/isw_bfaaeheaf_MyStripe /stripe/
+echo 50000 > /proc/sys/dev/raid/speed_limit_max
+
+Mounting an ISO:
+    mount -t iso9660 -o loop /home/user1/RedHat-9.0-i386-Disk1.iso /mnt/iso-1
+This can also be mounted using an entry in the file: /etc/fstab
+    /home/user1/RedHat-9.0-i386-Disk1.iso /mnt/iso-1 iso9660 loop,ro 0 3
+
+Mounting examples in /etc/fstab
+# device name   mount point     fs-type      options                 dump-freq pass-num
+pingu:/store    /store          nfs          rw                     0 0
+//pingu/ashare  /store/pingu    cifs         credentials=/root/smbpass.txt 0 0
+/dev/mapper/isw_bfaaeheaf_MyStripe /stripe      ext2    defaults        0 0
+/dev/mapper/isw_bfaaeheaf_MyMirror /mirror      ext3    defaults        0 0
+
+Installing Microsoft Fonts
+http://corefonts.sourceforge.net/
+yum install cabextract
+rpm -ivh RPMS/noarch/msttcorefonts-2.0.1.noarch.rpm
+/sbin/service xfs reload
+xlsfonts | grep ^-microsoft
+
+Fedora RPMs
+rpm -Uvh http://download.fedora.redhat.com/pub/epel/4/i386/epel-release-4-9.noarch.rpm
+
+Kile
+yum install kdegraphics    // Need kdvi for kviewerpart
+yum install kile 
+yum install kdelibs-devel
+./configure --prefix=$HOME/.kde
+make && make install
+
+pstricks
+cp base/latex/*   /usr/share/texmf/tex/latex/pstricks
+cp base/generic/* /usr/share/texmf/tex/generic/pstricks
+cp base/dvips/*   /usr/share/texmf/dvips/pstricks
+
+xkeyval
+mkdir /usr/share/texmf/tex/latex/xkeyval
+cp xkeyval/run/*.sty /usr/share/texmf/tex/latex/xkeyval
+mkdir /usr/share/texmf/tex/generic/xkeyval
+cp *.tex /usr/share/texmf/tex/generic/xkeyval
+
+pstricks-add 
+cp pstricks-add.pro /usr/share/texmf/dvips/pstricks
+cp pstricks-add.sty /usr/share/texmf/tex/latex/pstricks
+cp pstricks-add.tex /usr/share/texmf/tex/generic/pstricks
+texhash
+
+pst-3dplot
+cp pst-3dplot.pro /usr/share/texmf/dvips/pstricks
+cp pst-3dplot.sty /usr/share/texmf/tex/latex/pstricks
+cp pst-3dplot.tex /usr/share/texmf/tex/generic/pstricks
+texhash
+
+gconf-editor
+apps > gnome-terminal > keybindings > reset and clear > "<Ctrl>r"
+
+Taskbar Shortcuts
+Firefox/Opera
+Terminal
+Mathematica
+File Manager
+KeePass
+Eclipse
+VirtualBox
+XMMS
+Kate/Text Editor
+
+nVidia
+use TwinView, not separate X screens
+
+Radeon X300
+Section "Device"
+        Identifier  "Videocard0"
+        Driver      "radeon"
+        Option "MigrationHeuristic" "greedy"
+#Option "AccelMethod" "XAA"
+        Option "AccelMethod" "EXA"
+        Option          "EnablePageFlip"        "on"
+EndSection
+
+
+VirtualBox
+sh /tmp/VirtualBox-2.2.4-47978-Linux_amd64.run
+usermod -G abergman,vboxusers,usb abergman
+disable themes
+turn off system restore
+add usb group (503) and join it
+add this to /etc/fstab, then reboot
+none                    /sys/bus/usb/drivers    usbfs   devgid=503,devmode=664 0 0
+
+Reboot precis
+mount /media/usbdisk
+xsvnserve.sh
+ssh levlabhn -c xprecis.sh
+
+Firewall
+iptables-save > iptables.bak
+iptables -I INPUT 1 -s 128.220.138.90 -p tcp --dport 10000: -j ACCEPT 
+iptables -A INPUT -s 128.220.138.90 -p tcp --dport 10024: --state NEW -j ACCEPT
+ssh dictionary attack:
+iptables -A INPUT -m recent --update --seconds 40 --hitcount 5 --name SSH --rsource -j DROP
+iptables -A INPUT -m recent --set --name SSH --rsource -j ACCEPT
+
+Benchmarking file IO
+time dd of=bigfile if=/dev/zero bs=1048576 count=3000
+time dd if=bigfile of=/dev/null bs=1048576
+
+Send root email
+in /root/.forward write your@email.com
+gmail didnt work, but jhu.edu did
+
+On compute-0-3
+nc -v -v -l 2222 >/dev/null
+On compute-0-4, need IP address of compute-0-3
+time yes|nc -v -v -n 10.255.255.251 2222 >/dev/null
+then cntl-C
+To calculate bandwidth = size*8/time(sec)/1048576 = Mb/sec
+
+iperf -s // on server
+iperf -c <ip_server> on client
+
+LogWatch
+/etc/log.d/logwatch.conf
+Detail = Low  --> Detail = Med
+
+Query network speed
+cluster-fork '/sbin/ethtool eth0 | grep -i speed'
+
+Jumbo-frames
+/sbin/ifconfig eth0 mtu 9000
+
+VNC
+on the server, edit /etc/sysconfig/vncservers
+VNCSERVERS="1:abergman"
+VNCSERVERARGS[1]="-geometry 1280x1024 -localhost"
+uncomment lines in .vnc/xstartup
+then,
+/sbin/service vncserver start
+on the client:
+scp precis:.vnc/passwd ~/.vnc/
+vncviewer -via precis -passwd .vnc/passwd localhost:1 
+vncconfig -set DeferUpdate=0
+vncserver -geometry 1600x1150
+Tunnel ports 5801, 5901, 6001
+
+
+in $HOME/.ssh/config:
+Host precis
+Hostname 10.16.107.22
+ProxyCommand netcat-proxy-command 128.220.138.90 10.16.107.22
+
+Multihop ssh with PuTTY
+1. Configure public key authentication for the intermediate host
+2. Putty > “Session” > host name and user name for the final destination host.
+3. "Connection" > Proxy > select “Local”, proxy command: plink.exe intermediate.proxy.host -l username -agent -nc %host:%port\n
+4. Save the session.
+
+
+NFS
+cluster-fork '/usr/sbin/nfsstat -rc'   #retrans columns tells if insufficient number of NFS threads serving client
+rsize=32768,wsize=32768,intr,noatime   #mount options for 32kb read/write block size
+mkdir /scratch
+mount /dev/sdb1 /scratch
+chgrp levlab /scratch
+chmod g+w /scratch
+/etc/exports: /scratch 10.255.255.1(rw,async,no_root_squash) 10.255.255.0/255.255.255.0(rw,async)
+service nfs reload
+rocks run host compute 'mkdir /scratch; ls -ld /scratch'
+rocks run host compute 'mount -t nfs -o async,noatime 10.255.255.1:/scratch /scratch'
+To Precis From levlabhn:
+iptables -A RH-Firewall-1-INPUT -s 128.220.138.90 -j ACCEPT
+/etc/exports: /mirror   128.220.138.90(rw,async,anonuid=500,anongid=500,all_squash)
+service nfs restart
+mount -t nfs -o async,noatime 10.16.107.22:/mirror /precis
+
+
+WebMIN
+The following is a snippet from /etc/sysctl.conf that may improve network performance:
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_syncookies = 1
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_rmem = 4096 87380 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+
+Using sed to pick out line from file
+SEEDFILE=/my/param/file
+SEED=$(sed -n -e "$SGE_TASK_ID p" $SEEDFILE)
+reset JOB_ID: echo 0 > $SGE_ROOT/default/spool/qmaster/jobseqnumber
+
+SGE
+Schedule Interval = 0
+Load Adj Decay Time = 0
+delete np_load_avg 0.50
+qconf -kt scheduler
+qconf -at scheduler
+qconf -ssconf
+qconf -sconf global
+qmon needs yum install xorg-x11-fonts*
+
+
+#
+# Add the NAS file server to the cluster
+#
+echo "Add the NAS file server to the cluster"
+rocks list host | grep -q -w -e 'nas-0-0' || rocks add host nas-0-0
+rocks list host interface nas-0-0 | grep -q -w -e 'eth0' || \
+    rocks add host interface nas-0-0 iface=em1
+rocks set host interface subnet nas-0-0 iface=em1 subnet=private
+rocks set host interface ip     nas-0-0 iface=em1 ip=10.255.255.2
+rocks set host interface mac    nas-0-0 iface=em1 mac=00:25:90:51:26:5f
+rocks set host attr nas-0-0 arch x86_64
+rocks set host attr nas-0-0 os linux
+rocks set host attr nas-0-0 managed false
+rocks set host attr nas-0-0 kickstartable no
+rocks set host installaction nas-0-0 action=os
+rocks set host boot nas-0-0 action=os
+rocks sync config
+#
+# Adding IPMI on LevLabNAS to Rocks
+#
+rocks list host interface |less
+rocks add host interface nas-0-0 iface=em2
+rocks set host interface subnet nas-0-0 iface=em2 subnet=private
+rocks set host interface ip     nas-0-0 iface=em2 ip=10.255.255.3
+rocks set host interface mac    nas-0-0 iface=em2 mac=00:25:90:51:23:d3
+rocks set host interface name   nas-0-0 iface=em2 name=nas-0-0-ipmi
+rocks sync config
+rocks list host
+rocks list host interface|less
+ftp://ftp.supermicro.com/utility/IPMIView/Linux/
+install IPMIView20-Linux_v2.8.0_Build110802.bin
+jre errors, so run as root
+
+Dell DSET diagnostics
+tentakel 'sh /tmp/delldset_v2.2.125_x64_A01.bin --install'
+dellsysteminfo --silent -f /tmp/dset
+unzip password = dell
+export LD_LIBRARY_PATH=/opt/dell/dset/bin:$LD_LIBRARY_PATH
+insmod /lib/modules/2.6.18-194.17.4.el5/kernel/drivers/firmware/dcdbas.ko 
+
+lm_sensors     # yum install if not present
+sensors-detect # (select YES for all questions)
+sensors        # runs sensors 
+
+yum install hddtemp
+
+Creates a image of text
+convert -font "Courier-Bold" -pointsize 32 label:"U: levlabuser\nP: letmein207" label.gif
+
+Firefox tuning
+about:config
+ssh -CqnN -D8001 levlabhn
+network.http.pipelining              true
+network.http.pipelining.maxrequests  8
+network.http.pipelining.ssl          true
+network.http.proxy.pipelining        true
+network.http.max-connections                        25
+network.http.max-connections-per-server             25
+network.http.max-persistent-connections-per-proxy   25
+network.http.max-persistent-connections-per-server  25
+
+
+Firfox plugins
+Refgrab-it
+Adblock
+Flashblock
+Ghostery
+
+Leave out the 'z' to tar without zip compression
+tar -czf mytarfile.tar my_directory
+tar zxvf mytarfile.tar
+tar -cf - /dir_to_tar/ | split -b 2000m - test_backup.tar.
+tar over ssh:
+tar -C source_dir -clf - . | ssh destination_server 'tar -C target_dir -xpf -'
+
+
+Add headnode as execution node
+/opt/gridengine/install_execd
+accept all defaults
+qmon > host configuration > host groups > Add > Hostgroup: @headgroup, Host: levlabhn.local
+delete levlabhn.local from @allhosts
+qmon > queue control > Add > Queue Name: head.q, New host: levlabhn.local, Slots: 1
+
+yum install xbindkeys
+KP_Enter
+
+
+Install XP on existing Linux
+Boot LiveCD
+grub
+root(hd0,1)
+setup(hd0)
+quit
+Then add to /boot/grub/menu.list
+title Other
+  rootnoverify(hd0,0)
+  chainloader +1
+
+Source, generate the md5sums:
+cd /data
+find $@ ! -type d -print0 | xargs -0 md5sum > ~/MD5SUMS.data 2>&1
+Once complete and files are transferred, verify on the destination
+cd /new_data
+scp oldserv:~/MD5SUMS.data ./
+md5sum -c MD5SUMS.data | grep -v OK$
+
+
+EPEL
+https://fedoraproject.org/wiki/EPEL/FAQ#howtouse
+rpm -Uvh http://download.fedora.redhat.com/pub/epel/5/i386/epel-release-5-3.noarch.rpm
+
+Mathematica Default ImageSize
+Options > Graphics Options > Image Bounding Box > Image Size
+SetOptions[ToExpression[Join[Names["*Plot"], Names["*Plot3D"]]], ImageSize -> 5*72];
+
+Firefox
+  Small icons
+  /tmp/Downloads/
+  Search as you type
+
+Plugins
+  RefGrab-it
+
+Bookmarks
+  Google
+  Gmail
+  Refworks
+  Wikipedia
+  Weather
+
+
+Quick links
+  firefox
+  terminal
+  Home
+  Gedit
+  Eclipse
+  Mathematica
+
+WinXP on Dimension 9150
+Turn off themes/system restore
+Install Dell drivers (Chipset/Ethernet/Audio)
+MS Service packs 1/2/3
+NVidia Driver
+Norton AV
+Firefox (AdBlock/Flashblock/Ghostery)
+WinSCP/PuTTY
+Acrobat
+HP display driver
+
+Linux on Dimension 9150
+/boot 250MB
+/      20GB
+/data 200GB (RAID-1)
+swap    6GB
+WinXP 100GB
+
+
+
+Mathematica SELinux
+chcon -t textrel_shlib_t /usr/local/Wolfram/Mathematica/5.2/SystemFiles/Libraries/Linux/*.so
+#setsebool -P allow_execmod=0
+
+Fedora SSHD
+service sshd start
+chkconfig --list sshd
+chkconfig --level 345 sshd on
+
+sshd_config
+Protocol 2
+PermitRootLogin no
+LoginGraceTime 30
+
+/etc/init.d/sshd restart
+
+RPMFusion repositories
+yum --nogpgcheck install http://rpm.livna.org/livna-release.rpm  http://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-stable.noarch.rpm  http://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-stable.noarch.rpm
+
+NVidia Drivers
+yum remove xorg-x11-drv-nouveau
+yum install kmod-nvidia
+new-kernel-pkg --mkinitrd --dracut --update $(rpm -q --queryformat="%{version}-%{release}.%{arch}\n" kernel | tail -n 1)
+reboot
+
+MP3 in Rhythmbox:
+yum install gstreamer-plugins-ugly
+yum install xmms xmms-mp3
+
+yum install openmotif
+cd /usr/include/
+[root@Precis include]# ln -s openmotif/Xm .
+
+APCUPSd
+chkconfig --list apcupsd
+chkconfig --level 345 apcupsd on
+cat /var/log/apcupsd.events 
+apcaccess status
+chcon -t bin_t 'commok'
+semanage fcontext -a -t bin_t '/etc/apcupsd/apccontrol'
+
+yum install mencoder h264enc xvidcore
+
+Autologin in Gnome
+gedit /etc/gdm/custom.conf
+[daemon]
+AutomaticLoginEnable=true
+AutomaticLogin=abergman
+
+Reduce idle cpu consumption when in virutal machine: add "notsc divider=10" to grub 
+/boot/grub/grub.conf
+kernel ... ... notsc divider=10
+check effect by "cat /proc/cmdline"
+
+KeepassX
+needed Atrpms-testing repo
+yum install libXtst-devel gcc-c++ qt44 qt44-X11 qt44-devel
+qmake-qt47;make;make install;
+
+Increasing SHMMAX shared memroy
+echo "2147483648" > /proc/sys/kernel/shmmax          #temporary fix
+echo "kernel.shmmax=2147483648" >> /etc/sysctl.conf  #permanently set it
+
+Create png image from raw data
+convert -size 640x480 -depth 8 rgb:image image.png
+
+Mount virtualbox share at startup
+in /etc/rc.local add
+mount -t vboxsf Documents -o uid=abergman,gid=abergman /home/abergman/Documents
+mount -t vboxsf temp -o uid=1000,gid=1000 /scratch
+
+Allow non-root users to mount filesystems
+cd /etc/sysctl.conf
+Add the statement:
+vfs.usermount=1
+
+Mount SMB
+# List the shares
+smbclient -U user -I 192.168.16.229 -L //smbshare/
+mount -t smbfs -o username=winuser //smbserver/myshare /mnt/smbshare
+mount -t cifs -o username=winuser,password=winpwd //192.168.16.229/myshare /mnt/share
+# store the credentials in a file:/home/user/.smb:
+username=winuser
+password=winpwd
+mount -t cifs -o credentials=/home/user/.smb //192.168.16.229/myshare /mnt/smbshare
+
+Fedora 15
+yum update
+yum -y install kernel-devel kernel-headers dkms gcc gcc-c++
+Install Guest Additions
+yum install evince-djvu keepassx
+
+Changing default partition layout on compute nodes
+rocks-partition --list --delete --nodename compute-0-0 ...
+rocks-partition --list --delete --nodename compute-0-8
+cluster-fork 'rm /.rocks-release'
+su -
+cd /home/install/site-profiles/4.1/nodes
+cp skeleton.xml extend-auto-partition.xml
+<var name="Kickstart_PartsizeSwap" val="8000"/>
+<main>
+ssh-agent $SHELL
+ssh-add
+cd /home/install
+rocks-dist dist
+cluster-fork 'rm /.rocks-release'
+cluster-fork '/boot/kickstart/cluster-kickstart'
+#shoot-node compute-0-0
+
+Adding g++, fortran to compute nodes
+emacs /export/rocks/install/site-profiles/5.4/nodes/extend-compute.xml
+  <package>gcc-c++.x86_64</package>
+  <package>gcc-gfortran.x86_64</package>
+  <package>libstdc++-devel.x86_64</package>
+  <package type="meta">base-x</package>
+  <package type="meta">gnome-desktop</package>
+/opt/gridengine/examples/jobs/sge-reinstall.sh
+rocks set host attr compute x11 true
+rocks set appliance attr compute x11 true
+
+Using jumbo-frames on cluster
+rocks set network mtu optiputer 9000
+
+LevLabNAS Setup
+My Account > Change Admin User > Username: LevLabUser
+My Account > Change Password > ...
+Groups > Add Group > levlab 1001
+
+zpool create -m /mnt/tank tank raidz2 da0 da1 da2  da3  da4  da5  da6  da7 \
+                               raidz2 da8 da9 da10 da11 da12 da13 da14 da15 \
+                               spare  da16
+zpool export tank
+
+Or as separate commands (old disk nameing tho)
+zpool create -m /mnt/tank tank raidz2 mfid0 mfid1 mfid2 mfid3 mfid4 mfid5 mfid6 mfid7
+zpool add tank raidz2 mfid8 mfid9 mfid10 mfid11 mfid12 mfid13 mfid14 mfid15
+zpool add spare mfid16
+zpool export tank
+
+Now in FreeNAS: Storage > Volumes > Auto Import Volume: "tank"
+Volume tank > Edit ZFS options > Compression Level > gzip 6
+Create ZFS Dataset > Volume: tank, Name: home
+Create ZFS Dataset > Volume: tank, Name: home/pub
+Create ZFS Dataset > Volume: tank, Name: nas-0-0
+zpool set autoreplace=on tank
+Controls automatic device replacement. If set to off, device replacement must be initiated by the administrator by using the zpool replace command. If set to on, any new device, found in the same physical location as a device that previously belonged to the pool, is automatically formatted and replaced. The default behavior is off. This property can also be referred to by its shortened column name, replace.
+
+zfs set snapdir=visible tank/home
+makes .zfs snapshot folders visible in ls and samba
+
+Creat the pub directory
+zfs create tank/home/pub
+chgrp levlab pub
+cd pub
+mkdir     Presentations Manuals Software Share-1week Share
+chmod g+w Presentations Manuals Software Share-1week Share
+chgrp levlab Presentations Manuals Software Share-1week Share
+
+zpool iostat -v 1
+zpool status
+zpool list
+zpool destroy tank
+zfs get compressratio
+zfs get all
+dmesg | grep mfidOB
+zpool iostat 1
+
+
+NFS Settings
+ZFS dataset /tank/nas-0-0
+Permisions abergman:levlab
+Number of servers = 11
+Async mode = yes
+Unix share: nas-0-0 to precis, Authorized IP = 10.16.107.22 
+Mapall abergman:levlab
+Unix share: nas-0-0 to cluster, Authorized IP = 10.255.255.0/24
+Maproot nobody:nogroup
+rocks run host compute 'mkdir /nas-0-0; ls -ld /nas-0-0'
+rocks run host compute 'mount -t nfs -o async,noatime,intr nas-0-0:/mnt/tank/nas-0-0 /nas-0-0'
+
+NFS client problems with rpc.statd, so use nolock on precis
+grep rpc.statd /var/log/audit/audit.log | audit2allow -M mypol
+semodule -i mypol.pp
+service nfslock start
+mount -t nfs -o async,noatime,nolock,intr,hard 128.220.138.91:/mnt/tank/nas-0-0 /nas-0-0
+in /etc/fstab
+128.220.138.91:/mnt/tank/nas-0-0    /nas-0-0    nfs     async,noatime,nolock,intr  0 0
+
+1. Create a zfs dataset for the user
+   Dataset Name: home/newuser
+#   zfs create tank/home/newuser 
+2. Create a user account
+   Username: mbrennan
+   Primary Group: levlab
+   Home Directory: /mnt/tank/home/newuser/private
+   Shell: bash
+   Full Name: New User
+   Email: newuser@jhu.edu
+   Password: 10 rnd chars
+3. Associate permissions of dataset with new user account
+   chown newuser:levlab /mnt/tank/home/newuser
+   chmod 700 /mnt/tank/home/newuser/private
+4. Configure and start the CIFS service
+5. Create levlabhn /nas-0-0 user directory
+   mkdir /mnt/tank/nas-0-0/newuser
+   chown newuser:levlab /mnt/tank/nas-0-0/newuser
+   chmod 700 /mnt/tank/nas-0-0/newuser
+5. Add user to levlabhn
+   useradd -g levlab -u 1001 newuser
+   passwd newuser
+   id newuser
+   rocks sync users
+
+6-32 x 5mm flat head screws for the hard drive
+SuperMicro  MCP-410-00005-0N -Screw bag (100 pcs) 
+
+fflush(stdout); // Will now print everything in the stdout buffer
+setbuf(stdout, NULL);
+
+Changing UID and GID on levlabhn to match levlabnas
+groupmod -g 1001 levlab
+find / -group 500 -exec chgrp -h 1001 {} \;
+usermod -g 1001 abergman
+usermod -u 1001 abergman
+find / -user 500 -exec chown -h 1001 {} \;
+
+Octave
+yum install pcre-devel readline-devel
+HDF5
+GraphicsMagick++
+gnuplot
+make && make install
+
+**WhisperQuiet Centos 6
+1) Update packages
+yum update
+yum -y install kernel-devel kernel-headers  gcc gcc-c++ libstdc++ fftw fftw-devel lapack.i686 lapack-devel.i686 atlas.i686 openmpi openmpi-devel valgrind-openmpi xterm subversion k3b
+libstdc++.i68 redhat-lsb
+2) Enable SSH
+service: ssh runlevel 2 3 4 5
+firewall: port 22
+3) Configure gostname
+/etc/sysconfig/network
+  HOSTNAME=WhisperQuiet
+4) Install NVidia Drivers
+init 3
+sh NVIDIA-Linux-x86_64-290.10.run
+System > Keyboard Prefences > Layouts > Layout Options > Key Seq to kill X server > Cntl-Alt-Backspace
+System > Prefences > NVidia X server settings
+add /etc/X11/xorg.conf in Section "Device"
+    Option      "Rotate" "CCW"
+5) VirtualBox
+6) Mathematica
+7) Eclipse-CDT-Parallel
+8) APCUPSd
+   ./configure --enable-usb && make && make install
+   /etc/apcupsd/apcupsd.conf
+   /etc/rc.d/init.d/apcupsd start
+9) Printer
+*) XFS
+   yum install xfsdump xfsprogs
+   mkfs.xfs -f -d su=128k,sw=7 /dev/sdc
+   /etc/fstab
+      /dev/sda                /data                   xfs     defaults        1 2
+      //128.220.138.91/levlabnas       /home/abergman/levlabnas cifs uid=abergman,gid=abergman,credentials=/home/abergman/Research/configurations/smbpass 0 0
+      128.220.138.91:/mnt/tank/nas-0-0/abergman /nas-0-0        nfs  async,noatime,intr,hard                                    0 0
+*) SuperDoctor II
+   ftp://ftp.supermicro.com/utility/SuperDoctor_II/Linux/
+   ftp://ftp.supermicro.com/utility/SuperDoctor_II/Linux/Release/SD2_2.83.369-110830.tar.gz
+   ./superodoctor/quickinstall
+   rpm -iv linc-1.0.3-1.x86_64.rpm
+   superdoctor
+*) RPMForge
+   rpm --import http://apt.sw.be/RPM-GPG-KEY.dag.txt
+   wget http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+   rpm -K rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+   rpm -i rpmforge-release-0.5.2-2.el6.rf.x86_64.rpm
+*) EPEL
+   rpm -Uvh http://ftp.osuosl.org/pub/fedora-epel/6/x86_64/epel-release-6-5.noarch.rpm
+*) RPMFusion
+   rpm -Uvh http://download1.rpmfusion.org/free/el/updates/testing/6/i386/rpmfusion-free-release-6-0.1.noarch.rpm http://download1.rpmfusion.org/nonfree/el/updates/testing/6/i386/rpmfusion-nonfree-release-6-0.1.noarch.rpm
+*) yum install dkms iozone meld emacs screen hdf5 hdf5-openmpi hdf5-devel glib glib-devel gtk+-devel alsa-lib-devel mplayer mplayer-tools  git lapack-devel ffmpeg gconf-editor
+*) System-monitor panel bug
+   yum remove gnome-applets
+   restart
+   yum install gnome-applets
+
+MegaRAID 9265-8i
+unzip CentOs5_5_all_5_30.zip
+tar zxvf megaraid_sas-v00.00.05.30_k2.6.18-194.el5.PAE.xen.i686_x64.gz 
+yum install redhat-lsb
+rpm -ivh dkms-2.0.22.0-1.noarch.rpm
+rpm -ivh megaraid_sas-v00.00.05.30-1dkms.noarch.rpm 
+
+MegaCli64
+./MegaCli64 -adpCount
+./MegaCli64 -adpallinfo -aall
+./MegaCli64 -AdpBIOS -Dsply -a0
+./MegaCli64 -PDGetNum -a0
+./MegaCli64 -PDList -a0
+./MegaCli64 -AdpEventLog -GetEventLogInfo -a0
+./MegaCli64 –CfgLDAdd
+./MegaCli64 -CfgDsply -a0
+./MegaCli64 -ShowSummary -a0
+./MegaCli64 -EncInfo -a0
+./MegaCli64 -LDPDInfo -a0
+./MegaCli64 -PDlist -a0 | grep -e '^Enclosure Device ID:' -e '^Slot Number:'
+./MegaCli64 -CfgLDAdd -R5 [252:0,252:1,252:2,252:3,252:4,252:5,252:6,252:7] WB ADRA Direct CachedBadBBU -strpsz128 -a0
+./MegaCli64 -LDInfo -L0 -a0
+./MegaCli64 -LDGetProp -DskCache -L0 -a0
+./MegaCli64 -LDSetProp -EnDskCache -L0 -a0
+./MegaCli64 -LDBI -ShowProg -L0 a0
+./MegaCli64 -LDBI -ProgDsply -L0 a0
+
+Backup disk
+mklabel msdos
+mkpart primary ext4 1 -1
+mkfs.ext4 /dev/sdd1
+mkdir /media/backup
+mount /dev/sdd1 /media/backup
+chown abergman:abergman backup
+
+git repository
+git config --global user.name "Adriel Bergmann"
+git config --global user.email "abergma4@jhu.edu"
+git config --global color.ui auto
+git config --global merge.tool meld
+git config --global -l
+cat ~/.gitconfig
+in .bashrc:
+source /etc/bash_completion.d/git
+PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+
+================================

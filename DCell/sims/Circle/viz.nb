@@ -1,0 +1,604 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     14261,        445]*)
+(*NotebookOutlinePosition[     14945,        469]*)
+(*  CellTagsIndexPosition[     14901,        465]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(AppendTo[$Echo, "\<stdout\>"];\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    \(Get[Environment["\<ALT_DISP\>"]]\), "\[IndentingNewLine]", 
+    \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"irregNode.10000.array", "lost+found", "mat.10000.mat", 
+      "rhs.10000.Real64", "uvp.10000.Real64"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(MX = 256;\)\), "\[IndentingNewLine]", 
+    \(\(MY = MX;\)\), "\[IndentingNewLine]", 
+    \(\({prhs, urhs, vrhs} = 
+        ImportFluid0[MX, MY, "\<rhs\>", 10000];\)\), "\[IndentingNewLine]", 
+    \(\({pvel, uvel, vvel} = 
+        ImportFluid1[MX, MY, "\<uvp\>", 10000];\)\), "\[IndentingNewLine]", 
+    \(\(ImportIrreg["\<irregNode.10000.array\>"];\)\), "\[IndentingNewLine]", \
+
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(\(SetOptions[DensityPlot, PlotPoints \[Rule] {4\ MX, 4  MY}, 
+        Frame \[Rule] False, Mesh \[Rule] False];\)\), "\n", 
+    \(\(DisplayTogetherArray[\[IndentingNewLine]Map[
+          DensityPlot[#[y, x], {x, 0, MX - 2}, {y, 0, MY - 2}, 
+              Epilog \[Rule] {Green, Point /@ ir`X}] &, {{prhs, urhs, 
+              vrhs}, {pvel, uvel, 
+              vvel}}, {2}]\[IndentingNewLine]];\)\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(InterpolatingFunction::"dmval"\), \(\(:\)\(\ \)\), "\<\"Input \
+value \\!\\({0.`, 0.`}\\) lies outside the range of data in the interpolating \
+function. Extrapolation will be used. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"InterpolatingFunction::dmval\\\"]\\)\
+\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(InterpolatingFunction::"dmval"\), \(\(:\)\(\ \)\), "\<\"Input \
+value \\!\\({0.`, 0.2482893450635386`}\\) lies outside the range of data in \
+the interpolating function. Extrapolation will be used. \\!\\(\\*ButtonBox[\\\
+\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, \
+ButtonData:>\\\"InterpolatingFunction::dmval\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(InterpolatingFunction::"dmval"\), \(\(:\)\(\ \)\), "\<\"Input \
+value \\!\\({0.`, 0.4965786901270772`}\\) lies outside the range of data in \
+the interpolating function. Extrapolation will be used. \\!\\(\\*ButtonBox[\\\
+\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, \
+ButtonData:>\\\"InterpolatingFunction::dmval\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(InterpolatingFunction :: \\\"dmval\\\"\\) will be suppressed during \
+this calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\
+\"RefGuideLinkText\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\
+\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(DisplayTogetherArray[\[IndentingNewLine]Map[
+          Plot3D[#[y, x], {x, 0.5, MX - 2}, {y, 0.5, MY - 2}, 
+              PlotPoints \[Rule] {2  MX, \ 2  MY}, 
+              Mesh \[Rule] False] &, {{prhs, urhs}, {pvel, 
+              uvel}}, {2}]\[IndentingNewLine]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\({pvel, uvel, vvel} = 
+        ImportFluid1[MX, MY, "\<uvp\>", 10000];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(g = 
+        Plot3D[uvel[y, x], {x, 2, MX - 4}, {y, 2, MY - 4}, 
+          PlotPoints \[Rule] {MX, MY} 2, Mesh \[Rule] False, 
+          Ticks \[Rule] None];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Export["\</tmp/Circular-uvel-err.png\>", g]\)], "Input"],
+
+Cell[BoxData[
+    \("/tmp/Circular-uvel-err.png"\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(vscale = 5;\)\), "\[IndentingNewLine]", 
+    \(\(g = 
+        PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, 0.5, MX - 2}, {y, 0.5, 
+            MY - 2}, PlotRange \[Rule] {{0, MX - 2}, {\(-1\), MY - 2}}, 
+          ScaleFactor \[Rule] None, ScaleFunction \[Rule] \((#*vscale &)\), 
+          PlotPoints \[Rule] 2 {16, 16}, Frame \[Rule] False, 
+          ImageSize \[Rule] 600, HeadLength \[Rule] 0.2*10^\(-2. \), 
+          Epilog \[Rule] {Green, Point /@ ir`X}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Export["\</tmp/Circular-vector.png\>", g]\)], "Input"],
+
+Cell[BoxData[
+    \("/tmp/Circular-vector.png"\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"grid.10000.Real64", "grid.pos", "grid.size", "irregNode.10000.array", 
+      "lost+found", "mat.10000.mat", "rhs.10000.Real64", 
+      "uvp.10000.Real64"}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\({phi, pos} = ImportGrid["\<grid\>"];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\([phi[\([1]\)]]\)\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(uexact = uvel;\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(DensityPlot[uexact[y, x] - uvel[y, x], {x, 0, MX - 2}, {y, 0, MY - 2}, 
+      Epilog \[Rule] {Green, Point /@ ir`X}]\), "\[IndentingNewLine]", 
+    \(Plot3D[uexact[y, x] - uvel[y, x], {x, 0.5, MX - 2}, {y, 0.5, MY - 2}, 
+      PlotPoints \[Rule] {2  MX, \ 2  MY}, Mesh \[Rule] False]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(sp = N@ImportMat["\<mat.10000.mat\>"]\), "\n", 
+    \(\(rhs = 
+        Rest@Import["\<rhs.10000.Real64\>", "\<Real64\>", 
+            ByteOrdering \[Rule] 1];\)\), "\n", 
+    \(\(uvp = 
+        Rest@Import["\<uvp.10000.Real64\>", "\<Real64\>", 
+            ByteOrdering \[Rule] 1];\)\), "\n", 
+    \(Length /@ {uvp, rhs}\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"SparseArray", "[", 
+        RowBox[{
+          
+          InterpretationBox[\("<"\[InvisibleSpace]69079\[InvisibleSpace]">"\),
+            
+            SequenceForm[ "<", 69079, ">"],
+            Editable->False], ",", \({12288, 12288}\)}], "]"}],
+      False,
+      Editable->False]], "Output"],
+
+Cell[BoxData[
+    \({12288, 12288}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(ArrayPlot[sp, ImageSize \[Rule] $IMAGESIZE, 
+        Mesh \[Rule] False];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Norm[sp . uvp - rhs]\)], "Input"],
+
+Cell[BoxData[
+    \(0.000011097280956869005`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(txt = "\< 0 KSP Residual norm 1.632103312150e+02 
+  1 KSP Residual norm 3.466304325895e-02 
+  2 KSP Residual norm 7.504342835776e-03 
+  3 KSP Residual norm 2.351222556977e-03 
+  4 KSP Residual norm 3.875131103921e-04 
+  5 KSP Residual norm 6.447734751912e-05\>"\), "\[IndentingNewLine]", 
+    \(\(StringSplit[txt] // Take[#, {5, \(-1\), 5}] &\) // 
+      ToExpression\)}], "Input"],
+
+Cell[BoxData[
+    \(" 0 KSP Residual norm 1.632103312150e+02    1 KSP Residual norm \
+3.466304325895e-02    2 KSP Residual norm 7.504342835776e-03    3 KSP \
+Residual norm 2.351222556977e-03    4 KSP Residual norm 3.875131103921e-04    \
+5 KSP Residual norm 6.447734751912e-05"\)], "Output"],
+
+Cell[BoxData[
+    \({2 + 1.63210331215`\ e, \(-2\) + 3.466304325895`\ e, \(-3\) + 
+        7.504342835776`\ e, \(-3\) + 2.351222556977`\ e, \(-4\) + 
+        3.875131103921`\ e, \(-5\) + 6.447734751912`\ e}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(mu = 0.02;\)\), "\[IndentingNewLine]", 
+    \(\(k = 1.998;\)\), "\[IndentingNewLine]", 
+    \(\(f2 = 10  mu;\)\), "\[IndentingNewLine]", 
+    \(\(nx = 1;\)\), "\[IndentingNewLine]", 
+    \(\(\(-1\)\/mu\) k*f2*nx\)}], "Input"],
+
+Cell[BoxData[
+    \(\(-19.98`\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(unn = 20;\)\), "\[IndentingNewLine]", 
+    \(\(uen = 0;\)\), "\[IndentingNewLine]", 
+    \(\(uee = \(-20\);\)\), "\[IndentingNewLine]", 
+    \(\(nx = 0;\)\), "\[IndentingNewLine]", 
+    \(\(tx = 1;\)\), "\[IndentingNewLine]", 
+    \(uee*nx\^2 + 2*uen*nx*tx + unn*tx\^2\)}], "Input"],
+
+Cell[BoxData[
+    \(20\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(mu = 1;\)\), "\[IndentingNewLine]", 
+    \(\(u = \(Sin[\[Pi]\ x]\^2\) 
+          Sin[2  \[Pi]\ y];\)\), "\[IndentingNewLine]", 
+    \(\(v = Sin[2  \[Pi]\ x] Sin[\[Pi]\ y]\^2;\)\), "\[IndentingNewLine]", 
+    \(\(phi = \((x - x\^2)\) Sin[\[Pi]\ x] \((y - y\^2)\) Sin[\[Pi]\ y] - 
+          16/\[Pi]\^6;\)\), "\[IndentingNewLine]", 
+    \(p = mu*D[phi, {x, 2}] + D[phi, {y, 2}] // FullSimplify\)}], "Input"],
+
+Cell[BoxData[
+    \(2\ \((\[Pi]\ \((\(-1\) + x)\)\ x\ \((\(-1\) + 
+                2\ y)\)\ Cos[\[Pi]\ y]\ Sin[\[Pi]\ x] + \((\[Pi]\ \((\(-1\) + 
+                      2\ x)\)\ \((\(-1\) + 
+                      y)\)\ y\ Cos[\[Pi]\ x] + \((\((\(-1\) + 
+                            x)\)\ x + \((\(-1\) + \[Pi]\^2\ \((\(-1\) + 
+                                  x)\)\ x)\)\ y + \((1 - \[Pi]\^2\ \((\(-1\) \
++ x)\)\ x)\)\ y\^2)\)\ Sin[\[Pi]\ x])\)\ Sin[\[Pi]\ y])\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(fx = \(-mu\)*D[u, {x, 2}] + D[u, {y, 2}] + D[p, x] // 
+          FullSimplify;\)\), "\[IndentingNewLine]", 
+    \(\(fy = \(-mu\)*D[v, {x, 2}] + D[v, {y, 2}] + D[p, y] // 
+          FullSimplify;\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(phi = \(1\/\[Pi]\) \(Sin[\[Pi]\ x]\^2\) 
+          Sin[\[Pi]\ y]\^2;\)\), "\[IndentingNewLine]", 
+    \(u = D[phi, y]\), "\[IndentingNewLine]", 
+    \(v = \(-D[phi, x]\)\), "\[IndentingNewLine]", 
+    \(p = mu*D[phi, {x, 2}] + D[phi, {y, 2}] // FullSimplify\)}], "Input"],
+
+Cell[BoxData[
+    \(2\ Cos[\[Pi]\ y]\ Sin[\[Pi]\ x]\^2\ Sin[\[Pi]\ y]\)], "Output"],
+
+Cell[BoxData[
+    \(\(-2\)\ Cos[\[Pi]\ x]\ Sin[\[Pi]\ x]\ Sin[\[Pi]\ y]\^2\)], "Output"],
+
+Cell[BoxData[
+    \(\[Pi]\ \((Cos[2\ \[Pi]\ x] - Cos[2\ \[Pi]\ \((x - y)\)] + 
+          Cos[2\ \[Pi]\ y] - Cos[2\ \[Pi]\ \((x + y)\)])\)\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(fx = 
+      D[u, {x, 2}] + D[u, {y, 2}] // FullSimplify\), "\[IndentingNewLine]", 
+    \(fy = D[v, {x, 2}] + D[v, {y, 2}] // FullSimplify\)}], "Input"],
+
+Cell[BoxData[
+    \(2\ \[Pi]\^2\ \((\(-1\) + 2\ Cos[2\ \[Pi]\ x])\)\ Sin[
+        2\ \[Pi]\ y]\)], "Output"],
+
+Cell[BoxData[
+    \(2\ \[Pi]\^2\ \((1 - 2\ Cos[2\ \[Pi]\ y])\)\ Sin[
+        2\ \[Pi]\ x]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(uvel\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(InterpolatingFunction[{{0.5`, 63.5`}, {0.`, 63.`}}, "<>"]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(dx = 1/MX;\)\), "\[IndentingNewLine]", 
+    \(\(ui = 
+        Table[u, {x, \(-0.5\)*dx, \((MX - 0.5 - 1)\)*dx, dx}, {y, 
+            0, \((MX - 0.5)\)*dx, dx}];\)\), "\[IndentingNewLine]", 
+    \(\(vi = 
+        Table[v, {x, 0, \((MX - 0.5)\)*dx, 
+            dx}, {y, \(-0.5\)*dx, \((MX - 0.5 - 1)\)*dx, 
+            dx}];\)\), "\[IndentingNewLine]", 
+    \(\(pi = Table[v, {x, MX}, {y, MX}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions /@ {pi, ui, vi}\)], "Input"],
+
+Cell[BoxData[
+    \({{64, 64}, {64, 64}, {64, 64}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(uvp = 
+        Transpose[{pi, vi, ui}, {3, 1, 2}];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[uvp]\), "\[IndentingNewLine]", 
+    \(\(uvp = Flatten[uvp];\)\), "\[IndentingNewLine]", 
+    \(Length[uvp]\)}], "Input"],
+
+Cell[BoxData[
+    \({64, 64, 3}\)], "Output"],
+
+Cell[BoxData[
+    \(12288\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(rhs = sp . uvp;\)\), "\n", 
+    \(\(rhs = Partition[rhs, 3];\)\), "\n", 
+    \(\(rhs = Partition[rhs, MX];\)\), "\[IndentingNewLine]", 
+    \(\(rhs = Transpose[rhs, {2, 3, 1}];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[rhs]\)}], "Input"],
+
+Cell[BoxData[
+    \({3, 64, 64}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListPlot3D[rhs[\([3]\)]]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1920}, {0, 1105}},
+AutoGeneratedPackage->Automatic,
+WindowSize->{708, 1026},
+WindowMargins->{{0, Automatic}, {Automatic, 25}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 67, 1, 27, "Input"],
+Cell[1824, 54, 39, 1, 27, "Input"],
+Cell[1866, 57, 183, 3, 43, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[2074, 64, 44, 1, 27, "Input"],
+Cell[2121, 67, 137, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2295, 74, 863, 16, 187, "Input"],
+Cell[3161, 92, 390, 6, 33, "Message"],
+Cell[3554, 100, 406, 6, 33, "Message"],
+Cell[3963, 108, 406, 6, 33, "Message"],
+Cell[4372, 116, 346, 5, 33, "Message"],
+Cell[4721, 123, 42, 1, 27, "Output"]
+}, Open  ]],
+Cell[4778, 127, 304, 5, 75, "Input"],
+Cell[5085, 134, 106, 2, 27, "Input"],
+Cell[5194, 138, 194, 4, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[5413, 146, 76, 1, 27, "Input"],
+Cell[5492, 149, 62, 1, 27, "Output"]
+}, Open  ]],
+Cell[5569, 153, 503, 8, 91, "Input"],
+
+Cell[CellGroupData[{
+Cell[6097, 165, 74, 1, 27, "Input"],
+Cell[6174, 168, 60, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6271, 174, 44, 1, 27, "Input"],
+Cell[6318, 177, 190, 3, 43, "Output"]
+}, Open  ]],
+Cell[6523, 183, 73, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[6621, 188, 51, 1, 27, "Input"],
+Cell[6675, 191, 137, 3, 27, "Output"]
+}, Open  ]],
+Cell[6827, 197, 51, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[6903, 202, 318, 4, 75, "Input"],
+Cell[7224, 208, 137, 3, 27, "Output"],
+Cell[7364, 213, 137, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7538, 221, 355, 8, 75, "Input"],
+Cell[7896, 231, 336, 10, 27, "Output"],
+Cell[8235, 243, 48, 1, 27, "Output"]
+}, Open  ]],
+Cell[8298, 247, 110, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[8433, 253, 53, 1, 27, "Input"],
+Cell[8489, 256, 58, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8584, 262, 402, 8, 123, "Input"],
+Cell[8989, 272, 291, 4, 75, "Output"],
+Cell[9283, 278, 220, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9540, 286, 248, 5, 110, "Input"],
+Cell[9791, 293, 45, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9873, 299, 305, 6, 109, "Input"],
+Cell[10181, 307, 36, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10254, 313, 428, 7, 100, "Input"],
+Cell[10685, 322, 476, 7, 45, "Output"]
+}, Open  ]],
+Cell[11176, 332, 233, 4, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[11434, 340, 294, 5, 94, "Input"],
+Cell[11731, 347, 83, 1, 29, "Output"],
+Cell[11817, 350, 88, 1, 29, "Output"],
+Cell[11908, 353, 151, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12096, 360, 172, 3, 43, "Input"],
+Cell[12271, 365, 108, 2, 29, "Output"],
+Cell[12382, 369, 103, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12522, 376, 37, 1, 27, "Input"],
+Cell[12562, 379, 135, 3, 27, "Output"]
+}, Open  ]],
+Cell[12712, 385, 432, 9, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[13169, 398, 59, 1, 27, "Input"],
+Cell[13231, 401, 64, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13332, 407, 240, 5, 75, "Input"],
+Cell[13575, 414, 45, 1, 27, "Output"],
+Cell[13623, 417, 39, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13699, 423, 264, 5, 91, "Input"],
+Cell[13966, 430, 45, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14048, 436, 57, 1, 27, "Input"],
+Cell[14108, 439, 137, 3, 27, "Output"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

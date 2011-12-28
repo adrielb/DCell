@@ -1,0 +1,1054 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[     23824,        784]*)
+(*NotebookOutlinePosition[     24454,        806]*)
+(*  CellTagsIndexPosition[     24410,        802]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(Get[Environment["\<ALT_DISP\>"]]\)], "Input"],
+
+Cell[BoxData[
+    \(\($IMAGESIZE = 600;\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(StrList = 
+        Function[str, Import[StringToStream[str], "\<List\>"]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Linear Least Squares using SVD", "Section"],
+
+Cell[BoxData[{
+    \(\(x = N@{1, \ 2, \ 5, \ 10, \ 17};\)\), "\[IndentingNewLine]", 
+    \(\(y = 
+        N@Import[
+            StringToStream["\<3.1416e+00  -8.5841e-01  -8.8584e+00  \
+-1.4858e+01  -1.2858e+01\>"], "\<List\>"];\)\), "\[IndentingNewLine]", 
+    \(ListPlot[Thread[{x, y}]]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(A = {Table[1. , {Length[x]}], 
+            x,  .5  x\^2}\[Transpose] ;\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[Take[A, 3]]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"1.`", "1.`", "0.5`"},
+            {"1.`", "2.`", "2.`"},
+            {"1.`", "5.`", "12.5`"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(p = PseudoInverse[Take[A, 3]];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm[p]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"2.5000000000000075`", \(-1.6666666666666736`\), 
+              "0.1666666666666674`"},
+            {\(-1.7500000000000078`\), 
+              "2.0000000000000067`", \(-0.2500000000000007`\)},
+            {"0.5000000000000011`", \(-0.6666666666666679`\), 
+              "0.1666666666666668`"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(p . Take[y, 3]\)], "Input"],
+
+Cell[BoxData[
+    \({7.808283333333357`, \(-5.000020000000024`\), 
+      0.6666733333333368`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Transpose[A] . x\)], "Input"],
+
+Cell[BoxData[
+    \({35.`, 419.`, 3023.5`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(t\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Fit[Thread[{x, y}], {1, a, a\ a}, a]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(6.130424763257568`\)\(\[InvisibleSpace]\)\) - 
+      3.630577021780301`\ a + 0.14827413352272723`\ a\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(DisplayTogether[\[IndentingNewLine]Plot[
+        p . y . {xx\^2, xx, 1}, {xx, Min[x], 
+          Max[x]}], \[IndentingNewLine]ListPlot[Thread[{x, y}]], 
+      ImageSize \[Rule] $IMAGESIZE]\)], "Input"],
+
+Cell[BoxData[
+    \(DisplayTogether[\[IndentingNewLine]Plot[
+        Evaluate@Fit[Thread[{x, y}], {1, a, a\ a}, a], {a, Min[x], 
+          Max[x]}], \[IndentingNewLine]ListPlot[Thread[{x, y}]], 
+      ImageSize \[Rule] $IMAGESIZE]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(D[\[IndentingNewLine]Fit[Thread[{x, y}], {1, a, a\ a}, a], {a, 
+          2}\[IndentingNewLine]] /. a \[Rule] 0\)], "Input"],
+
+Cell[BoxData[
+    \(0.29654826704545445`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\({U, S, Vt} = SingularValueDecomposition[A];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(MatrixForm /@ {U, S, Vt}\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {\(-0.05556190995529456`\), 
+                  "0.5940076409878496`", \(-0.7979219809361301`\), 
+                  "0.08595527295711189`"},
+                {\(-0.46364283528851485`\), "0.2705012282892004`", 
+                  "0.1441043919313264`", \(-0.8313232409873811`\)},
+                {\(-0.8717237606217351`\), \(-0.05300518440944894`\), 
+                  "0.07312176102843015`", "0.4816028900010064`"},
+                {"0.14847855271131558`", "0.7557608473371744`", 
+                  "0.5806958279763732`", "0.26376507802926336`"}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]], ",", 
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {"4.728799156409374`", "0.`"},
+                {"0.`", "1.6243332596305449`"},
+                {"0.`", "0.`"},
+                {"0.`", "0.`"}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]], ",", 
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {\(-0.9648663677312447`\), \(-0.2627411129250907`\)},
+                {\(-0.26274111292509067`\), "0.9648663677312446`"}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(pp = 
+        Vt\[Transpose]  . \((S\[Transpose] \^\(-1\) /. 
+              ComplexInfinity \[Rule] 
+                0. )\) . \((U\[Transpose] )\);\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pp . y\)], "Input"],
+
+Cell[BoxData[
+    \({0.3389830508474584`, 2.576271186440678`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(p . y\)], "Input"],
+
+Cell[BoxData[
+    \({0.3389830508474584`, 2.576271186440678`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(MatrixForm[S\^\(-1\)]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(A = 
+      Partition[{1. , \(-2.50725\), 6.28632, 1. , \(-1.7072\), 2.91453, 
+          1. , \(-0.726423\), 0.527691, 1. , 0.452286, 0.204562, 1. , 
+          1.81034, 3.27735, 1. , 2.53149, 6.40844, 1. , 3.76245, 14.1561}, 
+        3]\)], "Input"],
+
+Cell[BoxData[
+    \({{1.`, \(-2.50725`\), 6.28632`}, {1.`, \(-1.7072`\), 
+        2.91453`}, {1.`, \(-0.726423`\), 0.527691`}, {1.`, 0.452286`, 
+        0.204562`}, {1.`, 1.81034`, 3.27735`}, {1.`, 2.53149`, 
+        6.40844`}, {1.`, 3.76245`, 14.1561`}}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(A[\([All, 2]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-2.50725`\), \(-1.7072`\), \(-0.726423`\), 0.452286`, 1.81034`, 
+      2.53149`, 3.76245`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(Table[{1, A[\([i, 2]\)],  .5  A[\([i, 3]\)]}, {i, 7}] // Transpose\) // 
+      Flatten\)], "Input"],
+
+Cell[BoxData[
+    \({1, 1, 1, 1, 1, 1, 1, \(-2.50725`\), \(-1.7072`\), \(-0.726423`\), 
+      0.452286`, 1.81034`, 2.53149`, 3.76245`, 3.14316`, 1.457265`, 
+      0.2638455`, 0.102281`, 1.638675`, 3.20422`, 7.07805`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(PseudoInverse[A] // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {\(-0.029464526045118646`\), "0.14923544657254145`", 
+              "0.29042190398714135`", "0.34660329129282447`", 
+              "0.25771847838671225`", 
+              "0.14366224671849367`", \(-0.15817684091259585`\)},
+            {\(-0.15537914943755643`\), \(-0.07780709832209921`\), \
+\(-0.004045337123834175`\), "0.05351259530015561`", "0.07774959317452784`", 
+              "0.07230619054731541`", "0.033663205861491026`"},
+            {"0.05234804890361212`", 
+              "0.007007505663901535`", \(-0.03015031360002662`\), \
+\(-0.04795583985134737`\), \(-0.03212874118141121`\), \(-0.00790740990081185`\
+\), "0.05878674996608345`"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(y = {1, 2, 5, 9, 7, 6, 5};\)\)], "Input"],
+
+Cell[BoxData[
+    \(ListPlot[Thread[{A[\([All, 2]\)], y}]]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Fit[Thread[{A[\([All, 2]\)], y}], {1, a, a\ a}, a]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(6.715669164916147`\)\(\[InvisibleSpace]\)\) + 
+      1.2967934985903051`\ a - 0.4944054994308279`\ a\^2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(\(\[IndentingNewLine]\)\(2\ 0.4944054994308279\)\)\)], "Input"],
+
+Cell[BoxData[
+    \(0.9888109988616558`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\ \)\(0.9888109988616558`\)\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(x = {1, 4, 8, 10};\)\), "\[IndentingNewLine]", 
+    \(\(y = {1, 5, 3, 6};\)\), "\[IndentingNewLine]", 
+    \(Fit[Thread[{x, y}], {1, a, a\ a}, a]\)}], "Input"],
+
+Cell[BoxData[
+    \(\(\(0.7202797202797178`\)\(\[InvisibleSpace]\)\) + 
+      0.8846153846153864`\ a - 0.045454545454545615`\ a\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(xyz = 
+        Table[{x -  .5 \((Random[] -  .5)\) - 3, 
+              y - 3 -  .5 \((Random[] -  .5)\), x\^2}, {x, 5}, {y, 5}] // 
+          Flatten[#, 1] &;\)\), "\[IndentingNewLine]", 
+    \(\(ListPlot[xyz[\([All, {1, 2}]\)]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(eq = Fit[xyz, {1, x, y, x\^2, y\^2}, {x, y}]\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(9.164175014362758`\)\(\[InvisibleSpace]\)\) + 
+      5.96539905051234`\ x + 0.8911006506607587`\ x\^2 - 
+      0.11869966417109652`\ y + 0.0046262840498355155`\ y\^2\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Plot3D[eq, {x, \(-2\), 2}, {y, \(-2\), 2}, 
+      Epilog \[Rule] {Point /@ xyz}]\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Signed Arc Length", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[{\(2\ C\ \[Eta]1 + 3\ D\ \[Eta]1\^2\)\/\@\(1 + \((2\ C\ \[Eta]1 + \
+3\ D\ \[Eta]1\^2)\)\^2\) \[Equal] \(-n\[Eta]\), 
+        1\/\@\(1 + \((2  C\ \[Eta]1 + 3  D\ \[Eta]1\^2)\)\^2\) \[Equal] 
+          n\[Epsilon]}, {C, D}]\)], "Input"],
+
+Cell[BoxData[
+    \({}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\@\(n\[Eta]\^2 + n\[Epsilon]\^2\) /. params\)], "Input"],
+
+Cell[BoxData[
+    \(2\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Solve[{C\ \[Eta]1\^2 + D\ \[Eta]1\^3 \[Equal] \[Epsilon]1, 
+        2  C\ \[Eta]1 + 
+            3\ D\ \[Eta]1\^2 \[Equal] \(-\(n\[Eta]\/n\[Epsilon]\)\)}, {C, 
+        D}]\)], "Input"],
+
+Cell[BoxData[
+    \({{C \[Rule] \(-\(\(\(-3\)\ n\[Epsilon]\ \[Epsilon]1 - 
+                  n\[Eta]\ \[Eta]1\)\/\(n\[Epsilon]\ \[Eta]1\^2\)\)\), 
+        D \[Rule] \(-\(\(2\ n\[Epsilon]\ \[Epsilon]1 + 
+                  n\[Eta]\ \[Eta]1\)\/\(n\[Epsilon]\ \[Eta]1\^3\)\)\)}}\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(params = 
+        N@{\[Eta]1 \[Rule] 1, \[Epsilon]1 \[Rule]  .5, 
+            n\[Eta] \[Rule] Cos[\[Theta]], 
+            n\[Epsilon] \[Rule] 
+              Sin[\[Theta]], \[Theta] \[Rule] \ \(-6\) \[Pi]/4};\)\), "\n", 
+    \({n\[Eta], n\[Epsilon]} //. params\), "\n", 
+    \(sol = 
+      Solve[{C\ \[Eta]1\^2 + D\ \[Eta]1\^3 \[Equal] \[Epsilon]1, 
+            2  C\ \[Eta]1 + 
+                3\ D\ \[Eta]1\^2 \[Equal] \(-\(n\[Eta]\/n\[Epsilon]\)\)}, {C, 
+            D}] //. params\), "\n", 
+    \(sol = sol[\([1]\)]\), "\n", 
+    \(Plot[C\ \[Eta]\^2 + D\ \[Eta]\^3 /. sol, {\[Eta], \(-1\), 1}, 
+      Prolog \[Rule] {Hue[0], PointSize[ .05], 
+          Point[{\[Eta]1, \[Epsilon]1} /. params], Hue[ .1], 
+          Line[{{\[Eta]1, \[Epsilon]1}, {\[Eta]1, \[Epsilon]1} + {n\[Eta], 
+                    n\[Epsilon]}} //. params], GrayLevel[0]}, 
+      PlotRange \[Rule] {{\(-1.5\), 1.5}, {\(-1.5\), 1.5}}, 
+      AspectRatio \[Rule] 1]\)}], "Input"],
+
+Cell[BoxData[
+    \({\(-1.8369701987210297`*^-16\), 1.`}\)], "Output"],
+
+Cell[BoxData[
+    \({{C \[Rule] 1.4999999999999998`, 
+        D \[Rule] \(-0.9999999999999998`\)}}\)], "Output"],
+
+Cell[BoxData[
+    \({C \[Rule] 1.4999999999999998`, 
+      D \[Rule] \(-0.9999999999999998`\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(NIntegrate[\@\(1 + \((2\ C\ \[Eta] + 3\ D\ \[Eta]\^2)\)\^2\) /. 
+        sol, {\[Eta], 0, \[Eta]1 /. params}]\)], "Input"],
+
+Cell[BoxData[
+    \(4.219820229705019`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\@\(1 +  .5\^2\)\)], "Input"],
+
+Cell[BoxData[
+    \(1.118033988749895`\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Integrate[\@\(1 + \((2\ C\ \[Eta] + 3\ D\ \[Eta]\^2)\)\^2\), {\[Eta], 
+        0, \[Eta]1}]\)], "Input"],
+
+Cell[BoxData[
+    \(\[Integral]\_0\%\[Eta]1\(\@\( 
+              1 + \((2\ C\ \[Eta] + 3\ D\ \[Eta]\^2)\)\^2\)\) \
+\[DifferentialD]\[Eta]\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(sol = \(Solve[{C\ e\^2 + D\ e\^3 \[Equal] x, 
+            2  C\ e + 3\ D\ e\^2 \[Equal] \(-\(n1\/n2\)\)}, {C, 
+            D}]\)[\([1]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({C \[Rule] \(1.`\ x\)\/e\^2 + \(1.`\ \((\(-12.921350090030908`\)\ e\^2 \
++ 2.`\ e\ x)\)\)\/e\^3, 
+      D \[Rule] \(-\(\(1.`\ \((\(-12.921350090030908`\)\ e\^2 + 
+                    2.`\ e\ x)\)\)\/e\^4\)\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \({n1, 
+        n2} = {0.9970186794329071, \(-0.0771605654584135\)} /. {x_, 
+            y_} \[Rule] {x, y}/\@\({x, y}\^2 // Total\)\)], "Input"],
+
+Cell[BoxData[
+    \({0.9970186794329071`, \(-0.0771605654584135`\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(params = N@{e \[Rule] 1.29593, x \[Rule] \(-1.58134\)};\)\), "\n", 
+    \(sol //. params\), "\[IndentingNewLine]", 
+    \(Plot[\(C\ ee\^2 + D\ ee\^3 /. sol\) //. params, {ee, \(-4\), 4}, 
+      Prolog \[Rule] {Hue[0], PointSize[ .05], Point[{e, x} /. params], 
+          Hue[ .1], Line[{{e, x}, {e, x} + {n1, n2}} //. params], 
+          GrayLevel[0]}, 
+      PlotRange \[Rule] 4 {{\(-1.5\), 1.5}, {\(-1.5\), 1.5}}, 
+      AspectRatio \[Rule] 1]\), "\[IndentingNewLine]", 
+    \(NIntegrate[\(\@\(1 + \((2\ C\ ee + 3\ D\ ee\^2)\)\^2\) /. sol\) //. 
+          params // Evaluate, {ee, 0, e /. params}]\)}], "Input"],
+
+Cell[BoxData[
+    \({C \[Rule] \(-12.795488238300791`\), 
+      D \[Rule] 9.147019915419628`}\)], "Output"],
+
+Cell[BoxData[
+    \(6.067116084346764`\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["3D Pressure gradient jump", "Section"],
+
+Cell[BoxData[{
+    RowBox[{
+      RowBox[{"vec", "=", 
+        RowBox[{"(", GridBox[{
+              {"nx", "ny", "nz"},
+              {"sx", "sy", "sz"},
+              {"rx", "ry", "rz"}
+              }], ")"}]}], ";"}], "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"j", "=", 
+        RowBox[{"(", GridBox[{
+              {"jpn"},
+              {"jps"},
+              {"jpr"}
+              }], ")"}]}], ";"}]}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    RowBox[{"sol", "=", 
+      RowBox[{
+        RowBox[{"Solve", "[", 
+          RowBox[{
+            RowBox[{
+              RowBox[{"vec", ".", 
+                RowBox[{"(", GridBox[{
+                      {"px"},
+                      {"py"},
+                      {"pz"}
+                      }], ")"}]}], "\[Equal]", "j"}], ",", \({px, py, pz}\)}],
+           "]"}], "[", \([1]\), "]"}]}]], "Input"],
+
+Cell[BoxData[
+    \({px \[Rule] \(-\(\(jps\ nz\ ry - jps\ ny\ rz - jpr\ nz\ sy + 
+                jpn\ rz\ sy + jpr\ ny\ sz - 
+                jpn\ ry\ sz\)\/\(\(-nz\)\ ry\ sx + ny\ rz\ sx + nz\ rx\ sy - 
+                nx\ rz\ sy - ny\ rx\ sz + nx\ ry\ sz\)\)\), 
+      py \[Rule] \(-\(\(jps\ nz\ rx - jps\ nx\ rz - jpr\ nz\ sx + 
+                jpn\ rz\ sx + jpr\ nx\ sz - jpn\ rx\ sz\)\/\(nz\ ry\ sx - 
+                ny\ rz\ sx - nz\ rx\ sy + nx\ rz\ sy + ny\ rx\ sz - 
+                nx\ ry\ sz\)\)\), 
+      pz \[Rule] \(-\(\(\(-jps\)\ ny\ rx + jps\ nx\ ry + jpr\ ny\ sx - 
+                jpn\ ry\ sx - jpr\ nx\ sy + jpn\ rx\ sy\)\/\(nz\ ry\ sx - 
+                ny\ rz\ sx - nz\ rx\ sy + nx\ rz\ sy + ny\ rx\ sz - 
+                nx\ ry\ sz\)\)\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(det = Det[vec]\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(det\\)\\\" is similar to existing symbol \
+\\\"\\!\\(Det\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \(nz\ ry\ sx - ny\ rz\ sx - nz\ rx\ sy + nx\ rz\ sy + ny\ rx\ sz - 
+      nx\ ry\ sz\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pd = {px, py, pz}\ det /. sol // FullSimplify\)], "Input"],
+
+Cell[BoxData[
+    \({jps\ nz\ ry - jps\ ny\ rz - jpr\ nz\ sy + jpn\ rz\ sy + jpr\ ny\ sz - 
+        jpn\ ry\ sz, \(-jps\)\ nz\ rx + jps\ nx\ rz + jpr\ nz\ sx - 
+        jpn\ rz\ sx - jpr\ nx\ sz + jpn\ rx\ sz, 
+      jps\ ny\ rx - jps\ nx\ ry - jpr\ ny\ sx + jpn\ ry\ sx + jpr\ nx\ sy - 
+        jpn\ rx\ sy}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(s = \(ToString[CForm[#]] &\) /@ Append[pd, det]\)], "Input"],
+
+Cell[BoxData[
+    \({"jps*nz*ry - jps*ny*rz - jpr*nz*sy + jpn*rz*sy + jpr*ny*sz - \
+jpn*ry*sz", 
+      "-(jps*nz*rx) + jps*nx*rz + jpr*nz*sx - jpn*rz*sx - jpr*nx*sz + \
+jpn*rx*sz", 
+      "jps*ny*rx - jps*nx*ry - jpr*ny*sx + jpn*ry*sx + jpr*nx*sy - \
+jpn*rx*sy", 
+      "nz*ry*sx - ny*rz*sx - nz*rx*sy + nx*rz*sy + ny*rx*sz - nx*ry*sz"}\)], \
+"Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(vars = ToString /@ Flatten[Join[vec, j]]\)], "Input"],
+
+Cell[BoxData[
+    \({"nx", "ny", "nz", "sx", "sy", "sz", "rx", "ry", "rz", "jpn", "jps", 
+      "jpr"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(pointers = 
+      Join[\("\<n->\>" <> ToString[#] &\) /@ 
+          Flatten[vec], \("\<j->\>" <> ToString[#] &\) /@ 
+          Flatten[j]]\)], "Input"],
+
+Cell[BoxData[
+    \({"n->nx", "n->ny", "n->nz", "n->sx", "n->sy", "n->sz", "n->rx", 
+      "n->ry", "n->rz", "j->jpn", "j->jps", "j->jpr"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(StringReplace[#, MapThread[Rule, {vars, pointers}]] &\) /@ 
+      s\)], "Input"],
+
+Cell[BoxData[
+    \({"j->jps*n->nz*n->ry - j->jps*n->ny*n->rz - j->jpr*n->nz*n->sy + \
+j->jpn*n->rz*n->sy + j->jpr*n->ny*n->sz - j->jpn*n->ry*n->sz", 
+      "-(j->jps*n->nz*n->rx) + j->jps*n->nx*n->rz + j->jpr*n->nz*n->sx - \
+j->jpn*n->rz*n->sx - j->jpr*n->nx*n->sz + j->jpn*n->rx*n->sz", 
+      "j->jps*n->ny*n->rx - j->jps*n->nx*n->ry - j->jpr*n->ny*n->sx + \
+j->jpn*n->ry*n->sx + j->jpr*n->nx*n->sy - j->jpn*n->rx*n->sy", 
+      "n->nz*n->ry*n->sx - n->ny*n->rz*n->sx - n->nz*n->rx*n->sy + \
+n->nx*n->rz*n->sy + n->ny*n->rx*n->sz - n->nx*n->ry*n->sz"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(n = 2  Table[Random[], {3}] - 1;\)\), "\[IndentingNewLine]", 
+    \(\(n = N@{1, 0, 1};\)\), "\[IndentingNewLine]", 
+    \(n /= Norm[n]\)}], "Input"],
+
+Cell[BoxData[
+    \({0.7071067811865475`, 0.`, 0.7071067811865475`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(s = {n[\([2]\)], \(-n[\([1]\)]\), 0};\)\), "\[IndentingNewLine]", 
+    \(s /= Norm[s]\)}], "Input"],
+
+Cell[BoxData[
+    \({0.`, \(-1.`\), 0}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(r = Cross[n, s]\)], "Input"],
+
+Cell[BoxData[
+    \({0.7071067811865475`, 0.`, \(-0.7071067811865475`\)}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(rot = {n, s, r};\)\), "\[IndentingNewLine]", 
+    \(\(rott = Transpose[rot];\)\), "\[IndentingNewLine]", 
+    \(MatrixForm /@ {rot, rott}\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{"{", 
+      RowBox[{
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {"0.7071067811865475`", "0.`", "0.7071067811865475`"},
+                {"0.`", \(-1.`\), "0"},
+                {"0.7071067811865475`", "0.`", \(-0.7071067811865475`\)}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]], ",", 
+        TagBox[
+          RowBox[{"(", "\[NoBreak]", GridBox[{
+                {"0.7071067811865475`", "0.`", "0.7071067811865475`"},
+                {"0.`", \(-1.`\), "0.`"},
+                {"0.7071067811865475`", "0", \(-0.7071067811865475`\)}
+                },
+              RowSpacings->1,
+              ColumnSpacings->1,
+              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+          Function[ BoxForm`e$, 
+            MatrixForm[ BoxForm`e$]]]}], "}"}]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(pts = 
+        Table[3 {0, Random[] -  .5, Random[] -  .5}, {300}];\)\)], "Input"],
+
+Cell[BoxData[
+    \(g = 
+      Show[Graphics3D[{Orange, Point /@ \((pts . rott)\), Red, 
+            Line[{{0, 0, 0}, 5  n}], Green, Line[{{0, 0, 0}, 5  s}], Blue, 
+            Line[{{0, 0, 0}, 5  r}]}], 
+        PlotRange \[Rule] {{\(-5\), 5}, {\(-5\), 5}, {\(-5\), 5}}, 
+        Axes \[Rule] True]\)], "Input"],
+
+Cell[BoxData[
+    \(<< Graphics`Animation`\)], "Input"],
+
+Cell[BoxData[
+    \(SpinShow[g]\)], "Input"],
+
+Cell[BoxData[
+    \(pts . rott\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(rot . rott // MatrixForm\)], "Input"],
+
+Cell[BoxData[
+    TagBox[
+      RowBox[{"(", "\[NoBreak]", GridBox[{
+            {"1.0000000000000002`", "0.`", "0.`"},
+            {"0.`", "1.0000000000000002`", "0.`"},
+            {"0.`", "0.`", "1.0000000000000002`"}
+            },
+          RowSpacings->1,
+          ColumnSpacings->1,
+          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
+      Function[ BoxForm`e$, 
+        MatrixForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Cross[{nx, ny, nz}, {nz, 0, \(-nx\)}]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-nx\)\ ny, nx\^2 + nz\^2, \(-ny\)\ nz}\)], "Output"]
+}, Open  ]]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1552},
+WindowMargins->{{0, Automatic}, {0, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 65, 1, 27, "Input"],
+Cell[1822, 54, 54, 1, 27, "Input"],
+Cell[1879, 57, 111, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2015, 63, 49, 0, 74, "Section"],
+Cell[2067, 65, 302, 6, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[2394, 75, 165, 3, 48, "Input"],
+Cell[2562, 80, 378, 11, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2977, 96, 116, 2, 43, "Input"],
+Cell[3096, 100, 576, 14, 63, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3709, 119, 47, 1, 27, "Input"],
+Cell[3759, 122, 107, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3903, 129, 49, 1, 27, "Input"],
+Cell[3955, 132, 56, 1, 27, "Output"]
+}, Open  ]],
+Cell[4026, 136, 34, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4085, 141, 69, 1, 27, "Input"],
+Cell[4157, 144, 141, 2, 29, "Output"]
+}, Open  ]],
+Cell[4313, 149, 221, 4, 68, "Input"],
+Cell[4537, 155, 243, 4, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[4805, 163, 144, 2, 59, "Input"],
+Cell[4952, 167, 54, 1, 27, "Output"]
+}, Open  ]],
+Cell[5021, 171, 80, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[5126, 176, 57, 1, 27, "Input"],
+Cell[5186, 179, 1769, 41, 81, "Output"]
+}, Open  ]],
+Cell[6970, 223, 184, 4, 31, "Input"],
+
+Cell[CellGroupData[{
+Cell[7179, 231, 39, 1, 27, "Input"],
+Cell[7221, 234, 75, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7333, 240, 38, 1, 27, "Input"],
+Cell[7374, 243, 75, 1, 27, "Output"]
+}, Open  ]],
+Cell[7464, 247, 54, 1, 31, "Input"],
+
+Cell[CellGroupData[{
+Cell[7543, 252, 268, 5, 43, "Input"],
+Cell[7814, 259, 268, 4, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8119, 268, 48, 1, 27, "Input"],
+Cell[8170, 271, 127, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8334, 278, 121, 2, 27, "Input"],
+Cell[8458, 282, 230, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8725, 290, 63, 1, 27, "Input"],
+Cell[8791, 293, 928, 19, 63, "Output"]
+}, Open  ]],
+Cell[9734, 315, 63, 1, 27, "Input"],
+Cell[9800, 318, 71, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[9896, 323, 83, 1, 27, "Input"],
+Cell[9982, 326, 141, 2, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10160, 333, 85, 1, 43, "Input"],
+Cell[10248, 336, 53, 1, 27, "Output"]
+}, Open  ]],
+Cell[10316, 340, 66, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[10407, 345, 182, 3, 59, "Input"],
+Cell[10592, 350, 144, 2, 29, "Output"]
+}, Open  ]],
+Cell[10751, 355, 268, 5, 48, "Input"],
+
+Cell[CellGroupData[{
+Cell[11044, 364, 77, 1, 31, "Input"],
+Cell[11124, 367, 203, 3, 29, "Output"]
+}, Open  ]],
+Cell[11342, 373, 113, 2, 27, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11492, 380, 36, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[11553, 384, 260, 4, 57, "Input"],
+Cell[11816, 390, 36, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11889, 396, 76, 1, 36, "Input"],
+Cell[11968, 399, 35, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12040, 405, 204, 4, 41, "Input"],
+Cell[12247, 411, 290, 5, 47, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12574, 421, 973, 19, 148, "Input"],
+Cell[13550, 442, 70, 1, 29, "Output"],
+Cell[13623, 445, 112, 2, 27, "Output"],
+Cell[13738, 449, 108, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13883, 456, 142, 2, 37, "Input"],
+Cell[14028, 460, 52, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14117, 466, 49, 1, 36, "Input"],
+Cell[14169, 469, 52, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14258, 475, 124, 2, 37, "Input"],
+Cell[14385, 479, 151, 3, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[14573, 487, 170, 3, 44, "Input"],
+Cell[14746, 492, 242, 4, 46, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15025, 501, 163, 3, 40, "Input"],
+Cell[15191, 506, 81, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15309, 512, 636, 10, 126, "Input"],
+Cell[15948, 524, 107, 2, 27, "Output"],
+Cell[16058, 528, 52, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[16159, 535, 44, 0, 74, "Section"],
+Cell[16206, 537, 426, 14, 123, "Input"],
+
+Cell[CellGroupData[{
+Cell[16657, 555, 417, 12, 63, "Input"],
+Cell[17077, 569, 775, 12, 87, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[17889, 586, 47, 1, 27, "Input"],
+Cell[17939, 589, 354, 5, 20, "Message"],
+Cell[18296, 596, 116, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18449, 603, 78, 1, 27, "Input"],
+Cell[18530, 606, 322, 5, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[18889, 616, 80, 1, 27, "Input"],
+Cell[18972, 619, 352, 8, 43, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19361, 632, 73, 1, 27, "Input"],
+Cell[19437, 635, 116, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19590, 642, 171, 4, 27, "Input"],
+Cell[19764, 648, 152, 2, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[19953, 655, 102, 2, 27, "Input"],
+Cell[20058, 659, 568, 8, 75, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20663, 672, 171, 3, 59, "Input"],
+Cell[20837, 677, 81, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[20955, 683, 122, 2, 43, "Input"],
+Cell[21080, 687, 52, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21169, 693, 48, 1, 27, "Input"],
+Cell[21220, 696, 86, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[21343, 702, 174, 3, 59, "Input"],
+Cell[21520, 707, 998, 24, 63, "Output"]
+}, Open  ]],
+Cell[22533, 734, 104, 2, 27, "Input"],
+Cell[22640, 738, 312, 6, 43, "Input"],
+Cell[22955, 746, 55, 1, 27, "Input"],
+Cell[23013, 749, 44, 1, 27, "Input"],
+Cell[23060, 752, 43, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[23128, 757, 57, 1, 27, "Input"],
+Cell[23188, 760, 423, 11, 76, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[23648, 776, 70, 1, 27, "Input"],
+Cell[23721, 779, 75, 1, 29, "Output"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

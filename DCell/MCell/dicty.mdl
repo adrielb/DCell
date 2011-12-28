@@ -1,0 +1,106 @@
+iterations = 200
+dt = 1e-5
+halfbox = 1
+
+kon = 1
+koff = 1
+ka = 1
+ki = 1
+da = 1
+di = 1
+nmols = 400
+kr = 1e250
+k1r = 1
+k2r = 1
+k3r = 1
+k1r = 1
+k2i = 1
+k3i = 1
+
+TIME_STEP = dt
+ITERATIONS = iterations
+
+DEFINE_MOLECULES
+{
+	cAMP {DIFFUSION_CONSTANT_3D = 6e-6} // ligand
+	cAR {DIFFUSION_CONSTANT_3D = 6e-6} // cAMP receptor
+	RL {DIFFUSION_CONSTANT_3D = 6e-6}  // Receptor-ligan complex
+	A {DIFFUSION_CONSTANT_3D = 6e-6}
+	I {DIFFUSION_CONSTANT_3D = 6e-6}
+	r {DIFFUSION_CONSTANT_3D = 6e-6}
+	R {DIFFUSION_CONSTANT_3D = 6e-6}
+	amp {DIFFUSION_CONSTANT_3D = 6e-6}
+	AMP {DIFFUSION_CONSTANT_3D = 6e-6}
+	I2  {DIFFUSION_CONSTANT_3D = 6e-6}
+}
+
+DEFINE_SURFACE_CLASSES
+{
+	receptors	{
+		MOLECULE_DENSITY {
+			cAR' = 1000 // um^-2
+		} 
+	}
+	zeroBC	{ ABSORPTIVE = cAMP     }
+	highBC  { CLAMP_CONCENTRATION cAMP, = 1e-5 } // Units Molar
+}
+
+DEFINE_REACTIONS {
+	cAMP + cAR -> RL [kon]
+	RL -> cAMP + cAR [koff]
+	RL -> A + RL [ka]
+	RL -> I + RL [ki]
+	A -> . [da]
+	I -> . [di]
+	A + r -> A + R [kr]
+	I + R -> I + r [kr]
+	R + amp -> Ramp [k1r]
+	Ramp -> R + amp [k2r]
+	Ramp -> R + AMP [k3r]
+	I2 + amp -> I2amp [k1i]
+	I2amp -> I2 + amp [k2i]
+	I2amp -> I2 + AMP [k3i] 
+}
+
+my_box BOX 
+{
+	CORNERS = [-halfbox,-halfbox,-halfbox],[halfbox,halfbox,halfbox]
+}
+
+A_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = halfbox/2
+	MOLECULE = A
+	NUMBER_TO_RELEASE = nmols
+}
+
+I_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = halfbox/2
+	MOLECULE = I
+	NUMBER_TO_RELEASE = nmols
+}
+
+r_release_site SPHERICAL_RELEASE_SITE {
+	LOCATION = [0,0,0]
+	SITE_DIAMETER = halfbox/2
+	MOLECULE = r
+	NUMBER_TO_RELEASE = nmols
+}
+
+INSTANTIATE world OBJECT 
+{
+	system OBJECT my_box { }
+	A_release_site OBJECT A_release_site { }
+	I_release_site OBJECT I_release_site { }
+	r_release_site OBJECT r_release_site { }
+}
+
+REACTION_DATA_OUTPUT
+{
+	STEP = dt * 1
+	
+	{COUNT[r,WORLD]} => "./output/A.dat"
+
+}
+

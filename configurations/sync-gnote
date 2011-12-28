@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gnote=.local/share/gnote/
+
+rsync -avh --delete ~/$gnote precis:~/$gnote
+

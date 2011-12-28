@@ -1,0 +1,12 @@
+include ${DCell_DIR}/Common/base
+LOCDIR  = ${DCELL_DIR}/
+LIBNAME =  
+OBJSC   = 
+
+all: ${OBJSC}
+
+link: ${OBJSC}
+	@${CLINKER} ${OBJSC} ${PETSC_KSP_LIB}
+
+check: link
+	@${MPIRUN} -np 1 ./a.out -check

@@ -1,0 +1,287 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      5634,        198]*)
+(*NotebookOutlinePosition[      6266,        220]*)
+(*  CellTagsIndexPosition[      6222,        216]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(\(SetDirectory["\</home/abergman/Research/DCell/LevelSetMethod\>"];\)\)]\
+, "Input"],
+
+Cell[BoxData[
+    \(Get[Environment["\<ALT_DISP\>"]]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["Zalesak's Disk", "Section"],
+
+Cell[BoxData[{
+    \(\(d = 31.8;\)\), "\[IndentingNewLine]", 
+    \(\(w = d/10;\)\), "\[IndentingNewLine]", 
+    \(\(r = 2  d/3. ;\)\), "\[IndentingNewLine]", 
+    \(\({d, w, r} = Round /@ {d, w, r};\)\), "\[IndentingNewLine]", 
+    \(\(zd = 
+        Table[N[Sign[\@\(x\^2 + y\^2\) - r] /. \ 
+              0 \[Rule] \(-1\)], {x, \(-d\), d}, {y, \(-d\), 
+            d}];\)\), "\[IndentingNewLine]", 
+    \(\(zd[\([Range[d - w + 1, d + w + 1], Range[d - r, d]]\)] = 
+        1. ;\)\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[zd, PlotRange \[Rule] {\(- .1\),  .1}]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Dimensions[zd]\)], "Input"],
+
+Cell[BoxData[
+    \({65, 65}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(Export["\<zd.Real64\>", Flatten@zd, "\<Real64\>"];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Import["\<zd.Real64\>", "\<Real64\>"] // Length\)], "Input"],
+
+Cell[BoxData[
+    \(4225\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(file = "\<result.Real64\>";\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(file\\)\\\" is similar to existing symbol \\\
+\"\\!\\(File\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(oldDate = FileDate[file]\)], "Input"],
+
+Cell[BoxData[
+    \({2007, 9, 10, 15, 29, 6.`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(While[
+      True, \[IndentingNewLine]Pause[1]; \[IndentingNewLine]newDate = 
+        FileDate[file]; \[IndentingNewLine]If[oldDate \[Equal] newDate, \ 
+        Continue[]]; \[IndentingNewLine]oldDate\  = \ 
+        newDate;\[IndentingNewLine]\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(dat = 
+        Import["\<result.Real64\>", "\<Real64\>"];\)\), \
+"\[IndentingNewLine]", 
+    \(\(dat = Partition[dat, 65];\)\), "\[IndentingNewLine]", 
+    \(ListDensityPlot[dat]\)}], "Input"],
+
+Cell[BoxData[
+    \(ListPlot3D[dat]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Times @@ Dimensions[dat]\)], "Input"],
+
+Cell[BoxData[
+    \(4225\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListDensityPlot[Sign@dat]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(ir = 
+        Import["\<irregNode.Real64\>", "\<Real64\>"];\)\), "\
+\[IndentingNewLine]", 
+    \(Length[ir]\), "\[IndentingNewLine]", 
+    \(\(ir = \(Partition[ir, 3]\)[\([All, {2, 1}]\)];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(0\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ListPlot[ir]\)], "Input"],
+
+Cell[BoxData[
+    \(ListDensityPlot[dat, Epilog \[Rule] {Hue[0], Point /@ ir}, 
+      PlotRange \[Rule]  .1 {\(-1\), 1}, Mesh \[Rule] True]\)], "Input"],
+
+Cell[BoxData[{
+    \(\(dat = \(Import["\<result.\>" <> 
+                ToString[#] <> "\<.Real64\>", "\<Real64\>"] &\) /@ 
+          Range[0, 99];\)\), "\[IndentingNewLine]", 
+    \(\(dat = \(Partition[#, 65] &\) /@ dat;\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(\(ListPlot3D[#, ImageSize \[Rule] 1111, 
+            PlotRange \[Rule] {\(-11\), 24}, 
+            DisplayFunction \[Rule] ani] &\) /@ dat;\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(\(ListDensityPlot[Sign@#, ImageSize \[Rule] 1111, 
+            PlotRange \[Rule] {\(-11\), 24}, 
+            DisplayFunction \[Rule] ani] &\) /@ dat;\)\)], "Input"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 3200}, {0, 1200}},
+WindowSize->{837, 1152},
+WindowMargins->{{Automatic, 756}, {-4, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 104, 2, 27, "Input"],
+Cell[1861, 55, 65, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[1951, 60, 33, 0, 74, "Section"],
+Cell[1987, 62, 583, 11, 134, "Input"],
+
+Cell[CellGroupData[{
+Cell[2595, 77, 47, 1, 27, "Input"],
+Cell[2645, 80, 42, 1, 27, "Output"]
+}, Open  ]],
+Cell[2702, 84, 87, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2814, 89, 80, 1, 27, "Input"],
+Cell[2897, 92, 38, 1, 27, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2984, 99, 19, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[3028, 103, 64, 1, 27, "Input"],
+Cell[3095, 106, 356, 5, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3488, 116, 57, 1, 27, "Input"],
+Cell[3548, 119, 60, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3645, 125, 296, 5, 123, "Input"],
+Cell[3944, 132, 42, 1, 27, "Output"]
+}, Open  ]],
+Cell[4001, 136, 215, 5, 59, "Input"],
+Cell[4219, 143, 48, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4292, 148, 57, 1, 27, "Input"],
+Cell[4352, 151, 38, 1, 27, "Output"]
+}, Open  ]],
+Cell[4405, 155, 58, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4488, 160, 227, 5, 59, "Input"],
+Cell[4718, 167, 35, 1, 27, "Output"]
+}, Open  ]],
+Cell[4768, 171, 45, 1, 27, "Input"],
+Cell[4816, 174, 152, 2, 27, "Input"],
+Cell[4971, 178, 237, 4, 43, "Input"],
+Cell[5211, 184, 176, 3, 27, "Input"],
+Cell[5390, 189, 186, 3, 27, "Input"],
+Cell[5579, 194, 39, 1, 27, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

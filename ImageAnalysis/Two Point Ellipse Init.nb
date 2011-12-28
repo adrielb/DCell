@@ -1,0 +1,288 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      8459,        222]*)
+(*NotebookOutlinePosition[      9088,        244]*)
+(*  CellTagsIndexPosition[      9044,        240]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+    \({pt1, pt2} = {{0.488955, 0.219454}, {0.555408, 0.228314}}\)], "Input"],
+
+Cell[BoxData[
+    \({{0.488955`, 0.219454`}, {0.555408`, 0.228314`}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(pt1 = {5, 5};\)\), "\[IndentingNewLine]", 
+    \(\(pt2 = {10, 10};\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(center = \(pt2 + pt1\)\/2\)], "Input"],
+
+Cell[BoxData[
+    \({15\/2, 15\/2}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(diff = pt2 - pt1\)], "Input"],
+
+Cell[BoxData[
+    \({5, 5}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\[Theta] = ArcTan[diff[\([2]\)]\/diff[\([1]\)]]\)], "Input"],
+
+Cell[BoxData[
+    \(0.13254561814064839`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(b = Norm[diff]\/2. ;\)\)], "Input"],
+
+Cell[BoxData[""], "Input"],
+
+Cell[BoxData[
+    \(\(el = {b\ Cos[\[Beta]],  .1\ Sin[\[Beta]]};\)\)], "Input"],
+
+Cell[BoxData[
+    RowBox[{
+      RowBox[{"rot", "=", 
+        RowBox[{"(", GridBox[{
+              {\(Cos[\[Theta]]\), \(-Sin[\[Theta]]\)},
+              {\(Sin[\[Theta]]\), \(Cos[\[Theta]]\)}
+              }], ")"}]}], ";"}]], "Input"],
+
+Cell[BoxData[
+    \(\(final = \((rot . el + center)\)\[Transpose] ;\)\)], "Input"],
+
+Cell[BoxData[{\($EllipseSamples = 
+        Range[0. , 
+          2.  \[Pi] - 
+            0.0001,  .1];\), "\[IndentingNewLine]", \($EllipseWidth =  .1;\), \
+"\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"EllipInit", "=", 
+        RowBox[{"Function", "[", 
+          RowBox[{"points", ",", "\[IndentingNewLine]", 
+            RowBox[{"Module", "[", 
+              
+              RowBox[{\({center, diff, \[Theta], scale, ell, rot}\), ",", 
+                "\[IndentingNewLine]", 
+                
+                RowBox[{\(pt1 = points[\([1]\)]\), 
+                  ";", \(pt2 = points[\([2]\)]\), ";", 
+                  "\[IndentingNewLine]", \(center = Plus @@ points\/2\), ";", 
+                  "\[IndentingNewLine]", \(diff = Subtract @@ points\), ";", 
+                  "\[IndentingNewLine]", \(scale = Norm[diff]\/2. \), ";", 
+                  "\[IndentingNewLine]", \(ell = {scale\ \
+Cos[$EllipseSamples], $EllipseWidth\ Sin[$EllipseSamples]}\), ";", 
+                  "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \(\[Theta] = 
+                    If[\[IndentingNewLine]diff[\([1]\)] \[Equal] 
+                        0. , \[IndentingNewLine]ArcTan[
+                        10\^6. ], \[IndentingNewLine]ArcTan[
+                        diff[\([2]\)]\/diff[\([1]\)]]]\), ";", 
+                  "\[IndentingNewLine]", 
+                  RowBox[{"rot", "=", 
+                    RowBox[{"(", GridBox[{
+                          {\(Cos[\[Theta]]\), \(-Sin[\[Theta]]\)},
+                          {\(Sin[\[Theta]]\), \(Cos[\[Theta]]\)}
+                          }], ")"}]}], ";", "\[IndentingNewLine]", 
+                  "\[IndentingNewLine]", \(\((rot . ell + 
+                        center)\)\[Transpose] \)}]}], "\[IndentingNewLine]", 
+              "]"}]}], "]"}]}], ";"}]}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(e = EllipInit[{{0.2, 0.2}, { .5,  .5}}]\)], "Input"],
+
+Cell[BoxData[
+    \({{0.5`, 0.5`}, {0.49219133620170447`, 
+        0.5063099133817033`}, {0.4829619435742881`, 
+        0.5110580297780843`}, {0.4724040391580525`, 
+        0.5141969075796292`}, {0.4606231140439456`, 
+        0.5156951841569198`}, {0.44773687934145145`, 
+        0.5155378892256604`}, {0.4338740900480943`, 
+        0.5137265944248092`}, {0.41917325857206467`, 
+        0.5102793976132818`}, {0.4037812707620222`, 
+        0.5052307420421274`}, {0.38785191827225013`, 
+        0.4986310722089492`}, {0.37154436192728235`, 
+        0.49054632983315954`}, {0.3550215414395564`, 
+        0.4810572949881168`}, {0.3384485473696673`, 
+        0.47025877897333473`}, {0.3219909715960579`, 
+        0.4582586769913183`}, {0.30581325277570687`, 
+        0.44517689009436534`}, {0.2900770333274243`, 
+        0.4311441271728865`}, {0.2749395443542348`, 
+        0.4163005989553785`}, {0.26055203464216997`, 
+        0.4007946170691725`}, {0.24705825943239434`, 
+        0.3847811121596795`}, {0.23459304406635492`, 
+        0.36842008587459396`}, {0.22328093685553682`, 
+        0.3518750121803204`}, {0.213234964635905`, 
+        0.3353112039841377`}, {0.20455550344112117`, 
+        0.3188941613822751`}, {0.1973292755783951`, 
+        0.30278791803765753`}, {0.19162848312785793`, 
+        0.2871534022097683`}, {0.18751008652324389`, 
+        0.272146828812676`}, {0.18501523542206538`, 
+        0.25791813856725043`}, {0.18416885755183723`, 
+        0.24460949984304436`}, {0.18497940964046344`, 
+        0.232353888158939`}, {0.1874387929194074`, 
+        0.22127375753571532`}, {0.19152243404390992`, 
+        0.21147981697595641`}, {0.1971895306217272`, 
+        0.2030699242962889`}, {0.2043834588971468`, 
+        0.19612810836442723`}, {0.21303233951683725`, 
+        0.19072372951050323`}, {0.22304975572458646`, 
+        0.18691078650157525`}, {0.234335616808964`, 
+        0.18472737700379704`}, {0.24677715817662466`, 
+        0.1841953169231312`}, {0.2602500680588494`, 
+        0.18531992242802808`}, {0.2746197295936471`, 
+        0.18808995683202792`}, {0.28974256587294045`, 
+        0.19247774286701752`}, {0.3054674745155718`, 
+        0.19843943922534457`}, {0.32163733743234796`, 
+        0.20591547860767145`}, {0.3380905906980502`, 
+        0.21483116289973994`}, {0.3546628388447702`, 
+        0.22509740953123714`}, {0.37118849744708293`, 
+        0.23661164155939118`}, {0.3875024475868904`, 
+        0.24925881258387564`}, {0.4034416856670708`, 
+        0.26291255625241294`}, {0.41884695208953826`, 
+        0.2774364488715945`}, {0.43356432252450383`, 
+        0.29268537250733034`}, {0.4474467458714969`, 
+        0.30850696495527574`}, {0.4603555135453536`, 
+        0.3247431420936142`}, {0.47216164540654804`, 
+        0.3412316774073463`}, {0.4827471784881112`, 
+        0.3578078229020018`}, {0.4920063456426046`, 
+        0.37430595521114385`}, {0.49984663233249377`, 
+        0.39056123045029656`}, {0.5061897010048279`, 
+        0.4064112312825501`}, {0.5109721738141726`, 
+        0.4216975897389024`}, {0.5141462658730922`, 
+        0.43626756957865565`}, {0.5156802627029495`, 
+        0.44997559237944623`}, {0.5155588371144924`, 
+        0.4626846921087184`}, {0.5137832023520627`, 
+        0.47426788364304706`}, {0.5103710999712598`, 
+        0.4846094315615155`}, {0.5053566225711819`, 
+        0.49360600653578335`}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(Plot[x, {x, 0, 1}, Epilog \[Rule] {Point /@ e}, 
+      AspectRatio \[Rule] 1]\)], "Input"]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 1280}, {0, 1024}},
+WindowSize->{1272, 970},
+WindowMargins->{{0, Automatic}, {0, Automatic}}
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[1776, 53, 90, 1, 27, "Input"],
+Cell[1869, 56, 82, 1, 27, "Output"]
+}, Open  ]],
+Cell[1966, 60, 105, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[2096, 66, 58, 1, 44, "Input"],
+Cell[2157, 69, 48, 1, 44, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2242, 75, 49, 1, 27, "Input"],
+Cell[2294, 78, 40, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2371, 84, 80, 1, 46, "Input"],
+Cell[2454, 87, 54, 1, 27, "Output"]
+}, Open  ]],
+Cell[2523, 91, 57, 1, 44, "Input"],
+Cell[2583, 94, 26, 0, 27, "Input"],
+Cell[2612, 96, 79, 1, 27, "Input"],
+Cell[2694, 99, 236, 6, 45, "Input"],
+Cell[2933, 107, 82, 1, 27, "Input"],
+Cell[3018, 110, 1824, 35, 405, "Input"],
+
+Cell[CellGroupData[{
+Cell[4867, 149, 72, 1, 27, "Input"],
+Cell[4942, 152, 3388, 63, 155, "Output"]
+}, Open  ]],
+Cell[8345, 218, 110, 2, 27, "Input"]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

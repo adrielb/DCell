@@ -1,0 +1,1 @@
+su -c 'mount -t nfs -o async,noatime,nolock,intr 128.220.138.91:/mnt/tank/nas-0-0 /nas-0-0'
