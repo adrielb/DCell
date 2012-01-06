@@ -196,7 +196,7 @@ PetscErrorCode HeapPrint( Heap h, HeapPrintNode printNode )
   PetscFunctionReturn(0);
 }
 
-PetscTruth HeapIsEmpty( Heap h )
+PetscBool HeapIsEmpty( Heap h )
 {
   return ArrayLength(h->tree) == 1;
 }

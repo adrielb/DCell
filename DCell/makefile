@@ -1,16 +1,15 @@
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
-####
+
 #source: Managing Projects with GNU Make, Robert Mecklenburg 2004
 # $(call make-library, library-name, source-file-list)
 define make-library
 OBJECTS += ${2}
-libname := ./lib/${PETSC_ARCH}/lib${1}.a
+libname = ./lib/${PETSC_ARCH}/lib${1}.a
 libraries += ./lib/${PETSC_ARCH}/lib${1}.a
 ./lib/${PETSC_ARCH}/lib${1}.a: ${2}
-	echo $${libname}
-	echo $$^
-	${AR} ${AR_FLAGS} ${DCELL_DIR}/lib/${PETSC_ARCH}/lib$$@.a $$^
+	@echo Library: $$@
+	@${AR} ${AR_FLAGS} $$@ $$^
 endef
 
 # $(subdirectory)

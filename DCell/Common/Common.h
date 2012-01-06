@@ -73,7 +73,7 @@ PetscErrorCode InterpolateVelocity3D( const int udof, PetscReal ****field, const
 
 // Global Arrays - PETSc integration
 typedef int GA; // todo: use GA type instead of int
-PetscErrorCode GACreate( DA da, int *ga );
+PetscErrorCode GACreate( DM da, int *ga );
 PetscErrorCode GAGetVec(int ga, Vec vec ); // GA --> PETSc
 PetscErrorCode GAPutVec(Vec vec, int ga ); // PETSc --> GA
 PetscErrorCode GAGather(int ga, Array c, Array v); // GA --> val[]

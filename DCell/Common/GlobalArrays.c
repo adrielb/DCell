@@ -8,7 +8,7 @@ PetscLogEvent EVENT_GAScatterAcc;
 
 #undef __FUNCT__
 #define __FUNCT__ "GACreate"
-PetscErrorCode GACreate( DA da, int *ga )
+PetscErrorCode GACreate( DM da, int *ga )
 {
   int i;
   int dims[4], block[4];
