@@ -52,7 +52,7 @@ PetscErrorCode GACreate( DA da, int *ga )
   int g = GA_Create_handle();
   GA_Set_data(g,dim,dims,C_DBL);
   GA_Set_irreg_distr(g,map,block);
-  ierr = GA_Allocate( g ); if( !ierr ) SETERRQ(PETSC_ERR_MEM,"GA_Allocate() Failed");
+  ierr = GA_Allocate( g ); if( !ierr ) SETERRQ(PETSC_COMM_WORLD,PETSC_ERR_MEM,"GA_Allocate() Failed");
   *ga = g;
   
   PetscFunctionReturn(0);

@@ -884,7 +884,7 @@ add /etc/X11/xorg.conf in Section "Device"
    rpm -Uvh http://ftp.osuosl.org/pub/fedora-epel/6/x86_64/epel-release-6-5.noarch.rpm
 *) RPMFusion
    rpm -Uvh http://download1.rpmfusion.org/free/el/updates/testing/6/i386/rpmfusion-free-release-6-0.1.noarch.rpm http://download1.rpmfusion.org/nonfree/el/updates/testing/6/i386/rpmfusion-nonfree-release-6-0.1.noarch.rpm
-*) yum install dkms iozone meld emacs screen hdf5 hdf5-openmpi hdf5-devel glib glib-devel gtk+-devel alsa-lib-devel mplayer mplayer-tools  git lapack-devel ffmpeg gconf-editor
+*) yum install dkms iozone meld emacs screen hdf5 hdf5-openmpi hdf5-devel glib glib-devel gtk+-devel alsa-lib-devel mplayer mplayer-tools  git lapack-devel ffmpeg gconf-editor splint
 *) System-monitor panel bug
    yum remove gnome-applets
    restart

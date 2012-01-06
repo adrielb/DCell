@@ -3,8 +3,8 @@
 
 #include "ga.h"
 #include "macdecls.h"
-#include "petscts.h"
-#include "petscda.h"
+#include "petscdmda.h"
+#include "petscksp.h"
 #include "Array.h"
 
 #define LINE() { \
@@ -51,8 +51,8 @@ static const int STAR[][3] = { {1,0,0},{-1, 0, 0},
                                {0,0,1},{ 0, 0,-1} };
 
 #define DCellInit() DCellInitialize(&argc,&args, __FILE__)
-PetscErrorCode  DCellInitialize(int *argc,char ***args, const char sourcefile[]);
-PetscErrorCode  DCellFinalize();
+PetscErrorCode DCellInitialize(int *argc,char ***args, const char sourcefile[]);
+PetscErrorCode DCellFinalize();
 PetscErrorCode DCellGetWorkingDirectory( char* workingdirectory );
 
 // Start offset of first file, so temporal files are alphabetically sorted properly
@@ -62,7 +62,7 @@ PetscErrorCode VecWrite( Vec vec, const char *name, int t );
 PetscErrorCode MatWrite( Mat mat, const char *name, int t );
 
 typedef struct _LeastSq *LeastSq;
-PetscErrorCode LeastSqCreate( int Np, PetscTruth is2D, LeastSq *ls );
+PetscErrorCode LeastSqCreate( int Np, PetscBool is2D, LeastSq *ls );
 PetscErrorCode LeastSqDestroy( LeastSq ls );
 PetscErrorCode LeastSqGetVecs( LeastSq ls, double **s, double **r, double **g, int *len );
 PetscErrorCode LeastSqSolve( LeastSq ls );
@@ -99,7 +99,7 @@ PetscErrorCode HeapPeek( Heap h, void *topItem );
 PetscErrorCode HeapCheck( Heap h );
 PetscErrorCode HeapPrint( Heap h, HeapPrintNode printNode );
 int HeapSize( Heap h );
-PetscTruth HeapIsEmpty( Heap h );
+PetscBool HeapIsEmpty( Heap h );
 PetscErrorCode  HeapRegisterEvents();
 
 // UniqueID

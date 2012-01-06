@@ -25,7 +25,7 @@ struct _LeastSq {
 
 #undef __FUNCT__
 #define __FUNCT__ "LeastSqCreate"
-PetscErrorCode LeastSqCreate( int Np, PetscTruth is2D, LeastSq *ls )
+PetscErrorCode LeastSqCreate( int Np, PetscBool is2D, LeastSq *ls )
 {
   PetscErrorCode ierr;
   LeastSq lsq;

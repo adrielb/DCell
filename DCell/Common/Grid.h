@@ -11,7 +11,7 @@ struct _Grid {
   iCoor p; // Position of this local grid within a global grid
   iCoor n; // Number of grid points
   Coor d;  // grid spacing in units of length
-  PetscTruth is2D;
+  PetscBool is2D;
   PetscReal *v1;   // Resizable array
   PetscReal *grid; // Rectangular array of vec
   int dof;
