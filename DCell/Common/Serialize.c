@@ -35,7 +35,7 @@ PetscErrorCode GridWrite( Grid g, int t )
   ierr = PetscSNPrintf(filename,len,"%s/%s.%d.Real64",wd,g->name,time); CHKERRQ(ierr);
   ierr = PetscViewerBinaryOpen(PETSC_COMM_SELF,filename,FILE_MODE_WRITE,&binv); CHKERRQ(ierr);
   ierr = VecView(g->v, binv); CHKERRQ(ierr);
-  ierr = PetscViewerDestroy(binv); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&binv); CHKERRQ(ierr);
 
   if( g->filePos == NULL ) {
     ierr = PetscSNPrintf(filename,len,"%s/%s.pos",wd,g->name); CHKERRQ(ierr);
@@ -70,7 +70,7 @@ PetscErrorCode VecWrite( Vec vec, const char *name, int t )
   ierr = PetscSNPrintf(filename,len,"%s/%s.%d.Real64",wd,name,time); CHKERRQ(ierr);
   ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,filename,FILE_MODE_WRITE,&binv); CHKERRQ(ierr);
   ierr = VecView(vec, binv); CHKERRQ(ierr);
-  ierr = PetscViewerDestroy(binv); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&binv); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -90,7 +90,7 @@ PetscErrorCode MatWrite( Mat mat, const char *name, int t )
   ierr = PetscSNPrintf(filename,len,"%s/%s.%d.mat",tempdir,name,time); CHKERRQ(ierr);
   ierr = PetscViewerASCIIOpen(PETSC_COMM_SELF, filename, &view); CHKERRQ(ierr);
   ierr = MatView(mat, view); CHKERRQ(ierr);
-  ierr = PetscViewerDestroy(view); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&view); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
 }

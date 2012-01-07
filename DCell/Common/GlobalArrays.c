@@ -17,8 +17,8 @@ PetscErrorCode GACreate( DM da, int *ga )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = DAGetOwnershipRanges(da,&lx,&ly,&lz); CHKERRQ(ierr);
-  ierr = DAGetInfo(da,&dim,&M,&N,&P,&m,&n,&p,&dof,0,0,0); CHKERRQ(ierr);
+  ierr = DMDAGetOwnershipRanges(da,&lx,&ly,&lz); CHKERRQ(ierr);
+  ierr = DMDAGetInfo(da,&dim,&M,&N,&P,&m,&n,&p,&dof,0,0,0,0,0); CHKERRQ(ierr);
   dim = dim + 1; // plus one for [dof]
   p = p < 0 ? 0 : p;
   int map[p+n+m+1]; // size of map is sum of block[]

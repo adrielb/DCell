@@ -839,7 +839,7 @@ make && make install
 **WhisperQuiet Centos 6
 1) Update packages
 yum update
-yum -y install kernel-devel kernel-headers  gcc gcc-c++ libstdc++ fftw fftw-devel lapack.i686 lapack-devel.i686 atlas.i686 openmpi openmpi-devel valgrind-openmpi xterm subversion k3b
+yum -y install kernel-devel kernel-headers  gcc gcc-c++ libstdc++ fftw fftw-devel lapack.i686 lapack-devel.i686 atlas.i686 openmpi openmpi-devel valgrind-devel valgrind-openmpi gdb xterm subversion k3b
 libstdc++.i68 redhat-lsb
 2) Enable SSH
 service: ssh runlevel 2 3 4 5

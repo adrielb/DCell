@@ -1,14 +1,15 @@
 #include "Common.h"
 
 const PetscInt dof = 3;
-DA da;
-DALocalInfo info;
+DM da;
+DMDALocalInfo info;
 int rank;
 
 #undef __FUNCT__
 #define __FUNCT__ "TestVecs"
 PetscErrorCode TestVecs( int ga, Vec petscVec)
 {
+  MPI_Comm comm = PETSC_COMM_WORLD;
   PetscErrorCode  ierr;
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Testing GA_Get()\t"); CHKERRQ(ierr);
   PetscReal ***petscvec;
@@ -21,7 +22,7 @@ PetscErrorCode TestVecs( int ga, Vec petscVec)
   NGA_Get(ga,lo,hi,gabuf,ld);
 //  ierr = PetscSynchronizedPrintf(PETSC_COMM_WORLD,"GA[%d]: lo [%d,%d,%d]   hi [%d,%d,%d]   ld [%d,%d]\n",nodeid, lo[0],lo[1],lo[2],hi[0],hi[1],hi[2],ld[0],ld[1]); CHKERRQ(ierr);
 //  ierr = PetscSynchronizedFlush(PETSC_COMM_WORLD); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
   int j,i,d;
   for ( j = info.ys; j < info.ys+info.ym; ++j) {
     for ( i = info.xs; i < info.xs+info.xm; ++i) {
@@ -30,7 +31,7 @@ PetscErrorCode TestVecs( int ga, Vec petscVec)
 //        printf("\t\t[%1.0f,%1.0f]", petscvec[j][i][d], gabuf[c] );
         if( petscvec[j][i][d] != gabuf[c] ) {
           printf("[%d,%d;%d] petsc: %1.0f, ga: %1.0f\n",j,i,d,petscvec[j][i][d],gabuf[c]);
-          SETERRQ1(0,"[%d]GA_Get() FAILED", rank );
+          SETERRQ1(comm,0,"[%d]GA_Get() FAILED", rank );
         }
         c++;
       }
@@ -38,7 +39,7 @@ PetscErrorCode TestVecs( int ga, Vec petscVec)
     }
 //    printf("\n");
   }
-  ierr = DAVecRestoreArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"PASSED [%d]\n",rank); CHKERRQ(ierr);
   PetscBarrier(0);
 
@@ -59,7 +60,7 @@ PetscErrorCode TestVecs( int ga, Vec petscVec)
           if( PetscAbs( value - c/3 ) > 1e-3 ) {
             printf( "[ %d, %d; %d] ", i, j, d);
             printf("%1.1f - %d \n", value, c/3);
-            SETERRQ(0,"GA_Gather() FAILED");
+            SETERRQ(comm, 0,"GA_Gather() FAILED");
           }
           c++;
         }
@@ -133,14 +134,14 @@ PetscErrorCode TestVecs( int ga, Vec petscVec)
 PetscErrorCode MakeGAVec( int d1, int d2, int *p_ga ) {
   PetscErrorCode ierr;
   int dim, M,N,P, m,n,p, dof;
-  ierr = DAGetInfo(da,&dim,&M,&N,&P,&m,&n,&p,&dof,0,0,0); CHKERRQ(ierr);
+  ierr = DMDAGetInfo(da,&dim,&M,&N,&P,&m,&n,&p,&dof,0,0,0,0,0); CHKERRQ(ierr);
   dim = dim + 1; // plus one for [dof]
   int dims[3] = {N,M,dof};
   int block[3] = {n,m,1};
   int map[n+m+1]; // size of map is sum of block[]
 
   const PetscInt *lx, *ly, *lz;
-  DAGetOwnershipRanges(da,&lx,&ly,&lz);
+  DMDAGetOwnershipRanges(da,&lx,&ly,&lz);
   map[0] = 0;
   int i;
   for( i = 1; i < n; i++ ) map[i] = ly[i-1] + map[i-1];
@@ -193,12 +194,12 @@ PetscErrorCode MakePetscVec( int d1, int d2, Vec *vec)
   PetscReal ***petscvec;
 
   PetscErrorCode  ierr;
-  ierr = DACreate2d(PETSC_COMM_WORLD,DA_NONPERIODIC,DA_STENCIL_STAR,
+  ierr = DMDACreate2d(PETSC_COMM_WORLD,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_STAR,
            d1,d2,m,n,dof,sw,0,0, &da); CHKERRQ(ierr);
-  ierr = DAGetLocalInfo(da,&info); CHKERRQ(ierr);
-  ierr = DAView(da, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
-  ierr = DACreateGlobalVector(da, &petscVec); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(da,&info); CHKERRQ(ierr);
+  ierr = DMView(da, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
+  ierr = DMCreateGlobalVector(da, &petscVec); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
   int j,i,d;
   for ( j = info.ys; j < info.ys+info.ym; ++j) {
     for ( i = info.xs; i < info.xs+info.xm; ++i) {
@@ -207,7 +208,7 @@ PetscErrorCode MakePetscVec( int d1, int d2, Vec *vec)
       }
     }
   }
-  ierr = DAVecRestoreArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArrayDOF(da,petscVec,&petscvec); CHKERRQ(ierr);
   ierr = PetscBarrier(0); CHKERRQ(ierr);
 //  ierr = VecView(petscVec,PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
 
@@ -257,4 +258,5 @@ int main(int argc, char **args)
   GA_Terminate();
   ierr = PetscPrintf(PETSC_COMM_WORLD, "End %s\n", __FILE__); CHKERRQ(ierr);
   ierr = PetscFinalize(); CHKERRQ(ierr);
+  return 0;
 }

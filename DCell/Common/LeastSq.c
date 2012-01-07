@@ -8,6 +8,7 @@ void DGELSS(int *m,int *n,int *nrhs,double *a,int *lda,double *b,int *ldb,
            double *s,double *rcond,int *rank,double *work,int *lwork,int *info);
 
 struct _LeastSq {
+  MPI_Comm comm;
   int Np;       // Maximum # of points
   int m;        // Current number of points
   int n;        // Number of basis (1,x,x^2) or (1,x,y,x^2,y^2,xy)
@@ -96,11 +97,11 @@ PetscErrorCode LeastSqSetNumPoints( LeastSq ls, int m )
 {
   PetscFunctionBegin;
   if( m > ls->Np ) 
-    SETERRQ2( PETSC_ERR_ARG_OUTOFRANGE, 
-        "Max points: Np = %d < m = %d given.", ls->Np, m );
+    SETERRQ2( ls->comm, PETSC_ERR_ARG_OUTOFRANGE,
+      "Max points: Np = %d < m = %d given.", ls->Np, m );
   if( m < ls->n ) 
-      SETERRQ2( PETSC_ERR_ARG_OUTOFRANGE, 
-        "Min points: need n = %d > m = %d given.", ls->n, m );
+    SETERRQ2( ls->comm, PETSC_ERR_ARG_OUTOFRANGE,
+      "Min points: need n = %d > m = %d given.", ls->n, m );
   
   ls->m = m;
   
@@ -167,7 +168,7 @@ PetscErrorCode LeastSqSolve( LeastSq ls )
     printf("2\tn:%d\n", ls->n);
     printf("3\tnrhs:%d\n", ls->nrhs);
     PrintMat( ls->m, ls->n, ls->a );
-    SETERRQ(1,"MKL ERROR in LeastSq");
+    SETERRQ(ls->comm, 1,"MKL ERROR in LeastSq");
   }
     
   PetscFunctionReturn(0);

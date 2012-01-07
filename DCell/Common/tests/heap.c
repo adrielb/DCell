@@ -67,7 +67,7 @@ int main(int argc, char **args)
     PetscGetTime(&tend);
     printf("TIME: %f\n", tend-t1);
   }
-  ierr = PetscRandomDestroy(rnd); CHKERRQ(ierr);
+  ierr = PetscRandomDestroy(&rnd); CHKERRQ(ierr);
   ierr = HeapDestroy(h); CHKERRQ(ierr);
   ierr = MemCacheDestroy(mc); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);

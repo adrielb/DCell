@@ -6,14 +6,13 @@ PetscErrorCode  RegisterEvents();
 const static char MAINFILE[PETSC_MAX_PATH_LEN];
 
 #undef __FUNCT__
-#define __FUNCT__ "DCellInit"
+#define __FUNCT__ "DCellInitialize"
 PetscErrorCode  DCellInitialize(int *argc,char ***args, const char file[])
 {
   setbuf(stdout, NULL);
   int stack = 10e6; //TODO: make GA stack/heap a petsc option -ga_stack -ga_heap
   int heap =  100e6;
   PetscErrorCode  ierr;
-  PetscFunctionBegin;
   ierr = MPI_Init(argc,args); CHKERRQ(ierr);
   if( !MA_init(C_DBL, stack, heap)) {
     GA_Error((char*)"MA_init failed",stack+heap);
@@ -21,6 +20,7 @@ PetscErrorCode  DCellInitialize(int *argc,char ***args, const char file[])
   GA_Initialize();
   ierr = PetscInitialize(argc, args, (char *) 0, ""); CHKERRQ(ierr);
 
+  PetscFunctionBegin;
   //TODO: Open HDF5 simulation file here
   ierr = RegisterEvents(); CHKERRQ(ierr);
   ierr = HeapRegisterEvents(); CHKERRQ(ierr);

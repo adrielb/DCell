@@ -1,6 +1,7 @@
 #include "Common.h"
 
 struct _Array {
+  MPI_Comm comm;
   void *dataArray;
   int len;        // actual length of data in array
   int ELEMSIZE;   // a constant
@@ -74,7 +75,7 @@ PetscErrorCode ArraySetSize( Array a, int size )
 
   if( size < 0 )
   {
-    SETERRQ2(PETSC_ERR_ARG_OUTOFRANGE,"Array [%s] size %d < 0", a->name, size);
+    SETERRQ2(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"Array [%s] size %d < 0", a->name, size);
   }
 
   a->len = size;
@@ -151,7 +152,7 @@ PetscErrorCode ArrayGet( Array a, int i, void *elem )
   if( 0 <= i && i < a->len )
     *((void**)elem) = a->dataArray + a->ELEMSIZE * i;
   else
-    SETERRQ3(PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
+    SETERRQ3(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
   PetscFunctionReturn(0);
 }
 
@@ -163,7 +164,7 @@ PetscErrorCode ArrayGetP( Array a, int i, void *elem )
   if( 0 <= i && i < a->len )
     *(void**)elem = *(void**)(a->dataArray + a->ELEMSIZE * i);
   else
-    SETERRQ3(PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
+    SETERRQ3(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
   PetscFunctionReturn(0);
 }
 
@@ -179,7 +180,7 @@ PetscErrorCode ArrayGetCoor( Array a, iCoor pos, void *elem)
   if( pos.x < a->p.x || pos.x >= a->q.x ||
       pos.y < a->p.y || pos.y >= a->q.y ||
       pos.z < a->p.z || pos.z >= a->q.z ){
-    SETERRQ4(PETSC_ERR_ARG_OUTOFRANGE,"ArrayGetCoor[%s]: Coor [%d,%d,%d] not in array bounds",a->name,pos.x,pos.y,pos.z);
+    SETERRQ4(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGetCoor[%s]: Coor [%d,%d,%d] not in array bounds",a->name,pos.x,pos.y,pos.z);
   }
   idx = (pos.x - a->p.x) + a->size.x * (pos.y - a->p.y) + a->size.x * a->size.y * (pos.z - a->p.z);
   ierr = ArrayGet(a, idx, elem); CHKERRQ(ierr);

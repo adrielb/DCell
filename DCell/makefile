@@ -17,13 +17,21 @@ subdirectory = $(patsubst %/module.mk,%, \
                  $(word \
       $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
+define test-library
+ALLTESTS += test${1}${2}
+.PHONY: test${1}${2}
+test${1}${2}: ${1}/tests/${2}.o
+	@echo Make target: $$@
+	@${CLINKER} $$^ ${DCELL_LIB} ${3} ${PETSC_LIB}
+	@${MPIEXEC} -np ${4} ./a.out
+endef
 
 #export MODULES=Common LevelSetMethod IIM FluidField DWorld
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
 CFLAGS += ${DCELL_INCLUDE} -I/share/apps/include/ -Wall
 
-GA_LIB = -L/share/apps/lib -lga -lfblas
+GA_LIB = -L/share/apps/lib -lga
 PETSC_LIB := ${PETSC_LIB} ${GA_LIB}
 DCELL_LIB = -L${DCELL_DIR}/lib/${PETSC_ARCH} -Wl,-rpath,${DCELL_DIR}/lib/${PETSC_ARCH}
 
@@ -33,12 +41,15 @@ libraries :=
 
 include $(addsuffix /module.mk,$(MODULES))
 
-.PHONY: all
-all: ${libraries}
-	@echo MYSUB = ${MYSUB}
-	@echo libraries = ${libraries}
-	@echo libname = ${libname}
+.PHONY: all build alltests
+all: build alltests
+
+build: ${libraries}
+	${CLINKER} -shared -o ./lib/${PETSC_ARCH}/libDCell.so ${OBJECTS} 
 	@echo OBJECTS = ${OBJECTS}
+
+alltests: ${ALLTESTS}
+	@echo Tested everything
 
 rebuild:
 	@clear
@@ -52,11 +63,6 @@ rebuild:
 	done; \
 	END_TIME=`date +%s.%N`; \
 	echo "BUILD TIME: " `echo "$$END_TIME - $$START_TIME" | bc` " sec"\
-
-build:
-	@for d in ${MODULES}; do \
-		make -C $$d makeLib; \
-	done;
 
 opt:
 	export PETSC_ARCH=gcc-opt; make rebuild

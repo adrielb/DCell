@@ -8,7 +8,7 @@ int main(int argc, char **args)
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
   int Np = 10;
-  PetscTruth is2D = PETSC_TRUE;
+  PetscBool is2D = PETSC_TRUE;
   LeastSq lsq;
   ierr = LeastSqCreate( Np, is2D, &lsq); CHKERRQ(ierr);
   PetscReal *s, *g;

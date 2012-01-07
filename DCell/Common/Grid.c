@@ -46,11 +46,11 @@ PetscErrorCode GridDestroy( Grid g )
   
   PetscFunctionBegin;
   if( g->filePos ) {
-    ierr = PetscViewerDestroy(g->filePos); CHKERRQ(ierr);
-    ierr = PetscViewerDestroy(g->fileSize); CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&g->filePos); CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&g->fileSize); CHKERRQ(ierr);
   }
   ierr = PetscFree(g->v1); CHKERRQ(ierr);
-  ierr = VecDestroy(g->v); CHKERRQ(ierr);
+  ierr = VecDestroy(&g->v); CHKERRQ(ierr);
   ierr = PetscFree( g ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -144,7 +144,7 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
     ierr = PetscMalloc(g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
     g->MAXSIZE = g->SIZE;
   }
-  ierr = VecDestroy(g->v); CHKERRQ(ierr);
+  ierr = VecDestroy(&g->v); CHKERRQ(ierr);
   ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
   ierr = PetscMemzero(g->v1,g->MAXSIZE*sizeof(PetscReal)); CHKERRQ(ierr);
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
@@ -162,8 +162,8 @@ PetscErrorCode GridSetName( Grid g, const char *name )
   PetscErrorCode ierr;
   ierr = PetscStrcpy(g->name,name); CHKERRQ(ierr);
   if( g->filePos ) {
-    ierr = PetscViewerDestroy(g->filePos); CHKERRQ(ierr);
-    ierr = PetscViewerDestroy(g->fileSize); CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&g->filePos); CHKERRQ(ierr);
+    ierr = PetscViewerDestroy(&g->fileSize); CHKERRQ(ierr);
   }
   g->filePos = NULL;
   g->fileSize = NULL;
