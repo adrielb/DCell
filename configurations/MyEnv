@@ -12,6 +12,7 @@ export ALT_DISP=/home/abergman/Research/ImageAnalysis/AlternativeDisplay.m
 export EDITOR="emacs -nw"
 export PATH=/home/abergman/Research/configurations:$PATH
 export PATH=/usr/lib64/openmpi/bin:$PATH
+export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib:$LD_LIBRARY_PATH
 export PATH=/share/apps/bin:$PATH
 
 export DCELL_DIR=/home/abergman/Research/DCell
