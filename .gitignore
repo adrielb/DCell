@@ -6,6 +6,3 @@
 *.bin
 *.Real64
 a.out
-.project
-.cproject
-
