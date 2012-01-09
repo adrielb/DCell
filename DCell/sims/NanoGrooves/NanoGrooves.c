@@ -149,7 +149,7 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
 {
   PetscErrorCode ierr;
 
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = PetscOptionsGetReal(0,"-Fa",&cell->Fa,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-Fk", &cell->Fk, 0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-Fn",&cell->Fn,0); CHKERRQ(ierr);
@@ -161,9 +161,11 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "MyCellUpdateFluidFieldRHS"
 PetscErrorCode MyCellUpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t ) {
   PetscErrorCode ierr;
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = CalcContactArea( (MyCell)dcell, t ); CHKERRQ(ierr);
   ierr = IIMSetForceComponents(iim, InterfacialForceAdhesion ); CHKERRQ(ierr);
   ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
@@ -176,7 +178,7 @@ PetscErrorCode MyCellUpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscRea
 PetscErrorCode MyCellWrite( DCell dcell, int ti )
 {
   PetscErrorCode ierr;
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
   PetscFunctionReturn(0);
@@ -200,7 +202,7 @@ PetscErrorCode CalcContactArea( MyCell cell, PetscReal t )
   const iCoor *band = ArrayGetData(ls->band);
   PetscErrorCode ierr;
 
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   cell->contactArea = 0;

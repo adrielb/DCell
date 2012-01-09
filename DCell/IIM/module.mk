@@ -9,5 +9,5 @@ ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
 ${LOCOBJS}: IIM/ImmersedInterfaceMethod.h IIM/IIM_private.h
 
-LOCDEPS := -lIIM -lLevelSetMethod -lCommon
+LOCDEPS := IIM LevelSetMethod Common
 ${eval ${call test-library,${subdirectory},corrections,${LOCDEPS}, 2 }}

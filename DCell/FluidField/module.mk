@@ -6,7 +6,7 @@ ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
 ${LOCOBJS}: FluidField/FluidField.h FluidField/FluidField_private.h
 
-LOCDEPS := -lFluidField -lIIM -lLevelSetMethod -lCommon
+LOCDEPS := FluidField IIM LevelSetMethod Common
 ${eval ${call test-library,${subdirectory},viewMat,${LOCDEPS}, 2 }}
 
 

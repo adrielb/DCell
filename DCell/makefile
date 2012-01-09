@@ -3,11 +3,13 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: build alltests
+all: sim
 
-build: ${libraries}
-	@${CLINKER} -shared -o lib/${PETSC_ARCH}/libDCell.so ${OBJECTS}
-	@echo Library: lib/${PETSC_ARCH}/libDCell.so
+${LIBDCELL}: ${libraries}
+	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
+	@echo Library: ${LIBDCELL}
+
+build: ${LIBDCELL}
 
 alltests: ${ALLTESTS}
 	@echo Tested everything
@@ -21,9 +23,13 @@ opt:
 
 cleanDCell:
 	rm -f ${OBJECTS}
-	rm -f ${DCELL_DIR}/lib/${PETSC_ARCH}/lib*
+	rm -f lib/${PETSC_ARCH}/lib*
 
 sync:
 	syncDCell.sh
 
-.PHONY: all build alltests rebuild opt cleanDCell sync
+SIM := NanoGrooves
+sim: sim-${SIM}
+run: run-${SIM}
+
+.PHONY: all build alltests rebuild opt cleanDCell sync sim run

@@ -234,6 +234,8 @@ PetscErrorCode DWorldSetFrameInterval( DWorld w, PetscReal dtframe )
   return 0;
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "DWorldSetFromOptions"
 PetscErrorCode DWorldSetFromOptions( DWorld w )
 {
   MPI_Comm comm = w->fluid->comm;

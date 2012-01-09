@@ -6,5 +6,5 @@ ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
 ${LOCOBJS}: DWorld/DWorld.h
 
-LOCDEPS := -lDWorld -lFluidField -lIIM -lLevelSetMethod -lCommon
+LOCDEPS := DWorld FluidField IIM LevelSetMethod Common
 ${eval ${call test-library,${subdirectory},dworld,${LOCDEPS}, 2 }}
