@@ -46,19 +46,19 @@ PetscErrorCode FluidFieldDestroy(FluidField f)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = DADestroy(f->daV); CHKERRQ(ierr);
-  ierr = MatDestroy(f->mat); CHKERRQ(ierr);
-  ierr = KSPDestroy(f->ksp); CHKERRQ(ierr);
-  ierr = VecDestroy(f->rhs); CHKERRQ(ierr);
-  ierr = VecDestroy(f->vel); CHKERRQ(ierr);
+  ierr = DMDestroy(&f->daV); CHKERRQ(ierr);
+  ierr = MatDestroy(&f->mat); CHKERRQ(ierr);
+  ierr = KSPDestroy(&f->ksp); CHKERRQ(ierr);
+  ierr = VecDestroy(&f->rhs); CHKERRQ(ierr);
+  ierr = VecDestroy(&f->vel); CHKERRQ(ierr);
   ierr = ArrayDestroy(f->dirichletBC); CHKERRQ(ierr);
   GA_Destroy(f->ga);
 
-  ierr = DADestroy(f->daE); CHKERRQ(ierr);
+  ierr = DMDestroy(&f->daE); CHKERRQ(ierr);
 //  ierr = VecDestroy(f->E); CHKERRQ(ierr);
 
-  ierr = DADestroy(f->daB); CHKERRQ(ierr);
-  ierr = VecDestroy(f->buf); CHKERRQ(ierr);
+  ierr = DMDestroy(&f->daB); CHKERRQ(ierr);
+  ierr = VecDestroy(&f->buf); CHKERRQ(ierr);
   ierr = PetscFree(f); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -106,10 +106,10 @@ PetscErrorCode FluidFieldSetup( FluidField f )
 
   // Create vectors
   ierr = GACreate( f->daV, &f->ga); CHKERRQ(ierr);
-  ierr = DACreateGlobalVector(f->daV,&f->rhs); CHKERRQ(ierr);
+  ierr = DMCreateGlobalVector(f->daV,&f->rhs); CHKERRQ(ierr);
   ierr = VecDuplicate(f->rhs,&f->vel); CHKERRQ(ierr);
 //  ierr = DACreateGlobalVector(f->daE,&f->E); CHKERRQ(ierr);
-  ierr = DACreateGlobalVector(f->daB,&f->buf); CHKERRQ(ierr);
+  ierr = DMCreateGlobalVector(f->daB,&f->buf); CHKERRQ(ierr);
 
   // Set up the outer solver
   ierr = KSPCreate(f->comm,&f->ksp); CHKERRQ(ierr);
@@ -126,12 +126,12 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCFieldSplitSetType(pc,PC_COMPOSITE_SCHUR); CHKERRQ(ierr);
   if( f->is3D ) {
     ierr = PCFieldSplitSetBlockSize(pc,4); CHKERRQ(ierr);                            // [p u v w]
-    ierr = PCFieldSplitSetFields(pc,3,(int[]){U_FACE,V_FACE,W_FACE}); CHKERRQ(ierr); // [u v w]
-    ierr = PCFieldSplitSetFields(pc,1,(int[]){CELL_CENTER}); CHKERRQ(ierr);          // [ p ]
+    ierr = PCFieldSplitSetFields(pc,"v",3,(int[]){U_FACE,V_FACE,W_FACE}); CHKERRQ(ierr); // [u v w]
+    ierr = PCFieldSplitSetFields(pc,"p",1,(int[]){CELL_CENTER}); CHKERRQ(ierr);          // [ p ]
   } else {
     ierr = PCFieldSplitSetBlockSize(pc,3); CHKERRQ(ierr);                      // [p u v]
-    ierr = PCFieldSplitSetFields(pc,2,(int[]){U_FACE,V_FACE}); CHKERRQ(ierr);  // [u v]
-    ierr = PCFieldSplitSetFields(pc,1,(int[]){CELL_CENTER}); CHKERRQ(ierr);    // [ p ]
+    ierr = PCFieldSplitSetFields(pc,"v",2,(int[]){U_FACE,V_FACE}); CHKERRQ(ierr);  // [u v]
+    ierr = PCFieldSplitSetFields(pc,"p",1,(int[]){CELL_CENTER}); CHKERRQ(ierr);    // [ p ]
   }
   ierr = PCSetUp(pc); CHKERRQ(ierr);
   int nVelP;
@@ -170,7 +170,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
       ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
       ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
       ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
-      ierr = PCFactorSetMatOrderingType(pc,MATORDERING_ND); CHKERRQ(ierr);
+      ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
       ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
       ierr = PCSetUp(pc); CHKERRQ(ierr);
 
@@ -211,7 +211,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
       ierr = KSPSetType(subksp[0],KSPPREONLY); CHKERRQ(ierr);
       ierr = KSPGetPC(subksp[0],&pc); CHKERRQ(ierr);
       ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
-      ierr = PCFactorSetMatOrderingType(pc,MATORDERING_ND); CHKERRQ(ierr);
+      ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
       ierr = PCSetUp(pc); CHKERRQ(ierr);
     }
   }

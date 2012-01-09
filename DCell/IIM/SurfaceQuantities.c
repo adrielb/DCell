@@ -20,7 +20,7 @@ PetscErrorCode IIMUpdateSurfaceQuantities( IIM iim, LevelSet ls )
     ierr = IIMUpdateSurfaceQuantities_2D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_2D( iim, ls ); CHKERRQ(ierr);
   } else {
-    SETERRQ(0,"NOT IMPLEMENTED\nIIMUpdateSurfaceQuantities_3D\nIIMUpdateSurfaceDerivatives_3D");
+    SETERRQ(PETSC_COMM_SELF,0,"NOT IMPLEMENTED\nIIMUpdateSurfaceQuantities_3D\nIIMUpdateSurfaceDerivatives_3D");
     /*
     ierr = IIMUpdateSurfaceQuantities_3D( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_3D( iim, ls ); CHKERRQ(ierr);

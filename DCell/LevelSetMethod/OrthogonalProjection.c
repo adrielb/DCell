@@ -15,7 +15,7 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
   PetscReal x, x2, x3;
   PetscReal y, y2, y3;
   PetscReal norm;
-  PetscReal dist, mindist = PETSC_MAX;
+  PetscReal dist, mindist = PETSC_MAX_REAL;
   Coor d1,d2;
   Coor x0;
   int i,j,m;
@@ -79,11 +79,11 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
 //printf("},\n");
 //printf("m = %d\n", m);
       if( m == MAXITER ) { // convergence failed
-        dist = PETSC_MAX;
+        dist = PETSC_MAX_REAL;
       } else {
         if( x < -TOL || 1+TOL < x ||
             y < -TOL || 1+TOL < y  ) { // converged outside of domain
-          dist = PETSC_MAX;
+          dist = PETSC_MAX_REAL;
         } else {
           dist = PetscSqrtScalar(
               (x - x0.x) * (x - x0.x) +
@@ -100,7 +100,7 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
   } // j
 //  printf("MINDIST: %e\n", mindist);
 //  printf("Local: {%d, %d}\n", i, j);
-  if( PetscAbs( mindist - PETSC_MAX) < 1 ) {
+  if( PetscAbs( mindist - PETSC_MAX_REAL) < 1 ) {
     OrthogonalProjection2D_Quadratic( phi3, op);
 /*
     printf("PHI\n");

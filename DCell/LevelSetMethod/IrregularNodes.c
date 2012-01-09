@@ -180,7 +180,7 @@ PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx )
       ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
     }
   }
-  ierr = PetscViewerDestroy(viewer); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_LevelSetWriteIrregularNodeList,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

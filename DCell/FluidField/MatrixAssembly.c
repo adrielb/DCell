@@ -16,37 +16,37 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
   MPI_Comm_size(f->comm, &size);
   if( f->is3D ) {
     dof = 4; // [u v w p]
-    ierr = DACreate3d(f->comm,DA_NONPERIODIC,DA_STENCIL_STAR,
+    ierr = DMDACreate3d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_STAR,
               dims.x,dims.y,dims.z,  PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
               dof,1,  0,0,0, &f->daV); CHKERRQ(ierr);
 
     dof = 6; // [xx xy xz yy yz zz]
-    ierr = DACreate3d(f->comm,DA_NONPERIODIC,DA_STENCIL_BOX,
+    ierr = DMDACreate3d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
               dims.x,dims.y,dims.z, PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
               dof,1,  0,0,0, &f->daE); CHKERRQ(ierr);
 
     dof = 1; // buf
-    ierr = DACreate3d(f->comm,DA_NONPERIODIC,DA_STENCIL_BOX,
+    ierr = DMDACreate3d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
               dims.x,dims.y,dims.z, PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
               dof,1,  0,0,0, &f->daB); CHKERRQ(ierr);
 //    ierr = FluidFieldMatAssemble_3D( f->daV, f->dh, &f->mat); CHKERRQ(ierr);
   } else {
     dof = 3; // [u v p]
-    ierr = DACreate2d(f->comm,DA_NONPERIODIC,DA_STENCIL_STAR,
+    ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_STAR,
               dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daV); CHKERRQ(ierr);
 
     dof = 3; // [xx xy yy]
-    ierr = DACreate2d(f->comm,DA_NONPERIODIC,DA_STENCIL_BOX,
+    ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
               dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daE); CHKERRQ(ierr);
 
     dof = 1; // buf
-    ierr = DACreate2d(f->comm,DA_NONPERIODIC,DA_STENCIL_BOX,
+    ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
               dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daB); CHKERRQ(ierr);
   }
   if( size == 1 ) {
-    ierr = DAGetMatrix(f->daV, MATSEQAIJ, &f->mat); CHKERRQ(ierr);
+    ierr = DMGetMatrix(f->daV, MATSEQAIJ, &f->mat); CHKERRQ(ierr);
   } else {
-    ierr = DAGetMatrix(f->daV, MATMPIAIJ, &f->mat); CHKERRQ(ierr);
+    ierr = DMGetMatrix(f->daV, MATMPIAIJ, &f->mat); CHKERRQ(ierr);
   }
 
   ierr = FluidField_MatAssemble( f->mu, f->dirichletBC, f->daV, f->dh, f->mat); CHKERRQ(ierr);
@@ -74,10 +74,10 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
 
 #undef __FUNCT__
 #define __FUNCT__ "FluidField_MatAssemble"
-PetscErrorCode FluidField_MatAssemble( PetscReal mu, Array dbc, DA da, Coor dH, Mat mat )
+PetscErrorCode FluidField_MatAssemble( PetscReal mu, Array dbc, DM da, Coor dH, Mat mat )
 {
   int c;
-  DALocalInfo i;
+  DMDALocalInfo i;
   int n;
   int numdiv = 6;
   int zstr, zend, zenddiv, uzstr;
@@ -110,7 +110,7 @@ PetscErrorCode FluidField_MatAssemble( PetscReal mu, Array dbc, DA da, Coor dH, 
   PetscErrorCode ierr;
   PetscFunctionBegin;
 
-  DAGetLocalInfo(da, &i);
+  DMDAGetLocalInfo(da, &i);
 
   if( i.dim == 2 ) {
     endface = V_FACE;

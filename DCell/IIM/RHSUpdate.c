@@ -2,7 +2,7 @@
 #include "IIM_private.h"
 
 #undef __FUNCT__
-#define __FUNCT__ "IIMRHSUpdate"
+#define __FUNCT__ "IIMUpdateRHS"
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga )
 {
   int i;

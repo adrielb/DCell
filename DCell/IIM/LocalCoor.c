@@ -15,7 +15,7 @@ void cblas_drot(int len, double* x, int incx, double* y, int incy, double c, dou
 double LocalCoor2DArcLengthFunction( double x, void *params);
 
 #undef __FUNCT__
-#define __FUNCT__ "LocalCoor2DCreate"
+#define __FUNCT__ "LocalCoorCreate"
 PetscErrorCode LocalCoorCreate( int Np, LocalCoor *lc )
 {
   PetscErrorCode ierr;
@@ -24,7 +24,7 @@ PetscErrorCode LocalCoorCreate( int Np, LocalCoor *lc )
   PetscFunctionBegin;
   
   if( Np < 5 ) 
-    SETERRQ1( PETSC_ERR_ARG_OUTOFRANGE, 
+    SETERRQ1( PETSC_COMM_SELF, PETSC_ERR_ARG_OUTOFRANGE,
         "Max points Np = %d need to be > 5", Np );
   
   ierr = PetscNew( struct _LocalCoor, &l); CHKERRQ(ierr);
@@ -40,7 +40,7 @@ PetscErrorCode LocalCoorCreate( int Np, LocalCoor *lc )
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "LocalCoor2DDestroy"
+#define __FUNCT__ "LocalCoorDestroy"
 PetscErrorCode LocalCoorDestroy( LocalCoor lc )
 {
   PetscErrorCode ierr;

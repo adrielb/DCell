@@ -3,8 +3,7 @@
 
 #include "ga.h"
 #include "macdecls.h"
-#include "petscdmda.h"
-#include "petscksp.h"
+#include "petsc.h"
 #include "Array.h"
 
 #define LINE() { \

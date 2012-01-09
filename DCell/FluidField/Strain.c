@@ -2,7 +2,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "FluidFieldIntegrateStrainRate"
-PetscErrorCode FluidFieldIntegrateStrainRate( DA daV, Vec vecV, DA daE, Vec vecE, PetscReal dh, PetscReal dt )
+PetscErrorCode FluidFieldIntegrateStrainRate( DM daV, Vec vecV, DM daE, Vec vecE, PetscReal dh, PetscReal dt )
 {
   int i,j,k;
   int xs,ys,zs,
@@ -16,9 +16,9 @@ PetscErrorCode FluidFieldIntegrateStrainRate( DA daV, Vec vecV, DA daE, Vec vecE
   dx=dy=dz=dh;
 
   // Update strain rate
-  ierr = DAGetCorners(daE,&xs,&ys,&zs,&xm,&ym,&zm); CHKERRQ(ierr);
-  ierr = DAVecGetArray(daE,vecE,&e); CHKERRQ(ierr);
-  ierr = DAVecGetArray(daV,vecV,&vel); CHKERRQ(ierr);
+  ierr = DMDAGetCorners(daE,&xs,&ys,&zs,&xm,&ym,&zm); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray(daE,vecE,&e); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray(daV,vecV,&vel); CHKERRQ(ierr);
   for (k = zs; k < zm; ++k) {
     for (j = ys; j < ym; ++j) {
       for (i = xs; i < xm; ++i) {
@@ -34,14 +34,14 @@ PetscErrorCode FluidFieldIntegrateStrainRate( DA daV, Vec vecV, DA daE, Vec vecE
       }
     }
   }
-  ierr = DAVecRestoreArray(daE,vecE,&e); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daV,vecV,&vel); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daE,vecE,&e); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daV,vecV,&vel); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
 #undef __FUNCT__
 #define __FUNCT__ "FluidFieldElasticDivergence"
-PetscErrorCode FluidFieldElasticDivergence( DA daE, Vec et, DA daV, Vec rhs, PetscReal dh )
+PetscErrorCode FluidFieldElasticDivergence( DM daE, Vec et, DM daV, Vec rhs, PetscReal dh )
 {
   int i,j,k;
   int xs,ys,zs,
@@ -54,12 +54,12 @@ PetscErrorCode FluidFieldElasticDivergence( DA daE, Vec et, DA daV, Vec rhs, Pet
 
   PetscFunctionBegin;
   dx=dy=dz=dh;
-  ierr = DAGetLocalVector(daE, &etl); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalBegin(daE,et,INSERT_VALUES,etl); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalEnd(daE,et,INSERT_VALUES,etl); CHKERRQ(ierr);
-  ierr = DAVecGetArray(daE,et,&e); CHKERRQ(ierr);
-  ierr = DAVecGetArray(daV,rhs,&b); CHKERRQ(ierr);
-  ierr = DAGetCorners(daV,&xs,&ys,&zs,&xm,&ym,&zm); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(daE, &etl); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(daE,et,INSERT_VALUES,etl); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd(daE,et,INSERT_VALUES,etl); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray(daE,et,&e); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray(daV,rhs,&b); CHKERRQ(ierr);
+  ierr = DMDAGetCorners(daV,&xs,&ys,&zs,&xm,&ym,&zm); CHKERRQ(ierr);
   for (k = zs; k < zm; ++k) {
     for (j = ys; j < ym; ++j) {
       for (i = xs; i < xm; ++i) {
@@ -76,9 +76,9 @@ PetscErrorCode FluidFieldElasticDivergence( DA daE, Vec et, DA daV, Vec rhs, Pet
       }
     }
   }
-  ierr = DAVecRestoreArray(daV,rhs,&b); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daE,et,&e); CHKERRQ(ierr);
-  ierr = DARestoreLocalVector(daE, &etl); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daV,rhs,&b); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daE,et,&e); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(daE, &etl); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
 }

@@ -53,8 +53,8 @@ PetscErrorCode FluidField_DiscreteCompatibilityCondition( FluidField f )
 
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_FluidField_DiscreteCompatibilityCondition,0,0,0,0); CHKERRQ(ierr);
-  ierr = DAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+  ierr = DMDAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   for ( j = ys; j < ys+ym; ++j) {
     for ( i = xs; i < xs+xm; ++i) {
       if( PetscAbs(rhs[j][i][CELL_CENTER]) > eps )
@@ -75,7 +75,7 @@ PetscErrorCode FluidField_DiscreteCompatibilityCondition( FluidField f )
       }
     }
   }
-  ierr = DAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_FluidField_DiscreteCompatibilityCondition,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -89,14 +89,14 @@ PetscErrorCode FluidFieldMaxVelocityMag( FluidField f, PetscReal *maxVel )
   PetscReal ***vel;
   PetscReal mag;
   int xs,ys,xm,ym;
-  DALocalInfo info;
+  DMDALocalInfo info;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_FluidFieldMaxVelocityMag,0,0,0,0); CHKERRQ(ierr);
-  ierr = DAGetLocalInfo(f->daV,&info); CHKERRQ(ierr);
-  ierr = DAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(f->daV,&info); CHKERRQ(ierr);
+  ierr = DMDAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
 
   // hack: ignore upper boundary since vel interpolation needs [x, x+1]
   e.x = xs+xm-1;
@@ -111,7 +111,7 @@ PetscErrorCode FluidFieldMaxVelocityMag( FluidField f, PetscReal *maxVel )
       *maxVel = mag > *maxVel ? mag : *maxVel;
     }
   }
-  ierr = DAVecRestoreArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
   ierr = MPI_Allreduce(maxVel,maxVel,1,MPI_DOUBLE,MPI_MAX,f->comm); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_FluidFieldMaxVelocityMag,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);

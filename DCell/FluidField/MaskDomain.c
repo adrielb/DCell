@@ -1,13 +1,13 @@
 #include "FluidField.h"
 #include "FluidField_private.h"
 
-void CreateStencilTemplate(DALocalInfo i, MatStencil row, MatStencil *col);
+void CreateStencilTemplate(DMDALocalInfo i, MatStencil row, MatStencil *col);
 
 #undef __FUNCT__
 #define __FUNCT__ "FluidFieldMaskDomain"
 PetscErrorCode FluidFieldMaskDomain(FluidField f)
 {
-  DALocalInfo i;
+  DMDALocalInfo i;
   MatStencil row;
   //                 dp,dp, D,hx,hx,hy,hy,hz,hz
   PetscReal val[] = { 0, 0, 1, 0, 0, 0, 0, 0, 0}; // [ px, L(u) ]
@@ -25,7 +25,7 @@ PetscErrorCode FluidFieldMaskDomain(FluidField f)
   PetscFunctionBegin;
   ierr = PetscInfo(0,"Applying mask to fluid field\n"); CHKERRQ(ierr);
   if( !f->mask ) PetscFunctionReturn(0);
-  ierr = DAGetLocalInfo(f->daB, &i); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(f->daB, &i); CHKERRQ(ierr);
   ierr = GridGet(f->mask, &mask2D); CHKERRQ(ierr);
   ierr = GridGet(f->mask, &mask3D); CHKERRQ(ierr);
 
@@ -122,7 +122,7 @@ PetscErrorCode FluidFieldMaskDomain(FluidField f)
 #define __FUNCT__ "FluidField_PressureBC"
 PetscErrorCode FluidField_PressureBC(FluidField f)
 {
-  DALocalInfo i;
+  DMDALocalInfo i;
   MatStencil row;
   //                  P,ux,ux,vy,vy,wx,wy
   PetscReal val[] = { 1, 0, 0, 0, 0, 0, 0};
@@ -135,7 +135,7 @@ PetscErrorCode FluidField_PressureBC(FluidField f)
 
   PetscFunctionBegin;
   if( !f->mask ) PetscFunctionReturn(0);
-  ierr = DAGetLocalInfo(f->daB, &i); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(f->daB, &i); CHKERRQ(ierr);
   ierr = GridGet(f->mask, &mask2D); CHKERRQ(ierr);
   ierr = GridGet(f->mask, &mask3D); CHKERRQ(ierr);
 
@@ -180,7 +180,7 @@ PetscErrorCode FluidField_PressureBC(FluidField f)
   PetscFunctionReturn(0);
 }
 
-void CreateStencilTemplate(DALocalInfo i, MatStencil row, MatStencil *col)
+void CreateStencilTemplate(DMDALocalInfo i, MatStencil row, MatStencil *col)
 {
   int c;
   const int n = 9;
@@ -214,18 +214,18 @@ PetscErrorCode FluidField_EnforceNoSlipBC( FluidField f )
   dbc = ArrayGetData(f->dirichletBC);
   if (f->is3D) {
     PetscReal ****rhs;
-    ierr = DAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
     for ( i = 0; i < len; ++i) {
       rhs[dbc[i].k][dbc[i].j][dbc[i].i][dbc[i].c] = 0;
     }
-    ierr = DAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   } else {
     PetscReal ***rhs;
-    ierr = DAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
     for ( i = 0; i < len; ++i) {
       rhs[dbc[i].j][dbc[i].i][dbc[i].c] = 0;
     }
-    ierr = DAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   }
   PetscFunctionReturn(0);
 }

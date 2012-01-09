@@ -11,7 +11,7 @@ PetscErrorCode IIMSurfaceNeighbors_2D( IIM iim, LevelSet ls, IrregularNode *n, I
   int e = iim->eps+1;
   int len = 0;
   iCoor p, q;
-  PetscTruth unique = PETSC_TRUE;
+  PetscBool unique = PETSC_TRUE;
   GridPoint *gridpoint;
   PetscErrorCode ierr;
 

@@ -1,10 +1,7 @@
 #ifndef FIELD_H_
 #define FIELD_H_
 
-
 #include "ImmersedInterfaceMethod.h"
-#include "petscda.h"
-#include "petscksp.h"
 
 typedef struct {
   PetscReal u,v,w,p;
@@ -19,7 +16,7 @@ typedef struct {
 typedef struct _FluidField {
   // DA for velocity [u v w p]
   // [mat] {vel} = {rhs}
-  DA daV;
+  DM daV;
   Mat mat;
   KSP ksp;
   Vec rhs;
@@ -33,17 +30,17 @@ typedef struct _FluidField {
    *  [exy eyy eyz]
    *  [exz eyz ezz]
    */
-  DA daE;
+  DM daE;
   Vec E;
 
   // DA for single component buffer
-  DA daB;
+  DM daB;
   Vec buf;
 
   PetscReal mu;
   Coor dh;   // Discretization size
   iCoor dims;
-  PetscTruth is3D;
+  PetscBool is3D;
   MPI_Comm comm;
   Grid mask;
 } *FluidField;

@@ -96,7 +96,7 @@ PetscErrorCode ParticleLSDestroy( ParticleLS pls )
   if( pls->particles0 != NULL ) {
     ierr = ArrayDestroy(pls->particles0); CHKERRQ(ierr);
   }
-  ierr = PetscRandomDestroy(pls->rnd); CHKERRQ(ierr);
+  ierr = PetscRandomDestroy(&pls->rnd); CHKERRQ(ierr);
   ierr = PetscFree( pls ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

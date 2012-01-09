@@ -33,7 +33,7 @@ struct _DWorld {
 
 
   // Temporal stats
-  PetscTruth printStep;
+  PetscBool printStep;
   PetscReal maxVel;// current maximum velocity (magnitude)
   PetscReal CFL;   // current CFL constraint
   PetscReal dt;    // current time step
@@ -58,7 +58,7 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world );
 PetscErrorCode DWorldDestroy( DWorld world );
 PetscErrorCode DWorldAddDCell( DWorld world, void *dcell );
 PetscErrorCode DWorldSimulate( DWorld world );
-PetscErrorCode DWorldSetPrintStep( DWorld world, PetscTruth printStep );
+PetscErrorCode DWorldSetPrintStep( DWorld world, PetscBool printStep );
 PetscErrorCode DWorldPrintStep( DWorld world );
 PetscErrorCode DWorldWrite( DWorld world, int ti );
 PetscErrorCode DWorldSetFrameInterval( DWorld w, PetscReal dtframe );

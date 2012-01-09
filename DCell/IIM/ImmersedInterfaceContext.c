@@ -3,7 +3,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMCreate"
-PetscErrorCode IIMCreate( PetscTruth is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim )
+PetscErrorCode IIMCreate( PetscBool is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim )
 {
   PetscErrorCode ierr;
   IIM i;
@@ -64,13 +64,13 @@ PetscErrorCode IIMSetForceContext(IIM iim, void *context )
 
 PetscErrorCode IIMSetNp( IIM iim, int Np )
 {
-  SETERRQ(0,"NOT IMP");
+  SETERRQ(PETSC_COMM_SELF,0,"NOT IMP");
   PetscFunctionReturn(0);
 }
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMRegisterEvents"
-static PetscTruth EVENTS_registered = PETSC_FALSE;
+static PetscBool EVENTS_registered = PETSC_FALSE;
 PetscErrorCode IIMRegisterEvents()
 {
   PetscErrorCode ierr;

@@ -57,7 +57,7 @@ typedef void (*JumpCondition)( PetscReal mu, IrregularNode *n, Jump *j, PetscInt
 void JumpPressure( IrregularNode *n, Jump *j );
 void JumpVelocity(PetscReal mu, IrregularNode *n, Jump *j, int i );
 
-PetscErrorCode IIMCreate( PetscTruth is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim );
+PetscErrorCode IIMCreate( PetscBool is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim );
 PetscErrorCode IIMDestroy( IIM iim );
 PetscErrorCode IIMSetForceComponents(IIM iim, InterfacialForce F );
 PetscErrorCode IIMSetForceContext(IIM iim, void *context);

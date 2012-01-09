@@ -34,13 +34,13 @@ PetscErrorCode IIMUpdateIrregularNodeGrid_3D( IIM iim, LevelSet ls )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  SETERRQ(0,"NOT IMPELEMENTED");
+  SETERRQ(PETSC_COMM_SELF,0,"NOT IMPELEMENTED");
   ierr=0;
   PetscFunctionReturn(0);
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "IIMGetIrregularGridPoint_2D"
+#define __FUNCT__ "IIMGetIrregularNodeGridPoint_2D"
 PetscErrorCode IIMGetIrregularNodeGridPoint_2D( IIM iim, int x, int y, GridPoint **pt )
 {
   int idx;

@@ -50,7 +50,7 @@ PetscErrorCode FMM_InitializeEikonal( LevelSet ls, MemCache mc, Heap heap )
   IrregularNode *nodes = ArrayGetData(ls->irregularNodes);
   IrregularNode *n;
   iCoor *band;
-  const PetscTruth is2D = ls->phi->is2D;
+  const PetscBool is2D = ls->phi->is2D;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
@@ -103,7 +103,7 @@ PetscErrorCode FMM_SolveEikonal( LevelSet ls, MemCache mc, Heap heap, int sign )
   PetscReal **phi2D, ***phi3D;
   FMMNode node;
   iCoor *band, pos;
-  const PetscTruth is2D = ls->phi->is2D;
+  const PetscBool is2D = ls->phi->is2D;
   PetscErrorCode ierr=0;
 
   PetscFunctionBegin;

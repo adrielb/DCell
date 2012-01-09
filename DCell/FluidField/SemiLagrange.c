@@ -5,7 +5,7 @@ PetscReal InterpolateField3D(PetscReal ****field, int dof, const PetscReal *shif
 
 #undef __FUNCT__
 #define __FUNCT__ "AdvectSL_2D"
-PetscErrorCode AdvectSL_2D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi, Vec vecPhi, PetscReal *phiShift, int f, PetscReal dh[3], PetscReal dt )
+PetscErrorCode AdvectSL_2D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi, Vec vecPhi, PetscReal *phiShift, int f, PetscReal dh[3], PetscReal dt )
 {
   int i,j;
   PetscReal ***vel;
@@ -14,7 +14,7 @@ PetscErrorCode AdvectSL_2D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
   Coor X; // Index coordinate
   Coor S; // Characteristic curve
   Coor V; // Interpolated velocity
-  DALocalInfo a;
+  DMDALocalInfo a;
   PetscLogDouble t1,t2;
   PetscErrorCode ierr;
 
@@ -22,19 +22,19 @@ PetscErrorCode AdvectSL_2D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
   ierr = PetscGetTime(&t1); CHKERRQ(ierr);
 
   Vec lvel;
-  ierr = DAGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalBegin(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalEnd  (daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(daVel,lvel,&vel); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd  (daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(daVel,lvel,&vel); CHKERRQ(ierr);
 
   Vec lphi;
-  ierr = DAGetLocalVector(daPhi,&lphi); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalBegin(daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalEnd  (daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(daPhi,lphi,&phi); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(daPhi,&lphi); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd  (daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(daPhi,lphi,&phi); CHKERRQ(ierr);
 
-  ierr = DAVecGetArray( daBuf,vecBuf,&buf); CHKERRQ(ierr);
-  ierr = DAGetLocalInfo(daPhi,&a); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray( daBuf,vecBuf,&buf); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(daPhi,&a); CHKERRQ(ierr);
 
   for (  j = a.ys; j < a.ys+a.ym && j < a.my-2; ++j) {
     for (i = a.xs; i < a.xs+a.xm && i < a.mx-2; ++i) {
@@ -64,11 +64,11 @@ PetscErrorCode AdvectSL_2D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
     }  // i
   }   // j
 
-  ierr = DAVecRestoreArray(daPhi, lphi, &phi); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daVel, lvel, &vel); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daBuf, vecBuf, &buf); CHKERRQ(ierr);
-  ierr = DARestoreLocalVector(daVel,&lvel); CHKERRQ(ierr);
-  ierr = DARestoreLocalVector(daPhi,&lphi); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daPhi, lphi, &phi); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daVel, lvel, &vel); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daBuf, vecBuf, &buf); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(daVel,&lvel); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(daPhi,&lphi); CHKERRQ(ierr);
 
   // Scatter single component parallel buffer into multi-component parallel vector.
   ierr = VecStrideScatter(vecBuf,f,vecPhi,INSERT_VALUES); CHKERRQ(ierr);
@@ -80,7 +80,7 @@ PetscErrorCode AdvectSL_2D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
 
 #undef __FUNCT__
 #define __FUNCT__ "AdvectSL_3D"
-PetscErrorCode AdvectSL_3D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi, Vec vecPhi, PetscReal *phiShift, int f, PetscReal dh[3], PetscReal dt )
+PetscErrorCode AdvectSL_3D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi, Vec vecPhi, PetscReal *phiShift, int f, PetscReal dh[3], PetscReal dt )
 {
   int i,j,k;
   PetscReal ****vel;
@@ -89,7 +89,7 @@ PetscErrorCode AdvectSL_3D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
   Coor X; // Index coordinate
   Coor S; // Characteristic curve
   Coor V; // Interpolated velocity
-  DALocalInfo a;
+  DMDALocalInfo a;
   PetscLogDouble t1,t2;
   PetscErrorCode ierr;
 
@@ -97,19 +97,19 @@ PetscErrorCode AdvectSL_3D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
   ierr = PetscGetTime(&t1); CHKERRQ(ierr);
 
   Vec lvel;
-  ierr = DAGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalBegin(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalEnd(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(daVel,lvel,&vel); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd(daVel,vecVel,INSERT_VALUES,lvel); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(daVel,lvel,&vel); CHKERRQ(ierr);
 
   Vec lphi;
-  ierr = DAGetLocalVector(daPhi,&lphi); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalBegin(daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
-  ierr = DAGlobalToLocalEnd  (daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
-  ierr = DAVecGetArrayDOF(daPhi,lphi,&phi); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(daPhi,&lphi); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd  (daPhi,vecPhi,INSERT_VALUES,lphi); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(daPhi,lphi,&phi); CHKERRQ(ierr);
 
-  ierr = DAVecGetArray( daBuf,vecBuf,&buf); CHKERRQ(ierr);
-  ierr = DAGetLocalInfo(daPhi,&a); CHKERRQ(ierr);
+  ierr = DMDAVecGetArray( daBuf,vecBuf,&buf); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(daPhi,&a); CHKERRQ(ierr);
 
   for     (k = a.zs; k < a.zs+a.zm && k < a.mz-2; ++k) {
     for   (j = a.ys; j < a.ys+a.ym && j < a.my-2; ++j) {
@@ -140,11 +140,11 @@ PetscErrorCode AdvectSL_3D( DA daVel, Vec vecVel, DA daBuf, Vec vecBuf, DA daPhi
       }  // i
     }   // j
   }    // k
-  ierr = DAVecRestoreArray(daPhi, lphi, &phi); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daVel, lvel, &vel); CHKERRQ(ierr);
-  ierr = DAVecRestoreArray(daBuf, vecBuf, &buf); CHKERRQ(ierr);
-  ierr = DARestoreLocalVector(daVel,&lvel); CHKERRQ(ierr);
-  ierr = DARestoreLocalVector(daPhi,&lphi); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daPhi, lphi, &phi); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daVel, lvel, &vel); CHKERRQ(ierr);
+  ierr = DMDAVecRestoreArray(daBuf, vecBuf, &buf); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(daVel,&lvel); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(daPhi,&lphi); CHKERRQ(ierr);
 
   // Scatter single component parallel buffer into multi-component parallel vector.
   ierr = VecStrideScatter(vecBuf,f,vecPhi,INSERT_VALUES); CHKERRQ(ierr);

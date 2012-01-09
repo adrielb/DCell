@@ -47,7 +47,7 @@ PetscErrorCode DWorldDestroy(DWorld world)
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
-  ierr = PetscViewerDestroy(world->temporalfile); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&world->temporalfile); CHKERRQ(ierr);
   ierr = DCellsArrayDestroy(world->dcells); CHKERRQ(ierr);
   ierr = IIMDestroy(world->iim); CHKERRQ(ierr);
   ierr = FluidFieldDestroy(world->fluid); CHKERRQ(ierr);
@@ -216,7 +216,7 @@ PetscErrorCode DWorldPrintStep( DWorld w )
   return 0;
 }
 
-PetscErrorCode DWorldSetPrintStep( DWorld w, PetscTruth printStep )
+PetscErrorCode DWorldSetPrintStep( DWorld w, PetscBool printStep )
 {
   w->printStep = printStep;
   return 0;

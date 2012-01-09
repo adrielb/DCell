@@ -7,9 +7,9 @@ PetscLogEvent EVENT_FluidField_DiscreteCompatibilityCondition;
 
 //Private Functions
 PetscErrorCode FluidFieldMatAssemble( FluidField f );
-PetscErrorCode FluidField_MatAssemble( PetscReal mu, Array dbc, DA daV, Coor dH, Mat mat );
-PetscErrorCode FluidFieldIntegrateStrainRate( DA daV, Vec vecV, DA daE, Vec vecE, PetscReal dh, PetscReal dt );
-PetscErrorCode FluidFieldElasticDivergence( DA daE, Vec et, DA daV, Vec rhs, PetscReal dh );
+PetscErrorCode FluidField_MatAssemble( PetscReal mu, Array dbc, DM daV, Coor dH, Mat mat );
+PetscErrorCode FluidFieldIntegrateStrainRate( DM daV, Vec vecV, DM daE, Vec vecE, PetscReal dh, PetscReal dt );
+PetscErrorCode FluidFieldElasticDivergence( DM daE, Vec et, DM daV, Vec rhs, PetscReal dh );
 PetscErrorCode FluidField_EnforceNoSlipBC( FluidField f );
 PetscErrorCode FluidField_PressureBC( FluidField f );
 PetscErrorCode FluidField_AppendDBC( Array dbc, MatStencil row );

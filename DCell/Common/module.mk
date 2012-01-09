@@ -1,4 +1,6 @@
-LOCDIR := ${DCELL_DIR}/${subdirectory}/
+# Common Module
+
+#LOCDIR := ${DCELL_DIR}/${subdirectory}/
 LOCOBJS := LeastSq.o Serialize.o Array.o Grid.o Grid3D.o InterpolateVelocity.o \
            GlobalArrays.o DCellInit.o Memcache.o Heap.o UniqueID.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
