@@ -816,6 +816,9 @@ in /etc/fstab
    id newuser
    rocks sync users
 
+net use z: /delete
+net use z: \\128.220.138.91\levlabnas /user:levlabuser /persistent:yes
+
 6-32 x 5mm flat head screws for the hard drive
 SuperMicro  MCP-410-00005-0N -Screw bag (100 pcs) 
 
