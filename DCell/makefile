@@ -4,6 +4,8 @@ include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
 all: sim
+SIM := NanoGrooves
+test: testDWorld.dworld
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
@@ -14,21 +16,20 @@ build: ${LIBDCELL}
 alltests: ${ALLTESTS}
 	@echo Tested everything
 
-test: build testDWorld.dworld
-
 rebuild: cleanDCell build
 
 opt:
-	export PETSC_ARCH=gcc-opt; make rebuild
+	export PETSC_ARCH=gcc-opt; \
+	make cleanDCell; \
+	make -j16 build
 
 cleanDCell:
-	rm -f ${OBJECTS}
+	rm -f ${CLEAN}
 	rm -f lib/${PETSC_ARCH}/lib*
 
 sync:
 	syncDCell.sh
 
-SIM := NanoGrooves
 sim: sim-${SIM}
 run: run-${SIM}
 

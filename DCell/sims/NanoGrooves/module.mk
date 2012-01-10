@@ -8,20 +8,21 @@ RUNOPTS := \
 -pls_rmin 0.5 \
 -pls_rmax 0.9 \
 -Fa 0.5 \
--Fk 1 \
--Fn 0 \
+-Fk 2 \
+-Fn 20 \
 -kclip 0.1 \
 -groove_width 2 \
--timax 10 \
+-timax 1 \
 -CFL 0.1 \
 -dtmax 1 \
 -ksp_monitor \
--ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_1_ksp_max_it 4 -ksp_max_it 100 \
+-ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_p_ksp_max_it 4 -ksp_max_it 100 \
 -log_summary -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
 
 #-ksp_atol 1e3
-#-ksp_rtol 1e-3 
+#-ksp_rtol 1e-3
+#-fieldsplit_p_ksp_monitor 
 #-fieldsplit_1_ksp_max_it 4
 #-ksp_monitor -ksp_converged_reason -viewer_binary_skip_info -log_summary
 #-log_summary -ksp_view 
