@@ -6,7 +6,7 @@
 # assign a name to submitted job
 #$ -N render
 # change output file name
-#$ -o $HOME/output/$JOB_NAME.$JOB_ID.$TASK_ID
+#$ -o $HOME/output/render/$JOB_NAME.$JOB_ID.$TASK_ID
 # export environment variables
 #$ -V
 

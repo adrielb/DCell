@@ -1,0 +1,41 @@
+#!/bin/bash
+# request Bourne again shell as shell for job
+#$ -S /bin/bash
+# merge stderr with stdout
+#$ -j y
+# assign a name to submitted job
+#$ -N K-fa
+# change output file name
+#$ -o $PETSC_TMP/$JOB_NAME.$JOB_ID
+# export environment variables
+#$ -V
+
+echo $HOSTNAME
+echo fa $fa
+echo K $K
+
+# run the simulation
+${DCELL_DIR}/sims/a.out -K $K -fa $fa -ksp_rtol 1e-5\
+-fieldsplit_1_ksp_max_it 4 -log_summary -viewer_binary_skip_info
+
+# render the simulation to png images
+math < viz.m 
+
+# create movie
+ffmpeg -f image2 -r 2 -i g.1%04d.png -vcodec mpeg4 -qscale 5 movie.mp4
+
+high quality MPEG4
+'-mbd rd -flags +mv4+aic -trellis 2 -cmp 2 -subcmp 2 -g 300 -pass 1/2', things to try: '-bf 2', '-flags qprd', '-flags mv0', '-flags skiprd'.
+
+x264
+–rc-lookahead 250
+ffmpeg -i input -acodec libfaac -aq 100 -vcodec libx264 -preset medium \
+    -tune animation -profile baseline -level 3.0 -crf 20 -threads 0 output.mp4
+
+# delete simulation data
+rm *.Real64 *.array *.pos *.size
+
+SEED=$(sed -n -e "$SGE_TASK_ID p" $SEEDFILE)
+LEN=`wc -l /tmp/params |cut -f1 -d ' '`
+
+grep -H -e invalid -e 'fa ' -e 'K ' K-fa.*|grep -B 2 invalid
