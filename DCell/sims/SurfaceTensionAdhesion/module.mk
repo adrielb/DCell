@@ -1,16 +1,15 @@
-# NanoGrooves simulation
+# SurfaceTension-Adhesion simulation
 
 ${subdirectory}/${1}.o: ${LIBDCELL}
 	@${CLINKER} ${subdirectory}/${1}.o ${DCELL_LIB} -lDCell ${PETSC_LIB}
 	@echo Simulation: sim-${1} 
 
 RUNOPTS := \
--pls_rmin 0.5 \
--pls_rmax 0.9 \
+-pls_rmin 0.1 \
+-pls_rmax 0.5 \
 -Fa 3 \
 -Fk 1 \
 -Fn 0 \
--ecm 0.033 \
 -kclip 0.1 \
 -groove_width 2 \
 -timax 10000 \
@@ -32,4 +31,4 @@ RUNOPTS := \
 #-ksp_max_it 4 
 
 
-${eval ${call simulation,NanoGrooves,1,${RUNOPTS}}}
+${eval ${call simulation,SurfaceTensionAdhesion,1,${RUNOPTS}}}

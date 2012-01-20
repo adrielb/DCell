@@ -249,7 +249,7 @@ PetscErrorCode DWorldSetFromOptions( DWorld w )
   ierr = PetscOptionsGetInt (0,"-timax",&w->timax,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetInt (0,"-writeInterval",&w->writeInterval,0); CHKERRQ(ierr);
 
-  ierr = PetscPrintf(comm, " DWorld Options\n"); CHKERRQ(ierr);
+  ierr = PetscPrintf(comm, "DWorld Options\n"); CHKERRQ(ierr);
   ierr = PetscPrintf(comm, "CFL     = %e\n", w->CFL); CHKERRQ(ierr);
   ierr = PetscPrintf(comm, "dtmax   = %e\n", w->dtmax); CHKERRQ(ierr);
   ierr = PetscPrintf(comm, "dtframe = %e\n", w->dtframe); CHKERRQ(ierr);

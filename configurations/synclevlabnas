@@ -1,5 +1,11 @@
-su -c ' \
-mount /dev/sdd1 /media/backup \
-su abergman -c 'rsync -avh --delete --progress --stats --exclude ".zfs/" --inplace abergman@128.220.138.91:.. /media/backup/levlabnas/' \
-umount /media/backup '
+if [ ! $( id -u ) -eq 0 ]; then
+    echo "Please enter root's password."
+    exec su -c "${0}" # Call this prog as root
+    exit ${?}  # sice we're 'execing' above, we wont reach this exit
+               # unless something goes wrong.
+fi
+
+mount /dev/sdd1 /media/backup
+su abergman -c 'rsync -avh --delete --progress --stats --inplace --exclude ".zfs/" levlabnas:.. /media/backup/levlabnas/'
+umount /media/backup
 

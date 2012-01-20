@@ -4,7 +4,7 @@
 # $(call make-library, library-name, source-file-list)
 define make-library
 DCELLOBJECTS += ${2}
-OBJECTS += ${2}
+CLEAN += ${2}
 libname = ./lib/${PETSC_ARCH}/lib${1}.a
 libraries += ./lib/${PETSC_ARCH}/lib${1}.a
 ./lib/${PETSC_ARCH}/lib${1}.a: ${2}
@@ -19,28 +19,31 @@ subdirectory = $(patsubst %/module.mk,%, \
 
 # ${call test-library,module,testprog, depends, NP}
 define test-library
-OBJECTS += ${1}/tests/${2}.o
+CLEAN += ${1}/tests/${2}.o ${1}/tests/${2}.x
 ALLTESTS += test${1}-${2}
 .PHONY: test${1}-${2}
 ${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
-test${1}-${2}: ${1}/tests/${2}.o
+${1}/tests/${2}.x: ${1}/tests/${2}.o
+	@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
+test${1}-${2}: ${1}/tests/${2}.x
 	@echo "====================================================================="
 	@echo Test target: $$@
-	@${CLINKER} $$^ ${DCELL_LIB} ${addprefix -l, ${3} } ${PETSC_LIB}
 	-rm -rf ${PETSC_TMP}/*
 	@${MPIEXEC} -np ${4} ./a.out
 endef
 
 # ${call simulation,SimName,NP,runopts}
 define simulation
-OBJECTS += ${subdirectory}/${1}.o
+CLEAN += ${subdirectory}/${1}.o ${subdirectory}/${1}.x
 .PHONY: sim-${1} run-${1}
 ${subdirectory}/${1}.o: ${LIBDCELL}
-sim-${1}: ${subdirectory}/${1}.o
-	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB}
+${subdirectory}/${1}.x: ${subdirectory}/${1}.o
+	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
+sim-${1}: ${subdirectory}/${1}.x
 	@echo Simulation: sim-${1}
 run-${1}: sim-${1}
-	@${MPIEXEC} -np ${2} ./a.out ${3}
+	-rm -rf ${PETSC_TMP}/*
+	@${MPIEXEC} -np ${2} ${subdirectory}/${1}.x ${3}
 endef
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
@@ -54,7 +57,7 @@ LIBDCELL := lib/${PETSC_ARCH}/libDCell.so
 
 #Accumulate info from each module
 DCELLOBJECTS := 
-OBJECTS :=
+CLEAN :=
 libraries :=
 
 #mpiexec -n 4 --bysocket --bind-to-socket --report-bindings
