@@ -1,10 +1,11 @@
+export PETSC_ARCH=gcc-opt
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
 all: sim
-SIM := NanoGrooves
+SIM := SurfaceTensionAdhesion
 test: testDWorld.dworld
 
 ${LIBDCELL}: ${libraries}

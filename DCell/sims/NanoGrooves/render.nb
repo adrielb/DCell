@@ -41,10 +41,10 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[      5395,        136]*)
-(*NotebookOutlinePosition[      6058,        159]*)
-(*  CellTagsIndexPosition[      6014,        155]*)
-(*WindowFrame->Generic*)
+(*NotebookOptionsPosition[      6887,        164]*)
+(*NotebookOutlinePosition[      7550,        187]*)
+(*  CellTagsIndexPosition[      7506,        183]*)
+(*WindowFrame->Normal*)
 
 
 
@@ -55,20 +55,24 @@ Cell[BoxData[
   InitializationCell->True],
 
 Cell[BoxData[
-    \(\(SetDirectory["\</nas-0-0/abergman/sims/4122.k0\>"];\)\)], "Input"],
+    \(\(SetDirectory["\</nas-0-0/sims/4258.fbFk\>"];\)\)], "Input"],
 
 Cell[BoxData[
     \(Exit[]\)], "Input"],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[{
-    \(\(fscale = 100;\)\), "\n", 
+    \(\(fscale = 10000;\)\), "\n", 
     \(\(MX = 1000;\)\), "\n", 
     \(\(MY = 250;\)\), "\n", 
     \(\(dx = 0.1;\)\), "\n", 
     \(\(contactThres = 0.3;\)\), "\n", 
     \(\(LX = 100;\)\), "\n", 
     \(\(LY = 25;\)\), "\n", 
-    \(\(vscale = 50;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(vscale = 50;\)\), "\[IndentingNewLine]", 
+    \(\(\($TextStyle = {FontSize \[Rule] 14};\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
     \(\({{groovesbin, groovesls}, pos} = 
         ImportGrid["\<grooves\>"];\)\), "\n", 
     \(\(Block[{MX, MY}, \[IndentingNewLine]{MY, MX} = 
@@ -78,7 +82,8 @@ Cell[BoxData[{
                   pos[\([2, 1]\)]}*dx, 
             InterpolationOrder \[Rule] 1];\[IndentingNewLine]];\)\), "\n", 
     \(\(ImportIrreg["\<grooves.irregNode.10000.array\>"];\)\), "\n", 
-    \(\(groovesir = ir`X*dx;\)\n\), "\[IndentingNewLine]", 
+    \(\(\(groovesir = ir`X*dx;\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
     \(\(CellForces[] := 
         Module[{vecs}, \[IndentingNewLine]vecs = 
             Take[{ir`X*dx, ir`nv, fscale*ir`f1}\[Transpose] , {1, \(-1\), 
@@ -90,6 +95,14 @@ Cell[BoxData[{
   InitializationCell->True],
 
 Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(vscale\\)\\\" is similar to existing symbol \
+\\\"\\!\\(fscale\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[BoxData[
     \(\(RealtimeGraph = 
         Function[t, 
           Module[{time = t + 10000}, \[IndentingNewLine]Print["\<TIME: \>", 
@@ -97,14 +110,35 @@ Cell[BoxData[
                 ToString[time] <> "\<.array\>"]; \[IndentingNewLine]{pvel, 
                 uvel, vvel} = 
               ImportFluid1[MX, MY, dx, "\<uvp\>", 
-                time]; \[IndentingNewLine]\[IndentingNewLine]g = 
+                time]; \[IndentingNewLine]\[IndentingNewLine]ptsParams = \
+{1.37452, 24}; \[IndentingNewLine]ptsDWorld = {99.0548, 
+                24}; \[IndentingNewLine]ptsDir = {LX/2, 
+                24}; \[IndentingNewLine]txtParams = 
+              Import["\<!grep -m 1 -A 5 'Cell Parameters' output\>", \
+"\<Text\>"]; \[IndentingNewLine]txtDWorld = 
+              Import["\<!grep -m 1 -A 6 'DWorld Options' output\>", \
+"\<Text\>"]; \[IndentingNewLine]\[IndentingNewLine]g = 
               DisplayTogether[\[IndentingNewLine]ContourPlot[
                   grooves[y, x], {x, dx, LX}, {y, dx, LY}, 
                   PlotPoints \[Rule] 1 {LX, LY}, ImageSize \[Rule] 1100, 
                   PlotRange \[Rule] {{0, LX}, {\(-2\), LY}, All}, 
                   Contours \[Rule] {0, \(-contactThres\)/dx}, 
                   ContourShading \[Rule] None, AspectRatio \[Rule] Automatic, 
-                  Epilog \[Rule] {Red, 
+                  Epilog \[Rule] {\[IndentingNewLine]GrayLevel[0.9], 
+                      Rectangle[
+                        ptsParams, {17.0393, 
+                          14.7536}], \[IndentingNewLine]GrayLevel[0.9], 
+                      Rectangle[ptsDWorld, 
+                        ptsDWorld - {20, 10}], \[IndentingNewLine]GrayLevel[
+                        0.9], Rectangle[{ptsParams[\([1]\)], 
+                          22}, {ptsDWorld[\([1]\)], 
+                          24}], \[IndentingNewLine]Black, 
+                      Text[txtParams, 
+                        ptsParams, {\(-1\), 1}], \[IndentingNewLine]Black, 
+                      Text[txtDWorld, 
+                        ptsDWorld, {1, 1}], \[IndentingNewLine]Black, 
+                      Text[Directory[], 
+                        ptsDir, {0, 1}], \[IndentingNewLine]Red, 
                       ProgressBar[]}], \[IndentingNewLine]CellForces[], \
 \[IndentingNewLine]PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, dx, 
                     LX - 1}, {y, dx, LY - 1}, ScaleFactor \[Rule] None, 
@@ -123,21 +157,15 @@ Cell[BoxData[{
   InitializationCell->True],
 
 Cell[BoxData[
-    \(\(RealtimeGraph[9999];\)\)], "Input"],
+    \(\(RealtimeGraph[1000];\)\)], "Input"],
 
 Cell[BoxData[
-    \(Exit[]\)], "Input"],
-
-Cell[BoxData[
-    \(\(DensityPlot[grooves[y, x], {x, 0, LX}, {y, 0, LY}, 
-        Epilog \[Rule] {Green, Point /@ groovesir}, 
-        AspectRatio \[Rule] Automatic, 
-        PlotPoints \[Rule] 10 {LX, LY}];\)\)], "Input"]
+    \(Exit[]\)], "Input"]
 },
 FrontEndVersion->"5.2 for X",
 ScreenRectangle->{{0, 2400}, {0, 1600}},
 AutoGeneratedPackage->Automatic,
-WindowSize->{1200, 1550},
+WindowSize->{1200, 1525},
 WindowMargins->{{Automatic, 0}, {0, Automatic}}
 ]
 
@@ -158,19 +186,22 @@ CellTagsIndex->{}
 
 (*NotebookFileOutline
 Notebook[{
-Cell[1755, 51, 122, 3, 27, "Input",
+Cell[1754, 51, 122, 3, 27, "Input",
   InitializationCell->True],
-Cell[1880, 56, 88, 1, 27, "Input"],
-Cell[1971, 59, 39, 1, 27, "Input"],
-Cell[2013, 62, 1374, 27, 363, "Input",
+Cell[1879, 56, 81, 1, 27, "Input"],
+Cell[1963, 59, 39, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[2027, 64, 1475, 30, 379, "Input",
   InitializationCell->True],
-Cell[3390, 91, 1518, 26, 251, "Input",
+Cell[3505, 96, 360, 5, 20, "Message"]
+}, Open  ]],
+Cell[3880, 104, 2745, 47, 491, "Input",
   InitializationCell->True],
-Cell[4911, 119, 153, 3, 43, "Input",
+Cell[6628, 153, 153, 3, 43, "Input",
   InitializationCell->True],
-Cell[5067, 124, 57, 1, 27, "Input"],
-Cell[5127, 127, 39, 1, 27, "Input"],
-Cell[5169, 130, 222, 4, 27, "Input"]
+Cell[6784, 158, 57, 1, 27, "Input"],
+Cell[6844, 161, 39, 1, 27, "Input"]
 }
 ]
 *)
