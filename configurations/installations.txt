@@ -816,6 +816,8 @@ in /etc/fstab
    id newuser
    rocks sync users
 
+mdconfig -a -t vnode -f /mnt/tank/swap0 -u 3 && swapon /dev/md3
+
 net use z: /delete
 net use z: \\128.220.138.91\levlabnas /user:levlabuser /persistent:yes
 

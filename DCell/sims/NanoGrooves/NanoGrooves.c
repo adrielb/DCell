@@ -5,9 +5,7 @@ static LevelSet lsGrooves;
 typedef struct _MyCell {
   struct _DCell dcell;
   PetscReal Fk;  // magnitude of surface tension
-  PetscReal Fa; // magnitude of adhesion
-  PetscReal Fn; // restoring force
-  PetscReal Ka; // scale factor of contact area on surface tension
+  PetscReal Fa;  // magnitude of adhesion
   PetscReal kclip; // limit of curvature force
   PetscReal ecm; // ecm concentration
   PetscReal scale;
@@ -28,14 +26,13 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
   const MyCell c = (MyCell)context;
   const Coor dh = lsGrooves->phi->d;
   PetscReal dist;
-  PetscReal Fn = c->Fn * c->ecm * c->contactArea;
+  PetscReal ecmTot = c->ecm * c->contactArea;
 
   GridInterpolate( lsGrooves->phi, n->X, &dist );
 
   if( dist*dh.x > -c->contactThres ) {
     n->fa1 = c->Fa;
     n->fa2 = 0;
-    Fn = 0;
   }
 
   PetscReal k = n->k;
@@ -43,7 +40,7 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
 
-  n->f1 = c->scale * ( n->fa1*c->ecm - c->Fk * k + Fn );
+  n->f1 = c->scale * ( n->fa1*c->ecm - c->Fk * k * ecmTot );
   n->f2 = c->scale * ( n->fa2 );
 }
 
@@ -105,7 +102,6 @@ int main(int argc, char **args) {
   cell->dh = fluid->dh;
   cell->Fk = 3;
   cell->Fa = 3;
-  cell->Fn = 0;
   cell->kclip = 1 / radius;
   cell->ecm = 1;
   cell->scale = 1e-3;
@@ -171,16 +167,15 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   PetscFunctionBegin;
   ierr = PetscOptionsGetReal(0,"-Fa",&cell->Fa,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-Fk", &cell->Fk, 0); CHKERRQ(ierr);
-  ierr = PetscOptionsGetReal(0,"-Fn",&cell->Fn,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-kclip",&cell->kclip,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-ecm",&cell->ecm,0); CHKERRQ(ierr);
 
   ierr = PetscPrintf(MPI_COMM_WORLD,"Cell Parameters\n"); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fa     = %f\n", cell->Fa); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fk     = %f\n", cell->Fk); CHKERRQ(ierr);
-  ierr = PetscPrintf(MPI_COMM_WORLD,"Fn     = %f\n", cell->Fn); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"kclip  = %f\n", cell->kclip); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"ecm    = %f\n", cell->ecm); CHKERRQ(ierr);
+  ierr = PetscPrintf(MPI_COMM_WORLD,"---------------\n", cell->ecm); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

@@ -5,7 +5,7 @@ include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
 all: sim
-SIM := SurfaceTensionAdhesion
+SIM := NanoGrooves
 test: testDWorld.dworld
 
 ${LIBDCELL}: ${libraries}
