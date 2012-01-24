@@ -5,6 +5,7 @@ static LevelSet lsGrooves;
 typedef struct _MyCell {
   struct _DCell dcell;
   PetscReal Fk;  // magnitude of surface tension
+  PetscReal Fk0;  // magnitude of basal surface tension
   PetscReal Fa;  // magnitude of adhesion
   PetscReal kclip; // limit of curvature force
   PetscReal ecm; // ecm concentration
@@ -40,7 +41,7 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
 
-  n->f1 = c->scale * ( n->fa1*c->ecm - c->Fk * k * ecmTot );
+  n->f1 = c->scale * ( n->fa1*c->ecm - (c->Fk * ecmTot + c->Fk0 ) * k);
   n->f2 = c->scale * ( n->fa2 );
 }
 
@@ -101,6 +102,7 @@ int main(int argc, char **args) {
   ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
   cell->dh = fluid->dh;
   cell->Fk = 3;
+  cell->Fk = 1;
   cell->Fa = 3;
   cell->kclip = 1 / radius;
   cell->ecm = 1;
@@ -167,12 +169,14 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   PetscFunctionBegin;
   ierr = PetscOptionsGetReal(0,"-Fa",&cell->Fa,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-Fk", &cell->Fk, 0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-Fk0", &cell->Fk0, 0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-kclip",&cell->kclip,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-ecm",&cell->ecm,0); CHKERRQ(ierr);
 
   ierr = PetscPrintf(MPI_COMM_WORLD,"Cell Parameters\n"); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fa     = %f\n", cell->Fa); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fk     = %f\n", cell->Fk); CHKERRQ(ierr);
+  ierr = PetscPrintf(MPI_COMM_WORLD,"Fk0    = %f\n", cell->Fk0); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"kclip  = %f\n", cell->kclip); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"ecm    = %f\n", cell->ecm); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"---------------\n", cell->ecm); CHKERRQ(ierr);

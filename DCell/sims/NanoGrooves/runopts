@@ -1,0 +1,15 @@
+-Fa 1
+-ecm 1
+-Fk 0
+-Fk0 1
+-kclip 0.1
+-groove_width 2
+-timax 40000
+-CFL 0.1
+-dtmax 1
+-dtframe 10
+-pls_rmin 0.1
+-pls_rmax 0.5
+-ksp_monitor
+-ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_p_ksp_max_it 4 -ksp_max_it 100
+-log_summary -viewer_binary_skip_info
