@@ -164,7 +164,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCFieldSplitGetSubKSP(pc,&nVel,&kspVel); CHKERRQ(ierr);
   for( i = 0; i < nVel; i++ ) {
     if( size == 1 ) {
-      // Cholesky
+      /* Cholesky
       ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel_%d\n",i); CHKERRQ(ierr);
       ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
       ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
@@ -173,7 +173,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
       ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
       ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
       ierr = PCSetUp(pc); CHKERRQ(ierr);
-
+      */
       /* ICC
       ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel_%d\n",i); CHKERRQ(ierr);
       ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
@@ -185,6 +185,18 @@ PetscErrorCode FluidFieldSetup( FluidField f )
       ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
       ierr = PCSetUp(pc); CHKERRQ(ierr);
       */
+      // SOR
+      ierr = PetscPrintf(PETSC_COMM_WORLD,"  PREONLY/SOR_%d\n",i); CHKERRQ(ierr);
+      ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
+      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
+      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
+      ierr = PCSetType(pc,PCSOR); CHKERRQ(ierr);
+      ierr = PCSORSetIterations(pc,1,1); CHKERRQ(ierr);
+      ierr = PCSORSetSymmetric(pc,SOR_SYMMETRIC_SWEEP); CHKERRQ(ierr);
+      ierr = PCSORSetOmega(pc,1.9); CHKERRQ(ierr);
+      ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
+      ierr = PCSetUp(pc); CHKERRQ(ierr);
+
     } else {
       /* SOR
       ierr = PetscPrintf(PETSC_COMM_WORLD,"  GMRES/SOR_%d\n",i); CHKERRQ(ierr);
