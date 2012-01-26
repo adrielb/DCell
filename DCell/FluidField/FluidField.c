@@ -143,90 +143,15 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCSetType(pc,PCNONE); CHKERRQ(ierr);
   ierr = KSPSetFromOptions(kspVelP[1]);CHKERRQ(ierr);
 
-  // Split velocity [u v w] into component matricies [u], [v], [w]
+  ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel\n"); CHKERRQ(ierr);
   ierr = KSPSetType(kspVelP[0],KSPPREONLY); CHKERRQ(ierr);
   ierr = KSPGetPC(kspVelP[0],&pc); CHKERRQ(ierr);
-  ierr = PCSetType(pc, PCFIELDSPLIT); CHKERRQ(ierr);
-  ierr = PCFieldSplitSetType(pc,PC_COMPOSITE_ADDITIVE); CHKERRQ(ierr);
-  ierr = PCFieldSplitSetBlockSize(pc,f->is3D?3:2); CHKERRQ(ierr);
+  ierr = KSPSetTolerances(kspVelP[0],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
+  ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
+  ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
+  ierr = KSPSetFromOptions(kspVelP[0]);CHKERRQ(ierr);
   ierr = PCSetUp(pc); CHKERRQ(ierr);
 
-  /* Set solver for each velocity component
-   * Split component velocity as parallel blocks along processors
-   * Use direct solver for each block
-   * TODO: use MG, w/FFT on coarse grid
-   */
-
-  int size;
-  MPI_Comm_size( f->comm, &size);
-  int i, nVel;
-  KSP *kspVel, *subksp;
-  ierr = PCFieldSplitGetSubKSP(pc,&nVel,&kspVel); CHKERRQ(ierr);
-  for( i = 0; i < nVel; i++ ) {
-    if( size == 1 ) {
-      /* Cholesky
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel_%d\n",i); CHKERRQ(ierr);
-      ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
-      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
-      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
-      ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
-      ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
-      ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-      */
-      /* ICC
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel_%d\n",i); CHKERRQ(ierr);
-      ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
-      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
-      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
-      ierr = PCSetType(pc,PCICC); CHKERRQ(ierr);
-      ierr = PCFactorSetMatOrderingType(pc,MATORDERING_ND); CHKERRQ(ierr);
-      ierr = PCFactorSetLevels(pc,10); CHKERRQ(ierr);
-      ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-      */
-      // SOR
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"  PREONLY/SOR_%d\n",i); CHKERRQ(ierr);
-      ierr = KSPSetType(kspVel[i],KSPPREONLY); CHKERRQ(ierr);
-      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
-      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
-      ierr = PCSetType(pc,PCSOR); CHKERRQ(ierr);
-      ierr = PCSORSetIterations(pc,1,1); CHKERRQ(ierr);
-      ierr = PCSORSetSymmetric(pc,SOR_SYMMETRIC_SWEEP); CHKERRQ(ierr);
-      ierr = PCSORSetOmega(pc,1.9); CHKERRQ(ierr);
-      ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-
-    } else {
-      /* SOR
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"  GMRES/SOR_%d\n",i); CHKERRQ(ierr);
-      ierr = KSPSetType(kspVel[i],KSPGMRES); CHKERRQ(ierr);
-      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,1e-4,PETSC_DEFAULT,PETSC_DEFAULT); CHKERRQ(ierr);
-      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
-      ierr = PCSetType(pc,PCSOR); CHKERRQ(ierr);
-      ierr = PCSORSetIterations(pc,1,1); CHKERRQ(ierr);
-      ierr = PCSORSetSymmetric(pc,SOR_SYMMETRIC_SWEEP); CHKERRQ(ierr);
-      ierr = PCSORSetOmega(pc,1.9); CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-      */
-
-      /* ASM */
-      ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel_%d\n",i); CHKERRQ(ierr);
-      ierr = KSPSetType(kspVel[i],KSPGMRES); CHKERRQ(ierr);
-      ierr = KSPSetTolerances(kspVel[i],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
-      ierr = KSPGetPC(kspVel[i],&pc); CHKERRQ(ierr);
-      ierr = PCSetType(pc, PCASM); CHKERRQ(ierr);
-      ierr = PCASMSetOverlap(pc, 20); CHKERRQ(ierr);
-      ierr = KSPSetFromOptions(kspVel[i]);CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-      ierr = PCASMGetSubKSP(pc,PETSC_NULL,PETSC_NULL,&subksp); CHKERRQ(ierr);
-      ierr = KSPSetType(subksp[0],KSPPREONLY); CHKERRQ(ierr);
-      ierr = KSPGetPC(subksp[0],&pc); CHKERRQ(ierr);
-      ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
-      ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
-      ierr = PCSetUp(pc); CHKERRQ(ierr);
-    }
-  }
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Solver Setup: %f sec\n",t2-t1); CHKERRQ(ierr);
 
