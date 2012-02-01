@@ -143,14 +143,19 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCSetType(pc,PCNONE); CHKERRQ(ierr);
   ierr = KSPSetFromOptions(kspVelP[1]);CHKERRQ(ierr);
 
-  ierr = PetscPrintf(PETSC_COMM_WORLD,"  Factoring Vel\n"); CHKERRQ(ierr);
+  // Split velocity [u v w] into component matricies [u], [v], [w]
   ierr = KSPSetType(kspVelP[0],KSPPREONLY); CHKERRQ(ierr);
   ierr = KSPGetPC(kspVelP[0],&pc); CHKERRQ(ierr);
-  ierr = KSPSetTolerances(kspVelP[0],PETSC_DEFAULT,PETSC_DEFAULT,PETSC_DEFAULT,1); CHKERRQ(ierr);
-  ierr = PCSetType(pc,PCCHOLESKY); CHKERRQ(ierr);
-  ierr = PCFactorSetMatOrderingType(pc,MATORDERINGND); CHKERRQ(ierr);
-  ierr = KSPSetFromOptions(kspVelP[0]);CHKERRQ(ierr);
+  ierr = PCSetType(pc, PCFIELDSPLIT); CHKERRQ(ierr);
+  ierr = PCFieldSplitSetType(pc,PC_COMPOSITE_ADDITIVE); CHKERRQ(ierr);
+  ierr = PCFieldSplitSetBlockSize(pc,f->is3D?3:2); CHKERRQ(ierr);
   ierr = PCSetUp(pc); CHKERRQ(ierr);
+
+  /* Set solver for each velocity component
+   * Split component velocity as parallel blocks along processors
+   * Use direct solver for each block
+   * TODO: use MG, w/FFT on coarse grid
+   */
 
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Solver Setup: %f sec\n",t2-t1); CHKERRQ(ierr);

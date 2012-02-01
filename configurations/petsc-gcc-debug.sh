@@ -3,7 +3,7 @@
 #Exit immediately if command returns non-zero exit status
 set -e
 
-export PETSC_ARCH=gcc-debug
+export PETSC_ARCH=gcc-debug-slu
 cd $PETSC_DIR
 
 ./config/configure.py \
@@ -13,8 +13,9 @@ cd $PETSC_DIR
 --with-debugging=yes \
 --with-cc=mpicc \
 --with-fc=mpif90 \
+--download-parmetis=yes \
+--download-superlu_dist=yes
 #--download-f-blas-lapack=1
-#--download-superlu=1
 #--download-hdf5=1
 #--download-umfpack=
 

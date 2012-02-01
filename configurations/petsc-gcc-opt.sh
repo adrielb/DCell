@@ -14,10 +14,13 @@ cd $PETSC_DIR
 --with-fc=mpif90 \
 --COPTFLAGS="-O3" \
 --FOPTFLAGS="-O3" \
+#--download-parmetis=yes \
+#--download-superlu_dist=yes \
+#--download-spooles=yes
 #--download-f-blas-lapack=1 
 
 
-make -j 6 all
+make all
 make test
 
 #--with-mpi-dir=/share/apps/openmpi-1.4.1 \ 

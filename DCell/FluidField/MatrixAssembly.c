@@ -48,6 +48,7 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
   } else {
     ierr = DMGetMatrix(f->daV, MATMPIAIJ, &f->mat); CHKERRQ(ierr);
   }
+  ierr = MatSetFromOptions(f->mat); CHKERRQ(ierr);
 
   ierr = FluidField_MatAssemble( f->mu, f->dirichletBC, f->daV, f->dh, f->mat); CHKERRQ(ierr);
 
