@@ -11,18 +11,6 @@ PetscErrorCode FluidFieldSolve( FluidField f )
   PetscErrorCode ierr;
   PetscFunctionBegin;
 
-  // AdvectSL each Eij
-//  AdvectSL()
-
-  // Rotate strain tensor by curl of velocity field
-//  ???
-
-  // Integrate strain rate
-//  FluidFieldIntegrateStrainRate( DA daV, Vec vecV, DA daE, Vec vecE, PetscReal dh, PetscReal dt );
-
-  // Compute the divergence of strain E->rhs
-//  FluidFieldElasticDivergence()
-
   // IIM update for each level set
 
   // Discrete compatibility condition
@@ -33,9 +21,19 @@ PetscErrorCode FluidFieldSolve( FluidField f )
 
   // Solve the system L(u) - px = del(sigma) + IIM
   ierr = PetscGetTime(&t1); CHKERRQ(ierr);
-  ierr = KSPSolve(f->ksp,f->rhs,f->vel); CHKERRQ(ierr);
+  ierr = KSPSolve(f->ksp,PETSC_NULL,PETSC_NULL); CHKERRQ(ierr);
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"KSP Solve: %f sec\n",t2-t1); CHKERRQ(ierr);
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "ComputeRHS"
+PetscErrorCode ComputeRHS(DM dm,Vec x,Vec b)
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
 
   PetscFunctionReturn(0);
 }

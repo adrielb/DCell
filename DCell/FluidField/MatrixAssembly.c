@@ -66,6 +66,26 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
 
 //  ierr = MatWrite(f->mat,"mat",0); CHKERRQ(ierr);
 
+  ierr = DMSetApplicationContext(f->daV,f); CHKERRQ(ierr);
+  ierr = DMSetJacobian(f->daV,FluidField_ComputeMatrix);CHKERRQ(ierr);
+  ierr = DMSetInitialGuess(da,ComputeInitialGuess);CHKERRQ(ierr);
+  ierr = DMSetFunction(da,ComputeRHS);CHKERRQ(ierr);
+  ierr = KSPSetDM(f->ksp,f->daV);CHKERRQ(ierr);
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "FluidField_ComputeMatrix"
+PetscErrorCode FluidField_ComputeMatrix(DM dm,Vec x,Mat jac,Mat B,MatStructure *stflg)
+{
+  FluidField fluid;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = DMGetApplicationContext(dm, &fluid); CHKERRQ(ierr);
+  ierr = FluidField_MatAssemble( fluid->mu, fluid->dirichletBC, fluid->daV, fluid->dh, B ); CHKERRQ(ierr);
+  *stflg = SAME_NONZERO_PATTERN;
   PetscFunctionReturn(0);
 }
 

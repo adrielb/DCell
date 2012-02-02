@@ -13,6 +13,7 @@ PetscErrorCode FluidFieldElasticDivergence( DM daE, Vec et, DM daV, Vec rhs, Pet
 PetscErrorCode FluidField_EnforceNoSlipBC( FluidField f );
 PetscErrorCode FluidField_PressureBC( FluidField f );
 PetscErrorCode FluidField_AppendDBC( Array dbc, MatStencil row );
+PetscErrorCode FluidField_ComputeMatrix(DM dm,Vec x,Mat jac,Mat B,MatStructure *stflg);
 PetscErrorCode FluidFieldRegisterEvents(  );
 
 #endif /* FLUIDFIELD_PRIVATE_H_ */

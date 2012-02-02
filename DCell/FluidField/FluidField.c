@@ -151,12 +151,6 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCFieldSplitSetBlockSize(pc,f->is3D?3:2); CHKERRQ(ierr);
   ierr = PCSetUp(pc); CHKERRQ(ierr);
 
-  /* Set solver for each velocity component
-   * Split component velocity as parallel blocks along processors
-   * Use direct solver for each block
-   * TODO: use MG, w/FFT on coarse grid
-   */
-
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Solver Setup: %f sec\n",t2-t1); CHKERRQ(ierr);
 
