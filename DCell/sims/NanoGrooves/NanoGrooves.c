@@ -136,7 +136,7 @@ int main(int argc, char **args) {
 PetscErrorCode MyCellDestroy( DCell cell ) {
   MyCell mycell = (MyCell) cell;
   PetscErrorCode ierr;
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = PetscViewerDestroy(&mycell->contactareafile); CHKERRQ(ierr);
   ierr = DCellDestroy(cell); CHKERRQ(ierr);
   PetscFunctionReturn(0);

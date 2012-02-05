@@ -54,6 +54,7 @@ struct _DWorld {
   PetscErrorCode (*Simulate)( DWorld world );
 };
 
+// DWorld
 PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world );
 PetscErrorCode DWorldDestroy( DWorld world );
 PetscErrorCode DWorldAddDCell( DWorld world, void *dcell );
@@ -66,6 +67,7 @@ PetscErrorCode DWorldSetFromOptions( DWorld w );
 PetscErrorCode DWorldSimulate_Euler( DWorld world );
 PetscErrorCode DWorldSimulate_RK2( DWorld world );
 
+// DCells Array
 PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray);
 PetscErrorCode DCellsArrayDestroy(DCellsArray dcells );
 PetscErrorCode DCellsArrayAdd( DCellsArray dcells, DCell cell );
@@ -75,6 +77,7 @@ PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, Flui
 PetscErrorCode DCellsArrayAdvectRK2HalfStep( DCellsArray dcells, FluidField f, PetscReal dt );
 PetscErrorCode DCellsArrayAdvectRK2FullStep( DCellsArray dcells, FluidField f, PetscReal dt );
 
+// DCell
 PetscErrorCode DCellCreate( LevelSet lsPlasmaMembrane, DCell *dcell );
 PetscErrorCode DCellSetup( LevelSet lsPlasmaMembrane, DCell cell );
 PetscErrorCode DCellDestroy( DCell c );
