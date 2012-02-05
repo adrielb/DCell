@@ -116,6 +116,39 @@ PetscErrorCode DCellsArrayWrite( DCellsArray dcells, int t)
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "DCellsArrayInitPicard"
+PetscErrorCode DCellsArrayInitPicard( DCellsArray dcells )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells, i, &dcell);    CHKERRQ(ierr);
+    ierr = dcell->InitPicard( dcell ); CHKERRQ(ierr);
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellsArrayAdvectPicard"
+PetscErrorCode DCellsArrayAdvectPicard( DCellsArray dcells, FluidField f, PetscReal dt )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GAPutVec(f->vel,f->ga); CHKERRQ(ierr);
+
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells, i, &dcell); CHKERRQ(ierr);
+    dcell->lsPlasmaMembrane->Advect = LevelSetAdvectPicard;
+    ierr = LevelSetAdvect(dcell->lsPlasmaMembrane, f->ga, dt); CHKERRQ(ierr);
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "DCellsArrayUpdateFluidFieldRHS"
 static PetscLogEvent EVENT_DCellsArrayUpdateFluidFieldRHS;
 PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, FluidField f, PetscReal t )

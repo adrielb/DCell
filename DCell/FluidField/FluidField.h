@@ -21,6 +21,7 @@ typedef struct _FluidField {
   KSP ksp;
   Vec rhs;
   Vec vel;
+  Vec vel0;
   Array dirichletBC;
   int ga;
 

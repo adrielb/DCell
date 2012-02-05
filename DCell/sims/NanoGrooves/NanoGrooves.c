@@ -101,7 +101,6 @@ int main(int argc, char **args) {
   MyCell cell;
   ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
   cell->dh = fluid->dh;
-  cell->Fk = 3;
   cell->Fk = 1;
   cell->Fa = 3;
   cell->kclip = 1 / radius;
@@ -136,7 +135,7 @@ int main(int argc, char **args) {
 PetscErrorCode MyCellDestroy( DCell cell ) {
   MyCell mycell = (MyCell) cell;
   PetscErrorCode ierr;
-  PetscFunctionBegin
+  PetscFunctionBegin;
   ierr = PetscViewerDestroy(&mycell->contactareafile); CHKERRQ(ierr);
   ierr = DCellDestroy(cell); CHKERRQ(ierr);
   PetscFunctionReturn(0);

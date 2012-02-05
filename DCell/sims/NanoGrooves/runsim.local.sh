@@ -1,19 +1,20 @@
 #!/bin/bash
 
-JOBNAME=solvers
+JOBNAME=picard
+JOBID=01
 
-export PETSC_TMP=/data/sims/$JOBNAME/11
+export PETSC_TMP=/data/sims/$JOBNAME/$JOBID
 mkdir -p $PETSC_TMP
 
-mpiexec -np 8 ./NanoGrooves.x \
+./NanoGrooves.x \
 -Fa 1 \
 -ecm 1 \
 -Fk 0 \
 -Fk0 30 \
 -kclip 0.1 \
 -groove_width 1 \
--timax 222 \
--CFL 0.01 \
+-timax 1 \
+-CFL 0.5 \
 -dtmax 1 \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
@@ -22,18 +23,10 @@ mpiexec -np 8 ./NanoGrooves.x \
 -fieldsplit_p_ksp_max_it 4 \
 -fieldsplit_v_fieldsplit_0_ksp_type preonly \
 -fieldsplit_v_fieldsplit_1_ksp_type preonly \
--fieldsplit_v_fieldsplit_0_ksp_max_it 1 \
--fieldsplit_v_fieldsplit_1_ksp_max_it 1 \
--fieldsplit_v_fieldsplit_0_pc_type asm \
--fieldsplit_v_fieldsplit_1_pc_type asm \
--fieldsplit_v_fieldsplit_0_pc_asm_overlap 50 \
--fieldsplit_v_fieldsplit_1_pc_asm_overlap 50 \
--fieldsplit_v_fieldsplit_0_sub_ksp_type preonly \
--fieldsplit_v_fieldsplit_1_sub_ksp_type preonly \
--fieldsplit_v_fieldsplit_0_sub_pc_type cholesky \
--fieldsplit_v_fieldsplit_1_sub_pc_type cholesky \
--fieldsplit_v_fieldsplit_0_sub_pc_factor_mat_ordering_type nd \
--fieldsplit_v_fieldsplit_1_sub_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_0_pc_type cholesky \
+-fieldsplit_v_fieldsplit_1_pc_type cholesky \
+-fieldsplit_v_fieldsplit_0_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
 -log_summary -viewer_binary_skip_info \
 -info $PETSC_TMP/info.log > $PETSC_TMP/output &
 

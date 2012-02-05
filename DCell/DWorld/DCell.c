@@ -47,6 +47,7 @@ PetscErrorCode DCellSetup( LevelSet lsPlasmaMembrane, DCell cell )
   cell->AdvectRK2HalfStep = DCellAdvectRK2HalfStep;
   cell->AdvectRK2FullStep = DCellAdvectRK2FullStep;
   cell->UpdateFluidFieldRHS = DCellUpdateFluidFieldRHS;
+  cell->InitPicard = DCellInitPicard;
 
   PetscFunctionReturn(0);
 }
@@ -83,6 +84,17 @@ PetscErrorCode DCellAdvect( DCell dcell, int ga, PetscReal dt )
 
   PetscFunctionBegin;
   ierr = LevelSetAdvect(dcell->lsPlasmaMembrane, ga, dt); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellInitPicard"
+PetscErrorCode DCellInitPicard( DCell dcell )
+{
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GridCopy( dcell->lsPlasmaMembrane->phi, dcell->lsPlasmaMembrane->phi0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

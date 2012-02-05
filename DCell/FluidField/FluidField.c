@@ -51,6 +51,7 @@ PetscErrorCode FluidFieldDestroy(FluidField f)
   ierr = KSPDestroy(&f->ksp); CHKERRQ(ierr);
   ierr = VecDestroy(&f->rhs); CHKERRQ(ierr);
   ierr = VecDestroy(&f->vel); CHKERRQ(ierr);
+  ierr = VecDestroy(&f->vel0); CHKERRQ(ierr);
   ierr = ArrayDestroy(f->dirichletBC); CHKERRQ(ierr);
   GA_Destroy(f->ga);
 
@@ -108,6 +109,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = GACreate( f->daV, &f->ga); CHKERRQ(ierr);
   ierr = DMCreateGlobalVector(f->daV,&f->rhs); CHKERRQ(ierr);
   ierr = VecDuplicate(f->rhs,&f->vel); CHKERRQ(ierr);
+  ierr = VecDuplicate(f->rhs,&f->vel0); CHKERRQ(ierr);
 //  ierr = DACreateGlobalVector(f->daE,&f->E); CHKERRQ(ierr);
   ierr = DMCreateGlobalVector(f->daB,&f->buf); CHKERRQ(ierr);
 

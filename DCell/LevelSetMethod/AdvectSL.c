@@ -50,6 +50,18 @@ PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt)
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "LevelSetAdvectPicard"
+PetscErrorCode LevelSetAdvectPicard( LevelSet ls, Grid velgrid, PetscReal dt )
+{
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = LevelSetAdvectSL(ls, velgrid, dt ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
 #undef  __FUNCT__
 #define __FUNCT__ "LevelSetAdvectSL"
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt)

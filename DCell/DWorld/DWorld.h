@@ -16,6 +16,8 @@ struct _DCell {
   PetscErrorCode (*Advect)(DCell this, int ga, PetscReal dt );
   PetscErrorCode (*AdvectRK2HalfStep)(DCell this, int ga, PetscReal dt );
   PetscErrorCode (*AdvectRK2FullStep)(DCell this, int ga, PetscReal dt );
+  PetscErrorCode (*InitPicard)(DCell this);
+  PetscErrorCode (*AdvectPicard)(DCell this, int ga, PetscReal dt );
 };
 
 typedef struct _DCellsArray {
@@ -54,6 +56,7 @@ struct _DWorld {
   PetscErrorCode (*Simulate)( DWorld world );
 };
 
+// DWorld
 PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world );
 PetscErrorCode DWorldDestroy( DWorld world );
 PetscErrorCode DWorldAddDCell( DWorld world, void *dcell );
@@ -65,7 +68,9 @@ PetscErrorCode DWorldSetFrameInterval( DWorld w, PetscReal dtframe );
 PetscErrorCode DWorldSetFromOptions( DWorld w );
 PetscErrorCode DWorldSimulate_Euler( DWorld world );
 PetscErrorCode DWorldSimulate_RK2( DWorld world );
+PetscErrorCode DWorldSimulate_Picard(DWorld w);
 
+// DCells Array
 PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray);
 PetscErrorCode DCellsArrayDestroy(DCellsArray dcells );
 PetscErrorCode DCellsArrayAdd( DCellsArray dcells, DCell cell );
@@ -74,7 +79,10 @@ PetscErrorCode DCellsArrayWrite(  DCellsArray dcells, int t);
 PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, FluidField f, PetscReal t );
 PetscErrorCode DCellsArrayAdvectRK2HalfStep( DCellsArray dcells, FluidField f, PetscReal dt );
 PetscErrorCode DCellsArrayAdvectRK2FullStep( DCellsArray dcells, FluidField f, PetscReal dt );
+PetscErrorCode DCellsArrayInitPicard( DCellsArray dcells );
+PetscErrorCode DCellsArrayAdvectPicard( DCellsArray dcells, FluidField f, PetscReal dt );
 
+// DCell
 PetscErrorCode DCellCreate( LevelSet lsPlasmaMembrane, DCell *dcell );
 PetscErrorCode DCellSetup( LevelSet lsPlasmaMembrane, DCell cell );
 PetscErrorCode DCellDestroy( DCell c );
@@ -83,5 +91,7 @@ PetscErrorCode DCellAdvect( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellAdvectRK2HalfStep( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellAdvectRK2FullStep( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellUpdateFluidFieldRHS( DCell this, IIM, int ga, PetscReal t );
+PetscErrorCode DCellInitPicard( DCell dcell );
+PetscErrorCode DCellAdvectPicard( DCell dcell, int ga, PetscReal dt );
 
 #endif /*DWORLD_H_*/

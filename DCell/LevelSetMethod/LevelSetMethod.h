@@ -65,6 +65,7 @@ PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectSLRK2HalfStep( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSetAdvectSLRK2FullStep( LevelSet ls, Grid velgrid, PetscReal dt );
+PetscErrorCode LevelSetAdvectPicard( LevelSet ls, Grid velgrid, PetscReal dt );
 
 PetscErrorCode LevelSetInitializeParticles( LevelSet ls );
 PetscErrorCode ParticleLSDestroy( ParticleLS pls );

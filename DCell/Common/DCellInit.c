@@ -21,6 +21,7 @@ PetscErrorCode  DCellInitialize(int *argc,char ***args, const char file[])
   ierr = PetscInitialize(argc, args, (char *) 0, ""); CHKERRQ(ierr);
 
   PetscFunctionBegin;
+  ierr = PetscOptionsView(PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
   //TODO: Open HDF5 simulation file here
   ierr = RegisterEvents(); CHKERRQ(ierr);
   ierr = HeapRegisterEvents(); CHKERRQ(ierr);
