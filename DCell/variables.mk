@@ -29,7 +29,7 @@ test${1}-${2}: ${1}/tests/${2}.x
 	@echo "====================================================================="
 	@echo Test target: $$@
 	-rm -rf ${PETSC_TMP}/*
-	@${MPIEXEC} -np ${4} ./a.out
+	@${MPIEXEC} -np ${4} ./${1}/tests/${2}.x
 endef
 
 # ${call simulation,SimName,NP,runopts}

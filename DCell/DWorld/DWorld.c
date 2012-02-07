@@ -31,7 +31,16 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world )
   w->dtframe = -1;
   w->tiframe = 0;
   w->printStep = PETSC_TRUE;
-  w->Simulate = DWorldSimulate_Euler;
+  w->Simulate = DWorldSimulate_BFGS;
+
+  //BFGS
+  int N = 100;
+  MPI_Comm comm = PETSC_COMM_SELF;
+  ierr = MatCreateSeqDense(comm,N,N,PETSC_NULL,&w->jac); CHKERRQ(ierr);
+  ierr = VecCreateSeq(comm,N,&w->s); CHKERRQ(ierr);
+  ierr = VecDuplicate(w->s,&w->y); CHKERRQ(ierr);
+  ierr = VecDuplicate(w->s,&w->x0); CHKERRQ(ierr);
+  ierr = VecDuplicate(w->s,&w->x1); CHKERRQ(ierr);
 
   ierr = PetscLogEventRegister("DWorldWrite", 0, &EVENT_DWorldWrite); CHKERRQ(ierr);
   ierr = PetscInfo(0, "Created DWorld\n"); CHKERRQ(ierr);
@@ -94,6 +103,126 @@ PetscErrorCode DWorldSimulate(DWorld w)
 
   PetscFunctionBegin;
   ierr = w->Simulate( w ); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#include "petscblaslapack.h"
+#undef __FUNCT__
+#define __FUNCT__ "DWorldSimulate_BFGS"
+PetscErrorCode DWorldSimulate_BFGS(DWorld w)
+{
+  int i, j, k;
+  PetscReal zero = 0, one = 1, negone = -1;
+  PetscReal sTy, yTBy, a1;
+  PetscBLASInt n = 1;
+  PetscReal *m1, *m2, *ssT, *BysT, *syTB, *B; // matrices
+  PetscReal *s, *y, *d, *x0, *x1, *g0, *g1, *By; // vectors
+  int inc = 1;
+  const char nop = 'N';
+  int lda;
+  int maxIter = 10;
+  PetscReal tol = 10;
+  PetscReal lambda = 1;
+  FluidField fluid = w->fluid;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  // set [B] = [I]
+  // set phi0 = phi
+  size_t vecsize = sizeof(double)*n;
+  ierr = PetscMalloc(vecsize,&s); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&y); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&d); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&x0); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&x1); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&g0); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&g1); CHKERRQ(ierr);
+  ierr = PetscMalloc(vecsize,&By); CHKERRQ(ierr);
+  size_t matsize = sizeof(double)*n*n;
+  ierr = PetscMalloc(matsize,&m1); CHKERRQ(ierr);
+  ierr = PetscMalloc(matsize,&m2); CHKERRQ(ierr);
+  ierr = PetscMalloc(matsize,&ssT); CHKERRQ(ierr);
+  ierr = PetscMalloc(matsize,&BysT); CHKERRQ(ierr);
+  ierr = PetscMalloc(matsize,&syTB); CHKERRQ(ierr);
+  ierr = PetscMalloc(matsize,&B); CHKERRQ(ierr);
+
+  for (i = 0; i < maxIter; ++i) {
+    // Update RHS
+    // Evaluate g0 = g( X = x0 )
+    // g(X) = X - Xn - dt*U(X)
+    ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
+    ierr = DCellsArrayUpdateFluidFieldRHS(w->dcells, w->iim, fluid, w->t ); CHKERRQ(ierr);
+    ierr = FluidFieldSolve( fluid ); CHKERRQ(ierr);
+    ierr = DCellsArrayAdvectImplicit( w->dcells, w->fluid, w->dt, x0, g0 ); CHKERRQ(ierr);
+
+    // Solve B.d = -g0
+    // Mult  d = -B.g0
+    BLASgemv_(&nop,&n,&n,&negone,B,&lda,g0,&inc,&zero,d,&inc);
+
+    // Update position
+    // x1 = x0 + l d
+    for (j = 0; j < n; ++j) {
+      x1[j] = x0[j] + lambda*d[j];
+    }
+
+    // Check convergence
+    // | x1 - x0 | < tol
+    //  | g(x0) |  < tol
+    PetscReal dx, norm;
+    norm = 0;
+    for (k = 0; k < n; ++k) {
+      dx = x1[k] - x0[k];
+      norm += dx*dx;
+    }
+    if( norm < tol )
+      break;
+
+    // Evaluate g1 = g( X = x1 )
+    // g(X) = X - Xn - dt*U(X)
+    ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
+    ierr = DCellsArrayUpdateFluidFieldRHS(w->dcells, w->iim, fluid, w->t ); CHKERRQ(ierr);
+    ierr = FluidFieldSolve( fluid ); CHKERRQ(ierr);
+    ierr = DCellsArrayAdvectImplicit( w->dcells, w->fluid, w->dt, x1, g1 ); CHKERRQ(ierr);
+
+    // Update Hessian
+    // s = x1 - x0
+    // y = g(x1) - g(x0)
+    // B = B + (sT.y + yT.B.y)(s.sT) / (sT.y)^2 - ( B.y.sT + s.yT.B ) / (sT.y)
+    for (j = 0; j < n; ++j) {
+      s[j] = lambda*d[j];
+      y[j] = g1[j] - g0[j];
+    }
+
+    // [ (sT.y + yT.B.y) / (sT.y)^2 ] (s.sT)
+    BLASgemv_(&nop,&n,&n,&one,B,&lda,y,&inc,&zero,By,&inc); // By = B.y
+    yTBy = BLASdot_(&n,y,&inc,By,&inc);  // yT.B.y = y.By
+    sTy  = BLASdot_(&n,s,&inc,y,&inc); // sTy = sT.y
+    a1 = ( sTy + yTBy ) / (sTy*sTy);
+    dger_(&n,&n,&a1,s,&inc,s,&inc,ssT,&lda); // ssT = a1 * s.sT
+    // ( B.y.sT + s.yT.B ) / (sT.y)
+    dger_(&n,&n,&one,y,&inc,s,&inc,m1,&lda); // m1 = y.sT
+    dger_(&n,&n,&one,s,&inc,y,&inc,m2,&lda); // m2 = s.yT
+    dgemm_(&nop,&nop,&n,&n,&n,&one,B,&lda,m1,&lda,&zero,BysT,&lda); // BysT = B.m1
+    dgemm_(&nop,&nop,&n,&n,&n,&one,m2,&lda,B,&lda,&zero,syTB,&lda); // syTB = m2.B
+
+    for (j = 0; j < n*n; ++j) {
+      B[i] = B[i] + ssT[i] - (BysT[i] + syTB[i])/sTy;
+    }
+  }
+  ierr = PetscFree(s); CHKERRQ(ierr);
+  ierr = PetscFree(y); CHKERRQ(ierr);
+  ierr = PetscFree(d); CHKERRQ(ierr);
+  ierr = PetscFree(x0); CHKERRQ(ierr);
+  ierr = PetscFree(x1); CHKERRQ(ierr);
+  ierr = PetscFree(g0); CHKERRQ(ierr);
+  ierr = PetscFree(g1); CHKERRQ(ierr);
+  ierr = PetscFree(By); CHKERRQ(ierr);
+  ierr = PetscFree(m1); CHKERRQ(ierr);
+  ierr = PetscFree(m2); CHKERRQ(ierr);
+  ierr = PetscFree(ssT); CHKERRQ(ierr);
+  ierr = PetscFree(BysT); CHKERRQ(ierr);
+  ierr = PetscFree(syTB); CHKERRQ(ierr);
+  ierr = PetscFree(B); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

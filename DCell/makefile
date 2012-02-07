@@ -3,9 +3,9 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: sim
+all: test
 SIM := NanoGrooves
-test: testDWorld.dworld
+test: testDWorld-bfgs
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

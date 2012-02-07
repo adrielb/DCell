@@ -8,3 +8,4 @@ ${LOCOBJS}: DWorld/DWorld.h
 
 LOCDEPS := DWorld FluidField IIM LevelSetMethod Common
 ${eval ${call test-library,${subdirectory},dworld,${LOCDEPS}, 2 }}
+${eval ${call test-library,${subdirectory},bfgs,${LOCDEPS}, 1 }}

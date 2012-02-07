@@ -10,6 +10,7 @@ typedef struct _LevelSet *LevelSet;
 struct _LevelSet {
   Grid phi;  // the level set
   Grid phi0; //
+  Grid psi;  // implicit step
   Grid tmp; // temporary buffer while resizing     // TODO: use a global set of work grids for all level sets
   Array band; // Narrow band coordinates [x,y,z]
   Array irregularNodes;

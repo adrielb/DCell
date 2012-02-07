@@ -52,6 +52,12 @@ struct _DWorld {
   PetscLogStage stageSimLoop;
 
   PetscErrorCode (*Simulate)( DWorld world );
+
+  // BFGS
+  Mat jac;
+  KSP ksp;
+  Vec s, y;
+  Vec x0, x1;
 };
 
 // DWorld
@@ -66,6 +72,7 @@ PetscErrorCode DWorldSetFrameInterval( DWorld w, PetscReal dtframe );
 PetscErrorCode DWorldSetFromOptions( DWorld w );
 PetscErrorCode DWorldSimulate_Euler( DWorld world );
 PetscErrorCode DWorldSimulate_RK2( DWorld world );
+PetscErrorCode DWorldSimulate_BFGS( DWorld world );
 
 // DCells Array
 PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray);
@@ -76,6 +83,7 @@ PetscErrorCode DCellsArrayWrite(  DCellsArray dcells, int t);
 PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, FluidField f, PetscReal t );
 PetscErrorCode DCellsArrayAdvectRK2HalfStep( DCellsArray dcells, FluidField f, PetscReal dt );
 PetscErrorCode DCellsArrayAdvectRK2FullStep( DCellsArray dcells, FluidField f, PetscReal dt );
+PetscErrorCode DCellsArrayAdvectImplicit( DCellsArray dcells, FluidField f, PetscReal dt, PetscReal *p, PetscReal *g );
 
 // DCell
 PetscErrorCode DCellCreate( LevelSet lsPlasmaMembrane, DCell *dcell );
