@@ -1,6 +1,6 @@
 # DWorld Module
 
-LOCOBJS := DWorld.o DCell.o DCellsArray.o
+LOCOBJS := DWorld.o DCell.o DCellsArray.o Euler.o RK2.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
