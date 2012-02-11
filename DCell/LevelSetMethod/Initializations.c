@@ -47,7 +47,7 @@ PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radiu
     }
   }
 
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
 
   *lset = ls;
@@ -104,7 +104,7 @@ PetscErrorCode LevelSetInitializeToSphere( Coor dh, Coor center, PetscReal radiu
     } // j
   } // k
   
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
 
   *lset = ls;
@@ -134,7 +134,7 @@ PetscErrorCode LevelSetInitializeFromImage( LevelSet ls )
     }
   }
 
-  ierr = LevelSetUpdateIrregularNodeList(ls); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList(ls, ls->phi); CHKERRQ(ierr);
   ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
@@ -182,7 +182,7 @@ PetscErrorCode LevelSetInitializeToStar2D( Coor dh, Coor center, PetscReal radiu
     }
   }
 
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
 
   *lset = ls;

@@ -6,7 +6,7 @@
  */
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetUpdateIrregularNodeList"
-PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls )
+PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls, Grid p )
 {
   PetscErrorCode ierr;
 
@@ -18,9 +18,9 @@ PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls )
 
   if( ls->phi->is2D )
   {
-    LevelSetUpdateIrregularNodeList_2D( ls );
+    LevelSetUpdateIrregularNodeList_2D( ls, p );
   } else {
-    LevelSetUpdateIrregularNodeList_3D( ls );
+    LevelSetUpdateIrregularNodeList_3D( ls, p );
   }
   
   ierr = PetscLogEventEnd(EVENT_LevelSetUpdateIrregularNodeList,0,0,0,0); CHKERRQ(ierr);
@@ -29,7 +29,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls )
 
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetUpdateIrregularNodeList_2D"
-PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
+PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls, Grid p )
 {
   int i, j, k, I, J, ni, nj;
   const int numNei = 4;
@@ -43,7 +43,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
-  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+  ierr = GridGet(p,&phi); CHKERRQ(ierr);
   for( b = 0; b < ArrayLength(ls->band); ++b)
   {
     ierr = ArrayGet(ls->band,b,&band); CHKERRQ(ierr);

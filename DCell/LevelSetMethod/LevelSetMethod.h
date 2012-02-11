@@ -55,7 +55,7 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
 PetscErrorCode LevelSetDestroy(LevelSet ls);
 PetscErrorCode LevelSetSetBandWidth(LevelSet ls, PetscReal bandwidth);
 PetscErrorCode LevelSetResize( LevelSet ls);
-PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls );
+PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls, Grid p );
 PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx );
 PetscErrorCode LevelSetNormalDirection( LevelSet ls, Coor X, Coor *n );
 inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coor X );
@@ -66,6 +66,9 @@ PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectSLRK2HalfStep( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSetAdvectSLRK2FullStep( LevelSet ls, Grid velgrid, PetscReal dt );
+PetscErrorCode LevelSetAdvectImplicitInit( LevelSet ls, PetscInt *n );
+PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, PetscReal *g );
+PetscErrorCode LevelSetAdvectImplicitUpdate( LevelSet ls, PetscReal lambda, PetscReal *dpsi );
 
 PetscErrorCode LevelSetInitializeParticles( LevelSet ls );
 PetscErrorCode ParticleLSDestroy( ParticleLS pls );

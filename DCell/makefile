@@ -5,7 +5,7 @@ include $(addsuffix /module.mk,$(MODULES))
 
 all: test
 SIM := NanoGrooves
-test: testDWorld-bfgs
+test: testDWorld-implicit
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

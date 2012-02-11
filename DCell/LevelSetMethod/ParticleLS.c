@@ -312,7 +312,7 @@ PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt)
   ierr = GridCopy(ls->phi,ls->phi0); CHKERRQ(ierr);
   ierr = LevelSetAdvectSL(ls,velgrid,dt); CHKERRQ(ierr);
   ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   ierr = LevelSetCFLIncrement( ls, velgrid, dt ); CHKERRQ(ierr);
   if( ls->AdvectCount >= ls->AdvectThres || ls->CFLcount >= ls->CFLthres ) {
     ierr = PetscInfo4(0,"CFLcount: %f:%f  AdvectCount: %d:%d\n", ls->CFLcount, ls->CFLthres, ls->AdvectCount,ls->AdvectThres); CHKERRQ(ierr);
@@ -342,7 +342,7 @@ PetscErrorCode LevelSetAdvectPLSRK2HalfStep( LevelSet ls, Grid velgrid, PetscRea
   ierr = GridCopy(ls->phi,ls->phi0); CHKERRQ(ierr);
   ierr = LevelSetAdvectSL(ls, velgrid, dt ); CHKERRQ(ierr);
   ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -358,7 +358,7 @@ PetscErrorCode LevelSetAdvectPLSRK2FullStep( LevelSet ls, Grid velgrid, PetscRea
   ierr = ParticleLS_AdvectParticles2D(pls,ls->phi->d,velgrid,dt); CHKERRQ(ierr);
   ierr = LevelSetAdvectSL(ls, velgrid, dt ); CHKERRQ(ierr);
   ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
   ierr = LevelSetCFLIncrement( ls, velgrid, dt ); CHKERRQ(ierr);
   if( ls->AdvectCount >= ls->AdvectThres || ls->CFLcount >= ls->CFLthres ) {
     ierr = PetscInfo4(0,"CFLcount: %f:%f  AdvectCount: %d:%d\n", ls->CFLcount, ls->CFLthres, ls->AdvectCount,ls->AdvectThres); CHKERRQ(ierr);

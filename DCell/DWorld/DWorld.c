@@ -33,15 +33,6 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world )
   w->printStep = PETSC_TRUE;
   w->Simulate = DWorldSimulate_BFGS;
 
-  //BFGS
-  int N = 100;
-  MPI_Comm comm = PETSC_COMM_SELF;
-  ierr = MatCreateSeqDense(comm,N,N,PETSC_NULL,&w->jac); CHKERRQ(ierr);
-  ierr = VecCreateSeq(comm,N,&w->s); CHKERRQ(ierr);
-  ierr = VecDuplicate(w->s,&w->y); CHKERRQ(ierr);
-  ierr = VecDuplicate(w->s,&w->x0); CHKERRQ(ierr);
-  ierr = VecDuplicate(w->s,&w->x1); CHKERRQ(ierr);
-
   ierr = PetscLogEventRegister("DWorldWrite", 0, &EVENT_DWorldWrite); CHKERRQ(ierr);
   ierr = PetscInfo(0, "Created DWorld\n"); CHKERRQ(ierr);
 

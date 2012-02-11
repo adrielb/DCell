@@ -17,7 +17,7 @@ subdirectory = $(patsubst %/module.mk,%, \
                  $(word \
       $(words $(MAKEFILE_LIST)),$(MAKEFILE_LIST)))
 
-# ${call test-library,module,testprog, depends, NP}
+# ${call test-library,module,testprog, depends, NP, runopts}
 define test-library
 CLEAN += ${1}/tests/${2}.o ${1}/tests/${2}.x
 ALLTESTS += test${1}-${2}
@@ -29,7 +29,7 @@ test${1}-${2}: ${1}/tests/${2}.x
 	@echo "====================================================================="
 	@echo Test target: $$@
 	-rm -rf ${PETSC_TMP}/*
-	@${MPIEXEC} -np ${4} ./${1}/tests/${2}.x
+	@${MPIEXEC} -np ${4} ./${1}/tests/${2}.x ${5}
 endef
 
 # ${call simulation,SimName,NP,runopts}

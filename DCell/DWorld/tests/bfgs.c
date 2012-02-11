@@ -4,6 +4,11 @@
 void PrintVec( const char *name, PetscReal *v, int len);
 void PrintMat( const char *name, PetscReal *m, int len);
 
+// A := alpha*x*y' + A,
+int dger_(int *m, int *n, double *alpha,
+  double *x, int *incx, double *y, int *incy,
+  double *a, int *lda);
+
 void f( PetscReal *x, PetscReal *g ) {
   g[0] =  exp(x[0]-1) + 2*(x[0] - x[1]);
   g[1] = -exp(1-x[1]) - 2*(x[0] - x[1]);

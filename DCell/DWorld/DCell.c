@@ -47,6 +47,9 @@ PetscErrorCode DCellSetup( LevelSet lsPlasmaMembrane, DCell cell )
   cell->AdvectRK2HalfStep = DCellAdvectRK2HalfStep;
   cell->AdvectRK2FullStep = DCellAdvectRK2FullStep;
   cell->UpdateFluidFieldRHS = DCellUpdateFluidFieldRHS;
+  cell->AdvectImplicitInit = DCellAdvectImplicitInit;
+  cell->AdvectImplicitRHS = DCellAdvectImplicitRHS;
+  cell->AdvectImplicitUpdate = DCellAdvectImplicitUpdate;
 
   PetscFunctionReturn(0);
 }
@@ -119,4 +122,32 @@ PetscErrorCode DCellUpdateFluidFieldRHS( DCell this, IIM iim, int ga, PetscReal 
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "DCellAdvectImplicitInit"
+PetscErrorCode DCellAdvectImplicitInit( DCell this, PetscInt *n )
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = LevelSetAdvectImplicitInit( this->lsPlasmaMembrane, n); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
 
+#undef __FUNCT__
+#define __FUNCT__ "DCellAdvectImplicitRHS"
+PetscErrorCode DCellAdvectImplicitRHS( DCell this, int ga, PetscReal dt, PetscReal *g )
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = LevelSetAdvectImplicitRHS( this->lsPlasmaMembrane, ga, dt, g ); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellAdvectImplicitUpdate"
+PetscErrorCode DCellAdvectImplicitUpdate( DCell this, PetscReal lambda, PetscReal *dpsi )
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = LevelSetAdvectImplicitUpdate( this->lsPlasmaMembrane, lambda, dpsi ); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}

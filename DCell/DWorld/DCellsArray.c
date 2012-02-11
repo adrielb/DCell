@@ -138,6 +138,61 @@ PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, Flui
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "DCellsArrayAdvectImplicitInit"
+PetscErrorCode DCellsArrayAdvectImplicitInit( DCellsArray dcells, int *n )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  *n = 0;
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells,i,&dcell); CHKERRQ(ierr);
+    ierr = dcell->AdvectImplicitInit(dcell, n); CHKERRQ(ierr);
+  }
+  // TODO: sum up all sizes among procs
+//  ierr = MPI_Allreduce(n,n,1,MPI_DOUBLE,MPI_SUM,comm); CHKERRQ(ierr);
+  ierr = PetscBarrier(0); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellsArrayAdvectImplicitRHS"
+PetscErrorCode DCellsArrayAdvectImplicitRHS( DCellsArray dcells, FluidField f, double dt, double *g0 )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GAPutVec(f->vel,f->ga); CHKERRQ(ierr);
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells,i,&dcell); CHKERRQ(ierr);
+    ierr = dcell->AdvectImplicitRHS(dcell, f->ga, dt, g0 ); CHKERRQ(ierr);
+  }
+  ierr = PetscBarrier(0); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellsArrayAdvectImplicitUpdate"
+PetscErrorCode DCellsArrayAdvectImplicitUpdate( DCellsArray dcells, double lambda, double *d )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells,i,&dcell); CHKERRQ(ierr);
+    ierr = dcell->AdvectImplicitUpdate(dcell, lambda, d ); CHKERRQ(ierr);
+  }
+  ierr = PetscBarrier(0); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "DCellsRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
 PetscErrorCode DCellsRegisterEvents(  )
@@ -150,6 +205,7 @@ PetscErrorCode DCellsRegisterEvents(  )
   ierr = PetscLogEventRegister("DCellsAdvect",0,&EVENT_DCellsArrayAdvectRK2HalfStep); CHKERRQ(ierr);
   ierr = PetscLogEventRegister("DCellsAdvect",0,&EVENT_DCellsArrayAdvectRK2FullStep); CHKERRQ(ierr);
   ierr = PetscLogEventRegister("DCellsUpdateRHS",0,&EVENT_DCellsArrayUpdateFluidFieldRHS); CHKERRQ(ierr);
+
   EVENTS_registered = PETSC_TRUE;
   PetscFunctionReturn(0);
 }

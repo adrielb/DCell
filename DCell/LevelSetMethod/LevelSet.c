@@ -12,8 +12,11 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   PetscFunctionBegin;
   ierr = PetscNew(struct _LevelSet, &ls); CHKERRQ(ierr);
   ierr = GridCreate(dh,pos,size,1,&ls->phi); CHKERRQ(ierr);
+  ierr = GridSetName(ls->phi,"phi"); CHKERRQ(ierr);
   ierr = GridCreate(dh,pos,size,1,&ls->phi0); CHKERRQ(ierr);
+  ierr = GridSetName(ls->phi0,"phi0"); CHKERRQ(ierr);
   ierr = GridCreate(dh,pos,size,1,&ls->tmp); CHKERRQ(ierr); // Use a global, shared buffer for all level sets
+  ierr = GridSetName(ls->tmp,"tmp"); CHKERRQ(ierr);
   //TODO: set band width, init mem sizes for band and heap, counts and thresholds as petsc options
   ls->CFLthres = 3;
   ls->CFLcount = 0;

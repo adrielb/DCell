@@ -16,6 +16,9 @@ struct _DCell {
   PetscErrorCode (*Advect)(DCell this, int ga, PetscReal dt );
   PetscErrorCode (*AdvectRK2HalfStep)(DCell this, int ga, PetscReal dt );
   PetscErrorCode (*AdvectRK2FullStep)(DCell this, int ga, PetscReal dt );
+  PetscErrorCode (*AdvectImplicitInit)(DCell this, PetscInt *n );
+  PetscErrorCode (*AdvectImplicitRHS)(DCell this, int ga, PetscReal dt, PetscReal *g );
+  PetscErrorCode (*AdvectImplicitUpdate)(DCell this, PetscReal lambda, PetscReal *dpsi );
 };
 
 typedef struct _DCellsArray {
@@ -30,7 +33,6 @@ struct _DWorld {
   DCellsArray dcells; // cells this processor owns
   FluidField fluid;
   IIM iim;
-
 
   // Temporal stats
   PetscBool printStep;
@@ -52,12 +54,6 @@ struct _DWorld {
   PetscLogStage stageSimLoop;
 
   PetscErrorCode (*Simulate)( DWorld world );
-
-  // BFGS
-  Mat jac;
-  KSP ksp;
-  Vec s, y;
-  Vec x0, x1;
 };
 
 // DWorld
@@ -84,6 +80,9 @@ PetscErrorCode DCellsArrayUpdateFluidFieldRHS( DCellsArray dcells, IIM iim, Flui
 PetscErrorCode DCellsArrayAdvectRK2HalfStep( DCellsArray dcells, FluidField f, PetscReal dt );
 PetscErrorCode DCellsArrayAdvectRK2FullStep( DCellsArray dcells, FluidField f, PetscReal dt );
 PetscErrorCode DCellsArrayAdvectImplicit( DCellsArray dcells, FluidField f, PetscReal dt, PetscReal *p, PetscReal *g );
+PetscErrorCode DCellsArrayAdvectImplicitInit( DCellsArray dcells, PetscInt *n );
+PetscErrorCode DCellsArrayAdvectImplicitRHS( DCellsArray dcells, FluidField f, PetscReal dt, PetscReal *g );
+PetscErrorCode DCellsArrayAdvectImplicitUpdate( DCellsArray dcells, PetscReal lambda, PetscReal *dpsi );
 
 // DCell
 PetscErrorCode DCellCreate( LevelSet lsPlasmaMembrane, DCell *dcell );
@@ -94,5 +93,7 @@ PetscErrorCode DCellAdvect( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellAdvectRK2HalfStep( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellAdvectRK2FullStep( DCell dcell, int ga, PetscReal dt );
 PetscErrorCode DCellUpdateFluidFieldRHS( DCell this, IIM, int ga, PetscReal t );
-
+PetscErrorCode DCellAdvectImplicitInit( DCell this, PetscInt *n );
+PetscErrorCode DCellAdvectImplicitRHS( DCell this, int ga, PetscReal dt, PetscReal *g );
+PetscErrorCode DCellAdvectImplicitUpdate( DCell this, PetscReal lambda, PetscReal *dpsi );
 #endif /*DWORLD_H_*/

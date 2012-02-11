@@ -168,6 +168,7 @@ PetscErrorCode LeastSqSolve( LeastSq ls )
     printf("2\tn:%d\n", ls->n);
     printf("3\tnrhs:%d\n", ls->nrhs);
     PrintMat( ls->m, ls->n, ls->a );
+    PetscPushErrorHandler(PetscMPIAbortErrorHandler,0);
     SETERRQ(ls->comm, 1,"MKL ERROR in LeastSq");
   }
     

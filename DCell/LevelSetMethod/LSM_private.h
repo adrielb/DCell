@@ -12,8 +12,8 @@ PetscLogEvent EVENT_ParticleLS_AdjustRadii;
 PetscLogEvent EVENT_ParticleLS_ReseedParticles;
 
 PetscErrorCode LevelSetRegisterEvents( );
-PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls );
-PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls );
+PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls, Grid p );
+PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls, Grid p );
 PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetGatherVelocity(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);
