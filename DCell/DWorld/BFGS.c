@@ -87,45 +87,36 @@ PetscErrorCode DWorldSimulate_BFGS(DWorld w)
     for (c = 0; c < 30; ++c) {
       // Update position
       // x1 = x0 + l d
-      ierr = DWorld_DebugWrite( w, 1); CHKERRQ(ierr);
+//      ierr = DWorld_DebugWrite( w, 1); CHKERRQ(ierr);
       ierr = DCellsArrayAdvectImplicitUpdate( dcells, lambda, d); CHKERRQ(ierr);
 //      ierr = DWorld_DebugWrite( w, i+1); CHKERRQ(ierr);
-      ierr = DWorld_DebugWrite( w, 2); CHKERRQ(ierr);
+//      ierr = DWorld_DebugWrite( w, 2); CHKERRQ(ierr);
 
-      // Check convergence
-      // | x1 - x0 | == | l*d | < tolx
-      norm = 0;
-      for (j = 0; j < n; ++j) {
-        norm += lambda*d[j]*lambda*d[j];
+      int m;
+      for (m = 0; m < 10; ++m) {
+        // Evaluate g1 = g( X = x1 )
+        // g(X) = X - Xn - dt*U(X)
+        ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
+        ierr = DCellsArrayUpdateFluidFieldRHS( dcells, w->iim, fluid, w->t ); CHKERRQ(ierr);
+        ierr = FluidFieldSolve( fluid ); CHKERRQ(ierr);
+        ierr = DCellsArrayAdvectImplicitRHS( dcells, w->fluid, w->dt, g1 ); CHKERRQ(ierr);
+
+        // Check root
+        //  | g(x1) |  < tolg
+        g1norm = 0;
+        for (j = 0; j < n; ++j) {
+          g1norm += g1[j]*g1[j];
+        }
+        g1norm = sqrt(g1norm);
+        if( g1norm < tolg )
+          break;
       }
-      norm = sqrt(norm);
-      ierr = PetscInfo1(0,"BFGS convergence norm: %f\n", norm ); CHKERRQ(ierr);
-      if( norm < tolx )
-        break;
-
-      // Evaluate g1 = g( X = x1 )
-      // g(X) = X - Xn - dt*U(X)
-      ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
-      ierr = DCellsArrayUpdateFluidFieldRHS( dcells, w->iim, fluid, w->t ); CHKERRQ(ierr);
-      ierr = FluidFieldSolve( fluid ); CHKERRQ(ierr);
-      ierr = DCellsArrayAdvectImplicitRHS( dcells, w->fluid, w->dt, g1 ); CHKERRQ(ierr);
-
-      // Check root
-      //  | g(x1) |  < tolg
-      g1norm = 0;
-      for (j = 0; j < n; ++j) {
-        g1norm += g1[j]*g1[j];
-      }
-      g1norm = sqrt(g1norm);
-
-      if( g1norm < tolg )
-        break;
 
       if( g1norm > g0norm ) {
         // reset psi back to x0
         ierr = DCellsArrayAdvectImplicitUpdate( dcells, -lambda, d); CHKERRQ(ierr);
-        ierr = DWorld_DebugWrite( w, 3); CHKERRQ(ierr);
-        lambda = lambda / 2.;
+//        ierr = DWorld_DebugWrite( w, 3); CHKERRQ(ierr);
+//        lambda = lambda / 2.;
       } else {
         g0norm = g1norm;
         break;
@@ -211,11 +202,9 @@ PetscErrorCode DWorld_DebugWrite( DWorld w, int i )
   ierr = ArrayGetP(w->dcells->dcells,0,&dcell); CHKERRQ(ierr);
   ls = dcell->lsPlasmaMembrane;
   ierr = GridWrite(ls->phi,i); CHKERRQ(ierr);
-  ierr = GridWrite(ls->psi,i); CHKERRQ(ierr);
+  ierr = GridWrite(ls->psi->phi,i); CHKERRQ(ierr);
   ierr = FluidFieldWrite(w->fluid, i); CHKERRQ(ierr);
 
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->phi); CHKERRQ(ierr);
-  ierr = LevelSetWriteIrregularNodeList(ls, i); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->psi); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(ls->psi, i); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

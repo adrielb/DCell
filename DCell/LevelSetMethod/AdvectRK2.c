@@ -9,7 +9,7 @@ PetscErrorCode LevelSetAdvectSLRK2HalfStep( LevelSet ls, Grid velgrid, PetscReal
   PetscFunctionBegin;
   ierr = GridCopy(ls->phi,ls->phi0); CHKERRQ(ierr);
   ierr = LevelSetAdvectSL(ls, velgrid, dt ); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -21,7 +21,7 @@ PetscErrorCode LevelSetAdvectSLRK2FullStep( LevelSet ls, Grid velgrid, PetscReal
 
   PetscFunctionBegin;
   ierr = LevelSetAdvectSL(ls, velgrid, dt ); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

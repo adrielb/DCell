@@ -10,7 +10,7 @@ typedef struct _LevelSet *LevelSet;
 struct _LevelSet {
   Grid phi;  // the level set
   Grid phi0; //
-  Grid psi;  // implicit step
+  LevelSet psi;  // implicit step
   Grid tmp; // temporary buffer while resizing     // TODO: use a global set of work grids for all level sets
   Array band; // Narrow band coordinates [x,y,z]
   Array irregularNodes;
@@ -54,8 +54,9 @@ struct _IrregularNode {
 PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset);
 PetscErrorCode LevelSetDestroy(LevelSet ls);
 PetscErrorCode LevelSetSetBandWidth(LevelSet ls, PetscReal bandwidth);
+PetscErrorCode LevelSetDuplicate( LevelSet ls, LevelSet *copy);
 PetscErrorCode LevelSetResize( LevelSet ls);
-PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls, Grid p );
+PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls );
 PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx );
 PetscErrorCode LevelSetNormalDirection( LevelSet ls, Coor X, Coor *n );
 inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coor X );
