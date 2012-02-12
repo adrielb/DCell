@@ -13,10 +13,11 @@ PetscErrorCode LevelSetAdvectImplicitInit( LevelSet ls, PetscInt *n )
   *n = *n + len;
 
   if( ls->psi == NULL ) {
-    ierr = GridDuplicate(ls->phi,&ls->psi); CHKERRQ(ierr);
-    ierr = GridSetName(ls->psi,"psi"); CHKERRQ(ierr);
+    ierr = LevelSetDuplicate(ls, &ls->psi); CHKERRQ(ierr);
+    ierr = GridSetName(ls->psi->phi,"psi"); CHKERRQ(ierr);
   }
-  ierr = GridCopy(ls->phi,ls->psi); CHKERRQ(ierr);
+  ierr = GridCopy(ls->phi,ls->psi->phi); CHKERRQ(ierr);
+  ierr = ArrayCopy(ls->band,ls->psi->band); CHKERRQ(ierr);
   ierr = GridCopy(ls->phi,ls->phi0); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
@@ -36,7 +37,7 @@ PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, Pet
   PetscFunctionBegin;
   ierr = LevelSetAdvect(ls,ga,dt); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
-  ierr = GridGet(ls->psi,&psi); CHKERRQ(ierr);
+  ierr = GridGet(ls->psi->phi,&psi); CHKERRQ(ierr);
   for (i = 0; i < len; ++i) {
     g[i] = psi[b[i].y][b[i].x] - phi[b[i].y][b[i].x];
   }
@@ -54,7 +55,7 @@ PetscErrorCode LevelSetAdvectImplicitUpdate( LevelSet ls, PetscReal lambda, Pets
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = GridGet(ls->psi,&psi); CHKERRQ(ierr);
+  ierr = GridGet(ls->psi->phi,&psi); CHKERRQ(ierr);
   for (i = 0; i < len; ++i) {
     psi[b[i].y][b[i].x] = psi[b[i].y][b[i].x] + lambda * dpsi[i];
   }

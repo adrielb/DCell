@@ -51,8 +51,8 @@ PetscErrorCode MyCellUpdateFluidFieldImplicitRHS( DCell dcell, IIM iim, int ga, 
   PetscFunctionBegin;
   ierr = IIMSetForceComponents(iim, InterfacialForceSurfaceTension ); CHKERRQ(ierr);
   ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
-  LevelSet ls = dcell->lsPlasmaMembrane;
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->psi); CHKERRQ(ierr);
+  LevelSet ls = dcell->lsPlasmaMembrane->psi;
+  ierr = LevelSetUpdateIrregularNodeList(ls); CHKERRQ(ierr);
   ierr = IIMUpdateRHS(iim, ls, ga); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

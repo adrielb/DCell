@@ -37,7 +37,7 @@ PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt)
   ierr = GridCopy(ls->phi,ls->phi0); CHKERRQ(ierr);
   ierr = LevelSetAdvectSL( ls, velgrid, dt ); CHKERRQ(ierr);
   ierr = LevelSetCFLIncrement( ls, velgrid, dt ); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList( ls, ls->phi ); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
   if( ls->AdvectCount > ls->AdvectThres || ls->CFLcount > ls->CFLthres ) {
     // TODO: specifically say which level set object is reinitializing (ls->ID)
     ierr = PetscInfo4(0,"CFLcount: %f:%f  AdvectCount: %d:%d\n", ls->CFLcount, ls->CFLthres, ls->AdvectCount,ls->AdvectThres); CHKERRQ(ierr);

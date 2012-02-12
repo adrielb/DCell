@@ -3,7 +3,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetUpdateIrregularNodeList_3D"
-PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls, Grid p )
+PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
 {
   int i, j, k;
   int I, J, K;
@@ -18,7 +18,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls, Grid p )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = GridGet(p,&phi); CHKERRQ(ierr);
+  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   for( b = 0; b < ArrayLength(ls->band); ++b)
   {
     ierr = ArrayGet(ls->band,b,&band); CHKERRQ(ierr);

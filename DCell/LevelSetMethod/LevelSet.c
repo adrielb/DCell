@@ -64,6 +64,18 @@ PetscErrorCode LevelSetSetBandWidth(LevelSet ls, PetscReal bandwidth)
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "LevelSetDuplicate"
+PetscErrorCode LevelSetDuplicate( LevelSet ls, LevelSet *copy)
+{
+  Grid phi = ls->phi;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = LevelSetCreate(phi->d,phi->p,phi->n,copy); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "LevelSetRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
 PetscErrorCode LevelSetRegisterEvents(  )

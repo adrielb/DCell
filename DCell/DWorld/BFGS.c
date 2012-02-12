@@ -211,11 +211,9 @@ PetscErrorCode DWorld_DebugWrite( DWorld w, int i )
   ierr = ArrayGetP(w->dcells->dcells,0,&dcell); CHKERRQ(ierr);
   ls = dcell->lsPlasmaMembrane;
   ierr = GridWrite(ls->phi,i); CHKERRQ(ierr);
-  ierr = GridWrite(ls->psi,i); CHKERRQ(ierr);
+  ierr = GridWrite(ls->psi->phi,i); CHKERRQ(ierr);
   ierr = FluidFieldWrite(w->fluid, i); CHKERRQ(ierr);
 
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->phi); CHKERRQ(ierr);
-  ierr = LevelSetWriteIrregularNodeList(ls, i); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->psi); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(ls->psi, i); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
