@@ -79,7 +79,7 @@ int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.5;
+  PetscReal dx = 0.1;
   Coor len = {24,24,0};
   iCoor size = {len.x/dx,len.y/dx,0};
   printf("MX = %d;\n", size.x);
@@ -107,7 +107,7 @@ int main(int argc, char **args) {
 
   ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
   world->timax = 100;
-  world->dtmax = 10;
+  world->dtmax = 0.0001;
   world->CFL = 0.5;
   world->tend = 3;
 

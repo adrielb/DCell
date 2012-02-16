@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     40859,       1180]*)
-(*NotebookOutlinePosition[     41538,       1204]*)
-(*  CellTagsIndexPosition[     41494,       1200]*)
+(*NotebookOptionsPosition[     34500,       1069]*)
+(*NotebookOutlinePosition[     35179,       1093]*)
+(*  CellTagsIndexPosition[     35135,       1089]*)
 (*WindowFrame->Normal*)
 
 
@@ -745,10 +745,10 @@ Cell[CellGroupData[{
 Cell["implicit", "Section"],
 
 Cell[BoxData[{
-    \(\(dx = 0.5;\)\), "\[IndentingNewLine]", 
-    \(\(dt = 0.001257;\)\), "\[IndentingNewLine]", 
+    \(\(dx = 0.1;\)\), "\[IndentingNewLine]", 
+    \(\(dt = 0.00009;\)\), "\[IndentingNewLine]", 
     \(\(vscale = dt\/dx;\)\), "\[IndentingNewLine]", 
-    \(\(MX = 48;\)\), "\[IndentingNewLine]", 
+    \(\(MX = 240;\)\), "\[IndentingNewLine]", 
     \(\(MY = MX;\)\), "\[IndentingNewLine]", 
     \(\(LX = MX*dx;\)\), "\[IndentingNewLine]", 
     \(\(LY = MY*dx;\)\)}], "Input"],
@@ -811,7 +811,7 @@ Cell[BoxData[{
 \[IndentingNewLine]PlotVectorField[{uvel[y, x], vvel[y, x]}, {x, dx, 
                   LX - 1}, {y, dx, LY - 1}, ScaleFactor \[Rule] None, 
                 ScaleFunction \[Rule] \((#*vscale &)\), 
-                PlotPoints \[Rule] \(({MX, MY}/1)\), Frame \[Rule] False, 
+                PlotPoints \[Rule] \(({MX, MY}/5)\), Frame \[Rule] False, 
                 HeadLength \[Rule] 0.2*10^\(-2. \), ImageSize \[Rule] 1000, 
                 Epilog \[Rule] {\(Point[dx*#] &\) /@ 
                       ir`X}]; \[IndentingNewLine] (*\(Export["\<g.\>" <> 
@@ -821,7 +821,7 @@ Cell[BoxData[{
 
 Cell[BoxData[{
     \(clear\), "\[IndentingNewLine]", 
-    \(\(RealtimeGraph /@ Range[0, 9];\)\)}], "Input"],
+    \(\(RealtimeGraph /@ Range[0, 80];\)\)}], "Input"],
 
 Cell[CellGroupData[{
 
@@ -852,108 +852,6 @@ Cell[BoxData[{
     \(\(\(ListPlot3D[psi[\([#]\)] - phi[\([#]\)], 
             PlotRange \[Rule] {\(-0.5\), 0.5}] &\)~Array~
         Length[psi];\)\)}], "Input"],
-
-Cell[BoxData[
-    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(6\\) of \
-\\!\\({\\(\\({\\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, \\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 7 \[RightSkeleton]\\)\
-\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-\\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\\({7.5`, \\(\\(\[LeftSkeleton] 9 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 9 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)}\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\
-\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(6\\) of \
-\\!\\({\\(\\({\\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, \\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 7 \[RightSkeleton]\\)\
-\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-\\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\), \\(\\({\\(\\({7.5`, \\(\\(\[LeftSkeleton] 9 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 9 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\({\\(\[LeftSkeleton] 1 \
-\[RightSkeleton]\\)}\\)\\)}\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\
-\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(Plot3D::"gval"\), \(\(:\)\(\ \)\), "\<\"Function value \
-\\!\\(\\(\\(7.5`\[InvisibleSpace]\\)\\) - \\(\\(\\(\\({\\(\\({\\(\\({7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 7 \
-\[RightSkeleton]\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\
-\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\), \\(\\({\\(\\({7.5`, 7.5`, \\(\\(\[LeftSkeleton] 8 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 10 \
-\[RightSkeleton]\\)\\)}\\)\\)}\\)\\) \[LeftDoubleBracket] 6 \
-\[RightDoubleBracket]\\)\\)\\) at grid point xi = \\!\\(1\\), yi = \\!\\(1\\) \
-is not a real number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"Plot3D::gval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(Plot3D::"gval"\), \(\(:\)\(\ \)\), "\<\"Function value \
-\\!\\(\\(\\(7.5`\[InvisibleSpace]\\)\\) - \\(\\(\\(\\({\\(\\({\\(\\({7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 7 \
-\[RightSkeleton]\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\
-\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\), \\(\\({\\(\\({7.5`, 7.5`, \\(\\(\[LeftSkeleton] 8 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 10 \
-\[RightSkeleton]\\)\\)}\\)\\)}\\)\\) \[LeftDoubleBracket] 6 \
-\[RightDoubleBracket]\\)\\)\\) at grid point xi = \\!\\(1\\), yi = \\!\\(2\\) \
-is not a real number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"Plot3D::gval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(Plot3D::"gval"\), \(\(:\)\(\ \)\), "\<\"Function value \
-\\!\\(\\(\\(7.5`\[InvisibleSpace]\\)\\) - \\(\\(\\(\\({\\(\\({\\(\\({7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] \
-50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 7 \
-\[RightSkeleton]\\)\\), \\(\\({7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, 7.5`, \
-7.5`, 7.5`, 7.5`, \\(\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\
-\\(\[LeftSkeleton] 50 \[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 3 \
-\[RightSkeleton]\\)\\), \\(\\({\\(\\({7.5`, 7.5`, \\(\\(\[LeftSkeleton] 8 \
-\[RightSkeleton]\\)\\), \\(\\(\[LeftSkeleton] 50 \
-\[RightSkeleton]\\)\\)}\\)\\), \\(\\(\[LeftSkeleton] 10 \
-\[RightSkeleton]\\)\\)}\\)\\)}\\)\\) \[LeftDoubleBracket] 6 \
-\[RightDoubleBracket]\\)\\)\\) at grid point xi = \\!\\(1\\), yi = \\!\\(3\\) \
-is not a real number. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"Plot3D::gval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
-\\!\\(Plot3D :: \\\"gval\\\"\\) will be suppressed during this calculation. \
-\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
-\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
-"Message"],
 
 Cell[BoxData[
     \($Aborted\)], "Output"]
@@ -1018,7 +916,7 @@ Cell[BoxData[{
                   MapThread[
                     Function[{p, n, f}, Line[{p, p + f*n}]], {psi, nv, 
                       f1}]}];\[IndentingNewLine]]] /@ 
-        Range[0, 40];\)\)}], "Input"],
+        Range[0, 33];\)\)}], "Input"],
 
 Cell[BoxData[
     RowBox[{\(BinaryReadList::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found \
@@ -1041,16 +939,7 @@ Cell[BoxData[{
     \(Dimensions[tmp]\)}], "Input"],
 
 Cell[BoxData[
-    \({40, 60, 60}\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(Max[Abs[tmp]]\)], "Input"],
-
-Cell[BoxData[
-    \(0.8944045819668218`\)], "Output"]
+    \({33, 60, 60}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -1406,85 +1295,74 @@ Cell[24636, 782, 45, 1, 26, "Output"]
 Cell[24696, 786, 143, 3, 43, "Input"],
 Cell[24842, 791, 367, 7, 91, "Input"],
 Cell[25212, 800, 1022, 19, 155, "Input"],
-Cell[26237, 821, 107, 2, 43, "Input"],
+Cell[26237, 821, 108, 2, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[26369, 827, 25, 0, 40, "Subsection"],
+Cell[26370, 827, 25, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[26419, 831, 123, 2, 43, "Input"],
-Cell[26545, 835, 46, 1, 26, "Output"]
+Cell[26420, 831, 123, 2, 43, "Input"],
+Cell[26546, 835, 46, 1, 26, "Output"]
 }, Open  ]],
-Cell[26606, 839, 106, 2, 43, "Input"],
-Cell[26715, 843, 96, 2, 43, "Input"],
+Cell[26607, 839, 106, 2, 43, "Input"],
+Cell[26716, 843, 96, 2, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[26836, 849, 199, 4, 43, "Input"],
-Cell[27038, 855, 1180, 17, 33, "Message"],
-Cell[28221, 874, 1180, 17, 33, "Message"],
-Cell[29404, 893, 1171, 17, 46, "Message"],
-Cell[30578, 912, 1171, 17, 46, "Message"],
-Cell[31752, 931, 1171, 17, 46, "Message"],
-Cell[32926, 950, 330, 5, 20, "Message"],
-Cell[33259, 957, 42, 1, 26, "Output"]
+Cell[26837, 849, 199, 4, 43, "Input"],
+Cell[27039, 855, 42, 1, 26, "Output"]
 }, Open  ]],
-Cell[33316, 961, 204, 4, 43, "Input"]
+Cell[27096, 859, 204, 4, 43, "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[33557, 970, 29, 0, 40, "Subsection"],
+Cell[27337, 868, 29, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[33611, 974, 50, 1, 27, "Input"],
-Cell[33664, 977, 264, 4, 41, "Output"]
+Cell[27391, 872, 50, 1, 27, "Input"],
+Cell[27444, 875, 264, 4, 41, "Output"]
 }, Open  ]],
-Cell[33943, 984, 650, 12, 107, "Input"],
+Cell[27723, 882, 650, 12, 107, "Input"],
 
 Cell[CellGroupData[{
-Cell[34618, 1000, 1170, 20, 155, "Input"],
-Cell[35791, 1022, 393, 6, 20, "Message"]
+Cell[28398, 898, 1170, 20, 155, "Input"],
+Cell[29571, 920, 393, 6, 20, "Message"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[36233, 1034, 25, 0, 40, "Subsection"],
+Cell[30013, 932, 25, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[36283, 1038, 123, 2, 43, "Input"],
-Cell[36409, 1042, 46, 1, 26, "Output"]
+Cell[30063, 936, 123, 2, 43, "Input"],
+Cell[30189, 940, 46, 1, 26, "Output"]
+}, Open  ]],
+Cell[30250, 944, 154, 3, 43, "Input"],
+Cell[30407, 949, 149, 3, 43, "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[36492, 1048, 46, 1, 27, "Input"],
-Cell[36541, 1051, 53, 1, 26, "Output"]
+Cell[30593, 957, 25, 0, 40, "Subsection"],
+Cell[30621, 959, 449, 10, 94, "Input"],
+Cell[31073, 971, 580, 12, 115, "Input"],
+
+Cell[CellGroupData[{
+Cell[31678, 987, 598, 11, 131, "Input"],
+Cell[32279, 1000, 38, 1, 26, "Output"]
 }, Open  ]],
-Cell[36609, 1055, 154, 3, 43, "Input"],
-Cell[36766, 1060, 149, 3, 43, "Input"]
+Cell[32332, 1004, 443, 9, 78, "Input"],
+Cell[32778, 1015, 923, 19, 139, "Input"],
+Cell[33704, 1036, 414, 9, 78, "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[36952, 1068, 25, 0, 40, "Subsection"],
-Cell[36980, 1070, 449, 10, 94, "Input"],
-Cell[37432, 1082, 580, 12, 115, "Input"],
+Cell[34155, 1050, 30, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[38037, 1098, 598, 11, 131, "Input"],
-Cell[38638, 1111, 38, 1, 26, "Output"]
+Cell[34210, 1054, 49, 1, 27, "Input"],
+Cell[34262, 1057, 79, 1, 22, "Print"]
 }, Open  ]],
-Cell[38691, 1115, 443, 9, 78, "Input"],
-Cell[39137, 1126, 923, 19, 139, "Input"],
-Cell[40063, 1147, 414, 9, 78, "Input"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[40514, 1161, 30, 0, 40, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[40569, 1165, 49, 1, 27, "Input"],
-Cell[40621, 1168, 79, 1, 22, "Print"]
-}, Open  ]],
-Cell[40715, 1172, 50, 1, 27, "Input"],
-Cell[40768, 1175, 63, 1, 44, "Input"]
+Cell[34356, 1061, 50, 1, 27, "Input"],
+Cell[34409, 1064, 63, 1, 44, "Input"]
 }, Open  ]]
 }, Open  ]]
 }

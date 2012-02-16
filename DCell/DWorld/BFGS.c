@@ -117,6 +117,7 @@ PetscErrorCode DWorldSimulate_BFGSstep(DWorld w)
   g0norm = gnorm(n, g0);
   ierr = PetscInfo1(0,"root norm = %f\n", g0norm); CHKERRQ(ierr);
 int count = 0;
+  PetscBool GRADIENT_ONLY = PETSC_TRUE;
   for (i = 0; i < MAX_BFGS_ITER; ++i) {
     // Solve B.d = -g0
     // Mult  d = -B.g0
@@ -147,9 +148,9 @@ int count = 0;
       g1norm = gnorm( n, g1);
       ierr = PetscInfo1(0,"tentative root norm = %f\n", g1norm); CHKERRQ(ierr);
 
-      if( w->ti == 10 ) {
+      if( w->ti == 9 ) {
         count++;
-        ierr = DWorld_DebugWrite( w, count); CHKERRQ(ierr);
+//        ierr = DWorld_DebugWrite( w, count); CHKERRQ(ierr);
       }
 
       if( g1norm > g0norm ) {
@@ -165,8 +166,9 @@ int count = 0;
     if( c == MAX_STEP_ITER ) {
       ierr = PetscInfo1(0,"MAX_STEP_ITER = %d reached!\n", MAX_STEP_ITER); CHKERRQ(ierr);
       g0norm = g1norm;
-//      exit(1);
-//      continue;
+      lambda = lambda * 2.;
+      GRADIENT_ONLY = PETSC_FALSE;
+      break;
     }
 
     ierr = PetscInfo1(0,"root norm = %f\n", g1norm); CHKERRQ(ierr);
@@ -178,10 +180,12 @@ int count = 0;
       break;
     }
 
-    temp = g0;
-    g0 = g1;
-    g1 = temp;
-    continue;
+    if( GRADIENT_ONLY ) {
+      temp = g0;
+      g0 = g1;
+      g1 = temp;
+      continue;
+    }
 
     // Update Hessian
     // s = x1 - x0 = l * d
@@ -222,7 +226,7 @@ int count = 0;
 
   if( i == MAX_BFGS_ITER ) {
     ierr = PetscInfo1( 0, "MAX_BFGS_ITER = %d reached! \n", MAX_BFGS_ITER); CHKERRQ(ierr);
-    exit(1);
+//    exit(1);
   }
 
   ierr = DCellsArrayAdvectImplicitReinit( dcells, w->dt); CHKERRQ(ierr);

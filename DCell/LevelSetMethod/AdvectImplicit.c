@@ -46,8 +46,6 @@ PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, Pet
   PetscReal **psi;
   PetscReal **tmp;
   PetscReal **phi0;
-  Coor dh = ls->phi->d;
-  Coor X;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
@@ -58,11 +56,7 @@ PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, Pet
   ierr = VecZeroEntries(ls->tmp->v); CHKERRQ(ierr);
   ierr = GridGet(ls->psi->phi,&psi); CHKERRQ(ierr);
   for (i = 0; i < len; ++i) {
-//    g[i] = psi[b[i].y][b[i].x] - phi[b[i].y][b[i].x];
-    X.x = b[i].x;
-    X.y = b[i].y;
-//    g[i] = ( psi[b[i].y][b[i].x] - phi[b[i].y][b[i].x] ) * LevelSetDiracDelta2D( phi, dh, X);
-    PetscReal diracdelta = PetscAbs( phi[b[i].y][b[i].x] ) < 2. ;
+    PetscReal diracdelta = PetscAbs( phi[b[i].y][b[i].x] ) < 2.1 ;
     g[i] = ( psi[b[i].y][b[i].x] - phi[b[i].y][b[i].x] ) * diracdelta;
     tmp[b[i].y][b[i].x] = g[i];
   }
