@@ -96,9 +96,14 @@ PetscErrorCode DWorldSimulate(DWorld w)
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "DWorldPrintStep"
 PetscErrorCode DWorldPrintStep( DWorld w )
 {
   PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = PetscInfo1( 0, "ti = %d\n", w->ti); CHKERRQ(ierr);
+  if( !w->printStep ) return 0;
   if( w->dtframe > 0 ) {
     ierr = PetscPrintf(PETSC_COMM_WORLD, "frame:\t %8d \n", w->tiframe-1);
   }

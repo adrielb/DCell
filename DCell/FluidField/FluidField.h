@@ -20,7 +20,8 @@ typedef struct _FluidField {
   Mat mat;
   KSP ksp;
   Vec rhs;
-  Vec vel;
+  Vec vel;  // velocity at t = n+1
+  Vec vel0; // velocity at t = n
   Array dirichletBC;
   int ga;
 

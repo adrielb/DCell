@@ -193,6 +193,23 @@ PetscErrorCode DCellsArrayAdvectImplicitUpdate( DCellsArray dcells, double lambd
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "DCellsArrayAdvectImplicitReinit"
+PetscErrorCode DCellsArrayAdvectImplicitReinit( DCellsArray dcells, double dt )
+{
+  int i;
+  DCell dcell;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  for ( i = 0; i < ArrayLength(dcells->dcells); ++i) {
+    ierr = ArrayGetP(dcells->dcells,i,&dcell); CHKERRQ(ierr);
+    ierr = dcell->AdvectImplicitReinit( dcell, dt); CHKERRQ(ierr);
+  }
+  ierr = PetscBarrier(0); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "DCellsRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
 PetscErrorCode DCellsRegisterEvents(  )

@@ -11,13 +11,12 @@ PetscErrorCode MyCellWrite( DCell dcell, int ti )
   PetscFunctionBegin;
   ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
-
   PetscFunctionReturn(0);
 }
 
 inline PetscReal ClipCurvature( PetscReal k )
 {
-  const PetscReal clip = 0.2;
+  const PetscReal clip = 0.1;
 
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
@@ -99,7 +98,7 @@ int main(int argc, char **args) {
   PetscReal radius = 9;
   LevelSet ls;
   ierr = LevelSetInitializeToStar2D(fluid->dh,center,radius,0.5*radius, 5,&ls); CHKERRQ(ierr);
-  ls->Advect = LevelSetAdvectSL;
+  ls->Advect = LevelSetAdvectImplicit;
 
   MyCell cell;
   ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
@@ -107,7 +106,7 @@ int main(int argc, char **args) {
   ierr = MyCellWrite((DCell)cell, 0); CHKERRQ(ierr);
 
   ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
-  world->timax = 3;
+  world->timax = 100;
   world->dtmax = 10;
   world->CFL = 0.5;
   world->tend = 3;

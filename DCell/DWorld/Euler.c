@@ -32,9 +32,7 @@ PetscErrorCode DWorldSimulate_Euler(DWorld w)
       }
     }
 
-    if( w->printStep ) {
-      ierr = DWorldPrintStep(w); CHKERRQ(ierr);
-    }
+    ierr = DWorldPrintStep(w); CHKERRQ(ierr);
 
     w->t = w->t + w->dt;
 

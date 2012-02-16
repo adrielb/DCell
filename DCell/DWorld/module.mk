@@ -12,7 +12,7 @@ ${eval ${call test-library,${subdirectory},bfgs,${LOCDEPS}, 1 }}
 
 #-ksp_monitor
 RUNOPTS =  \
--ksp_atol 1e-2 -ksp_rtol 1e-3 -ksp_max_it 100 \
+-ksp_rtol 1e-6 -ksp_max_it 100 \
 -fieldsplit_p_ksp_max_it 4 \
 -fieldsplit_v_fieldsplit_0_ksp_type preonly \
 -fieldsplit_v_fieldsplit_1_ksp_type preonly \
@@ -22,4 +22,5 @@ RUNOPTS =  \
 -fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
 -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
+#-ksp_atol 1e-2 -ksp_rtol 1e-3 -ksp_max_it 100
 ${eval ${call test-library,${subdirectory},implicit,${LOCDEPS}, 1, ${RUNOPTS} }}

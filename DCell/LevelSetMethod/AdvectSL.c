@@ -123,17 +123,33 @@ PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt)
 #define __FUNCT__ "LevelSetCFLIncrement"
 PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt )
 {
-  int i;
-  int len = ArrayLength(ls->irregularNodes);
-  IrregularNode *nodes = ArrayGetData(ls->irregularNodes);
-  PetscReal mag,maxVel = 0;
-  PetscReal ***vel;
-  Coor X,V;
   Coor dh = ls->phi->d;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  ierr = LevelSet_MaxVelocity( ls, velgrid ); CHKERRQ(ierr);
+
+  ls->CFLcount += dt * ls->maxVel / dh.x;
+  ls->AdvectCount++;
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "LevelSet_MaxVelocity"
+PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid )
+{
+  int i;
+  int len = ArrayLength(ls->irregularNodes);
+  IrregularNode *nodes = ArrayGetData(ls->irregularNodes);
+  PetscReal mag;
+  PetscReal ***vel;
+  Coor X,V;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
   ierr = GridGet(velgrid,&vel); CHKERRQ(ierr);
+  ls->maxVel = 0;
   for ( i = 0; i < len; ++i) {
     X.x = nodes[i].pos.x;
     X.y = nodes[i].pos.y;
@@ -142,11 +158,8 @@ PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt )
 
     mag = PetscSqrtScalar( V.x*V.x + V.y*V.y );
 
-    maxVel = mag > maxVel ? mag : maxVel;
+    ls->maxVel = mag > ls->maxVel ? mag : ls->maxVel;
   }
-
-  ls->CFLcount += dt * maxVel / dh.x;
-  ls->AdvectCount++;
 
   PetscFunctionReturn(0);
 }

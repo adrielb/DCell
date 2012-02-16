@@ -19,6 +19,7 @@ struct _DCell {
   PetscErrorCode (*AdvectImplicitInit)(DCell this, PetscInt *n );
   PetscErrorCode (*AdvectImplicitRHS)(DCell this, int ga, PetscReal dt, PetscReal *g );
   PetscErrorCode (*AdvectImplicitUpdate)(DCell this, PetscReal lambda, PetscReal *dpsi );
+  PetscErrorCode (*AdvectImplicitReinit)(DCell this, PetscReal dt );
 };
 
 typedef struct _DCellsArray {
@@ -54,6 +55,8 @@ struct _DWorld {
   PetscLogStage stageSimLoop;
 
   PetscErrorCode (*Simulate)( DWorld world );
+
+  Array bfgs;
 };
 
 // DWorld
@@ -83,6 +86,7 @@ PetscErrorCode DCellsArrayAdvectImplicit( DCellsArray dcells, FluidField f, Pets
 PetscErrorCode DCellsArrayAdvectImplicitInit( DCellsArray dcells, PetscInt *n );
 PetscErrorCode DCellsArrayAdvectImplicitRHS( DCellsArray dcells, FluidField f, PetscReal dt, PetscReal *g );
 PetscErrorCode DCellsArrayAdvectImplicitUpdate( DCellsArray dcells, PetscReal lambda, PetscReal *dpsi );
+PetscErrorCode DCellsArrayAdvectImplicitReinit( DCellsArray dcells, PetscReal dt );
 
 // DCell
 PetscErrorCode DCellCreate( LevelSet lsPlasmaMembrane, DCell *dcell );
@@ -96,4 +100,5 @@ PetscErrorCode DCellUpdateFluidFieldRHS( DCell this, IIM, int ga, PetscReal t );
 PetscErrorCode DCellAdvectImplicitInit( DCell this, PetscInt *n );
 PetscErrorCode DCellAdvectImplicitRHS( DCell this, int ga, PetscReal dt, PetscReal *g );
 PetscErrorCode DCellAdvectImplicitUpdate( DCell this, PetscReal lambda, PetscReal *dpsi );
+PetscErrorCode DCellAdvectImplicitReinit( DCell this, PetscReal dt);
 #endif /*DWORLD_H_*/

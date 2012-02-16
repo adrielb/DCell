@@ -20,6 +20,7 @@ struct _LevelSet {
   PetscReal CFLcount;  // number of grid points ls has moved between reinitializations
   PetscInt AdvectThres;// number of times ls moves before it triggers reinitializations
   PetscInt AdvectCount;// number of times ls has moved between reinitializations
+  PetscReal maxVel;
   ParticleLS pls;
   PetscErrorCode (*Advect)(LevelSet ls, Grid velgrid, PetscReal dt);
 };
@@ -67,9 +68,11 @@ PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectSLRK2HalfStep( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSetAdvectSLRK2FullStep( LevelSet ls, Grid velgrid, PetscReal dt );
+PetscErrorCode LevelSetAdvectImplicit( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSetAdvectImplicitInit( LevelSet ls, PetscInt *n );
 PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, PetscReal *g );
 PetscErrorCode LevelSetAdvectImplicitUpdate( LevelSet ls, PetscReal lambda, PetscReal *dpsi );
+PetscErrorCode LevelSetAdvectImplicitReinit( LevelSet ls, PetscReal dt );
 
 PetscErrorCode LevelSetInitializeParticles( LevelSet ls );
 PetscErrorCode ParticleLSDestroy( ParticleLS pls );

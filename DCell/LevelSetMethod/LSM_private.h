@@ -18,6 +18,7 @@ PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetGatherVelocity(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt );
+PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid );
 PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op );
 PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3],  Coor *op );
 PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op );

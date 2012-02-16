@@ -50,6 +50,7 @@ PetscErrorCode DCellSetup( LevelSet lsPlasmaMembrane, DCell cell )
   cell->AdvectImplicitInit = DCellAdvectImplicitInit;
   cell->AdvectImplicitRHS = DCellAdvectImplicitRHS;
   cell->AdvectImplicitUpdate = DCellAdvectImplicitUpdate;
+  cell->AdvectImplicitReinit = DCellAdvectImplicitReinit;
 
   PetscFunctionReturn(0);
 }
@@ -149,5 +150,15 @@ PetscErrorCode DCellAdvectImplicitUpdate( DCell this, PetscReal lambda, PetscRea
   PetscErrorCode ierr;
   PetscFunctionBegin;
   ierr = LevelSetAdvectImplicitUpdate( this->lsPlasmaMembrane, lambda, dpsi ); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCellAdvectImplicitReinit"
+PetscErrorCode DCellAdvectImplicitReinit( DCell this, PetscReal dt )
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = LevelSetAdvectImplicitReinit( this->lsPlasmaMembrane, dt ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
