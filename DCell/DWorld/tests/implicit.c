@@ -106,12 +106,12 @@ int main(int argc, char **args) {
   ierr = MyCellWrite((DCell)cell, 0); CHKERRQ(ierr);
 
   ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
-  world->timax = 100;
-  world->dtmax = 0.0001;
+  world->timax = 1000;
+  world->dtmax = 0.1;
   world->CFL = 0.5;
   world->tend = 3;
 
-  ierr = DWorldSimulate_BFGS(world); CHKERRQ(ierr);
+  ierr = DWorldSimulate(world); CHKERRQ(ierr);
   ierr = DWorldDestroy(world); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;

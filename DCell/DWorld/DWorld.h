@@ -71,7 +71,8 @@ PetscErrorCode DWorldSetFrameInterval( DWorld w, PetscReal dtframe );
 PetscErrorCode DWorldSetFromOptions( DWorld w );
 PetscErrorCode DWorldSimulate_Euler( DWorld world );
 PetscErrorCode DWorldSimulate_RK2( DWorld world );
-PetscErrorCode DWorldSimulate_BFGS( DWorld world );
+PetscErrorCode DWorldSimulate_Implicit( DWorld world );
+PetscErrorCode DWorldSetTimeStep( DWorld w, PetscReal dt );
 
 // DCells Array
 PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray);

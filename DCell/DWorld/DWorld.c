@@ -31,7 +31,7 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world )
   w->dtframe = -1;
   w->tiframe = 0;
   w->printStep = PETSC_TRUE;
-  w->Simulate = DWorldSimulate_BFGS;
+  w->Simulate = DWorldSimulate_Implicit;
 
   ierr = PetscLogEventRegister("DWorldWrite", 0, &EVENT_DWorldWrite); CHKERRQ(ierr);
   ierr = PetscInfo(0, "Created DWorld\n"); CHKERRQ(ierr);
@@ -111,7 +111,18 @@ PetscErrorCode DWorldPrintStep( DWorld w )
   ierr = PetscPrintf(PETSC_COMM_WORLD, "time: \t %.3e \t %.3e \t %3.2f%%\n", w->t, w->tend, (100.*w->t)/w->tend);
   ierr = PetscPrintf(PETSC_COMM_WORLD, "dt:   \t %.3e \t %.3e \n", w->dt, w->dtcfl);
   ierr = PetscPrintf(PETSC_COMM_WORLD, "CFL:  \t %f \t %f \n", w->dt*w->maxVel/w->fluid->dh.x, w->CFL);
-  return 0;
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DWorldSetTimeStep"
+PetscErrorCode DWorldSetTimeStep( DWorld w, PetscReal dt )
+{
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  w->dt = dt;
+  ierr = PetscInfo1( 0, "dt = %f\n", w->dt); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
 }
 
 PetscErrorCode DWorldSetPrintStep( DWorld w, PetscBool printStep )
