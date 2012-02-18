@@ -56,7 +56,7 @@ struct _DWorld {
 
   PetscErrorCode (*Simulate)( DWorld world );
 
-  Array bfgs;
+  Array g0array, g1array; // implicit stepping
 };
 
 // DWorld

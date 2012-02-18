@@ -51,6 +51,10 @@ PetscErrorCode DWorldDestroy(DWorld world)
   ierr = DCellsArrayDestroy(world->dcells); CHKERRQ(ierr);
   ierr = IIMDestroy(world->iim); CHKERRQ(ierr);
   ierr = FluidFieldDestroy(world->fluid); CHKERRQ(ierr);
+  if( world->g0array != PETSC_NULL ) {
+    ierr = ArrayDestroy(world->g0array); CHKERRQ(ierr);
+    ierr = ArrayDestroy(world->g1array); CHKERRQ(ierr);
+  }
   ierr = PetscFree(world); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

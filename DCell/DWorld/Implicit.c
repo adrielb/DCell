@@ -15,6 +15,10 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  if( w->g0array == PETSC_NULL ) {
+    ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
+  }
   for (w->ti = 0; w->t < w->tend && w->ti < w->timax; ++w->ti) {
     ierr = DWorldSimulate_ImplicitStep(w); CHKERRQ(ierr);
     ierr = DWorldWrite(w, w->ti); CHKERRQ(ierr);
@@ -37,7 +41,6 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   FluidField fluid = w->fluid;
   DCellsArray dcells = w->dcells;
   PetscLogDouble t1, t2;
-  size_t vecsize;
 //  int count = 0;
   int MAX_STEPS_PICARD = 15;
   int MAX_STEPS_LINE = 3;
@@ -51,16 +54,10 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   // set psi_0 = phi_n
   n = 0;
   ierr = DCellsArrayAdvectImplicitInit(dcells, &n); CHKERRQ(ierr);
-
-  /*
-   ierr = ArraySetSize(g0array,n); CHKERRQ(ierr);
-   ierr = ArraySetSize(g1array,n); CHKERRQ(ierr);
-   g0 = ArrayGetData(g0array);
-   g1 = ArrayGetData(g1array);
-   */
-  vecsize = sizeof(double) * n;
-  ierr = PetscMalloc(vecsize,&g0); CHKERRQ(ierr);
-  ierr = PetscMalloc(vecsize,&g1); CHKERRQ(ierr);
+  ierr = ArraySetSize( w->g0array, n); CHKERRQ(ierr);
+  ierr = ArraySetSize( w->g1array, n); CHKERRQ(ierr);
+  g0   = ArrayGetData( w->g0array );
+  g1   = ArrayGetData( w->g1array );
 
   // Update RHS
   // Evaluate g0 = g( X = x0 )
@@ -171,8 +168,6 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 
   converged:
   ierr = DCellsArrayAdvectImplicitReinit(dcells, w->dt); CHKERRQ(ierr);
-  ierr = PetscFree(g0); CHKERRQ(ierr);
-  ierr = PetscFree(g1); CHKERRQ(ierr);
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD, "TS Solve: %f sec\n", t2 - t1); CHKERRQ(ierr);
   PetscFunctionReturn(0);
