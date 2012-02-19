@@ -205,8 +205,8 @@ PetscErrorCode MyCellUpdateFluidFieldImplicitRHS( DCell dcell, IIM iim, int ga, 
   ierr = CalcContactArea( (MyCell)dcell, t ); CHKERRQ(ierr);
   ierr = IIMSetForceComponents(iim, InterfacialForceAdhesion ); CHKERRQ(ierr);
   ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
-  LevelSet ls = dcell->lsPlasmaMembrane;
-  ierr = LevelSetUpdateIrregularNodeList(ls,ls->psi); CHKERRQ(ierr);
+  LevelSet ls = dcell->lsPlasmaMembrane->psi;
+  ierr = LevelSetUpdateIrregularNodeList(ls); CHKERRQ(ierr);
   ierr = IIMUpdateRHS(iim, ls, ga); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -218,6 +218,7 @@ PetscErrorCode MyCellWrite( DCell dcell, int ti ) {
   PetscFunctionBegin;
   ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

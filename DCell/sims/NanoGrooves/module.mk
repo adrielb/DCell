@@ -5,15 +5,15 @@ ${subdirectory}/${1}.o: ${LIBDCELL}
 	@echo Simulation: sim-${1} 
 
 RUNOPTS := \
--pls_rmin 0.5 \
--pls_rmax 0.9 \
+-pls_rmin 0.1 \
+-pls_rmax 0.5 \
 -Fa 3 \
 -Fk 1 \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
 -groove_width 2 \
--timax 10000 \
+-timax 10 \
 -CFL 0.1 \
 -dtmax 1 \
 -ksp_monitor \
