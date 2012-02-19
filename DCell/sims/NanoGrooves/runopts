@@ -4,7 +4,7 @@
 -Fk0 1
 -kclip 0.1
 -groove_width 2
--timax 40000
+-timax 10
 -CFL 0.05
 -dtmax 1
 -dtframe 10

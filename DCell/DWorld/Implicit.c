@@ -17,8 +17,23 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
   PetscFunctionBegin;
   if( w->g0array == PETSC_NULL ) {
     ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
-    ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g1array",sizeof(double),16,&w->g1array); CHKERRQ(ierr);
   }
+
+  // defaults
+  w->MAX_STEPS_PICARD = 15;
+  w->MAX_STEPS_LINE = 3;
+  w->MAX_STEPS_DT = 8;
+  w->MAX_D = 0.1;
+  w->TOL_G = 0.01;
+
+  // cmd line opts
+  ierr = PetscOptionsGetInt( 0, "-max_steps_picard", &w->MAX_STEPS_PICARD, 0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt( 0, "-max_steps_line", &w->MAX_STEPS_LINE, 0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt( 0, "-max_steps_dt", &w->MAX_STEPS_DT, 0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal( 0, "-implicit_max_d", &w->MAX_D, 0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal( 0, "-implicit_tol_g", &w->TOL_G, 0); CHKERRQ(ierr);
+
   for (w->ti = 0; w->t < w->tend && w->ti < w->timax; ++w->ti) {
     ierr = DWorldSimulate_ImplicitStep(w); CHKERRQ(ierr);
     ierr = DWorldWrite(w, w->ti); CHKERRQ(ierr);
@@ -42,11 +57,11 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   DCellsArray dcells = w->dcells;
   PetscLogDouble t1, t2;
 //  int count = 0;
-  int MAX_STEPS_PICARD = 15;
-  int MAX_STEPS_LINE = 3;
-  int MAX_STEPS_DT = 8;
-  PetscReal TOL_G = 0.01;
-  PetscReal MAX_D = 0.1;
+  const int MAX_STEPS_PICARD = w->MAX_STEPS_PICARD;
+  const int MAX_STEPS_LINE = w->MAX_STEPS_LINE;
+  const int MAX_STEPS_DT = w->MAX_STEPS_DT;
+  const PetscReal TOL_G = w->TOL_G;
+  const PetscReal MAX_D = w->MAX_D;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;

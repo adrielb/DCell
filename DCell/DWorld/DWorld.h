@@ -56,7 +56,14 @@ struct _DWorld {
 
   PetscErrorCode (*Simulate)( DWorld world );
 
-  Array g0array, g1array; // implicit stepping
+  // implicit stepping
+  Array g0array;
+  Array g1array;
+  int MAX_STEPS_PICARD;
+  int MAX_STEPS_LINE;
+  int MAX_STEPS_DT;
+  PetscReal MAX_D;
+  PetscReal TOL_G;
 };
 
 // DWorld
