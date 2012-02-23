@@ -79,7 +79,7 @@ int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.1;
+  PetscReal dx = 0.5;
   Coor len = {24,24,0};
   iCoor size = {len.x/dx,len.y/dx,0};
   printf("MX = %d;\n", size.x);

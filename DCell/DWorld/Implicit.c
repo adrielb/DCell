@@ -46,8 +46,8 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
 #undef __FUNCT__
 #define __FUNCT__ "DWorldSimulate_ImplicitStep"
 PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
-  int p, c, s;
-  PetscReal g0norm, g1norm;
+  int p, c, s, j;
+  PetscReal g0norm, g1norm = PETSC_MAX_REAL;
   PetscBLASInt n;
   PetscReal *d, *g0, *g1;
   PetscReal *temp; // swaps g0 <-> g1
@@ -56,7 +56,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   FluidField fluid = w->fluid;
   DCellsArray dcells = w->dcells;
   PetscLogDouble t1, t2;
-//  int count = 0;
+  int count = 0;
   const int MAX_STEPS_PICARD = w->MAX_STEPS_PICARD;
   const int MAX_STEPS_LINE = w->MAX_STEPS_LINE;
   const int MAX_STEPS_DT = w->MAX_STEPS_DT;
@@ -118,16 +118,22 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
         dtcfl = w->CFL * w->fluid->dh.x / maxVel;
         if (dtcfl < w->dt) {
           // velocity too fast for current cfl condition
+          ierr = PetscInfo2(0,"Computed velocity too fast for current CFL condition: dtcfl = %f < dt = %f\n", dtcfl, w->dt); CHKERRQ(ierr);
           goto reset;
         }
         ierr = DCellsArrayAdvectImplicitRHS(dcells, w->fluid, w->dt, g1); CHKERRQ(ierr);
         g1norm = gnorm(n, g1);
         ierr = PetscInfo1(0,"tentative root norm = %f\n", g1norm); CHKERRQ(ierr);
 
-        /*      if( w->ti == 9 ) {
-         count++;
-         ierr = DWorld_DebugWrite( w, count); CHKERRQ(ierr);
-         } */
+        /*
+        if( w->ti == 4 ) {
+          ierr = DWorld_DebugWrite( w, count); CHKERRQ(ierr);
+          count++;
+        } else {
+          if( w->ti == 5 )
+            exit(1);
+        }
+        */
 
         if (g1norm < g0norm) {
           g0norm = g1norm;
@@ -191,7 +197,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 PetscReal gnorm(int n, PetscReal *g) {
   //* max norm
   int j;
-  PetscReal abs, norm;
+  PetscReal abs, norm = 0;
   for (j = 0; j < n; ++j) {
     abs = PetscAbs(g[j]);
     norm = norm < abs ? abs : norm;
