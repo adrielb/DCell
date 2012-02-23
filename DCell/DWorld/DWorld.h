@@ -59,6 +59,7 @@ struct _DWorld {
   // implicit stepping
   Array g0array;
   Array g1array;
+  Array  darray;
   int MAX_STEPS_PICARD;
   int MAX_STEPS_LINE;
   int MAX_STEPS_DT;

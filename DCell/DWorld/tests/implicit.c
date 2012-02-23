@@ -106,7 +106,7 @@ int main(int argc, char **args) {
   ierr = MyCellWrite((DCell)cell, 0); CHKERRQ(ierr);
 
   ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
-  world->timax = 1000;
+  world->timax = 1;
   world->dtmax = 0.1;
   world->CFL = 0.5;
   world->tend = 3;

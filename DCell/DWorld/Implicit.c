@@ -18,6 +18,7 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
   if( w->g0array == PETSC_NULL ) {
     ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
     ierr = ArrayCreate("g1array",sizeof(double),16,&w->g1array); CHKERRQ(ierr);
+    ierr = ArrayCreate("darray", sizeof(double),16,&w->darray); CHKERRQ(ierr);
   }
 
   // defaults
@@ -71,8 +72,10 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   ierr = DCellsArrayAdvectImplicitInit(dcells, &n); CHKERRQ(ierr);
   ierr = ArraySetSize( w->g0array, n); CHKERRQ(ierr);
   ierr = ArraySetSize( w->g1array, n); CHKERRQ(ierr);
+  ierr = ArraySetSize( w->darray, n); CHKERRQ(ierr);
   g0   = ArrayGetData( w->g0array );
   g1   = ArrayGetData( w->g1array );
+  d    = ArrayGetData( w->darray );
 
   // Update RHS
   // Evaluate g0 = g( X = x0 )
@@ -92,9 +95,24 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 
   for (s = 0; s < MAX_STEPS_DT; ++s) {
     for (p = 0; p < MAX_STEPS_PICARD; ++p) {
+      ierr = BernoulliDist( rnd, n, &delta); CHKERRQ(ierr);
+
+      // g0 = L( q + c d )
+      ierr = DCellsArrayAdvectImplicitUpdate(dcells, ck, delta[j] ); CHKERRQ(ierr);
+      ierr = LossFunction( w, g0 ); CHKERRQ(ierr);
+      ierr = DCellsArrayAdvectImplicitUpdate(dcells, -ck, delta[j] ); CHKERRQ(ierr);
+
+      // g1 = L( q + c d - 2 c d == q - c d )
+      ierr = DCellsArrayAdvectImplicitUpdate(dcells, -ck, delta[j] ); CHKERRQ(ierr);
+      ierr = LossFunction( w, g1 ); CHKERRQ(ierr);
+      ierr = DCellsArrayAdvectImplicitUpdate(dcells, ck, delta[j] ); CHKERRQ(ierr);
+
+      for (j = 0; j < n; ++j) {
+        d[j] = g1[j] - g0[j] / (2 * ck * delta[j] );
+      }
+
       lambda = 1;
       for (c = 0; c < MAX_STEPS_LINE; ++c) {
-        d = g0;
         //* Check step size isn't too large
         int maxdi = idamax_(&n, d, &inc);
         PetscReal maxd = PetscAbs(d[maxdi]*lambda);
@@ -107,21 +125,8 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
         // x1 = x0 + l d
         ierr = DCellsArrayAdvectImplicitUpdate(dcells, -lambda, d); CHKERRQ(ierr);
 
-        // Evaluate g1 = g( X = x1 )
-        // g(X) = X - Xn - dt*U(X)
-        ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
-        ierr = DCellsArrayUpdateFluidFieldRHS(dcells, w->iim, fluid, w->t); CHKERRQ(ierr);
-        ierr = FluidFieldSolve(fluid); CHKERRQ(ierr);
-        ierr = VecAXPBY(fluid->vel, 0.5, 0.5, fluid->vel0); CHKERRQ(ierr);
-        PetscReal maxVel, dtcfl;
-        ierr = FluidFieldMaxVelocityMag(w->fluid, &maxVel); CHKERRQ(ierr);
-        dtcfl = w->CFL * w->fluid->dh.x / maxVel;
-        if (dtcfl < w->dt) {
-          // velocity too fast for current cfl condition
-          ierr = PetscInfo2(0,"Computed velocity too fast for current CFL condition: dtcfl = %f < dt = %f\n", dtcfl, w->dt); CHKERRQ(ierr);
-          goto reset;
-        }
-        ierr = DCellsArrayAdvectImplicitRHS(dcells, w->fluid, w->dt, g1); CHKERRQ(ierr);
+
+
         g1norm = gnorm(n, g1);
         ierr = PetscInfo1(0,"tentative root norm = %f\n", g1norm); CHKERRQ(ierr);
 
@@ -194,6 +199,21 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   PetscFunctionReturn(0);
 }
 
+
+#undef __FUNCT__
+#define __FUNCT__ "BernoulliDist"
+PetscErrorCode BernoulliDist( PetscRandom rnd, int n, PetscReal *dist ) {
+  int i;
+  PetscReal val;
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  for (i = 0; i < n; ++i) {
+    ierr = PetscRandomGetValueReal(rnd,&val); CHKERRQ(ierr);
+    dist[i] = val < 0.5 ? -1 : 1;
+  }
+  PetscFunctionReturn(0);
+}
+
 PetscReal gnorm(int n, PetscReal *g) {
   //* max norm
   int j;
@@ -209,6 +229,34 @@ PetscReal gnorm(int n, PetscReal *g) {
    int inc = 1;
    return dnrm2_( &n, g, &inc);
    */
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "LossFunction"
+PetscErrorCode LossFunction(DWorld w, PetscReal *g) {
+  FluidField fluid = w->fluid;
+  DCellsArray dcells;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  // Evaluate g1 = g( X = x1 )
+  // g(X) = X - Xn - dt*U(X)
+  ierr = VecZeroEntries(fluid->rhs); CHKERRQ(ierr);
+  ierr = DCellsArrayUpdateFluidFieldRHS(dcells, w->iim, fluid, w->t); CHKERRQ(ierr);
+  ierr = FluidFieldSolve(fluid); CHKERRQ(ierr);
+  ierr = VecAXPBY(fluid->vel, 0.5, 0.5, fluid->vel0); CHKERRQ(ierr);
+  PetscReal maxVel, dtcfl;
+  ierr = FluidFieldMaxVelocityMag(w->fluid, &maxVel); CHKERRQ(ierr);
+  dtcfl = w->CFL * w->fluid->dh.x / maxVel;
+  if (dtcfl < w->dt) {
+    // velocity too fast for current cfl condition
+    ierr = PetscInfo2(0,"Computed velocity too fast for current CFL condition: dtcfl = %f < dt = %f\n", dtcfl, w->dt); CHKERRQ(ierr);
+    PetscFunctionReturn(0);
+  }
+
+  ierr = DCellsArrayAdvectImplicitRHS(dcells, w->fluid, w->dt, g); CHKERRQ(ierr);
+
+  PetscFunctionReturn(0);
 }
 
 #undef __FUNCT__
