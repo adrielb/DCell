@@ -1,7 +1,7 @@
 #!/bin/bash
 
-JOBNAME=test
-JOBID=01
+JOBNAME=implicit
+JOBID=03
 
 export PETSC_TMP=/data/sims/$JOBNAME/$JOBID
 mkdir -p $PETSC_TMP
@@ -10,11 +10,11 @@ mkdir -p $PETSC_TMP
 -Fa 1 \
 -ecm 1 \
 -Fk 0 \
--Fk0 30 \
+-Fk0 10.0 \
 -kclip 0.1 \
 -groove_width 1 \
--timax 1 \
--CFL 0.5 \
+-timax 10000 \
+-CFL 0.1 \
 -dtmax 1 \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \

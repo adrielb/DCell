@@ -50,7 +50,7 @@ int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.5;
+  PetscReal dx = 0.1;
   Coor len = {100,25,0};
   Coor dh = {dx,dx,0};
   iCoor size = {len.x/dx,len.y/dx,0};
