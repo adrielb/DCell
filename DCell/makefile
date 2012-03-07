@@ -4,8 +4,8 @@ include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
 all: test
-SIM := NanoGrooves
-test: testDWorld-implicit
+SIM := sim3D
+test: testCommon-spatialindex
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

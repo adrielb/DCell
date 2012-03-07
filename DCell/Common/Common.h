@@ -4,7 +4,6 @@
 #include "ga.h"
 #include "macdecls.h"
 #include "petsc.h"
-#include "Array.h"
 
 #define LINE() { \
   int rank; \
@@ -70,6 +69,26 @@ PetscErrorCode LeastSqSetNumPoints( LeastSq ls, int n );
 PetscErrorCode InterpolateVelocity2D( const int udof, PetscReal  ***field, const Coor X, Coor *vel );
 PetscErrorCode InterpolateVelocity3D( const int udof, PetscReal ****field, const Coor X, Coor *vel );
 
+// Array
+typedef struct _Array *Array;
+PetscErrorCode ArrayCreate( const char name[], int elemSize, size_t maxSize, Array *array );
+PetscErrorCode ArrayDestroy( Array a );
+PetscErrorCode ArraySetSize( Array a, int size );
+PetscErrorCode ArrayAppend( Array a, void *elem );
+PetscErrorCode ArrayAppendPtr( Array a, void *elem );
+PetscErrorCode ArrayGet( Array a, int i, void *elem );
+PetscErrorCode ArrayGetP( Array a, int i, void *elem );
+PetscErrorCode ArrayWrite( Array a, const char *name, int t );
+PetscErrorCode ArrayZero( Array a );
+PetscErrorCode ArrayDelete1( Array a, int idx );
+PetscErrorCode ArrayCopy( Array src, Array copy );
+PetscErrorCode ArrayDuplicate( Array a, Array *newarray );
+PetscErrorCode ArrayGetCoor( Array a, iCoor pos, void *elem);
+PetscErrorCode ArrayGetCoorP( Array a, iCoor pos, void *elem);
+PetscErrorCode ArraySetCoor( Array a, iCoor shift, iCoor size );
+int   ArrayLength( Array a );
+void* ArrayGetData( Array a );
+
 // Global Arrays - PETSc integration
 typedef int GA; // todo: use GA type instead of int
 PetscErrorCode GACreate( DM da, int *ga );
@@ -108,5 +127,15 @@ PetscErrorCode UniqueIDCreate( UniqueID *uid );
 PetscErrorCode UniqueIDDestroy( UniqueID uid );
 PetscErrorCode UniqueIDSetStartCount( UniqueID uid, UniqueIDType maxID );
 PetscErrorCode UniqueIDGenerate( UniqueID uid, UniqueIDType *id );
+
+// SpatialIndex
+typedef struct _SpatialIndex *SpatialIndex;
+typedef struct _SpatialItem  *SpatialItem;
+typedef struct _AABB *AABB;
+PetscErrorCode SpatialIndexCreate( Coor lo, Coor hi, Coor dh, SpatialIndex *sidx );
+PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx );
+PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data );
+PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items );
+PetscErrorCode SpatialIndexClear( SpatialIndex sidx );
 
 #endif /* COMMON_H_ */

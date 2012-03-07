@@ -31,10 +31,16 @@ PetscErrorCode IIMUpdateIrregularNodeGrid_2D( IIM iim, LevelSet ls )
 #define __FUNCT__ "IIMUpdateIrregularNodeGrid_3D"
 PetscErrorCode IIMUpdateIrregularNodeGrid_3D( IIM iim, LevelSet ls )
 {
+  int i;
+  int len = ArrayLength(ls->irregularNodes);
+  IrregularNode *nodes = ArrayGetData(ls->irregularNodes);
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   SETERRQ(PETSC_COMM_SELF,0,"NOT IMPELEMENTED");
+  for ( i = 0; i < len; ++i) {
+//    ierr = SpatialIndexInsertPoint( spidx, nodes[i]->X, nodes[i] ); CHKERRQ(ierr);
+  }
   ierr=0;
   PetscFunctionReturn(0);
 }

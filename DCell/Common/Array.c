@@ -188,15 +188,36 @@ PetscErrorCode ArrayGetCoor( Array a, iCoor pos, void *elem)
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "ArrayGetCoorP"
+PetscErrorCode ArrayGetCoorP( Array a, iCoor pos, void *elem)
+{
+  int idx;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  // TODO: test if(debug flag) then check bounds
+  if( pos.x < a->p.x || pos.x >= a->q.x ||
+      pos.y < a->p.y || pos.y >= a->q.y ||
+      pos.z < a->p.z || pos.z >= a->q.z ){
+    SETERRQ4(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGetCoor[%s]: Coor [%d,%d,%d] not in array bounds",a->name,pos.x,pos.y,pos.z);
+  }
+  idx = (pos.x - a->p.x) + a->size.x * (pos.y - a->p.y) + a->size.x * a->size.y * (pos.z - a->p.z);
+  ierr = ArrayGetP(a, idx, elem); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "ArraySetCoor"
 PetscErrorCode ArraySetCoor( Array a, iCoor shift, iCoor size )
 {
+  PetscErrorCode ierr;
   PetscFunctionBegin;
   a->p = shift;
   a->size = size;
   a->q.x = shift.x + size.x;
   a->q.y = shift.y + size.y;
   a->q.z = shift.z + size.z;
+  ierr = ArraySetSize(a,size.x*size.y*size.z); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
