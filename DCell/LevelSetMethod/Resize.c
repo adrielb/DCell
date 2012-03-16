@@ -4,7 +4,7 @@
 #define __FUNCT__ "LevelSetResize"
 PetscErrorCode LevelSetResize(LevelSet ls)
 {
-  int i,j;
+  int i,j,k;
   iCoor max, min;
   IrregularNode *n;
   iCoor shift;    // shift amount in new memory
@@ -65,16 +65,32 @@ PetscErrorCode LevelSetResize(LevelSet ls)
   // Calculate the union of the old and new extents
   p.x = PetscMax(p.x,shift.x);
   p.y = PetscMax(p.y,shift.y);
+  p.z = PetscMax(p.z,shift.z);
   q.x = PetscMin(q.x,shift.x+dim.x);
   q.y = PetscMin(q.y,shift.y+dim.y);
+  q.z = PetscMin(q.z,shift.z+dim.z);
 
   // Copy old ls into new mem tmp
-  PetscReal **phi, **tmp;
-  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
-  ierr = GridGet(ls->tmp,&tmp); CHKERRQ(ierr);
-  for (j = p.y; j < q.y; ++j) {
-    for (i = p.x; i < q.x; ++i) {
-      tmp[j][i] = phi[j][i];
+  if( ls->phi->is2D ) {
+    PetscReal **phi, **tmp;
+    ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+    ierr = GridGet(ls->tmp,&tmp); CHKERRQ(ierr);
+    for (j = p.y; j < q.y; ++j) {
+      for (i = p.x; i < q.x; ++i) {
+        tmp[j][i] = phi[j][i];
+      }
+    }
+    dim.z = 0;
+  } else {
+    PetscReal ***phi, ***tmp;
+    ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+    ierr = GridGet(ls->tmp,&tmp); CHKERRQ(ierr);
+    for (k = p.z; k < q.z; ++k) {
+      for (j = p.y; j < q.y; ++j) {
+        for (i = p.x; i < q.x; ++i) {
+          tmp[k][j][i] = phi[k][j][i];
+        }
+      }
     }
   }
 

@@ -17,10 +17,11 @@ int main(int argc, char **args)
   for (i = 0; i < Np; ++i) {
     s[i] = i - Np/2;
     g[i] = s[i]*s[i];
+    g[i+Np] = -3 + s[i] + s[i]*s[i];
   }
   ierr = LeastSqSolve(lsq); CHKERRQ(ierr);
   for (i = 0; i < Np; i++) {
-    printf("g[%d] = %f\n", i, g[i] );
+    printf("g[%d] = %f \t g[%d] = %f \n", i, g[i], i, g[i+Np] );
   }
 
   ierr = LeastSqDestroy(lsq); CHKERRQ(ierr);

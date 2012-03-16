@@ -58,9 +58,10 @@ int main(int argc, char **args) {
   PetscReal radius = len.x / 3.;
   Coor center = (Coor){ len.x / 2., len.y / 2., len.z / 2.};
   LevelSet ls;
-  ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
+//  ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
+  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 3.5, 5, &ls); CHKERRQ(ierr);
 //  ierr = LevelSetInitializeParticles(ls); CHKERRQ(ierr);
-  ls->Advect = LevelSetAdvectSL;
+  ls->Advect = LevelSetAdvectSL_3D;
   ierr = GridSetName(ls->phi,"mycell"); CHKERRQ(ierr);
 
   MyCell cell;
@@ -87,6 +88,7 @@ int main(int argc, char **args) {
   world->CFL = 0.1;
   world->tend = 1e9;
   ierr = DWorldSetFromOptions(world); CHKERRQ(ierr);
+  world->Simulate = DWorldSimulate_Euler;
   ierr = DWorldSimulate(world); CHKERRQ(ierr);
 
   ierr = DWorldDestroy(world); CHKERRQ(ierr);
@@ -115,7 +117,7 @@ PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
   PetscFunctionBegin;
   ierr = PetscNew( struct _MyCell, &cell); CHKERRQ(ierr);
   ierr = DCellSetup( ls, (DCell)cell ); CHKERRQ(ierr);
-  cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldImplicitRHS;
+  cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldRHS;
   cell->dcell.Destroy = MyCellDestroy;
   cell->dcell.Write = MyCellWrite;
   *mycell = cell;
@@ -177,6 +179,7 @@ PetscErrorCode MyCellWrite( DCell dcell, int ti ) {
   PetscFunctionBegin;
   ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
-  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
+//  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane, ti); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

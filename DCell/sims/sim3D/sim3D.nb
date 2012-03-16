@@ -1,0 +1,328 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      6815,        227]*)
+(*NotebookOutlinePosition[      7494,        251]*)
+(*  CellTagsIndexPosition[      7450,        247]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[{
+    \(Get[Environment["\<ALT_DISP\>"]]\), "\n", 
+    \(<< Graphics`Arrow`\), "\[IndentingNewLine]", 
+    \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"contactarea.dat", "info.log.0", "mycell.10000.Real64", 
+      "mycell.irregNode.10000.array", "mycell.pos", "mycell.size", 
+      "rhs.10000.Real64", "temporal.dat", "uvp.10000.Real64"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["info", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(size = \(Import["\<!grep -m 1 -e 'FluidFieldSetup(): Size' \
+info.log.0\>", "\<Table\>"]\)[\([1]\)] // Drop[#, 3] &\)], "Input"],
+
+Cell[BoxData[
+    \({50, 50, 50}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(dh = \(Import["\<!grep -m 1 -e 'FluidFieldSetup(): dx' info.log.0\>", "\
+\<Table\>"]\)[\([1]\)] // Drop[#, 3] &\), "\[IndentingNewLine]", 
+    \(\(dx = dh[\([1]\)];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({0.5`, 0.5`, 0.5`}\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FluidField RHS", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(name = "\<uvp.10000\>";\)\), "\n", 
+    \(\(dat = 
+        Rest@Import[name <> "\<.Real64\>", "\<Real64\>", 
+            ByteOrdering \[Rule] 1];\)\), "\[IndentingNewLine]", 
+    \(\(dat = Partition[dat, 4];\)\), "\[IndentingNewLine]", 
+    \(\(dat = 
+        Partition[dat, 
+          size[\([\)\(1\)\(]\)]*
+            size[\([\)\(2\)\(]\)]];\)\), "\[IndentingNewLine]", 
+    \(\(dat = \(Partition[#, size[\([\)\(1\)\(]\)]] &\) /@ 
+          dat;\)\), "\[IndentingNewLine]", 
+    \(\(dat = Transpose[dat, {2, 3, 4, 1}];\)\), "\[IndentingNewLine]", 
+    \(\({pres, uvel, vvel, wvel} = dat;\)\), "\[IndentingNewLine]", 
+    \(Dimensions[dat]\), "\[IndentingNewLine]", 
+    \(Dimensions[pres]\)}], "Input"],
+
+Cell[BoxData[
+    \({4, 50, 50, 50}\)], "Output"],
+
+Cell[BoxData[
+    \({50, 50, 50}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(rng = \(Quantile[Flatten@#, {0, 1}] &\) /@ {pres, uvel, vvel, 
+          wvel}\)], "Input"],
+
+Cell[BoxData[
+    \({{0.`, 0.`}, {0.`, 0.`}, {0.`, 0.`}, {0.`, 0.`}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {All, All, rng[\([4]\)]}] &\) /@ 
+        wvel;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(DisplayTogetherArray[{{\[IndentingNewLine]ListDensityPlot[
+                  pres[\([#]\)], PlotRange \[Rule] {All, All, rng[\([1]\)]}], 
+                ListDensityPlot[uvel[\([#]\)], 
+                  PlotRange \[Rule] {All, All, 
+                      rng[\([2]\)]}]}, {ListDensityPlot[vvel[\([#]\)], 
+                  PlotRange \[Rule] {All, All, rng[\([3]\)]}], 
+                ListDensityPlot[wvel[\([#]\)], 
+                  PlotRange \[Rule] {All, All, rng[\([\)\(4\)\(]\)]}]}}] &\) /@ 
+        Range[Length[pres]];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(pos = 
+        Position[
+          vvel, _?\((Abs[#] > 0.00001 &)\)];\)\), "\[IndentingNewLine]", 
+    \(\(val = Extract[vvel, pos];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(Show[
+        Graphics3D[
+          MapThread[{If[#2 > 0, RGBColor[0, #2, 0], RGBColor[\(-#2\), 0, 0]], 
+                Point[#1]} &, {pos, val\/Max[Abs[val]]}]]];\)\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["MyCell", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\({phi, pos} = ImportGrid3D["\<mycell\>"];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[phi]\), "\[IndentingNewLine]", 
+    \(\(phi = phi[\([1]\)];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({1, 58, 58, 58}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
+        phi;\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["IrregNodes", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(ImportIrreg3D["\<mycell.irregNode.10000.array\>"]\), "\
+\[IndentingNewLine]", 
+    \(Length[ir`f1]\), "\[IndentingNewLine]", 
+    \(Quantile[ir`f1, {0, 1}]\)}], "Input"],
+
+Cell[BoxData[
+    \(29406\)], "Output"],
+
+Cell[BoxData[
+    \({\(-0.0000451583878293923`\), 0.00006326205791442057`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Histogram[ir`f1]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(Function[
+          f, \[IndentingNewLine]g = 
+            Show[Graphics3D[{PointSize[
+                    0.04], \[IndentingNewLine]MapThread[{If[#1 > 0, 
+                          RGBColor[0, #1, 0], RGBColor[\(-#1\), 0, 0]], 
+                        Point[#2]} &, {f\/Max[Abs[f]], 
+                      ir`X}]\[IndentingNewLine]}], Axes \[Rule] True, 
+              ImageSize \[Rule] 800]] /@ {ir`f1, ir`f1n, 
+          ir`f1t};\)\)], "Input"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+AutoGeneratedPackage->None,
+WindowSize->{1200, 1523},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+ShowSelection->True
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 218, 4, 59, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[1997, 59, 44, 1, 27, "Input"],
+Cell[2044, 62, 221, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2302, 70, 26, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[2353, 74, 148, 2, 27, "Input"],
+Cell[2504, 78, 46, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2587, 84, 201, 3, 43, "Input"],
+Cell[2791, 89, 52, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2892, 96, 36, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[2953, 100, 728, 15, 155, "Input"],
+Cell[3684, 117, 49, 1, 26, "Output"],
+Cell[3736, 120, 46, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3819, 126, 111, 2, 27, "Input"],
+Cell[3933, 130, 82, 1, 26, "Output"]
+}, Open  ]],
+Cell[4030, 134, 164, 3, 43, "Input"],
+Cell[4197, 139, 607, 10, 75, "Input"],
+Cell[4807, 151, 171, 4, 43, "Input"],
+Cell[4981, 157, 201, 4, 44, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5219, 166, 28, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[5272, 170, 185, 3, 59, "Input"],
+Cell[5460, 175, 49, 1, 26, "Output"]
+}, Open  ]],
+Cell[5524, 179, 155, 3, 43, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[5716, 187, 32, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[5773, 191, 190, 4, 59, "Input"],
+Cell[5966, 197, 39, 1, 26, "Output"],
+Cell[6008, 200, 88, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6133, 206, 49, 1, 27, "Input"],
+Cell[6185, 209, 130, 3, 26, "Output"]
+}, Open  ]],
+Cell[6330, 215, 469, 9, 107, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+

@@ -71,7 +71,7 @@ PetscErrorCode InterpolateVelocity3D( const int udof, PetscReal ****field, const
 
 // Array
 typedef struct _Array *Array;
-PetscErrorCode ArrayCreate( const char name[], int elemSize, size_t maxSize, Array *array );
+PetscErrorCode ArrayCreate( const char name[], int elemSize, Array *array );
 PetscErrorCode ArrayDestroy( Array a );
 PetscErrorCode ArraySetSize( Array a, int size );
 PetscErrorCode ArrayAppend( Array a, void *elem );
@@ -99,7 +99,7 @@ PetscErrorCode GAScatterAcc(int ga, Array c, Array v);// val[] +-> GA
 
 // MemCache
 typedef struct _MemCache *MemCache;
-PetscErrorCode MemCacheCreate( size_t elemsize, size_t chunksize, MemCache *mc );
+PetscErrorCode MemCacheCreate( const char name[], size_t elemsize, size_t chunksize, MemCache *mc );
 PetscErrorCode MemCacheDestroy( MemCache mc );
 PetscErrorCode MemCacheAlloc( MemCache mc, void *elem );
 PetscErrorCode MemCacheFree( MemCache mc, void *elem );
@@ -108,7 +108,7 @@ PetscErrorCode MemCacheFree( MemCache mc, void *elem );
 typedef struct _Heap *Heap;
 typedef PetscReal (*Comparator)(void* parent, void* child);
 typedef void (*HeapPrintNode)(void* node);
-PetscErrorCode HeapCreate( Comparator cmp, Heap *heap);
+PetscErrorCode HeapCreate( const char name[], Comparator cmp, Heap *heap);
 PetscErrorCode HeapDestroy( Heap h );
 PetscErrorCode HeapClear( Heap h, MemCache mc );
 PetscErrorCode HeapInsert( Heap h, void *item );
@@ -132,10 +132,11 @@ PetscErrorCode UniqueIDGenerate( UniqueID uid, UniqueIDType *id );
 typedef struct _SpatialIndex *SpatialIndex;
 typedef struct _SpatialItem  *SpatialItem;
 typedef struct _AABB *AABB;
-PetscErrorCode SpatialIndexCreate( Coor lo, Coor hi, Coor dh, SpatialIndex *sidx );
+PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx );
+PetscErrorCode SpatialIndexSetDomain( SpatialIndex sidx, Coor lo, Coor hi, Coor dh );
 PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx );
 PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data );
-PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items );
+PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items[] );
 PetscErrorCode SpatialIndexClear( SpatialIndex sidx );
 
 #endif /* COMMON_H_ */

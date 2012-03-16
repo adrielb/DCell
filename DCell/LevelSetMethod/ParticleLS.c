@@ -31,7 +31,7 @@ PetscErrorCode LevelSetInitializeParticles( LevelSet ls )
   ierr = PetscOptionsGetReal(0,"-pls_dinit",&pls->D_INIT,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-pls_sinit",&pls->S_INIT,0); CHKERRQ(ierr);
 
-  ierr = ArrayCreate("particles",sizeof(struct _Particle),200,&pls->particles); CHKERRQ(ierr);
+  ierr = ArrayCreate( "particles", sizeof(struct _Particle), &pls->particles); CHKERRQ(ierr);
   ierr = PetscRandomCreate(PETSC_COMM_WORLD,&pls->rnd); CHKERRQ(ierr);
   ierr = PetscRandomSetType(pls->rnd,PETSCRAND48); CHKERRQ(ierr);
 
@@ -215,7 +215,7 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
   PetscFunctionBegin;
   static Array particleCounts;
   if( particleCounts == NULL ) {
-    ierr = ArrayCreate("particle counts", sizeof(unsigned char),ls->phi->SIZE,&particleCounts); CHKERRQ(ierr);
+    ierr = ArrayCreate( "particleCounts", sizeof(unsigned char), &particleCounts); CHKERRQ(ierr);
   }
   ierr = PetscLogEventBegin(EVENT_ParticleLS_ReseedParticles,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);

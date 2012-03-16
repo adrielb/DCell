@@ -9,6 +9,7 @@ RUNOPTS := \
 -pls_rmax 0.5 \
 -Fa 3 \
 -Fk 1 \
+-Fk0 1 \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
@@ -18,6 +19,7 @@ RUNOPTS := \
 -dtmax 1 \
 -ksp_monitor \
 -ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_p_ksp_max_it 4 -ksp_max_it 100 \
+-ksp_view \
 -log_summary -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
 

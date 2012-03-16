@@ -44,38 +44,35 @@ PetscErrorCode FluidFieldSolve( FluidField f )
 #define __FUNCT__ "FluidField_DiscreteCompatibilityCondition"
 PetscErrorCode FluidField_DiscreteCompatibilityCondition( FluidField f )
 {
-  PetscReal avg, sum=0, eps = PETSC_MACHINE_EPSILON;
-  PetscReal ***rhs;
-  int i,j;
+  int i, lo, hi, bs;
   int count = 0;
-  int xs,ys,xm,ym;
+  PetscReal avg, sum=0, eps = PETSC_MACHINE_EPSILON;
+  PetscReal *rhs;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_FluidField_DiscreteCompatibilityCondition,0,0,0,0); CHKERRQ(ierr);
-  ierr = DMDAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
-  ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
-  for ( j = ys; j < ys+ym; ++j) {
-    for ( i = xs; i < xs+xm; ++i) {
-      if( PetscAbs(rhs[j][i][CELL_CENTER]) > eps )
-      {
-        sum += rhs[j][i][CELL_CENTER];
-        count++;
-      }
+  ierr = VecGetOwnershipRange(f->rhs, &lo, &hi); CHKERRQ(ierr);
+  ierr = VecGetBlockSize(f->rhs, &bs); CHKERRQ(ierr);
+  ierr = VecGetArray(f->rhs,&rhs); CHKERRQ(ierr);
+
+  for ( i = lo+CELL_CENTER; i < hi; i+=bs ) {
+    if( PetscAbs( rhs[i] ) > eps ) {
+      sum += rhs[i];
+      count++;
     }
   }
+
   ierr = MPI_Allreduce(&sum,&sum,1,MPI_DOUBLE,MPI_SUM,f->comm); CHKERRQ(ierr);
   ierr = MPI_Allreduce(&count,&count,1,MPI_INT,MPI_SUM,f->comm); CHKERRQ(ierr);
   avg = sum / count;
-  for ( j = ys; j < ys+ym; ++j) {
-    for ( i = xs; i < xs+xm; ++i) {
-      if( PetscAbs(rhs[j][i][CELL_CENTER]) > eps )
-      {
-        rhs[j][i][CELL_CENTER] -= avg;
-      }
-    }
+
+  for ( i = lo+CELL_CENTER; i < hi; i+=bs ) {
+    if( PetscAbs( rhs[i] ) > eps )
+      rhs[i] -= avg;
   }
-  ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+
+  ierr = VecRestoreArray(f->rhs,&rhs); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_FluidField_DiscreteCompatibilityCondition,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -86,33 +83,58 @@ PetscErrorCode FluidFieldMaxVelocityMag( FluidField f, PetscReal *maxVel )
 {
   iCoor e;
   Coor X,V;
-  PetscReal ***vel;
+  PetscReal *vel;
   PetscReal mag;
-  int xs,ys,xm,ym;
+  int xs, ys, zs;
+  int xm, ym, zm;
   DMDALocalInfo info;
+  Vec locvel;
+  DM dm = f->daV;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_FluidFieldMaxVelocityMag,0,0,0,0); CHKERRQ(ierr);
-  ierr = DMDAGetLocalInfo(f->daV,&info); CHKERRQ(ierr);
-  ierr = DMDAGetCorners(f->daV,&xs,&ys,0,&xm,&ym,0); CHKERRQ(ierr);
-  ierr = DMDAVecGetArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
+  ierr = DMDAGetLocalInfo(dm,&info); CHKERRQ(ierr);
+  ierr = DMDAGetCorners(dm,&xs,&ys,&zs,&xm,&ym,&zm); CHKERRQ(ierr);
+  ierr = DMGetLocalVector(dm, &locvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalBegin(dm, f->vel, INSERT_VALUES, locvel); CHKERRQ(ierr);
+  ierr = DMGlobalToLocalEnd(dm, f->vel, INSERT_VALUES, locvel); CHKERRQ(ierr);
+  ierr = DMDAVecGetArrayDOF(dm,locvel,&vel); CHKERRQ(ierr);
 
-  // hack: ignore upper boundary since vel interpolation needs [x, x+1]
-  e.x = xs+xm-1;
-  e.y = ys+ym-1;
-  //TODO: Warning: doesnt count velocity field between proc boundaries, need to do
-  //      global to local sync to include ghost nodes
   *maxVel = 0;
-  for ( X.y = ys; X.y < e.y; ++X.y) {
-    for ( X.x = xs; X.x < e.x; ++X.x) {
-      ierr = InterpolateVelocity2D( U_FACE, vel, X, &V ); CHKERRQ(ierr);
-      mag = PetscSqrtScalar( V.x*V.x + V.y*V.y );
-      *maxVel = mag > *maxVel ? mag : *maxVel;
+  e.x = xs+xm;
+  e.y = ys+ym;
+  e.z = zs+zm;
+  if( e.x == info.mx ) e.x--;
+  if( e.y == info.my ) e.y--;
+  if( e.z == info.mz ) e.z--;
+
+  if( f->is3D ) {
+    PetscReal ****vel3D = (PetscReal****)vel;
+    for ( X.z = zs; X.z < e.z; ++X.z) {
+      for ( X.y = ys; X.y < e.y; ++X.y) {
+        for ( X.x = xs; X.x < e.x; ++X.x) {
+          ierr = InterpolateVelocity3D( U_FACE, vel3D, X, &V ); CHKERRQ(ierr);
+          mag = PetscSqrtScalar( V.x*V.x + V.y*V.y + V.z*V.z );
+          *maxVel = mag > *maxVel ? mag : *maxVel;
+        }
+      }
+    }
+  } else {
+    PetscReal ***vel2D = (PetscReal***)vel;
+    for ( X.y = ys; X.y < e.y; ++X.y) {
+      for ( X.x = xs; X.x < e.x; ++X.x) {
+        ierr = InterpolateVelocity2D( U_FACE, vel2D, X, &V ); CHKERRQ(ierr);
+        mag = PetscSqrtScalar( V.x*V.x + V.y*V.y );
+        *maxVel = mag > *maxVel ? mag : *maxVel;
+      }
     }
   }
-  ierr = DMDAVecRestoreArrayDOF(f->daV,f->vel,&vel); CHKERRQ(ierr);
+
   ierr = MPI_Allreduce(maxVel,maxVel,1,MPI_DOUBLE,MPI_MAX,f->comm); CHKERRQ(ierr);
+
+  ierr = DMDAVecRestoreArrayDOF(dm,f->vel,&vel); CHKERRQ(ierr);
+  ierr = DMRestoreLocalVector(dm,&locvel); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_FluidFieldMaxVelocityMag,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

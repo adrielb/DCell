@@ -18,9 +18,9 @@ PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls )
 
   if( ls->phi->is2D )
   {
-    LevelSetUpdateIrregularNodeList_2D( ls );
+    ierr = LevelSetUpdateIrregularNodeList_2D( ls ); CHKERRQ(ierr);
   } else {
-    LevelSetUpdateIrregularNodeList_3D( ls );
+    ierr = LevelSetUpdateIrregularNodeList_3D( ls ); CHKERRQ(ierr);
   }
   
   ierr = PetscLogEventEnd(EVENT_LevelSetUpdateIrregularNodeList,0,0,0,0); CHKERRQ(ierr);
@@ -55,7 +55,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
       for( I = -2; I <= 2; ++I) {
         local[J+2][I+2] = phi[J+j][I+i];
       }
-    } // for local 3x3 stencil
+    } // for local 5x5 stencil
 
     // Cell-centered Irregular Node
     for( J = -1; J < 2; ++J)
@@ -141,30 +141,19 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "LevelSetWriteIrregularNodeList"
-PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx )
+#define __FUNCT__ "LevelSetWriteIrregularNodeList_2D"
+PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscViewer viewer )
 {
+  int i,j;
+  int len = ArrayLength( irregularNodes );
   const int rowlen = 9;
   PetscReal row[rowlen]; // { X, Y, nv, nv, f1, f2, k }
-  char filename[PETSC_MAX_PATH_LEN], wd[PETSC_MAX_PATH_LEN];
-  PetscViewer viewer;
-  IrregularNode *node;
-  int i,j;
-  Array irreg = ls->irregularNodes;
+  IrregularNode *node, *nodes = ArrayGetData( irregularNodes );
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscLogEventBegin(EVENT_LevelSetWriteIrregularNodeList,0,0,0,0); CHKERRQ(ierr);
-
-  // TODO: label with levelset id tag:
-//  ierr = ArrayWrite( irreg, "irregNode", idx ); CHKERRQ(ierr);
-
-  ierr = DCellGetWorkingDirectory(wd); CHKERRQ(ierr);
-  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/%s.irregNode.%d.array",wd,ls->phi->name,idx+FILE_COUNT_START); CHKERRQ(ierr);
-  ierr = PetscViewerBinaryOpen(PETSC_COMM_SELF,filename,FILE_MODE_WRITE,&viewer); CHKERRQ(ierr);
-  for ( i = 0; i < ArrayLength(irreg); ++i) {
-    ierr = ArrayGet(irreg,i,&node); CHKERRQ(ierr);
-
+  for ( i = 0; i < len; ++i) {
+    node = &nodes[i];
     if( (node->shift == -1 && node->axis == -1) )
     {
       j=0;
@@ -179,6 +168,77 @@ PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx )
       row[j++] = node->k;
       ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
     }
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "LevelSetWriteIrregularNodeList_3D"
+PetscErrorCode LevelSetWriteIrregularNodeList_3D( Array irregularNodes, PetscViewer viewer )
+{
+  int i,j;
+  int len = ArrayLength( irregularNodes );
+  const int rowlen = 23;
+  PetscReal row[rowlen]; // { X, Y, Z, nv, nv, nv, k, f1 }
+  IrregularNode *node, *nodes = ArrayGetData( irregularNodes );
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  for ( i = 0; i < len; ++i) {
+    node = &nodes[i];
+//    if( (node->shift == -1 && node->axis == -1) )
+    {
+      j=0;
+      row[j++] = node->X.x;    // 0
+      row[j++] = node->X.y;
+      row[j++] = node->X.z;
+      row[j++] = node->pos.x;  // 3
+      row[j++] = node->pos.y;
+      row[j++] = node->pos.z;
+      row[j++] = node->nx;     // 6
+      row[j++] = node->ny;
+      row[j++] = node->nz;
+      row[j++] = node->k;      // 9
+      row[j++] = node->f1;
+      row[j++] = node->f1_n;
+      row[j++] = node->f1_t;   //12
+      row[j++] = node->f1_nn;
+      row[j++] = node->f1_tt;
+      row[j++] = node->f1_nt;  //15
+      row[j++] = node->sx;     //16
+      row[j++] = node->sy;
+      row[j++] = node->sz;
+      row[j++] = node->rx;     //19
+      row[j++] = node->ry;
+      row[j++] = node->rz;     //21
+      row[j++] = node->numNei; //22
+      ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
+    }
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "LevelSetWriteIrregularNodeList"
+PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx )
+{
+  char filename[PETSC_MAX_PATH_LEN], wd[PETSC_MAX_PATH_LEN];
+  PetscViewer viewer;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = PetscLogEventBegin(EVENT_LevelSetWriteIrregularNodeList,0,0,0,0); CHKERRQ(ierr);
+
+  // TODO: label with levelset id tag:
+//  ierr = ArrayWrite( irreg, "irregNode", idx ); CHKERRQ(ierr);
+
+  ierr = DCellGetWorkingDirectory(wd); CHKERRQ(ierr);
+  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/%s.irregNode.%d.array",wd,ls->phi->name,idx+FILE_COUNT_START); CHKERRQ(ierr);
+  ierr = PetscViewerBinaryOpen(PETSC_COMM_SELF,filename,FILE_MODE_WRITE,&viewer); CHKERRQ(ierr);
+  if( ls->phi->is2D ) {
+    ierr = LevelSetWriteIrregularNodeList_2D( ls->irregularNodes, viewer ); CHKERRQ(ierr);
+  } else {
+    ierr = LevelSetWriteIrregularNodeList_3D( ls->irregularNodes, viewer ); CHKERRQ(ierr);
   }
   ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_LevelSetWriteIrregularNodeList,0,0,0,0); CHKERRQ(ierr);

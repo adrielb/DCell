@@ -98,7 +98,7 @@ PetscErrorCode LevelSetInitializeToSphere( Coor dh, Coor center, PetscReal radiu
           ierr = ArrayAppend(ls->band,&band); CHKERRQ(ierr);
           band->x = i;
           band->y = j;
-          band->y = k;
+          band->z = k;
         } // inside
       } // i
     } // j
@@ -166,7 +166,7 @@ PetscErrorCode LevelSetInitializeToStar2D( Coor dh, Coor center, PetscReal radiu
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
   for (j = p.y; j < q.y; ++j) {
-    for (i = p.x; i < q.y; ++i) {
+    for (i = p.x; i < q.x; ++i) {
       X.x = i * dh.x - center.x;
       X.y = j * dh.y - center.y;
       A = ( radius + amp + amp * cos( numPetals * atan2(X.y,X.x)) ) / radius;
@@ -189,46 +189,59 @@ PetscErrorCode LevelSetInitializeToStar2D( Coor dh, Coor center, PetscReal radiu
 
   PetscFunctionReturn(0);
 }
-/*
+
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetInitializeToStar3D"
-PetscErrorCode LevelSetInitializeToStar3D( LevelSet ls )
+PetscErrorCode LevelSetInitializeToStar3D( Coor dh, Coor center, PetscReal radius, PetscReal amp, PetscReal numPetals, LevelSet *lset )
 {
-  PetscErrorCode ierr;
   int i, j, k;
-  PetscReal ***phi = ls->phi->v3;
-  iCoor n = ls->phi->n;
-  PetscReal I = n.x / 2.-.01,      J = n.y / 2.,      K = n.z / 2.;
-//  PetscReal radius = MIN( MIN( I, J), K) / 2 - .1;
+  const int BUF = 12;
+  PetscReal ***phi;
   iCoor *band;
+  iCoor p, q;
+  iCoor pos,size;
+  Coor X;
+  PetscReal A;
+  PetscReal M;
+  LevelSet ls;
+  PetscErrorCode ierr;
   
   PetscFunctionBegin;
-    
-  for (k = 0; k < n.z; ++k)
-  {
-    for (j = 0; j < n.y; ++j)
-    {
-      for (i = 0; i < n.x; ++i)
-      {
-        phi[k][j][i] = 
-          sqrt( 
-              ( PetscSqr(i - I) + PetscSqr(j - J) ) *
-              (.41 * cos( 8 * atan((j - J)/(i - I))) + 1)
-          ) + .5*( PetscSqr(k-K) - K ); // - radius + PetscAbs(k - K);
-
-        ierr = ArrayAppend(ls->band,(void*)&band); CHKERRQ(ierr);
-        band->x = i;
-        band->y = j;
-        band->z = k;
+  M = sqrt( 1+2*amp/radius ) * radius;
+  pos.x = (center.x - M ) / dh.x - BUF;
+  pos.y = (center.y - M ) / dh.y - BUF;
+  pos.z = (center.z - M ) / dh.z - BUF;;
+  size.x = 2 * (M/dh.x + BUF );
+  size.y = 2 * (M/dh.y + BUF );
+  size.z = 2 * (M/dh.z + BUF );
+  ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
+  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+  ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
+  for (k = p.z; k < q.z; ++k) {
+    for (j = p.y; j < q.y; ++j) {
+      for (i = p.x; i < q.x; ++i) {
+        X.x = i * dh.x - center.x;
+        X.y = j * dh.y - center.y;
+        X.z = k * dh.z - center.z;
+        A = radius + amp + amp * cos( numPetals * atan2(X.y, X.x) );
+        A = A / radius;
+        phi[k][j][i] = sqrt( (X.x*X.x)/A + (X.y*X.y)/A + (X.z*X.z) ) - radius;
+        if( k-p.z > BUF/2 && q.z-k > BUF/2 &&
+            j-p.y > BUF/2 && q.y-j > BUF/2 &&
+            i-p.x > BUF/2 && q.x-i > BUF/2 ) {
+          ierr = ArrayAppend( ls->band, &band); CHKERRQ(ierr);
+          band->x = i;
+          band->y = j;
+          band->z = k;
+        }
       }
     }
   }
   
-  ierr = ArrayDestroy(ls->band); CHKERRQ(ierr);
-  ierr = ArrayCreate(sizeof(iCoor), ls->phi->n.x*ls->phi->n.y*ls->bandWidth,&ls->band); CHKERRQ(ierr);
-  ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);  
-    
+  ierr = LevelSetUpdateIrregularNodeList( ls ); CHKERRQ(ierr);
+  ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
+
+  *lset = ls;
 
   PetscFunctionReturn(0);
 }
-*/

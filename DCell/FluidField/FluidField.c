@@ -30,7 +30,7 @@ PetscErrorCode FluidFieldCreate(MPI_Comm comm, FluidField *fluid)
   f->is3D = PETSC_FALSE;
 
   // Create BC index set
-  ierr = ArrayCreate("dirichletBC",sizeof(MatStencil),128,&f->dirichletBC); CHKERRQ(ierr);
+  ierr = ArrayCreate("dirichletBC",sizeof(MatStencil),&f->dirichletBC); CHKERRQ(ierr);
 
   ierr = FluidFieldRegisterEvents(); CHKERRQ(ierr);
 
@@ -158,6 +158,9 @@ PetscErrorCode FluidFieldSetup( FluidField f )
    * Use direct solver for each block
    * TODO: use MG, w/FFT on coarse grid
    */
+
+  ierr = PetscInfo3( 0, "Size: %d %d %d\n", f->dims.x, f->dims.y, f->dims.z ); CHKERRQ(ierr);
+  ierr = PetscInfo3( 0,   "dx: %e %e %e\n", f->dh.x,   f->dh.y,   f->dh.z ); CHKERRQ(ierr);
 
   ierr = PetscGetTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Solver Setup: %f sec\n",t2-t1); CHKERRQ(ierr);

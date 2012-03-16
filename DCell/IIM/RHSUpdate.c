@@ -28,9 +28,9 @@ PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga )
     ierr = IIMPressureGradientCorrection( iim, node, jump ); CHKERRQ(ierr);
 
     if( node->shift == CELL_CENTER ) {
-      JumpVelocity( *iim->mu, node, &jump, node->axis );
+      JumpVelocity( iim->mu, node, &jump, node->axis );
     } else {
-      JumpVelocity( *iim->mu, node, &jump, node->shift - U_FACE );
+      JumpVelocity( iim->mu, node, &jump, node->shift - U_FACE );
     }
 
     // C{ laplace(u) }

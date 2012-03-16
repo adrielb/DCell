@@ -102,5 +102,9 @@ inline double GridFunction3D_Curv( double ***p, int i, int j, int k, Coor d )
   c   = px2*(pyy+pzz) + py2*(pxx+pzz) + pz2*(pxx+pyy);
   c  -= 2.*(px*py*pxy + px*pz*pxz + py*pz*pyz);
   c  /= sqrt(ppp*ppp*ppp);
+
+  if( c != c ) {
+    c = 0;
+  }
   return c;
 }

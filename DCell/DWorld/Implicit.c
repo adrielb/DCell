@@ -16,8 +16,8 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
 
   PetscFunctionBegin;
   if( w->g0array == PETSC_NULL ) {
-    ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
-    ierr = ArrayCreate("g1array",sizeof(double),16,&w->g1array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g0array",sizeof(double),&w->g0array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g1array",sizeof(double),&w->g1array); CHKERRQ(ierr);
   }
 
   // defaults

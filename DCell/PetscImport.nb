@@ -41,10 +41,10 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     19798,        470]*)
-(*NotebookOutlinePosition[     20482,        494]*)
-(*  CellTagsIndexPosition[     20438,        490]*)
-(*WindowFrame->Generic*)
+(*NotebookOptionsPosition[     21343,        489]*)
+(*NotebookOutlinePosition[     22027,        513]*)
+(*  CellTagsIndexPosition[     21983,        509]*)
+(*WindowFrame->Normal*)
 
 
 
@@ -98,6 +98,23 @@ Cell[BoxData[{
                 Rest@Import[files[\([idx]\)], "\<Real64\>", 
                     ByteOrdering \[Rule] 1]; \[IndentingNewLine]Partition[
                 tmp, sizes[\([idx, 1]\)]]]; \[IndentingNewLine]dat = 
+            Array[f, Length[files]]; \[IndentingNewLine]{dat, 
+            pos}\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(\(ImportGrid3D[name_] := 
+        Module[{dat, files, sizes, pos, tmp, f}, \[IndentingNewLine]sizes = 
+            Import[name <> "\<.size\>", "\<Table\>"]; \[IndentingNewLine]pos \
+= Import[name <> "\<.pos\>", "\<Table\>"]; \[IndentingNewLine]files = 
+            FileNames[name <> "\<.*.Real64\>"]; \[IndentingNewLine]f = 
+            Function[
+              idx, \[IndentingNewLine]tmp = 
+                Rest@Import[files[\([idx]\)], "\<Real64\>", 
+                    ByteOrdering \[Rule] 
+                      1]; \[IndentingNewLine]dat = \(Partition[#, 
+                      sizes[\([idx, 1]\)]] &\) /@ 
+                  Partition[tmp, 
+                    sizes[\([idx, 2]\)]*
+                      sizes[\([idx, 1]\)]]]; \[IndentingNewLine]dat = 
             Array[f, Length[files]]; \[IndentingNewLine]{dat, 
             pos}\[IndentingNewLine]];\)\(\[IndentingNewLine]\)
     \)\), "\[IndentingNewLine]", 
@@ -175,7 +192,8 @@ Cell[BoxData[{
   InitializationCell->True],
 
 Cell[BoxData[{
-    \(ImportIrreg\), "\[IndentingNewLine]", 
+    \(\(ImportIrreg;\)\), "\[IndentingNewLine]", 
+    \(\(ImportIrreg3D;\)\), "\[IndentingNewLine]", 
     \(\(Begin["\<ir`\>"];\)\), "\[IndentingNewLine]", 
     \(\(ImportIrreg[filename_] := 
         Module[{r, i, format, s, len = 9}, \[IndentingNewLine]r[n_] := 
@@ -188,9 +206,25 @@ Cell[BoxData[{
             raw[\([\(s++\)]\)]; \[IndentingNewLine]T2 := 
             Transpose[raw[\([{\(s++\), \(s++\)}]\)]]; \[IndentingNewLine]X = 
             T2; \[IndentingNewLine]x = T2; \[IndentingNewLine]nv = 
-            T2; \[IndentingNewLine]f1 = T1; \[IndentingNewLine]f2 = 
-            T1; \[IndentingNewLine]k = 
+            T2; \[IndentingNewLine]k = 
             T1;\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
+    \(\(ImportIrreg3D[filename_] := 
+        Module[{r, i, format, s, len = 23}, \[IndentingNewLine]r[n_] := 
+            Table["\<Real64\>", {n}]; \[IndentingNewLine]raw = 
+            BinaryReadList[filename, r[len], 
+              ByteOrdering \[Rule] 1]; \[IndentingNewLine]If[raw === $Failed, 
+            Return[]]; \[IndentingNewLine]raw = 
+            Transpose[raw]; \[IndentingNewLine]s = 1; \[IndentingNewLine]T1 := 
+            raw[\([\(s++\)]\)]; \[IndentingNewLine]T3 := 
+            Transpose[
+              raw[\([{\(s++\), \(s++\), \(s++\)}]\)]]; \[IndentingNewLine]X = 
+            T3; \[IndentingNewLine]x = Round@T3; \[IndentingNewLine]nv = 
+            T3; \[IndentingNewLine]k = T1; \[IndentingNewLine]f1 = 
+            T1; \[IndentingNewLine]f1n = T1; \[IndentingNewLine]f1t = 
+            T1; \[IndentingNewLine]f1nn = T1; \[IndentingNewLine]f1tt = 
+            T1; \[IndentingNewLine]f1nt = T1; \[IndentingNewLine]sv = 
+            T3; \[IndentingNewLine]rv = T3; \[IndentingNewLine]numNei = 
+            Round@T1;\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
     \(\(End[];\)\)}], "Input",
   InitializationCell->True],
 
@@ -273,14 +307,14 @@ Cell[BoxData[{
                 Transpose; \[IndentingNewLine]SparseArray[
               Rule @@ rules]]];\)\(\[IndentingNewLine]\)
     \)\), "\[IndentingNewLine]", 
-    \(ImportTemporal[] := 
+    \(\(\(ImportTemporal[] := 
       Module[{temporal}, \[IndentingNewLine]temporal = 
           Import["\<temporal.dat\>"]; \[IndentingNewLine]Print[
           temporal[\([1]\)]]; \[IndentingNewLine]{ti, TIME, dt, dtcfl, 
             tiframe, CFL} = 
           Transpose@
-            Rest[temporal];\[IndentingNewLine]]\[IndentingNewLine]\), "\
-\[IndentingNewLine]", 
+            Rest[temporal];\[IndentingNewLine]]\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
     \(\(ImportParticles = 
         Function[t, 
           Module[{file, 
@@ -289,9 +323,8 @@ Cell[BoxData[{
               Import[file, "\<Real64\>"]; \[IndentingNewLine]dat = 
               Partition[dat, 4]; \[IndentingNewLine]dat = 
               Transpose[Most@dat]; \[IndentingNewLine]Xp = 
-              dat[\([\)\({1, 2}\)\(]\)] // 
-                Transpose; \[IndentingNewLine]radius = 
-              dat[\([\)\(4\)\(]\)];\[IndentingNewLine]]];\)\)}], "Input",
+              dat[\([{1, 2}]\)] // Transpose; \[IndentingNewLine]radius = 
+              dat[\([4]\)];\[IndentingNewLine]]];\)\)}], "Input",
   InitializationCell->True]
 }, Open  ]],
 
@@ -316,8 +349,6 @@ Cell[BoxData[
     \("viz`"\)], "Output"]
 }, Open  ]],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
     \(\(LoadBands[] := 
         Module[{}, \[IndentingNewLine]\(bands = 
@@ -329,14 +360,6 @@ Cell[BoxData[
                           2}]\)]; \[IndentingNewLine]band\[IndentingNewLine]] \
 /@ FileNames["\<band.*\>"];\)\[IndentingNewLine]];\)\)], "Input",
   InitializationCell->True],
-
-Cell[BoxData[
-    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
-error: new symbol name \\\"\\!\\(band\\)\\\" is similar to existing symbol \\\
-\"\\!\\(bands\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"]
-}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -405,15 +428,9 @@ Cell[BoxData[
               dt;\[IndentingNewLine]];\[IndentingNewLine]];\)\)], "Input",
   InitializationCell->True],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
     \(\(End[];\)\)], "Input",
-  InitializationCell->True],
-
-Cell[BoxData[
-    \("viz`"\)], "Output"]
-}, Open  ]]
+  InitializationCell->True]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -423,7 +440,8 @@ Cell["SGE", "Section"],
 Cell[BoxData[{
     \(MakeViz\), "\[IndentingNewLine]", 
     \(ProgressBar\), "\[IndentingNewLine]", 
-    \(ProgressBarTest\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(\(ProgressBarTest\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
     \(\(Begin["\<sge`\>"];\)\)}], "Input",
   InitializationCell->True],
 
@@ -431,7 +449,8 @@ Cell[BoxData[{
     \(\(ID = Environment["\<SGE_TASK_ID\>"];\)\), "\[IndentingNewLine]", 
     \(\(TASKLAST = 
         Environment["\<SGE_TASK_LAST\>"];\)\), "\[IndentingNewLine]", 
-    \(\(STARTIDX = 10000;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
+    \(\(\(STARTIDX = 10000;\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
     \(\(If[
         ID =!= $Failed, \[IndentingNewLine]$DisplayFunction = 
           Identity; \[IndentingNewLine]ID = 
@@ -471,7 +490,7 @@ Cell[BoxData[
 FrontEndVersion->"5.2 for X",
 ScreenRectangle->{{0, 2400}, {0, 1600}},
 AutoGeneratedPackage->Automatic,
-WindowSize->{1200, 1550},
+WindowSize->{1200, 1525},
 WindowMargins->{{Automatic, 0}, {0, Automatic}},
 ShowSelection->True
 ]
@@ -495,75 +514,67 @@ CellTagsIndex->{}
 Notebook[{
 
 Cell[CellGroupData[{
-Cell[1777, 53, 26, 0, 38, "Subsection"],
-Cell[1806, 55, 348, 7, 75, "Input",
+Cell[1776, 53, 26, 0, 40, "Subsection"],
+Cell[1805, 55, 348, 7, 75, "Input",
   InitializationCell->True],
-Cell[2157, 64, 5768, 110, 1115, "Input",
+Cell[2156, 64, 6695, 127, 1291, "Input",
   InitializationCell->True],
-Cell[7928, 176, 1047, 18, 315, "Input",
+Cell[8854, 193, 2125, 35, 651, "Input",
   InitializationCell->True],
-Cell[8978, 196, 677, 12, 187, "Input"],
-Cell[9658, 210, 1773, 30, 571, "Input"],
-Cell[11434, 242, 587, 11, 91, "Input",
+Cell[10982, 230, 677, 12, 187, "Input"],
+Cell[11662, 244, 1773, 30, 571, "Input"],
+Cell[13438, 276, 587, 11, 91, "Input",
   InitializationCell->True],
-Cell[12024, 255, 2000, 39, 379, "Input",
+Cell[14028, 289, 1982, 38, 379, "Input",
   InitializationCell->True]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[14061, 299, 22, 0, 74, "Section"],
-Cell[14086, 301, 230, 5, 75, "Input",
+Cell[16047, 332, 22, 0, 74, "Section"],
+Cell[16072, 334, 230, 5, 75, "Input",
   InitializationCell->True],
 
 Cell[CellGroupData[{
-Cell[14341, 310, 78, 2, 27, "Input",
+Cell[16327, 343, 78, 2, 27, "Input",
   InitializationCell->True],
-Cell[14422, 314, 40, 1, 27, "Output"]
+Cell[16408, 347, 40, 1, 26, "Output"]
+}, Open  ]],
+Cell[16463, 351, 518, 10, 139, "Input",
+  InitializationCell->True],
+
+Cell[CellGroupData[{
+Cell[17006, 365, 178, 5, 27, "Input",
+  InitializationCell->True],
+Cell[17187, 372, 133, 3, 26, "Output"]
+}, Open  ]],
+Cell[17335, 378, 361, 7, 75, "Input",
+  InitializationCell->True],
+Cell[17699, 387, 141, 3, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[17865, 394, 274, 5, 59, "Input",
+  InitializationCell->True],
+Cell[18142, 401, 187, 3, 41, "Output"]
+}, Open  ]],
+Cell[18344, 407, 206, 4, 27, "Input",
+  InitializationCell->True],
+Cell[18553, 413, 829, 15, 251, "Input",
+  InitializationCell->True],
+Cell[19385, 430, 71, 2, 27, "Input",
+  InitializationCell->True]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[14499, 320, 518, 10, 139, "Input",
+Cell[19493, 437, 22, 0, 74, "Section"],
+Cell[19518, 439, 256, 6, 91, "Input",
   InitializationCell->True],
-Cell[15020, 332, 357, 5, 20, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[15414, 342, 178, 5, 27, "Input",
+Cell[19777, 447, 544, 11, 155, "Input",
   InitializationCell->True],
-Cell[15595, 349, 133, 3, 27, "Output"]
-}, Open  ]],
-Cell[15743, 355, 361, 7, 75, "Input",
+Cell[20324, 460, 555, 10, 155, "Input",
   InitializationCell->True],
-Cell[16107, 364, 141, 3, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[16273, 371, 274, 5, 59, "Input",
+Cell[20882, 472, 371, 10, 90, "Input",
   InitializationCell->True],
-Cell[16550, 378, 187, 3, 44, "Output"]
-}, Open  ]],
-Cell[16752, 384, 206, 4, 27, "Input",
-  InitializationCell->True],
-Cell[16961, 390, 829, 15, 251, "Input",
-  InitializationCell->True],
-
-Cell[CellGroupData[{
-Cell[17815, 409, 71, 2, 27, "Input",
-  InitializationCell->True],
-Cell[17889, 413, 40, 1, 27, "Output"]
-}, Open  ]]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[17978, 420, 22, 0, 74, "Section"],
-Cell[18003, 422, 239, 5, 91, "Input",
-  InitializationCell->True],
-Cell[18245, 429, 531, 10, 155, "Input",
-  InitializationCell->True],
-Cell[18779, 441, 555, 10, 155, "Input",
-  InitializationCell->True],
-Cell[19337, 453, 371, 10, 93, "Input",
-  InitializationCell->True],
-Cell[19711, 465, 71, 2, 27, "Input",
+Cell[21256, 484, 71, 2, 27, "Input",
   InitializationCell->True]
 }, Open  ]]
 }

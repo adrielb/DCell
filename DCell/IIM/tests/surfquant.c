@@ -1,6 +1,7 @@
 #include "ImmersedInterfaceMethod.h"
 
-void InterfacialForceAdhesion( IrregularNode *n );
+void InterfacialForceAdhesion( IrregularNode *n, void *context );
+void InterfacialForceCurvature( IrregularNode *n, void *context );
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -8,39 +9,48 @@ int main(int argc, char **args)
 {
   PetscErrorCode  ierr;
   PetscFunctionBegin;
-  ierr = PetscInitialize(&argc, &args, (char *) 0, ""); CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "Start\n"); CHKERRQ(ierr);
+  ierr = DCellInit(); CHKERRQ(ierr);
 
-  int d1 = 64;
-  Coor d = {1./(d1-1), 1./(d1-1), 1./(d1-1)};
-  iCoor size = {d1,d1,0};
+  PetscReal dx = 0.01;
+  Coor dh = {dx, dx, dx};
+  Coor center = { 0, 0, 0};
+  PetscReal radius = 1;
 
   LevelSet ls;
-  ierr = LevelSetCreate( size, &ls); CHKERRQ(ierr);
-  ierr = GridSetDx(ls->g,d); CHKERRQ(ierr);
-  ierr = LevelSetInitializeToBall(ls); CHKERRQ(ierr);
-  ierr = VecWrite(ls->g->v, "ls",0); CHKERRQ(ierr);
+  ierr = LevelSetInitializeToSphere(dh, center, radius, &ls); CHKERRQ(ierr);
+//  ierr = LevelSetInitializeToStar3D(dh, center, radius, 0.4, 5, &ls); CHKERRQ(ierr);
+  ierr = GridWrite(ls->phi,0); CHKERRQ(ierr);
 
-  PetscReal mu=1;
+  PetscBool is2D = dh.z == 0.0;
   IIM iim;
-  ierr = IIMCreate(&mu,3,size,20,&iim); CHKERRQ(ierr);
-  IIMSetForceComponents(iim,InterfacialForceAdhesion);
+  int Np = 32;
+  ierr = IIMCreate( is2D, Np, dh, &iim); CHKERRQ(ierr);
+  ierr = IIMSetForceComponents(iim,InterfacialForceCurvature); CHKERRQ(ierr);
+  ierr = IIMSetForceContext(iim, &dx); CHKERRQ(ierr);
 
-  iCoor CELL_CENTER={0,0,0};
-  ierr = IIMUpdateSurfaceQuantities(iim,CELL_CENTER,ls); CHKERRQ(ierr);
-  ierr = IrregularNodeListWrite(ls->irregularNodes,0); CHKERRQ(ierr);
+  ierr = IIMUpdateSurfaceQuantities( iim, ls); CHKERRQ(ierr);
+//  ierr = SpatialIndexPrint(iim->sidx); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList( ls, 0); CHKERRQ(ierr);
+  ierr = ArrayWrite(ls->band,"band",0); CHKERRQ(ierr);
 
   ierr = LevelSetDestroy(ls); CHKERRQ(ierr);
   ierr = IIMDestroy(iim); CHKERRQ(ierr);
   
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "End\n"); CHKERRQ(ierr);
-  ierr = PetscFinalize(); CHKERRQ(ierr);
+  ierr = DCellFinalize(); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
-void InterfacialForceAdhesion( IrregularNode *n )
+void InterfacialForceAdhesion( IrregularNode *n, void *context )
 {
   const int gx = 0, gy = -1;
   n->f1 = n->nx * gx + n->ny * gy;
   n->f2 = -n->ny * gx + n->nx * gy;
+}
+
+void InterfacialForceCurvature( IrregularNode *n, void *context )
+{
+  PetscReal dx = *(PetscReal*)context;
+  n->f1 = n->X.y * dx;
+  n->f2 = 0;
+  n->f3 = 0;
 }

@@ -154,7 +154,7 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
 PetscErrorCode GridSetDx( Grid g, Coor d )
 {
   g->d = d;
-  PetscFunctionReturn(0);
+  return  0;
 }
 
 PetscErrorCode GridSetName( Grid g, const char *name )
@@ -167,7 +167,7 @@ PetscErrorCode GridSetName( Grid g, const char *name )
   }
   g->filePos = NULL;
   g->fileSize = NULL;
-  PetscFunctionReturn(0);
+  return 0;
 }
 
 PetscErrorCode GridGet( Grid g, void *grid )

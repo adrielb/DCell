@@ -3,9 +3,9 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: test
+all: sim
 SIM := sim3D
-test: testCommon-spatialindex
+test: testIIM-surfquant
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

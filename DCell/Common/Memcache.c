@@ -10,15 +10,18 @@ struct _MemCache {
 
 #undef __FUNCT__
 #define __FUNCT__ "MemCacheCreate"
-PetscErrorCode MemCacheCreate( size_t elemsize, size_t chunksize, MemCache *mc )
+PetscErrorCode MemCacheCreate( const char name[], size_t elemsize, size_t chunksize, MemCache *mc )
 {
   MemCache mem;
+  char tmp[256];
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscNew(struct _MemCache,&mem); CHKERRQ(ierr);
-  ierr = ArrayCreate("cache",sizeof(void*),chunksize,&mem->cache); CHKERRQ(ierr);
-  ierr = ArrayCreate("chunk",sizeof(void*),10,&mem->chunks); CHKERRQ(ierr);
+  sprintf(tmp, "%s_%s", name, "memcache");
+  ierr = ArrayCreate( tmp, sizeof(void*), &mem->cache); CHKERRQ(ierr);
+  sprintf(tmp, "%s_%s", name, "memchunk");
+  ierr = ArrayCreate( tmp, sizeof(void*), &mem->chunks); CHKERRQ(ierr);
   mem->elemsize = elemsize;
   mem->chunksize = chunksize;
   *mc = mem;
@@ -70,6 +73,8 @@ PetscErrorCode MemCacheAlloc( MemCache mc, void *ptr )
     for ( i = 0; i < chunksize; ++i) {
       cache[i] = *chunk + (chunksize-1-i)*elemsize;
     }
+    const int s = ArrayLength(mc->chunks) * chunksize * elemsize / (1024*1024);
+    ierr = PetscInfo1(0, "MemCache allocation: %d MB\n", s ); CHKERRQ(ierr);
   }
   //Pop off and return last mem location
   len = ArrayLength(mc->cache);

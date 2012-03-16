@@ -20,16 +20,30 @@ PetscErrorCode SpatialIndexBin( SpatialIndex sidx, Coor pt, iCoor *bin );
 
 #undef __FUNCT__
 #define __FUNCT__ "SpatialIndexCreate"
-PetscErrorCode SpatialIndexCreate( Coor lo, Coor hi, Coor dh, SpatialIndex *sidx )
+PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx )
 {
   size_t chunksize = 65536; // TODO: make petsc option for this
   SpatialIndex s;
+  char tmp[256];
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscNew(struct _SpatialIndex, &s); CHKERRQ(ierr);
-  ierr = ArrayCreate("spatialitems",sizeof(SpatialItem),10,&s->bins); CHKERRQ(ierr);
-  ierr = MemCacheCreate(sizeof(struct _SpatialItem),chunksize,&s->items); CHKERRQ(ierr);
+  sprintf(tmp, "%s_%s", name, "spatialbins");
+  ierr = ArrayCreate( tmp, sizeof(SpatialItem), &s->bins); CHKERRQ(ierr);
+  sprintf(tmp, "%s_%s", name, "spatialItems");
+  ierr = MemCacheCreate( tmp, sizeof(struct _SpatialItem), chunksize, &s->items); CHKERRQ(ierr);
+  *sidx = s;
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "SpatialIndexSetDomain"
+PetscErrorCode SpatialIndexSetDomain( SpatialIndex s, Coor lo, Coor hi, Coor dh )
+{
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
   s->lo = lo;
   s->hi = hi;
   s->dh = dh;
@@ -40,8 +54,7 @@ PetscErrorCode SpatialIndexCreate( Coor lo, Coor hi, Coor dh, SpatialIndex *sidx
   s->b.x = s->numbins.x - 2;
   s->b.y = s->numbins.y - 2;
   s->b.z = s->numbins.z - 2;
-  ierr = ArraySetCoor( s->bins, ((iCoor){-1,-1,-1}), s->numbins); CHKERRQ(ierr);
-  *sidx = s;
+  ierr = ArraySetCoor( s->bins, s->a, s->numbins); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -127,7 +140,7 @@ PetscErrorCode SpatialIndexBin( SpatialIndex sidx, Coor pt, iCoor *bin )
 
 #undef __FUNCT__
 #define __FUNCT__ "SpatialIndexQueryPoints"
-PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items )
+PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items[] )
 {
   int c = 0;
   iCoor lo, hi, b;
@@ -164,13 +177,13 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
           p.z = p.z - center.z;
           sqdist = p.x*p.x + p.y*p.y + p.z*p.z;
           if( sqdist <= r2 ) {
-            ((void**)items)[c] = iter->item;
+            items[c] = iter->item;
             c++;
             if( c == MAXLEN ) {
               ierr = PetscInfo1(0,"Max query size reached: MAXLEN = %d", MAXLEN); CHKERRQ(ierr);
               *len = c;
               PetscFunctionReturn(0);
-              } // c == Np
+            } // c == Np
           } // sqdist <= r2
           iter = iter->next;
         } // iter
@@ -215,5 +228,38 @@ PetscErrorCode SpatialIndexCollide( SpatialIndex sidx, AABB box, SpatialItem ite
 
   PetscFunctionBegin;
   ierr = 0;
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "SpatialIndexPrint"
+PetscErrorCode SpatialIndexPrint( SpatialIndex sidx )
+{
+  int len = 0;
+  iCoor a = sidx->a;
+  iCoor b = sidx->b;
+  iCoor x;
+  SpatialItem iter;
+
+  int max = 0;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  for (x.z = a.z; x.z <= b.z; x.z+=1) {
+    for (x.y = a.y; x.y <= b.y; x.y+=1) {
+      for (x.x = a.x; x.x <= b.x; x.x+=1) {
+        ierr = ArrayGetCoorP( sidx->bins, x, &iter); CHKERRQ(ierr);
+        len = 0;
+        while( iter != PETSC_NULL ) {
+          len++;
+          iter = iter->next;
+        }
+        if( len > max )
+          max = len;
+//          printf("%d %d %d %d\n", x.x, x.y, x.z, len);
+      }
+    }
+  }
+  printf("%d \n", max);
   PetscFunctionReturn(0);
 }

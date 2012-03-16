@@ -39,7 +39,7 @@ PetscErrorCode LeastSqCreate( int Np, PetscBool is2D, LeastSq *ls )
   lsq->n = is2D ? 3 : 6;
   ierr = PetscMalloc(lsq->m*lsq->n*sizeof(double), &lsq->a); CHKERRQ(ierr);
   
-  lsq->nrhs = 1;
+  lsq->nrhs = is2D ? 2 : 3;
   ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->b); CHKERRQ(ierr);
   ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->s); CHKERRQ(ierr);
   ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->r); CHKERRQ(ierr);

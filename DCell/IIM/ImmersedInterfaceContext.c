@@ -3,7 +3,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMCreate"
-PetscErrorCode IIMCreate( PetscBool is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim )
+PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
 {
   PetscErrorCode ierr;
   IIM i;
@@ -11,22 +11,25 @@ PetscErrorCode IIMCreate( PetscBool is2D, PetscReal *mu, PetscReal eps, int Np, 
   PetscFunctionBegin;
   
   ierr = PetscNew(struct _IIM, &i); CHKERRQ(ierr);
-  ierr = LocalCoorCreate(Np, &i->lc); CHKERRQ(ierr);
-  ierr = LeastSqCreate(Np, is2D, &i->lsq); CHKERRQ(ierr);
-  
-  int est = 1e5;
-  ierr = ArrayCreate( "iim_idx", sizeof(int*), est, &i->idx); CHKERRQ(ierr);
-  ierr = ArrayCreate( "iim_coor", 4*sizeof(int), est, &i->coor); CHKERRQ(ierr); // [ x y z d ]
-  ierr = ArrayCreate( "iim_val", sizeof(PetscReal), est, &i->val); CHKERRQ(ierr);
-  ierr = ArrayCreate( "iim_grid",sizeof(GridPoint), 1, &i->irregularNodeGrid); CHKERRQ(ierr);
-  //ierr = PetscOptionsGetReal(0,"-iim_eps",&t->eps,0); CHKERRQ(ierr);
-//  ierr = PetscOptionsGetInt(0,"-iim_Np",&t->Np,0); CHKERRQ(ierr);
+
+  ierr = ArrayCreate( "iim_idx", sizeof(int*), &i->idx); CHKERRQ(ierr);
+  ierr = ArrayCreate( "iim_coor", 4*sizeof(int), &i->coor); CHKERRQ(ierr); // [ x y z d ]
+  ierr = ArrayCreate( "iim_val", sizeof(PetscReal), &i->val); CHKERRQ(ierr);
+  ierr = ArrayCreate( "iim_grid",sizeof(GridPoint), &i->irregularNodeGrid); CHKERRQ(ierr);
+
   i->dh = dh;
-  i->mu = mu;
-  i->eps = eps;
-  i->Np = Np; 
+  i->mu = 1.0;
+  i->eps = 1.1;
+  i->Np = Np;
   i->F = InterfacialForceSurfaceTension;
   
+  ierr = PetscOptionsGetReal(0, "-iim_eps", &i->eps, 0 ); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt( 0, "-iim_Np", &i->Np, 0 ); CHKERRQ(ierr);
+
+  ierr = LocalCoorCreate(i->Np, &i->lc); CHKERRQ(ierr);
+  ierr = LeastSqCreate(i->Np, is2D, &i->lsq); CHKERRQ(ierr);
+  ierr = SpatialIndexCreate( "irregNodes", &i->sidx); CHKERRQ(ierr);
+
   *iim = i;
 
   ierr = IIMRegisterEvents(); CHKERRQ(ierr);
@@ -40,6 +43,7 @@ PetscErrorCode IIMDestroy( IIM iim )
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
+  ierr = SpatialIndexDestroy(iim->sidx); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->coor); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->val); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->idx); CHKERRQ(ierr);
@@ -59,6 +63,18 @@ PetscErrorCode IIMSetForceComponents(IIM iim, InterfacialForce F )
 PetscErrorCode IIMSetForceContext(IIM iim, void *context )
 {
   iim->context = context;
+  return 0;
+}
+
+PetscErrorCode IIMSetEps( IIM iim, PetscReal eps )
+{
+  iim->eps = eps;
+  return 0;
+}
+
+PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu )
+{
+  iim->mu = mu;
   return 0;
 }
 

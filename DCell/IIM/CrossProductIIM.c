@@ -9,7 +9,7 @@ PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
 {
   const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
   const PetscReal dd = dh*dh;
-  const PetscReal mu = *iim->mu;
+  const PetscReal mu = iim->mu;
   PetscReal h;
   iCoor pos;
   int *ipos = &pos.x;

@@ -12,7 +12,8 @@ int main(int argc, char **args)
   PetscReal dx = 0.02;
   Coor dh = {dx,dx,dx};
   SpatialIndex sidx;
-  ierr = SpatialIndexCreate(lo, hi, dh,  &sidx); CHKERRQ(ierr);
+  ierr = SpatialIndexCreate( &sidx ); CHKERRQ(ierr);
+  ierr = SpatialIndexSetDomain( sidx, lo, hi, dh ); CHKERRQ(ierr);
 
   PetscRandom rnd;
   ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rnd); CHKERRQ(ierr);
@@ -20,7 +21,7 @@ int main(int argc, char **args)
 //  ierr = PetscRandomSetInterval(rnd,1.2,1.5); CHKERRQ(ierr);
   ierr = PetscRandomSetType(rnd,PETSCRAND48); CHKERRQ(ierr);
 
-  int n = 64*1000*1000;
+  int n = 64*1000;
   Coor *pt;
   int i, j, k;
   Coor center = {1.1, 1.1, 1.1};
