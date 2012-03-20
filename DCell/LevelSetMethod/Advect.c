@@ -73,22 +73,38 @@ PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid )
   int len = ArrayLength(ls->irregularNodes);
   IrregularNode *nodes = ArrayGetData(ls->irregularNodes);
   PetscReal mag;
-  PetscReal ***vel;
+  PetscReal *vel;
   Coor X,V;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = GridGet(velgrid,&vel); CHKERRQ(ierr);
   ls->maxVel = 0;
-  for ( i = 0; i < len; ++i) {
-    X.x = nodes[i].pos.x;
-    X.y = nodes[i].pos.y;
-    // Interpolate velocity at grid point
-    ierr = InterpolateVelocity2D( 0, vel, X, &V ); CHKERRQ(ierr);
+  if( ls->phi->is2D ) {
+    PetscReal ***vel2D = (PetscReal***)vel;
+    for ( i = 0; i < len; ++i) {
+      X.x = nodes[i].pos.x;
+      X.y = nodes[i].pos.y;
+      // Interpolate velocity at grid point
+      ierr = InterpolateVelocity2D( 0, vel2D, X, &V ); CHKERRQ(ierr);
 
-    mag = PetscSqrtScalar( V.x*V.x + V.y*V.y );
+      mag = PetscSqrtScalar( V.x*V.x + V.y*V.y );
 
-    ls->maxVel = mag > ls->maxVel ? mag : ls->maxVel;
+      ls->maxVel = mag > ls->maxVel ? mag : ls->maxVel;
+    }
+  } else {
+    PetscReal ****vel3D = (PetscReal****)vel;
+    for ( i = 0; i < len; ++i) {
+      X.x = nodes[i].pos.x;
+      X.y = nodes[i].pos.y;
+      X.z = nodes[i].pos.z;
+      // Interpolate velocity at grid point
+      ierr = InterpolateVelocity3D( 0, vel3D, X, &V ); CHKERRQ(ierr);
+
+      mag = PetscSqrtScalar( V.x*V.x + V.y*V.y + V.z*V.z );
+
+      ls->maxVel = mag > ls->maxVel ? mag : ls->maxVel;
+    }
   }
 
   PetscFunctionReturn(0);
@@ -131,7 +147,7 @@ PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid)
   int lo[4],hi[4],ld[3] = {0,0,0};
   iCoor p,q;
   int type,dim,dims[4];
-  PetscReal ***grid;
+  PetscReal *grid;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
@@ -140,20 +156,37 @@ PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid)
   ierr = GridResize(velgrid,ls->phi->p,ls->phi->n); CHKERRQ(ierr);
   ierr = GridGetBounds(velgrid, &p, &q); CHKERRQ(ierr);
   ierr = GridGet(velgrid,&grid); CHKERRQ(ierr);
-  lo[0] = p.y < 0 ? 0 : p.y;
-  lo[1] = p.x < 0 ? 0 : p.x;
-  lo[2] = U_FACE;
-  hi[0] = q.y-1 > dims[0]-1 ? dims[0]-1 : q.y-1;
-  hi[1] = q.x-1 > dims[1]-1 ? dims[1]-1 : q.x-1;
-  hi[2] = V_FACE;
-/*
-  printf("%d %d %d\n", lo[0], lo[1], lo[2] );
-  printf("%d %d %d\n", hi[0], hi[1], hi[2] );
-  printf("%d %d %d\n", dims[0], dims[1], dims[2] );
-*/
-  ld[0] = q.x - p.x;
-  ld[1] = V_FACE;
-  NGA_Get(ga,lo,hi,&grid[lo[0]][lo[1]][0], ld);
+  if( ls->phi->is2D ) {
+    PetscReal ***grid2D = (PetscReal***)grid;
+    lo[0] = p.y < 0 ? 0 : p.y;
+    lo[1] = p.x < 0 ? 0 : p.x;
+    lo[2] = U_FACE;
+    hi[0] = q.y-1 > dims[0]-1 ? dims[0]-1 : q.y-1;
+    hi[1] = q.x-1 > dims[1]-1 ? dims[1]-1 : q.x-1;
+    hi[2] = V_FACE;
+  /*
+    printf("%d %d %d\n", lo[0], lo[1], lo[2] );
+    printf("%d %d %d\n", hi[0], hi[1], hi[2] );
+    printf("%d %d %d\n", dims[0], dims[1], dims[2] );
+  */
+    ld[0] = q.x - p.x;
+    ld[1] = V_FACE;
+    NGA_Get(ga,lo,hi,&grid2D[lo[0]][lo[1]][0], ld);
+  } else {
+    PetscReal ****grid3D = (PetscReal****)grid;
+    lo[0] = p.z < 0 ? 0 : p.z;
+    lo[1] = p.y < 0 ? 0 : p.y;
+    lo[2] = p.x < 0 ? 0 : p.x;
+    lo[3] = U_FACE;
+    hi[0] = q.z-1 > dims[0]-1 ? dims[0]-1 : q.z-1;
+    hi[1] = q.y-1 > dims[1]-1 ? dims[1]-1 : q.y-1;
+    hi[2] = q.x-1 > dims[2]-1 ? dims[2]-1 : q.x-1;
+    hi[3] = W_FACE;
+    ld[0] = q.y - p.y;
+    ld[1] = q.x - p.x;
+    ld[2] = W_FACE;
+    NGA_Get(ga,lo,hi,&grid3D[lo[0]][lo[1]][lo[2]][0], ld);
+  }
   ierr = PetscLogEventEnd(EVENT_LevelSetGetVelocity,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

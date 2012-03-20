@@ -65,7 +65,6 @@ inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coo
 
 PetscErrorCode LevelSetAdvect( LevelSet ls, int ga, PetscReal dt );
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);
-PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectAndReinit(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectSLRK2HalfStep( LevelSet ls, Grid velgrid, PetscReal dt );

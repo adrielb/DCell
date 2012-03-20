@@ -180,7 +180,7 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
             items[c] = iter->item;
             c++;
             if( c == MAXLEN ) {
-              ierr = PetscInfo1(0,"Max query size reached: MAXLEN = %d", MAXLEN); CHKERRQ(ierr);
+              ierr = PetscInfo1(0,"Max query size reached: MAXLEN = %d\n", MAXLEN); CHKERRQ(ierr);
               *len = c;
               PetscFunctionReturn(0);
             } // c == Np

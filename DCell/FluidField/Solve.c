@@ -122,6 +122,7 @@ PetscErrorCode FluidFieldMaxVelocityMag( FluidField f, PetscReal *maxVel )
     }
   } else {
     PetscReal ***vel2D = (PetscReal***)vel;
+    X.z = 0; // makes the compiler happy
     for ( X.y = ys; X.y < e.y; ++X.y) {
       for ( X.x = xs; X.x < e.x; ++X.x) {
         ierr = InterpolateVelocity2D( U_FACE, vel2D, X, &V ); CHKERRQ(ierr);
@@ -135,6 +136,7 @@ PetscErrorCode FluidFieldMaxVelocityMag( FluidField f, PetscReal *maxVel )
 
   ierr = DMDAVecRestoreArrayDOF(dm,f->vel,&vel); CHKERRQ(ierr);
   ierr = DMRestoreLocalVector(dm,&locvel); CHKERRQ(ierr);
+  ierr = PetscInfo1( 0, "max vel = %e\n", *maxVel); CHKERRQ(ierr);
   ierr = PetscLogEventEnd(EVENT_FluidFieldMaxVelocityMag,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

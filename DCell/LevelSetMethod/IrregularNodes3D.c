@@ -34,7 +34,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
           local[K+2][J+2][I+2] = phi[K+k][J+j][I+i];
         }
       }
-    }// for local 5x5 stencil
+    } // for local 5x5x5 stencil
 
     // Cell-centered Irregular Node
     for( K = -1; K <= 1; ++K) {
@@ -43,7 +43,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
           sten[K+1][J+1][I+1] = phi[K+k][J+j][I+i];
         }
       }
-    }// for local 3x3x3 stencil
+    } // for local 3x3x3 stencil
 
     // Add ortho-proj for FMM boundary condition
     for( m = 0; m < numNei; ++m)
@@ -100,6 +100,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
         {
           ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
           n->d = phiHI / (phiHI - phiLO);
+          if( n->d != n->d ) n->d = 0;
           n->signCenter = phiHI > 0. ? 1 : -1;
           n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
           n->pos = band[b];

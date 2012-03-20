@@ -159,7 +159,7 @@ PetscErrorCode LeastSqSolve( LeastSq ls )
     &ls->rcond/* relative condition s.v. treated as zero */, //-1 
     &ls->rank /*  */, 
     ls->work  /*  */, 
-    &ls->lwork /* size of work */, 
+    &ls->lwork/* size of work */,
     &ls->info /*  */
   );
   if( ls->info )

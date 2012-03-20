@@ -29,21 +29,49 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
 
-  n->f1 = c->scale * ( c->Fk0 * k);
+  n->f1 = c->scale * ( -c->Fk0 * n->k);
   n->f2 = c->scale * ( n->fa2 );
 }
+
+static LevelSet lsGrooves;
 
 int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
   PetscReal dx = 0.5;
-  Coor len = {25,25,25};
-//  Coor dh = {dx,dx,dx};
+  Coor len = {20,10,10};
+  Coor  dh = {dx,dx,dx};
   iCoor size = {len.x/dx,len.y/dx,len.z/dx};
   printf("MX = %d;\n", size.x);
   printf("MY = %d;\n", size.y);
   printf("MZ = %d;\n", size.z);
+
+  // Make NanoSurface
+  int borderwidth = 2;
+  PetscReal c,
+            b = borderwidth*dx,
+            w = 1,
+            h = 1 + b,
+            l = len.z,
+            s = 2;
+  ierr = PetscOptionsGetReal(0,"-groove_width",&w,0); CHKERRQ(ierr);
+  iCoor pos = {0,0,0};
+  ierr = LevelSetCreate(dh,pos,size,&lsGrooves); CHKERRQ(ierr);
+  ierr = VecSet(lsGrooves->phi->v,-1); CHKERRQ(ierr);
+  ierr = GridDrawBorder( lsGrooves->phi, borderwidth, 1 ); CHKERRQ(ierr);
+  for ( c = b; c < len.x; c+=s ) {
+    Coor lo = {c,  0, 0};
+    Coor hi = {c+w,h, l};
+    ierr = GridFillBox(lsGrooves->phi, lo, hi, 1); CHKERRQ(ierr);
+  }
+  ierr = GridSetName(lsGrooves->phi,"grooves"); CHKERRQ(ierr);
+  ierr = GridWrite(lsGrooves->phi,0); CHKERRQ(ierr);
+  ierr = LevelSetInitializeFromImage(lsGrooves); CHKERRQ(ierr);
+  ierr = GridWrite(lsGrooves->phi,1); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(lsGrooves,0); CHKERRQ(ierr);
+
+  exit(0);
 
   FluidField fluid;
   ierr = FluidFieldCreate(PETSC_COMM_WORLD, &fluid);  CHKERRQ(ierr);
@@ -55,24 +83,23 @@ int main(int argc, char **args) {
   ierr = DWorldCreate(fluid, &world); CHKERRQ(ierr);
   ierr = DWorldSetPrintStep(world,PETSC_TRUE); CHKERRQ(ierr);
 
-  PetscReal radius = len.x / 3.;
+  PetscReal radius = len.x / 4.;
   Coor center = (Coor){ len.x / 2., len.y / 2., len.z / 2.};
   LevelSet ls;
 //  ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
-  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 3.5, 5, &ls); CHKERRQ(ierr);
+  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 2.5, 5, &ls); CHKERRQ(ierr);
 //  ierr = LevelSetInitializeParticles(ls); CHKERRQ(ierr);
-  ls->Advect = LevelSetAdvectSL_3D;
   ierr = GridSetName(ls->phi,"mycell"); CHKERRQ(ierr);
 
   MyCell cell;
   ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
   cell->dh = fluid->dh;
   cell->Fk = 3;
-  cell->Fk = 1;
+  cell->Fk0 = 1;
   cell->Fa = 3;
   cell->kclip = 1 / radius;
   cell->ecm = 1;
-  cell->scale = 1e-3;
+  cell->scale = 1;
   cell->contactThres = 0.3;
   ierr = MyCellSetFromOptions(cell); CHKERRQ(ierr);
 

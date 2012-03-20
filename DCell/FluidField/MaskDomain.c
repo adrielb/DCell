@@ -208,25 +208,24 @@ PetscErrorCode FluidField_EnforceNoSlipBC( FluidField f )
   int i;
   int len = ArrayLength(f->dirichletBC);
   MatStencil *dbc;
+  PetscReal *rhs;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   dbc = ArrayGetData(f->dirichletBC);
   if (f->is3D) {
-    PetscReal ****rhs;
-    ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    PetscReal ****rhs3D = (PetscReal****)rhs;
     for ( i = 0; i < len; ++i) {
-      rhs[dbc[i].k][dbc[i].j][dbc[i].i][dbc[i].c] = 0;
+      rhs3D[dbc[i].k][dbc[i].j][dbc[i].i][dbc[i].c] = 0;
     }
-    ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   } else {
-    PetscReal ***rhs;
-    ierr = DMDAVecGetArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
+    PetscReal ***rhs2D = (PetscReal***)rhs;
     for ( i = 0; i < len; ++i) {
-      rhs[dbc[i].j][dbc[i].i][dbc[i].c] = 0;
+      rhs2D[dbc[i].j][dbc[i].i][dbc[i].c] = 0;
     }
-    ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   }
+  ierr = DMDAVecRestoreArrayDOF(f->daV,f->rhs,&rhs); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

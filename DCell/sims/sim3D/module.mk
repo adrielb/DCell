@@ -13,16 +13,37 @@ RUNOPTS := \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
--groove_width 2 \
--timax 10 \
+-timax 100 \
 -CFL 0.1 \
 -dtmax 1 \
 -ksp_monitor \
--ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_p_ksp_max_it 4 -ksp_max_it 100 \
--ksp_view \
+-ksp_atol 1e-12 -ksp_rtol 1e-6 -ksp_max_it 100 \
+-fieldsplit_p_ksp_max_it 4 \
+-fieldsplit_v_fieldsplit_0_ksp_max_it 1 \
+-fieldsplit_v_fieldsplit_1_ksp_max_it 1 \
+-fieldsplit_v_fieldsplit_2_ksp_max_it 1 \
+-fieldsplit_v_fieldsplit_0_pc_type icc \
+-fieldsplit_v_fieldsplit_1_pc_type icc \
+-fieldsplit_v_fieldsplit_2_pc_type icc \
+-fieldsplit_v_fieldsplit_0_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_2_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_0_pc_factor_levels 10 \
+-fieldsplit_v_fieldsplit_1_pc_factor_levels 10 \
+-fieldsplit_v_fieldsplit_2_pc_factor_levels 10 \
+-ksp_monitor \
 -log_summary -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
 
+#-fieldsplit_v_fieldsplit_0_pc_type cholesky \
+#-fieldsplit_v_fieldsplit_1_pc_type cholesky \
+#-fieldsplit_v_fieldsplit_2_pc_type cholesky \
+#-fieldsplit_v_fieldsplit_0_pc_factor_mat_ordering_type nd \
+#-fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
+#-fieldsplit_v_fieldsplit_2_pc_factor_mat_ordering_type nd \
+
+#-fieldsplit_v_fieldsplit_0_ksp_type preonly \
+#-fieldsplit_v_fieldsplit_1_ksp_type preonly \
 #-ksp_atol 1e3
 #-ksp_rtol 1e-3
 #-fieldsplit_p_ksp_monitor 

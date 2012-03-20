@@ -27,11 +27,7 @@ PetscErrorCode GridCreate( Coor dh, iCoor pos, iCoor size, int dof, Grid *grid )
   ierr = VecZeroEntries(g->v); CHKERRQ(ierr); // TODO: is this redundant?
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
   
-  if( g->is2D ) {
-    g->Interpolate = GridInterpolate2D;
-  } else {
-    g->Interpolate = GridInterpolate3D;
-  }
+  g->Interpolate = g->is2D ? GridInterpolate2D : GridInterpolate3D;
 
   *grid = g;
   
@@ -143,6 +139,7 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
     ierr = PetscFree(g->v1); CHKERRQ(ierr);
     ierr = PetscMalloc(g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
     g->MAXSIZE = g->SIZE;
+    ierr = PetscInfo3(0,"%s resizing: %d (%d MB)\n",g->name, g->MAXSIZE, g->MAXSIZE/(1024*1024) ); CHKERRQ(ierr);
   }
   ierr = VecDestroy(&g->v); CHKERRQ(ierr);
   ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
@@ -255,25 +252,54 @@ inline double GridFunction2D_Curv( double **p, int i, int j, Coor d )
 #define __FUNCT__ "GridDrawBorder"
 PetscErrorCode GridDrawBorder( Grid g, int borderWidth, PetscReal fill )
 {
-  int i,j;
+  int i,j,k;
   int b;
-  PetscReal **phi=0;
+  iCoor p,q;
+  PetscReal *phi=0;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = GridGet(g,&phi); CHKERRQ(ierr);
-  for ( i = 0; i < g->n.x; ++i) {
-    for (b = 0; b < borderWidth; ++b) {
-      phi[         b][i] = fill;
-      phi[g->n.y-1-b][i] = fill;
+  if( g->is2D ) {
+    PetscReal **phi2D = (PetscReal**)phi;
+    for ( i = 0; i < g->n.x; ++i) {
+      for (b = 0; b < borderWidth; ++b) {
+        phi2D[         b][i] = fill;
+        phi2D[g->n.y-1-b][i] = fill;
+      }
     }
-  }
-  for ( j = 0; j < g->n.y; ++j) {
-    for (b = 0; b < borderWidth; ++b) {
-      phi[j][         b] = fill;
-      phi[j][g->n.x-1-b] = fill;
+    for ( j = 0; j < g->n.y; ++j) {
+      for (b = 0; b < borderWidth; ++b) {
+        phi2D[j][         b] = fill;
+        phi2D[j][g->n.x-1-b] = fill;
+      }
     }
-  }
+  } else {
+    PetscReal ***phi3D = (PetscReal***)phi;
+    phi3D[0][0][0] = 0;
+    for ( k = 0; k < g->n.z; ++k) {
+      for ( j = 0; j < g->n.y; ++j) {
+        for ( b = 0; b < borderWidth; ++b) {
+          phi3D[k][j][         b] = fill;
+          phi3D[k][j][g->n.x-1-b] = fill;
+        } // b
+      } // j
+      for ( b = 0; b < borderWidth; ++b) {
+        for ( i = 0; i < g->n.x; ++i) {
+          phi3D[k][         b][i] = fill;
+          phi3D[k][g->n.y-1-b][i] = fill;
+        } // i
+      } // b
+    } // k
+    for ( b = 0; b < borderWidth; ++b) {
+      for ( j = 0; j < g->n.y; ++j) {
+        for ( i = 0; i < g->n.x; ++i) {
+          phi3D[         b][j][i] = fill;
+          phi3D[g->n.z-1-b][j][i] = fill;
+        } // i
+      } // j
+    } // b
+  } // 3D
   PetscFunctionReturn(0);
 }
 

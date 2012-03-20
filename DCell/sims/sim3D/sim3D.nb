@@ -41,19 +41,35 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[      6815,        227]*)
-(*NotebookOutlinePosition[      7494,        251]*)
-(*  CellTagsIndexPosition[      7450,        247]*)
+(*NotebookOptionsPosition[     16342,        516]*)
+(*NotebookOutlinePosition[     17021,        540]*)
+(*  CellTagsIndexPosition[     16977,        536]*)
 (*WindowFrame->Normal*)
 
 
 
 Notebook[{
+
+Cell[CellGroupData[{
+Cell["Init", "Subsection"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
 Cell[BoxData[{
     \(Get[Environment["\<ALT_DISP\>"]]\), "\n", 
-    \(<< Graphics`Arrow`\), "\[IndentingNewLine]", 
+    \(<< Graphics`Arrow`\), "\n", 
     \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
   InitializationCell->True],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(SetDirectory["\</data/sims/sim3D_1\>"]\)], "Input"],
+
+Cell[BoxData[
+    \("/data/sims/sim3D_1"\)], "Output"]
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -61,9 +77,10 @@ Cell[BoxData[
     \(FileNames[]\)], "Input"],
 
 Cell[BoxData[
-    \({"contactarea.dat", "info.log.0", "mycell.10000.Real64", 
-      "mycell.irregNode.10000.array", "mycell.pos", "mycell.size", 
-      "rhs.10000.Real64", "temporal.dat", "uvp.10000.Real64"}\)], "Output"]
+    \({"grooves.10000.Real64", "grooves.10001.Real64", 
+      "grooves.irregNode.10000.array", "grooves.pos", "grooves.size", 
+      "info.log.0"}\)], "Output"]
+}, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -88,27 +105,118 @@ Cell[BoxData[{
     \(\(dx = dh[\([1]\)];\)\)}], "Input"],
 
 Cell[BoxData[
-    \({0.5`, 0.5`, 0.5`}\)], "Output"]
-}, Open  ]]
+    RowBox[{\(Part::"partw"\), \(\(:\)\(\ \)\), "\<\"Part \\!\\(1\\) of \
+\\!\\({}\\) does not exist. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::partw\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Drop::"drop"\), \(\(:\)\(\ \)\), "\<\"Cannot drop positions \\!\
+\\(1\\) through \\!\\(3\\) in \\!\\(\\(\\({}\\)\\) \[LeftDoubleBracket] 1 \
+\[RightDoubleBracket]\\). \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"Drop::drop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    \(Drop[{}\[LeftDoubleBracket]1\[RightDoubleBracket], 3]\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(dx = 0.5;\)\), "\[IndentingNewLine]", 
+    \(\(size = {20, 10, 10};\)\)}], "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell["FluidField RHS", "Subsection"],
+Cell["Grooves", "Subsection"],
 
 Cell[CellGroupData[{
 
 Cell[BoxData[{
-    \(\(name = "\<uvp.10000\>";\)\), "\n", 
+    \(\({phi, pos} = 
+        ImportGrid3D["\<grooves\>"];\)\), "\[IndentingNewLine]", 
+    \(Dimensions /@ phi\)}], "Input"],
+
+Cell[BoxData[
+    \({{20, 20, 40}, {40, 40, 60}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[phi[\([1, 10]\)], PlotRange \[Rule] {\(-1\), 1}, 
+        Mesh \[Rule] True];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-1\), 1}, 
+            Mesh \[Rule] True] &\) /@ 
+        phi[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
+        phi[\([2]\)];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListContourPlot[#, PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
+        phi[\([2]\)];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
+        Transpose[phi[\([1]\)], {2, 3, 1}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(ImportIrreg3D["\<grooves.irregNode.10000.array\>"]\), "\
+\[IndentingNewLine]", 
+    \(Dimensions[ir`x]\)}], "Input"],
+
+Cell[BoxData[
+    \({16932, 3}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(color = \(Norm[{20, 0, 0} - #] &\) /@ ir`X // Rescale;\)\), "\n", 
+    \(\(ListPlot[color // Sort];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Show[
+        Graphics3D[{PointSize[0.04], 
+            Function[{p, c}, {GrayLevel[c], Point[p]}]~MapThread~
+              Transpose@
+                Take[{ir`X, color}\[Transpose] , {1, \(-1\), 
+                    1}]\[IndentingNewLine]}], Axes \[Rule] True, 
+        ImageSize \[Rule] 800];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Show[
+        Graphics3D[{PointSize[0.04], 
+            Function[{p, c}, {GrayLevel[c], Point[p]}]~MapThread~
+              Transpose@
+                Select[Take[{ir`X, color}\[Transpose] , {1, \(-1\), 
+                      1}], #[\([\)\(1, 3\)\(]\)] < 5 || #[\([1, 3]\)] > 
+                        40 &]\[IndentingNewLine]}], Axes \[Rule] True, 
+        ImageSize \[Rule] 800, ViewPoint -> {0, 0, 1}];\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["FluidField vel", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(name = "\<uvp.10000\>";\)\), "\[IndentingNewLine]", 
     \(\(dat = 
         Rest@Import[name <> "\<.Real64\>", "\<Real64\>", 
             ByteOrdering \[Rule] 1];\)\), "\[IndentingNewLine]", 
     \(\(dat = Partition[dat, 4];\)\), "\[IndentingNewLine]", 
     \(\(dat = 
         Partition[dat, 
-          size[\([\)\(1\)\(]\)]*
-            size[\([\)\(2\)\(]\)]];\)\), "\[IndentingNewLine]", 
-    \(\(dat = \(Partition[#, size[\([\)\(1\)\(]\)]] &\) /@ 
+          size[\([1]\)]*size[\([2]\)]];\)\), "\[IndentingNewLine]", 
+    \(\(dat = \(Partition[#, size[\([1]\)]] &\) /@ 
           dat;\)\), "\[IndentingNewLine]", 
     \(\(dat = Transpose[dat, {2, 3, 4, 1}];\)\), "\[IndentingNewLine]", 
     \(\({pres, uvel, vvel, wvel} = dat;\)\), "\[IndentingNewLine]", 
@@ -129,7 +237,11 @@ Cell[BoxData[
           wvel}\)], "Input"],
 
 Cell[BoxData[
-    \({{0.`, 0.`}, {0.`, 0.`}, {0.`, 0.`}, {0.`, 0.`}}\)], "Output"]
+    \({{\(-0.14775051211142176`\), 
+        0.5116032644917766`}, {\(-164.89556567718822`\), 
+        137.00639928100514`}, {\(-157.12960149493452`\), 
+        153.73820649252494`}, {\(-87.13734904374495`\), 
+        86.7411076282776`}}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -146,7 +258,7 @@ Cell[BoxData[{
                       rng[\([2]\)]}]}, {ListDensityPlot[vvel[\([#]\)], 
                   PlotRange \[Rule] {All, All, rng[\([3]\)]}], 
                 ListDensityPlot[wvel[\([#]\)], 
-                  PlotRange \[Rule] {All, All, rng[\([\)\(4\)\(]\)]}]}}] &\) /@ 
+                  PlotRange \[Rule] {All, All, rng[\([4]\)]}]}}] &\) /@ 
         Range[Length[pres]];\)\)}], "Input"],
 
 Cell[BoxData[{
@@ -164,6 +276,42 @@ Cell[BoxData[
 
 Cell[CellGroupData[{
 
+Cell["FluidField vel over time", "Subsection"],
+
+Cell[BoxData[
+    \(\(p = 
+        Function[
+            f, \[IndentingNewLine]dat = 
+              Rest@Import[f, "\<Real64\>", 
+                  ByteOrdering \[Rule] 1]; \[IndentingNewLine]dat = 
+              Partition[dat, 4]; \[IndentingNewLine]dat = 
+              Partition[dat, 
+                size[\([1]\)]*
+                  size[\([2]\)]]; \[IndentingNewLine]dat = \(Partition[#, 
+                    size[\([1]\)]] &\) /@ dat; \[IndentingNewLine]dat = 
+              Transpose[dat, {2, 3, 4, 1}]; \[IndentingNewLine]{pres, uvel, 
+                vvel, wvel} = 
+              dat; \[IndentingNewLine]uvel[\([Round[
+                  size[\([1]\)]/2]]\)]\[IndentingNewLine]] /@ 
+          FileNames["\<uvp.*\>"];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(rng = Quantile[Flatten@p, {0, 1}]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-163.25573919866125`\), 135.8396564520153`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {All, All, rng}] &\) /@ 
+        p;\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
 Cell["MyCell", "Subsection"],
 
 Cell[CellGroupData[{
@@ -171,16 +319,79 @@ Cell[CellGroupData[{
 Cell[BoxData[{
     \(\({phi, pos} = ImportGrid3D["\<mycell\>"];\)\), "\[IndentingNewLine]", 
     \(Dimensions[phi]\), "\[IndentingNewLine]", 
-    \(\(phi = phi[\([1]\)];\)\)}], "Input"],
+    \(mid = Length[phi[\([1, 1]\)]]/2 // Round\)}], "Input"],
 
 Cell[BoxData[
-    \({1, 58, 58, 58}\)], "Output"]
+    \({38, 40, 40, 40}\)], "Output"],
+
+Cell[BoxData[
+    \(20\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
     \(\(clear;\)\), "\[IndentingNewLine]", 
-    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
-        phi;\)\)}], "Input"]
+    \(\(\(ListDensityPlot[#[\([mid]\)], PlotRange \[Rule] {\(-7\), 7}] &\) /@ 
+        phi;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListPlot[phi[\([#, mid, mid]\)]] &\) /@ Range[1, 10];\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["velgrid", "Subsection"],
+
+Cell[BoxData[
+    \(\(size = {43, 43, 43};\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dat = 
+        Rest@Import["\<velgrid.10000.Real64\>", "\<Real64\>", 
+            ByteOrdering \[Rule] 1];\)\), "\[IndentingNewLine]", 
+    \(\(dat = Partition[dat, 3];\)\), "\[IndentingNewLine]", 
+    \(\(dat = 
+        Partition[dat, 
+          size[\([1]\)]*size[\([2]\)]];\)\), "\[IndentingNewLine]", 
+    \(\(dat = \(Partition[#, size[\([1]\)]] &\) /@ 
+          dat;\)\), "\[IndentingNewLine]", 
+    \(\(dat = Transpose[dat, {2, 3, 4, 1}];\)\), "\[IndentingNewLine]", 
+    \(\({uvel, vvel, wvel} = dat;\)\), "\[IndentingNewLine]", 
+    \(Dimensions[dat]\)}], "Input"],
+
+Cell[BoxData[
+    \({3, 43, 43, 43}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(rng = \(Quantile[Flatten@#, {0, 1}] &\) /@ {uvel, vvel, 
+          wvel}\)], "Input"],
+
+Cell[BoxData[
+    \({{\(-0.007365541543124928`\), 
+        0.007242944452935513`}, {\(-0.008117811962676035`\), 
+        0.007679181056341235`}, {\(-0.004394073561714606`\), 
+        0.004267595749444512`}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {All, All, rng[\([3]\)]}] &\) /@ 
+        wvel;\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(DisplayTogetherArray[{\[IndentingNewLine]ListDensityPlot[
+                uvel[\([#]\)], PlotRange \[Rule] {All, All, rng[\([1]\)]}], 
+              ListDensityPlot[vvel[\([#]\)], 
+                PlotRange \[Rule] {All, All, rng[\([2]\)]}], 
+              ListDensityPlot[wvel[\([#]\)], 
+                PlotRange \[Rule] {All, All, rng[\([3]\)]}]}] &\) /@ 
+        Range[Length[uvel]];\)\)}], "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -196,22 +407,17 @@ Cell[BoxData[{
     \(Quantile[ir`f1, {0, 1}]\)}], "Input"],
 
 Cell[BoxData[
-    \(29406\)], "Output"],
+    \(16268\)], "Output"],
 
 Cell[BoxData[
-    \({\(-0.0000451583878293923`\), 0.00006326205791442057`}\)], "Output"]
+    \({\(-0.6691482993793342`\), 0.42567552205557485`}\)], "Output"]
 }, Open  ]],
 
-Cell[CellGroupData[{
+Cell[BoxData[
+    \(\(Histogram[ir`f1];\)\)], "Input"],
 
 Cell[BoxData[
-    \(Histogram[ir`f1]\)], "Input"],
-
-Cell[BoxData[
-    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
-      False,
-      Editable->False]], "Output"]
-}, Open  ]],
+    \(\(maxabsf = Max[Abs[ir`f1]];\)\)], "Input"],
 
 Cell[BoxData[
     \(\(Function[
@@ -223,6 +429,89 @@ Cell[BoxData[
                       ir`X}]\[IndentingNewLine]}], Axes \[Rule] True, 
               ImageSize \[Rule] 800]] /@ {ir`f1, ir`f1n, 
           ir`f1t};\)\)], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Irreg over time", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(rng = Quantile[ir`X, {0, 1}]\)], "Input"],
+
+Cell[BoxData[
+    \({{10.5364163740361`, 41.770509831248425`}, {8.834097572069446`, 
+        41.165902427930554`}, {12.499962929379395`, 
+        37.50003707062061`}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Function[
+          file, \[IndentingNewLine]ImportIrreg3D[
+            file]; \[IndentingNewLine]\(Function[
+              f, \[IndentingNewLine]g = 
+                Show[Graphics3D[{PointSize[
+                        0.04], \[IndentingNewLine]MapThread[{If[#1 > 0, 
+                              RGBColor[0, #1, 0], RGBColor[\(-#1\), 0, 0]], 
+                            Point[#2]} &, {f\/maxabsf, 
+                          ir`X}]\[IndentingNewLine]}], PlotRange \[Rule] rng, 
+                  Axes \[Rule] True, ImageSize \[Rule] 800, 
+                  PlotLabel \[Rule] file]]\)[
+            ir`f1]; \[IndentingNewLine]Export[file <> "\<.png\>", 
+            g];\[IndentingNewLine]] /@ 
+        FileNames["\<mycell.irregNode.*\>"];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(Function[
+          t, \[IndentingNewLine]ImportIrreg3D["\<mycell.irregNode.\>" <> 
+              ToString[
+                10000 + t] <> "\<.array\>"]; \[IndentingNewLine]\(Function[
+              f, \[IndentingNewLine]g = 
+                Show[Graphics3D[{PointSize[
+                        0.04], \[IndentingNewLine]MapThread[{If[#1 > 0, 
+                              RGBColor[0, #1, 0], RGBColor[\(-#1\), 0, 0]], 
+                            Point[#2]} &, 
+                        Select[{f\/Max[Abs[f]], ir`X}\[Transpose] , 
+                            Abs[#[\([2, 3]\)] - 13] < 
+                                2 &]\[Transpose] ]\[IndentingNewLine]}], 
+                  PlotRange \[Rule] rng, Axes \[Rule] True, 
+                  ImageSize \[Rule] 800]]\)[ir`f1]\[IndentingNewLine]] /@ 
+        Range[0, 99];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(irf1t = 
+        Function[
+            t, \[IndentingNewLine]ImportIrreg3D["\<mycell.irregNode.\>" <> 
+                ToString[
+                  10000 + 
+                    t] <> "\<.array\>"]; \[IndentingNewLine]ir`f1\
+\[IndentingNewLine]] /@ Range[0, 9];\)\), "\[IndentingNewLine]", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(Histogram[#, HistogramRange \[Rule] {Min[irf1t], Max[irf1t]}] &\) /@ 
+        irf1t;\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Temporal stats", "Subsection"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ImportTemporal[]\)], "Input"],
+
+Cell[BoxData[
+    \({"iter", "t", "dt", "dtcfl", "tiframe", "CFL"}\)], "Print"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(ListPlot[TIME];\)\), "\n", 
+    \(\(ListPlot[dt];\)\), "\n", 
+    \(\(ListPlot[dtcfl];\)\), "\n", 
+    \(\(ListPlot[CFL];\)\)}], "Input"]
 }, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
@@ -250,71 +539,154 @@ CellTagsIndex->{}
 
 (*NotebookFileOutline
 Notebook[{
-Cell[1754, 51, 218, 4, 59, "Input",
+
+Cell[CellGroupData[{
+Cell[1776, 53, 26, 0, 40, "Subsection"],
+Cell[1805, 55, 39, 1, 27, "Input"],
+Cell[1847, 58, 201, 4, 59, "Input",
   InitializationCell->True],
 
 Cell[CellGroupData[{
-Cell[1997, 59, 44, 1, 27, "Input"],
-Cell[2044, 62, 221, 3, 26, "Output"]
+Cell[2073, 66, 71, 1, 27, "Input"],
+Cell[2147, 69, 54, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[2302, 70, 26, 0, 40, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[2353, 74, 148, 2, 27, "Input"],
-Cell[2504, 78, 46, 1, 26, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[2587, 84, 201, 3, 43, "Input"],
-Cell[2791, 89, 52, 1, 26, "Output"]
+Cell[2238, 75, 44, 1, 27, "Input"],
+Cell[2285, 78, 174, 3, 26, "Output"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[2892, 96, 36, 0, 40, "Subsection"],
+Cell[2508, 87, 26, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[2953, 100, 728, 15, 155, "Input"],
-Cell[3684, 117, 49, 1, 26, "Output"],
-Cell[3736, 120, 46, 1, 26, "Output"]
+Cell[2559, 91, 148, 2, 27, "Input"],
+Cell[2710, 95, 46, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[3819, 126, 111, 2, 27, "Input"],
-Cell[3933, 130, 82, 1, 26, "Output"]
+Cell[2793, 101, 201, 3, 43, "Input"],
+Cell[2997, 106, 280, 4, 20, "Message"],
+Cell[3280, 112, 355, 5, 20, "Message"],
+Cell[3638, 119, 87, 1, 26, "Output"]
 }, Open  ]],
-Cell[4030, 134, 164, 3, 43, "Input"],
-Cell[4197, 139, 607, 10, 75, "Input"],
-Cell[4807, 151, 171, 4, 43, "Input"],
-Cell[4981, 157, 201, 4, 44, "Input"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[5219, 166, 28, 0, 40, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[5272, 170, 185, 3, 59, "Input"],
-Cell[5460, 175, 49, 1, 26, "Output"]
-}, Open  ]],
-Cell[5524, 179, 155, 3, 43, "Input"]
+Cell[3740, 123, 106, 2, 43, "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[5716, 187, 32, 0, 40, "Subsection"],
+Cell[3883, 130, 29, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[5773, 191, 190, 4, 59, "Input"],
-Cell[5966, 197, 39, 1, 26, "Output"],
-Cell[6008, 200, 88, 1, 26, "Output"]
+Cell[3937, 134, 140, 3, 43, "Input"],
+Cell[4080, 139, 62, 1, 26, "Output"]
+}, Open  ]],
+Cell[4157, 143, 171, 3, 43, "Input"],
+Cell[4331, 148, 310, 6, 59, "Input"],
+Cell[4644, 156, 159, 3, 43, "Input"],
+Cell[4806, 161, 181, 3, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[5012, 168, 137, 3, 43, "Input"],
+Cell[5152, 173, 44, 1, 26, "Output"]
+}, Open  ]],
+Cell[5211, 177, 138, 2, 43, "Input"],
+Cell[5352, 181, 372, 8, 59, "Input"],
+Cell[5727, 191, 482, 9, 91, "Input"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6133, 206, 49, 1, 27, "Input"],
-Cell[6185, 209, 130, 3, 26, "Output"]
+Cell[6246, 205, 36, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[6307, 209, 708, 14, 155, "Input"],
+Cell[7018, 225, 49, 1, 26, "Output"],
+Cell[7070, 228, 46, 1, 26, "Output"]
 }, Open  ]],
-Cell[6330, 215, 469, 9, 107, "Input"]
+
+Cell[CellGroupData[{
+Cell[7153, 234, 111, 2, 27, "Input"],
+Cell[7267, 238, 264, 5, 26, "Output"]
+}, Open  ]],
+Cell[7546, 246, 164, 3, 43, "Input"],
+Cell[7713, 251, 599, 10, 75, "Input"],
+Cell[8315, 263, 171, 4, 43, "Input"],
+Cell[8489, 269, 201, 4, 44, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[8727, 278, 46, 0, 40, "Subsection"],
+Cell[8776, 280, 739, 15, 155, "Input"],
+
+Cell[CellGroupData[{
+Cell[9540, 299, 66, 1, 27, "Input"],
+Cell[9609, 302, 80, 1, 26, "Output"]
+}, Open  ]],
+Cell[9704, 306, 152, 3, 43, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[9893, 314, 28, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[9946, 318, 202, 3, 59, "Input"],
+Cell[10151, 323, 50, 1, 26, "Output"],
+Cell[10204, 326, 36, 1, 26, "Output"]
+}, Open  ]],
+Cell[10255, 330, 166, 3, 43, "Input"],
+Cell[10424, 335, 133, 2, 43, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[10594, 342, 29, 0, 40, "Subsection"],
+Cell[10626, 344, 57, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[10708, 349, 596, 12, 123, "Input"],
+Cell[11307, 363, 49, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[11393, 369, 105, 2, 27, "Input"],
+Cell[11501, 373, 220, 4, 26, "Output"]
+}, Open  ]],
+Cell[11736, 380, 164, 3, 43, "Input"],
+Cell[11903, 385, 467, 8, 75, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[12407, 398, 32, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[12464, 402, 190, 4, 59, "Input"],
+Cell[12657, 408, 39, 1, 26, "Output"],
+Cell[12699, 411, 82, 1, 26, "Output"]
+}, Open  ]],
+Cell[12796, 415, 54, 1, 27, "Input"],
+Cell[12853, 418, 63, 1, 27, "Input"],
+Cell[12919, 421, 469, 9, 107, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[13425, 435, 37, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[13487, 439, 61, 1, 27, "Input"],
+Cell[13551, 442, 180, 3, 26, "Output"]
+}, Open  ]],
+Cell[13746, 448, 816, 15, 195, "Input"],
+Cell[14565, 465, 854, 15, 164, "Input"],
+Cell[15422, 482, 461, 10, 107, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[15920, 497, 36, 0, 40, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[15981, 501, 49, 1, 27, "Input"],
+Cell[16033, 504, 79, 1, 22, "Print"]
+}, Open  ]],
+Cell[16127, 508, 199, 5, 91, "Input"]
 }, Open  ]]
 }
 ]

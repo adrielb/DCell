@@ -116,23 +116,46 @@ PetscErrorCode LevelSetInitializeToSphere( Coor dh, Coor center, PetscReal radiu
 #define __FUNCT__ "LevelSetInitializeFromImage"
 PetscErrorCode LevelSetInitializeFromImage( LevelSet ls )
 {
-  int i, j;
+  int n, i, j, k;
   const int BUF = 2;
   iCoor p,q;
   iCoor *band;
+  PetscReal *phi;
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
-  for (j = p.y + BUF; j < q.y - BUF; ++j)
-  {
-    for (i = p.x + BUF; i < q.x - BUF; ++i)
-    {
-      ierr = ArrayAppend(ls->band,(void*)&band); CHKERRQ(ierr);
-      band->x = i;
-      band->y = j;
-    }
-  }
+  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+  if( ls->phi->is2D ) {
+    PetscReal **phi2D = (PetscReal**)phi;
+    for (j = p.y + BUF; j < q.y - BUF; ++j)  {
+      for (i = p.x + BUF; i < q.x - BUF; ++i) {
+        for (n = 0; n < 4; ++n) {
+          if( phi2D[j][i] * phi2D[j + STAR[n][1]][i + STAR[n][0]] <= 0 ) {
+            ierr = ArrayAppend(ls->band,&band); CHKERRQ(ierr);
+            band->x = i;
+            band->y = j;
+          } // if irreg
+        } // n
+      } // i
+    } // j
+  } else {
+    PetscReal ***phi3D = (PetscReal***)phi;
+    for (k = p.z + BUF; k < q.z - BUF; ++k)  {
+      for (j = p.y + BUF; j < q.y - BUF; ++j)  {
+        for (i = p.x + BUF; i < q.x - BUF; ++i) {
+          for (n = 0; n < 6; ++n) {
+            if( phi3D[k][j][i] * phi3D[k + STAR[n][2]][j + STAR[n][1]][i + STAR[n][0]] <= 0 ) {
+              ierr = ArrayAppend(ls->band,&band); CHKERRQ(ierr);
+              band->x = i;
+              band->y = j;
+              band->z = k;
+            } // if irreg
+          } // n
+        } // i
+      } // j
+    } // k
+  } // 3D
 
   ierr = LevelSetUpdateIrregularNodeList(ls); CHKERRQ(ierr);
   ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);

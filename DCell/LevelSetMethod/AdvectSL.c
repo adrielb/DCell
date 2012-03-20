@@ -5,6 +5,23 @@
 #define __FUNCT__ "LevelSetAdvectSL"
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt)
 {
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = PetscLogEventBegin(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
+  if( ls->phi->is2D ) {
+    ierr = LevelSetAdvectSL_2D( ls, velgrid, dt); CHKERRQ(ierr);
+  } else {
+    ierr = LevelSetAdvectSL_3D( ls, velgrid, dt); CHKERRQ(ierr);
+  }
+  ierr = PetscLogEventEnd(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef  __FUNCT__
+#define __FUNCT__ "LevelSetAdvectSL_2D"
+PetscErrorCode LevelSetAdvectSL_2D(LevelSet ls, Grid velgrid, PetscReal dt)
+{
   int b;
   iCoor *band;
   Coor X; // Grid point
@@ -15,7 +32,6 @@ PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscLogEventBegin(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(velgrid,&vel); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   ierr = GridGet(ls->phi0,&phi0); CHKERRQ(ierr);
@@ -32,7 +48,6 @@ PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt)
     // Interpolate phi at projection
     phi[band->y][band->x] = Bilinear2D(GridFunction2D_Identity,phi0,dh, S.x, S.y );
   } // for b in band
-  ierr = PetscLogEventEnd(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -51,7 +66,6 @@ PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscLogEventBegin(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(velgrid,&vel); CHKERRQ(ierr);
   ierr = GridGet(ls->phi ,&phi); CHKERRQ(ierr);
   ierr = GridGet(ls->phi0,&phi0); CHKERRQ(ierr);
@@ -68,7 +82,8 @@ PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt)
     S.z = X.z - V.z * dt / dh.z;
 
     phi[band[b].z][band[b].y][band[b].x] = Bilinear3D(GridFunction3D_Identity, phi0, dh, S );
+//    ierr = GridInterpolate(ls->phi0,S,&phi[band[b].z][band[b].y][band[b].x]); CHKERRQ(ierr);
   } // for b in band
-  ierr = PetscLogEventEnd(EVENT_LevelSetAdvectSL,0,0,0,0); CHKERRQ(ierr);
+
   PetscFunctionReturn(0);
 }
