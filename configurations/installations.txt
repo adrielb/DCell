@@ -87,6 +87,16 @@ OPENGL_gl_LIBRARY = /home/abergman/ProgramFiles/Mesa-7.0.2/lib/libMesaGL.a
 VTK_OPENGL_HAS_OSMESA = ON
 VTK_USE_OFFSCREEN  =  ON
 
+cmake
+./bootstrap ; make
+/share/apps/cmake/cmake-2.8.7/bin/cmake
+vtk
+git clone git://vtk.org/VTK.git
+git clone git://vtk.org/VTKData.git
+git clone git://vtk.org/VTKLargeData.git
+git checkout --track -b release origin/release
+
+
 CGAL
 ./install_cgal -i
 add BLAS location

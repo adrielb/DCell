@@ -254,7 +254,6 @@ PetscErrorCode GridDrawBorder( Grid g, int borderWidth, PetscReal fill )
 {
   int i,j,k;
   int b;
-  iCoor p,q;
   PetscReal *phi=0;
   PetscErrorCode ierr;
 

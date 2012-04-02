@@ -101,14 +101,14 @@ PetscErrorCode FluidFieldMaskDomain(FluidField f)
           col[2].c = U_FACE;                     // u[i,j,k]   = 0
           col[3].c = V_FACE; col[3].j = row.j+1; // v[i,j+1,k] = 0
           col[4].c = V_FACE;                     // v[i,j,k]   = 0
-          col[5].c = W_FACE; col[5].k = row.k+1; // v[i,j,k+1] = 0
-          col[6].c = W_FACE;                     // v[i,j,k]   = 0
+          col[5].c = W_FACE; col[5].k = row.k+1; // w[i,j,k+1] = 0
+          col[6].c = W_FACE;                     // w[i,j,k]   = 0
           if( col[1].i >= i.mx ) col[1].i = -1;
           if( col[3].j >= i.my ) col[3].j = -1;
           if( col[5].k >= i.mz ) col[5].k = -1;
           ierr = MatSetValuesStencil(f->mat,1,&row,lenL,col,valL,INSERT_VALUES); CHKERRQ(ierr);
 //          TODO: Zero pressure RHS????
-//          ierr = FluidField_AppendDBC(f->dirichletBC,row); CHKERRQ(ierr);
+          ierr = FluidField_AppendDBC(f->dirichletBC,row); CHKERRQ(ierr);
         }
       } // row.i
     } // row.j

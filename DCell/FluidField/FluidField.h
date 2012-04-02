@@ -39,7 +39,8 @@ typedef struct _FluidField {
   Vec buf;
 
   PetscReal mu;
-  Coor dh;   // Discretization size
+  Coor dh;   // Discretization size in um
+  Coor lens; // Domain size in um
   iCoor dims;
   PetscBool is3D;
   MPI_Comm comm;

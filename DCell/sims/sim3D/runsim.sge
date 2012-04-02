@@ -1,0 +1,46 @@
+#!/bin/bash
+# request Bourne again shell as shell for job
+#$ -S /bin/bash
+# merge stderr with stdout
+#$ -j y
+# assign a name to submitted job
+#$ -N sim3D.Fk0
+# change output file name
+#$ -o $HOME/output/$JOB_ID.$TASK_ID.$JOB_NAME
+# export environment variables
+#$ -V
+# only output JOB_ID upon submission
+#$ -terse
+# request single slot queue
+#$ -q single
+
+# how to run: 
+#   1) set paramsfile
+#   2)./runsim.sh
+
+echo $HOSTNAME
+if [ "${HOSTNAME%%-*}" != "compute" ]
+then
+  echo "Must run on compute node"
+  exit 1
+fi
+
+JOBDIR=$JOB_ID.$SGE_TASK_ID.$JOB_NAME
+export PETSC_TMP=/nas-0-0/abergman/sims/$JOBDIR
+mkdir -p $PETSC_TMP
+ln -s ../../output/$JOBDIR $PETSC_TMP/output
+
+#simulation directory
+SIM=sim3D
+WD=${DCELL_DIR}/sims/${SIM}
+
+#load default options
+RUNOPTS=`cat ${WD}/runopts`
+PARAMSFILE=${WD}/paramsfile
+PARAMS=$(sed -n -e "$SGE_TASK_ID p" $PARAMSFILE)
+
+# run the simulation
+${WD}/${SIM}.x \
+${RUNOPTS} \
+${PARAMS} \
+-info $PETSC_TMP/info.log

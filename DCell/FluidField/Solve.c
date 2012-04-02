@@ -25,11 +25,11 @@ PetscErrorCode FluidFieldSolve( FluidField f )
 
   // IIM update for each level set
 
-  // Discrete compatibility condition
-  ierr = FluidField_DiscreteCompatibilityCondition( f ); CHKERRQ(ierr);
-
   // Enforce Dirichlet BC in case the IIM routines add correction terms to the boundaries
   ierr = FluidField_EnforceNoSlipBC(f); CHKERRQ(ierr);
+
+  // Discrete compatibility condition
+  ierr = FluidField_DiscreteCompatibilityCondition( f ); CHKERRQ(ierr);
 
   // Solve the system L(u) - px = del(sigma) + IIM
   ierr = PetscGetTime(&t1); CHKERRQ(ierr);

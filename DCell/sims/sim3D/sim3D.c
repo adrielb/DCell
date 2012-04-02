@@ -1,5 +1,7 @@
 #include "DWorld.h"
 
+static LevelSet lsGrooves;
+
 typedef struct _MyCell {
   struct _DCell dcell;
   PetscReal Fk;  // magnitude of surface tension
@@ -14,55 +16,69 @@ typedef struct _MyCell {
   PetscViewer contactareafile;
 } *MyCell;
 
-PetscErrorCode MyCellSetFromOptions( MyCell cell );
 PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell );
+PetscErrorCode MyCellDestroy( DCell cell );
+PetscErrorCode MyCellSetFromOptions( MyCell cell );
 PetscErrorCode MyCellUpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t );
 PetscErrorCode MyCellUpdateFluidFieldImplicitRHS( DCell dcell, IIM iim, int ga, PetscReal t );
 PetscErrorCode MyCellWrite( DCell dcell, int ti );
+PetscErrorCode MyCellWriteImplicit( DCell dcell, int ti );
 
 void InterfacialForceAdhesion(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
+  const Coor dh = lsGrooves->phi->d;
+  PetscReal dist;
+
+  GridInterpolate( lsGrooves->phi, n->X, &dist );
+
+  if( dist*dh.x > -c->contactThres ) {
+    n->fa1 = c->Fa;
+    n->fa2 = 0;
+  } else {
+    n->fa1 = 0;
+    n->fa2 = 0;
+  }
 
   PetscReal k = n->k;
   const PetscReal clip = c->kclip;
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
 
-  n->f1 = c->scale * ( -c->Fk0 * n->k);
+  n->f1 = c->scale * ( n->fa1 - c->Fk0 * k);
   n->f2 = c->scale * ( n->fa2 );
 }
-
-static LevelSet lsGrooves;
 
 int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.5;
-  Coor len = {20,10,10};
-  Coor  dh = {dx,dx,dx};
-  iCoor size = {len.x/dx,len.y/dx,len.z/dx};
-  printf("MX = %d;\n", size.x);
-  printf("MY = %d;\n", size.y);
-  printf("MZ = %d;\n", size.z);
+  FluidField fluid;
+  ierr = FluidFieldCreate(PETSC_COMM_WORLD, &fluid);  CHKERRQ(ierr);
+
+  Coor len = fluid->lens;
+  Coor  dh = fluid->dh;
+  iCoor size = fluid->dims;
+  PetscReal dx = dh.x;
 
   // Make NanoSurface
   int borderwidth = 2;
   PetscReal c,
             b = borderwidth*dx,
             w = 1,
-            h = 1 + b,
-            l = len.z,
+            h = 0.5,
+            l = len.y,
             s = 2;
   ierr = PetscOptionsGetReal(0,"-groove_width",&w,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-groove_height",&h,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-groove_spacing",&s,0); CHKERRQ(ierr);
   iCoor pos = {0,0,0};
   ierr = LevelSetCreate(dh,pos,size,&lsGrooves); CHKERRQ(ierr);
   ierr = VecSet(lsGrooves->phi->v,-1); CHKERRQ(ierr);
   ierr = GridDrawBorder( lsGrooves->phi, borderwidth, 1 ); CHKERRQ(ierr);
-  for ( c = b; c < len.x; c+=s ) {
-    Coor lo = {c,  0, 0};
-    Coor hi = {c+w,h, l};
+  for ( c = dx-w/2; c < len.x; c+=s ) {
+    Coor lo = {c,   0, 0};
+    Coor hi = {c+w, l, h+b};
     ierr = GridFillBox(lsGrooves->phi, lo, hi, 1); CHKERRQ(ierr);
   }
   ierr = GridSetName(lsGrooves->phi,"grooves"); CHKERRQ(ierr);
@@ -71,45 +87,38 @@ int main(int argc, char **args) {
   ierr = GridWrite(lsGrooves->phi,1); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(lsGrooves,0); CHKERRQ(ierr);
 
-  exit(0);
 
-  FluidField fluid;
-  ierr = FluidFieldCreate(PETSC_COMM_WORLD, &fluid);  CHKERRQ(ierr);
-  ierr = FluidFieldSetDims(fluid,size); CHKERRQ(ierr);
-  ierr = FluidFieldSetDx(fluid,dx); CHKERRQ(ierr);
+  ierr = FluidFieldSetMask(fluid, lsGrooves->phi ); CHKERRQ(ierr);
   ierr = FluidFieldSetup(fluid); CHKERRQ(ierr);
 
   DWorld world;
   ierr = DWorldCreate(fluid, &world); CHKERRQ(ierr);
   ierr = DWorldSetPrintStep(world,PETSC_TRUE); CHKERRQ(ierr);
 
-  PetscReal radius = len.x / 4.;
-  Coor center = (Coor){ len.x / 2., len.y / 2., len.z / 2.};
-  LevelSet ls;
-//  ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
-  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 2.5, 5, &ls); CHKERRQ(ierr);
+  int rank;
+  MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
+  if( rank == 0 ) {
+    PetscReal radius = 3;
+    Coor center = (Coor){ len.x / 2., len.y / 2., radius + h + b };
+    LevelSet ls;
+    ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
+//  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 2.5, 5, &ls); CHKERRQ(ierr);
 //  ierr = LevelSetInitializeParticles(ls); CHKERRQ(ierr);
-  ierr = GridSetName(ls->phi,"mycell"); CHKERRQ(ierr);
+    ierr = GridSetName(ls->phi,"mycell"); CHKERRQ(ierr);
 
-  MyCell cell;
-  ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
-  cell->dh = fluid->dh;
-  cell->Fk = 3;
-  cell->Fk0 = 1;
-  cell->Fa = 3;
-  cell->kclip = 1 / radius;
-  cell->ecm = 1;
-  cell->scale = 1;
-  cell->contactThres = 0.3;
-  ierr = MyCellSetFromOptions(cell); CHKERRQ(ierr);
+    MyCell cell;
+    ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
+    cell->dh = fluid->dh;
+    cell->kclip = 1 / radius;
+    ierr = MyCellSetFromOptions(cell); CHKERRQ(ierr);
+    ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
 
-  char filename[PETSC_MAX_PATH_LEN];
-  char wd[PETSC_MAX_PATH_LEN];
-  ierr = DCellGetWorkingDirectory(wd); CHKERRQ(ierr);
-  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/contactarea.dat", wd); CHKERRQ(ierr);
-  ierr = PetscViewerASCIIOpen(PETSC_COMM_SELF,filename,&cell->contactareafile); CHKERRQ(ierr);
+    ierr = VecShift(lsGrooves->phi->v,cell->contactThres/dx); CHKERRQ(ierr);
+    ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
+    ierr = LevelSetWriteIrregularNodeList(lsGrooves,1); CHKERRQ(ierr);
+    ierr = VecShift(lsGrooves->phi->v,-cell->contactThres/dx); CHKERRQ(ierr);
+  }
 
-  ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
   world->timax = 10;
   world->dtmax = 1e9;
   world->CFL = 0.1;
@@ -124,17 +133,6 @@ int main(int argc, char **args) {
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "MyCellDestroy"
-PetscErrorCode MyCellDestroy( DCell cell ) {
-  MyCell mycell = (MyCell) cell;
-  PetscErrorCode ierr;
-  PetscFunctionBegin;
-  ierr = PetscViewerDestroy(&mycell->contactareafile); CHKERRQ(ierr);
-  ierr = DCellDestroy(cell); CHKERRQ(ierr);
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
 #define __FUNCT__ "MyCellCreate"
 PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
 {
@@ -144,11 +142,44 @@ PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
   PetscFunctionBegin;
   ierr = PetscNew( struct _MyCell, &cell); CHKERRQ(ierr);
   ierr = DCellSetup( ls, (DCell)cell ); CHKERRQ(ierr);
-  cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldRHS;
+  const PetscBool implicit = PETSC_FALSE;
+  if( implicit ) {
+    cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldImplicitRHS;
+    cell->dcell.Write = MyCellWriteImplicit;
+  } else {
+    cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldRHS;
+    cell->dcell.Write = MyCellWrite;
+  }
+
   cell->dcell.Destroy = MyCellDestroy;
-  cell->dcell.Write = MyCellWrite;
+
+  cell->Fk = 1;
+  cell->Fk0 = 1;
+  cell->Fa = 1;
+  cell->ecm = 1;
+  cell->scale = 1e-3;
+  cell->contactThres = 0.4;
+
+  char filename[PETSC_MAX_PATH_LEN];
+  char wd[PETSC_MAX_PATH_LEN];
+  ierr = DCellGetWorkingDirectory(wd); CHKERRQ(ierr);
+  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/contactarea.dat", wd); CHKERRQ(ierr);
+  ierr = PetscViewerASCIIOpen(PETSC_COMM_SELF,filename,&cell->contactareafile); CHKERRQ(ierr);
+
   *mycell = cell;
   ierr = PetscInfo(0,"Created MyCell\n"); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "MyCellDestroy"
+PetscErrorCode MyCellDestroy( DCell cell )
+{
+  MyCell mycell = (MyCell) cell;
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = PetscViewerDestroy(&mycell->contactareafile); CHKERRQ(ierr);
+  ierr = DCellDestroy(cell); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -164,6 +195,7 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   ierr = PetscOptionsGetReal(0,"-Fk0", &cell->Fk0, 0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-kclip",&cell->kclip,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-ecm",&cell->ecm,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-contactThres",&cell->contactThres,0); CHKERRQ(ierr);
 
   ierr = PetscPrintf(MPI_COMM_WORLD,"Cell Parameters\n"); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fa     = %f\n", cell->Fa); CHKERRQ(ierr);
@@ -171,6 +203,7 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fk0    = %f\n", cell->Fk0); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"kclip  = %f\n", cell->kclip); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"ecm    = %f\n", cell->ecm); CHKERRQ(ierr);
+  ierr = PetscPrintf(MPI_COMM_WORLD,"contactThres = %f\n", cell->contactThres); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"---------------\n", cell->ecm); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -206,7 +239,17 @@ PetscErrorCode MyCellWrite( DCell dcell, int ti ) {
   PetscFunctionBegin;
   ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
-//  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane, ti); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "MyCellWriteImplicit"
+PetscErrorCode MyCellWriteImplicit( DCell dcell, int ti ) {
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = DCellWrite(dcell, ti); CHKERRQ(ierr);
+  ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
