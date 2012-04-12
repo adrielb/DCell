@@ -6,6 +6,7 @@ include $(addsuffix /module.mk,$(MODULES))
 all: sim
 SIM := sim3D
 test: testIIM-surfquant
+viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

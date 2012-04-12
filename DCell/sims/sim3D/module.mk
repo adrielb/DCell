@@ -9,16 +9,17 @@ RUNOPTS := \
 -pls_rmax 0.5 \
 -Fa 1 \
 -Fk 1 \
--Fk0 20 \
+-Fk0 10 \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
--contactThres 0.4 \
+-contactThres 0.2 \
+-adhesionRadius 0.4 \
 -fluid_dx 0.20 \
 -fluid_lens 20,20,9 \
 -timax 10000 \
 -CFL 0.1 \
--dtmax 0.1 \
+-dtmax 0.2 \
 -ksp_monitor \
 -ksp_atol 1e-12 -ksp_rtol 1e-3 -ksp_max_it 100 \
 -fieldsplit_p_ksp_max_it 4 \
@@ -93,3 +94,5 @@ RUNOPTS := \
 
 
 ${eval ${call simulation,sim3D,1,${RUNOPTS}}}
+${eval ${call vtkviz,LevelSet3DView,/data/scratch 0.2}}
+${eval ${call vtkviz,LevelSetQuadView,/data/scratch 0.2 12563}}

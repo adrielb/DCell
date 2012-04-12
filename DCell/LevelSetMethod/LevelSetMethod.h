@@ -62,6 +62,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls );
 PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx );
 PetscErrorCode LevelSetNormalDirection( LevelSet ls, Coor X, Coor *n );
 inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coor X );
+inline PetscReal LevelSetDiracDelta3D( PetscReal ***phi, const Coor dh, const Coor X );
 
 PetscErrorCode LevelSetAdvect( LevelSet ls, int ga, PetscReal dt );
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);

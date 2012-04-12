@@ -77,6 +77,11 @@
 	</natures>
 	<linkedResources>
 		<link>
+			<name>VTK</name>
+			<type>2</type>
+			<location>/share/apps/vtk/VTK</location>
+		</link>
+		<link>
 			<name>petsc</name>
 			<type>2</type>
 			<location>/share/apps/petsc-3.2-p5</location>

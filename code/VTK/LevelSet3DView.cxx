@@ -38,7 +38,7 @@
 
 int main(int argc, char **argv)
 {
-  int d1=100, d2=d1, d3=d1, ddd = d1*d2*d3;
+  int d1=61, d2=114, d3=42, ddd = d1*d2*d3;
   char *inputDataName= argv[1],
        *outputImageName = argv[2];
 
@@ -61,6 +61,7 @@ int main(int argc, char **argv)
     reader->SetDataExtent(0,d1-1,0,d2-1,0,d3-1);
     reader->SetDataSpacing(1,1,1);
     reader->SetFileDimensionality(3);
+	reader->SwapBytesOn();
     reader->SetHeaderSize(2*sizeof(int)); //For reading Petsc Vecs
       
   vtkCamera *aCamera = vtkCamera::New();

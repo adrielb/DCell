@@ -135,6 +135,7 @@ PetscErrorCode LevelSetInitializeFromImage( LevelSet ls )
             ierr = ArrayAppend(ls->band,&band); CHKERRQ(ierr);
             band->x = i;
             band->y = j;
+            break;
           } // if irreg
         } // n
       } // i
@@ -150,6 +151,7 @@ PetscErrorCode LevelSetInitializeFromImage( LevelSet ls )
               band->x = i;
               band->y = j;
               band->z = k;
+              break;
             } // if irreg
           } // n
         } // i

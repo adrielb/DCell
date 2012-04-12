@@ -43,3 +43,15 @@ inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coo
   const PetscReal gradmag = PetscSqrtScalar( px*px + py*py );
   return gradmag * ( 1 + cos( PETSC_PI * phival / eps) ) / (2*eps);
 }
+
+inline PetscReal LevelSetDiracDelta3D( PetscReal ***phi, const Coor dh, const Coor X )
+{
+  const PetscReal eps = 1.5;
+  const PetscReal phival = Bilinear3D(GridFunction3D_Identity, phi, dh, X );
+  if( phival < -eps || phival > eps ) return 0;
+  const PetscReal px = Bilinear3D(GridFunction3D_DerivX,phi,dh,X);
+  const PetscReal py = Bilinear3D(GridFunction3D_DerivY,phi,dh,X);
+  const PetscReal pz = Bilinear3D(GridFunction3D_DerivZ,phi,dh,X);
+  const PetscReal gradmag = PetscSqrtScalar( px*px + py*py + pz*pz );
+  return gradmag * ( 1 + cos( PETSC_PI * phival / eps) ) / (2*eps);
+}

@@ -6,7 +6,7 @@ all: VolumeRendering
 
 LevelSet3DView:
 	${CXX} ${CXXFLAGS} ${VTK_INCLUDE} LevelSet3DView.cxx ${VTK_LIB}
-	./a.out "/home/abergman/Research/DCell/temp/ls.1.Real64"
+	./a.out /data/sims/sim3D_8/mycell.19999.Real64
 
 VolumeRendering:
 	${CXX} ${CXXFLAGS} ${VTK_INCLUDE} VolumeRendering.cxx ${VTK_LIB} 
@@ -70,12 +70,34 @@ ifeq (${HOSTNAME},"levlabhn.clark.jhu.edu")
 -lvtkexoIIc       -lvtkGraphics          -lvtkproj4       -lvtkVolumeRendering
 else
 #ON-SCREEN LIBRARIES
-  VTK_DIR = /usr/include/vtk
-  VTK_INCLUDE=-I/usr/include/vtk
-  VTK_LIB=-lvtkCommon -lvtksys \
--lvtkFiltering -lvtkGenericFiltering -lvtkIO \
--lvtkRendering -lvtkVolumeRendering \
--lvtkGraphics -lvtkImaging
+VTK_DIR=/share/apps/vtk/VTK
+VTK_INCLUDE= \
+-I${VTK_DIR} \
+-I${VTK_DIR}/Utilities \
+-I${VTK_DIR}/VolumeRendering \
+-I${VTK_DIR}/Rendering \
+-I${VTK_DIR}/Hybrid \
+-I${VTK_DIR}/Widgets \
+-I${VTK_DIR}/Rendering/Testing/Cxx \
+-I${VTK_DIR}/IO \
+-I${VTK_DIR}/Imaging \
+-I${VTK_DIR}/Graphics \
+-I${VTK_DIR}/GenericFiltering \
+-I${VTK_DIR}/Filtering \
+-I${VTK_DIR}/Common \
+-I${VTK_DIR}/Common/Testing/Cxx \
+-I${VTK_DIR}/Utilities/DICOMParser \
+-I${VTK_DIR}/Utilities/vtkfreetype/include \
+-I${VTK_DIR}/Utilities/vtknetcdf \
+-I${VTK_DIR}/Utilities/vtkexodus2/include
+VTK_LIB=-L${VTK_DIR}/bin -Wl,-rpath,${VTK_DIR}/bin \
+-lvtkHybrid       -lvtkmetaio            -lvtkRendering  -lvtkWidgets \
+-lmpistubs        -lvtkFiltering         -lvtkImaging    -lvtksqlite           -lvtkzlib \
+-lvtkalglib       -lvtkfreetype          -lvtkInfovis    -lvtksys \
+-lvtkCharts       -lvtkftgl              -lvtkIO         -lvtktiff \
+-lvtkCommon       -lvtkGenericFiltering  -lvtkjpeg       -lvtkNetCDF      -lvtkverdict \
+-lvtkDICOMParser  -lvtklibxml2           -lvtkpng        -lvtkViews \
+-lvtkexoIIc       -lvtkGraphics          -lvtkproj4      -lvtkVolumeRendering
 endif
 
 OBJS = LevelSetView.o

@@ -12,8 +12,10 @@ typedef struct _MyCell {
   PetscReal scale;
   PetscReal contactThres;
   PetscReal contactArea;
+  PetscReal adhesionRadius;
   Coor dh;
   PetscViewer contactareafile;
+  SpatialIndex sidx;
 } *MyCell;
 
 PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell );
@@ -28,16 +30,20 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
   const Coor dh = lsGrooves->phi->d;
+  const PetscReal r = c->adhesionRadius;
   PetscReal dist;
+  const int MAXLEN = 500;
+  int len = 0;
+  int i;
+  IrregularNode *nei[MAXLEN];
 
   GridInterpolate( lsGrooves->phi, n->X, &dist );
-
   if( dist*dh.x > -c->contactThres ) {
-    n->fa1 = c->Fa;
-    n->fa2 = 0;
-  } else {
-    n->fa1 = 0;
-    n->fa2 = 0;
+    SpatialIndexQueryPoints( c->sidx, n->X, r / dh.x, MAXLEN, &len, (void**)nei);
+
+    for (i = 0; i < len; ++i) {
+      nei[i]->fa1 = c->Fa;
+    }
   }
 
   PetscReal k = n->k;
@@ -99,7 +105,7 @@ int main(int argc, char **args) {
   MPI_Comm_rank(PETSC_COMM_WORLD,&rank);
   if( rank == 0 ) {
     PetscReal radius = 3;
-    Coor center = (Coor){ len.x / 2., len.y / 2., radius + h + b };
+    Coor center = (Coor){ len.x / 2., len.y / 2., radius + h + b - dx };
     LevelSet ls;
     ierr = LevelSetInitializeToSphere(fluid->dh,center,radius,&ls); CHKERRQ(ierr);
 //  ierr = LevelSetInitializeToStar3D(fluid->dh, center, radius, 2.5, 5, &ls); CHKERRQ(ierr);
@@ -159,6 +165,7 @@ PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
   cell->ecm = 1;
   cell->scale = 1e-3;
   cell->contactThres = 0.4;
+  cell->adhesionRadius = 0.2;
 
   char filename[PETSC_MAX_PATH_LEN];
   char wd[PETSC_MAX_PATH_LEN];
@@ -196,6 +203,7 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   ierr = PetscOptionsGetReal(0,"-kclip",&cell->kclip,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-ecm",&cell->ecm,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-contactThres",&cell->contactThres,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-adhesionRadius",&cell->adhesionRadius,0); CHKERRQ(ierr);
 
   ierr = PetscPrintf(MPI_COMM_WORLD,"Cell Parameters\n"); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"Fa     = %f\n", cell->Fa); CHKERRQ(ierr);
@@ -204,6 +212,7 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
   ierr = PetscPrintf(MPI_COMM_WORLD,"kclip  = %f\n", cell->kclip); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"ecm    = %f\n", cell->ecm); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"contactThres = %f\n", cell->contactThres); CHKERRQ(ierr);
+  ierr = PetscPrintf(MPI_COMM_WORLD,"adhesionRadius = %f\n", cell->adhesionRadius); CHKERRQ(ierr);
   ierr = PetscPrintf(MPI_COMM_WORLD,"---------------\n", cell->ecm); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -215,6 +224,8 @@ PetscErrorCode MyCellUpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscRea
   PetscFunctionBegin;
   ierr = IIMSetForceComponents(iim, InterfacialForceAdhesion ); CHKERRQ(ierr);
   ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
+  MyCell mycell = (MyCell)dcell;
+  mycell->sidx = iim->sidx;
   ierr = IIMUpdateRHS(iim, dcell->lsPlasmaMembrane, ga); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -252,4 +263,72 @@ PetscErrorCode MyCellWriteImplicit( DCell dcell, int ti ) {
   ierr = ParticleLSWriteParticles(dcell->lsPlasmaMembrane->pls, ti); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(dcell->lsPlasmaMembrane->psi, ti); CHKERRQ(ierr);
   PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "CalcContactArea"
+PetscErrorCode CalcContactArea( MyCell cell, PetscReal t )
+{
+  LevelSet ls = cell->dcell.lsPlasmaMembrane;
+  PetscReal ***phi;
+  iCoor p,q;
+  Coor X;
+  const int idh = 10; // samples per grid cell
+  const PetscReal dh = 1. / idh;
+  const Coor dH = ls->phi->d;
+  const PetscReal dA = dh*dh*dh * dH.x*dH.y*dH.z;
+  const PetscReal dx = ls->phi->d.x;
+  PetscReal dist;
+  int m, i, j, k;
+  const int len = ArrayLength(ls->band);
+  const iCoor *band = ArrayGetData(ls->band);
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
+  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+  cell->contactArea = 0;
+  for (m = 0; m < len; ++m) {
+    for (k = 0; k < idh; k++) {
+      for (j = 0; j < idh; j++) {
+        for (i = 0; i < idh; i++) {
+          X.x = band[m].x + i * dh;
+          X.y = band[m].y + j * dh;
+          X.z = band[m].z + k * dh;
+          ierr = GridInterpolate( lsGrooves->phi, X, &dist ); CHKERRQ(ierr);
+          if( dist*dx > -cell->contactThres ) {
+            cell->contactArea += LevelSetDiracDelta3D( phi, ls->phi->d, X ) * dA;
+          } // if in contact
+        } // i
+      } // j
+    } // k
+  } // m in band
+  ierr = PetscViewerASCIIPrintf(cell->contactareafile,"%e %e\n", t, cell->contactArea); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+
+void InterfacialForceGrooveAdhesion(IrregularNode *n, void *context )
+{
+  const MyCell c = (MyCell)context;
+  const Coor dh = lsGrooves->phi->d;
+  PetscReal dist;
+
+  GridInterpolate( lsGrooves->phi, n->X, &dist );
+
+  if( dist*dh.x > -c->contactThres ) {
+    n->fa1 = c->Fa;
+    n->fa2 = 0;
+  } else {
+    n->fa1 = 0;
+    n->fa2 = 0;
+  }
+
+  PetscReal k = n->k;
+  const PetscReal clip = c->kclip;
+  k = k >  clip ?  clip : k;
+  k = k < -clip ? -clip : k;
+
+  n->f1 = c->scale * ( n->fa1 - c->Fk0 * k);
+  n->f2 = c->scale * ( n->fa2 );
 }
