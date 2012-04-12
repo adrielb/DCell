@@ -42,23 +42,34 @@ PetscErrorCode LevelSetAdvectImplicitRHS( LevelSet ls, int ga, PetscReal dt, Pet
   int i;
   iCoor *b = ArrayGetData(ls->band);
   int len = ArrayLength(ls->band);
-  PetscReal **phi;
-  PetscReal **psi;
-  PetscReal **tmp;
-  PetscReal **phi0;
+  PetscReal *phi;
+  PetscReal *psi;
+  const PetscReal eps = 2.1;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = LevelSetAdvect(ls,ga,dt); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
-  ierr = GridGet(ls->phi0,&phi0); CHKERRQ(ierr);
-  ierr = GridGet(ls->tmp,&tmp); CHKERRQ(ierr);
-  ierr = VecZeroEntries(ls->tmp->v); CHKERRQ(ierr);
+//  ierr = GridGet(ls->tmp,&tmp); CHKERRQ(ierr);
+//  ierr = VecZeroEntries(ls->tmp->v); CHKERRQ(ierr);
   ierr = GridGet(ls->psi->phi,&psi); CHKERRQ(ierr);
-  for (i = 0; i < len; ++i) {
-    PetscReal diracdelta = PetscAbs( phi[b[i].y][b[i].x] ) < 2.1 ;
-    g[i] = ( psi[b[i].y][b[i].x] - phi[b[i].y][b[i].x] ) * diracdelta;
-    tmp[b[i].y][b[i].x] = g[i];
+  if( ls->phi->is2D ) {
+    PetscReal diracdelta;
+    PetscReal **phi2D = (PetscReal**) phi;
+    PetscReal **psi2D = (PetscReal**) psi;
+    for (i = 0; i < len; ++i) {
+      diracdelta = PetscAbs( phi2D[b[i].y][b[i].x] ) < eps ;
+      g[i] = ( psi2D[b[i].y][b[i].x] - phi2D[b[i].y][b[i].x] ) * diracdelta;
+//    tmp[b[i].y][b[i].x] = g[i];
+    }
+  } else {
+    PetscReal diracdelta;
+    PetscReal ***phi3D = (PetscReal***) phi;
+    PetscReal ***psi3D = (PetscReal***) psi;
+    for (i = 0; i < len; ++i) {
+      diracdelta = PetscAbs( phi3D[b[i].z][b[i].y][b[i].x] ) < eps ;
+      g[i] = ( psi3D[b[i].z][b[i].y][b[i].x] - phi3D[b[i].z][b[i].y][b[i].x] ) * diracdelta;
+    }
   }
   PetscFunctionReturn(0);
 }
@@ -70,14 +81,23 @@ PetscErrorCode LevelSetAdvectImplicitUpdate( LevelSet ls, PetscReal lambda, Pets
   int i;
   iCoor *b = ArrayGetData(ls->band);
   int len = ArrayLength(ls->band);
-  PetscReal **psi;
+  PetscReal *psi;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = GridGet(ls->psi->phi,&psi); CHKERRQ(ierr);
-  for (i = 0; i < len; ++i) {
-    psi[b[i].y][b[i].x] = psi[b[i].y][b[i].x] + lambda * dpsi[i];
+  if( ls->phi->is2D ) {
+    PetscReal **psi2D = (PetscReal**)psi;
+    for (i = 0; i < len; ++i) {
+      psi2D[b[i].y][b[i].x] = psi2D[b[i].y][b[i].x] + lambda * dpsi[i];
+    }
+  } else {
+    PetscReal ***psi3D = (PetscReal***)psi;
+    for (i = 0; i < len; ++i) {
+      psi3D[b[i].z][b[i].y][b[i].x] = psi3D[b[i].z][b[i].y][b[i].x] + lambda * dpsi[i];
+    }
   }
+
   PetscFunctionReturn(0);
 }
 

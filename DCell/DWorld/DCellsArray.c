@@ -11,7 +11,7 @@ PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray)
 
   PetscFunctionBegin;
   ierr = PetscNew(struct _DCellsArray, &cells); CHKERRQ(ierr);
-  ierr = ArrayCreate("dcell_array", sizeof(DCell), 10, &cells->dcells); CHKERRQ(ierr);
+  ierr = ArrayCreate("dcell_array", sizeof(DCell), &cells->dcells); CHKERRQ(ierr);
   *dcellsarray = cells;
   ierr = DCellsRegisterEvents(); CHKERRQ(ierr);
   PetscFunctionReturn(0);

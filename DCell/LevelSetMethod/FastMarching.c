@@ -17,8 +17,8 @@ PetscErrorCode LevelSetReinitialize( LevelSet ls )
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_LevelSetReinitialize,0,0,0,0); CHKERRQ(ierr);
   if( mc == NULL ) {
-    ierr = MemCacheCreate(sizeof(struct _FMMNode),1e5,&mc); CHKERRQ(ierr);
-    ierr = HeapCreate(FMMComparator, &heap); CHKERRQ(ierr);
+    ierr = MemCacheCreate("FMM", sizeof(struct _FMMNode), 1e5, &mc); CHKERRQ(ierr);
+    ierr = HeapCreate( "FMM", FMMComparator, &heap); CHKERRQ(ierr);
   }
   
   // Ensure narrow band does not extend beyond allocated memory

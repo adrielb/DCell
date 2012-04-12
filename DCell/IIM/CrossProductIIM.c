@@ -9,7 +9,7 @@ PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
 {
   const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
   const PetscReal dd = dh*dh;
-  const PetscReal mu = *iim->mu;
+  const PetscReal mu = iim->mu;
   PetscReal h;
   iCoor pos;
   int *ipos = &pos.x;
@@ -149,7 +149,7 @@ void JumpVelocity( PetscReal mu, IrregularNode *n, Jump *j, int i )
   j->nt = -n->k_nt * j->e / mu;
   j->te = 0; //(j->e)_t / mu; // n->ftx_t
   j->ne = (-n->f2_n*s[i] - n->k_nn*n->f2*e[i])/mu; //# //(j->e)_n / mu; // TODO: tangential force derivatives
-  PetscReal pe = n->f2_n, // + n->f3_t,
+  PetscReal pe = n->f2_n + n->f3_t,
             pn = n->f1_n,
             pt = n->f1_t;
   j->ee = -j->nn - j->tt + ( pe * e[i] + pn * s[i] + pt * r[i] ) / mu; //#

@@ -17,20 +17,33 @@ PetscErrorCode FluidFieldCreate(MPI_Comm comm, FluidField *fluid)
   f->mu = 1e-3; // pN s / um^2
   ierr = PetscOptionsGetReal(0,"-fluid_viscosity",&f->mu,0); CHKERRQ(ierr);
 
+  int nmax = 3;
+  f->lens.x = 7;
+  f->lens.y = 7;
+  f->lens.z = 0;
+  ierr = PetscOptionsGetRealArray(0,"-fluid_lens", &f->lens.x, &nmax, 0); CHKERRQ(ierr);
+  f->is3D = (nmax == 3);
+
   PetscReal dx = 1;
   ierr = PetscOptionsGetReal(0,"-fluid_dx",&dx,0); CHKERRQ(ierr);
   f->dh.x = dx;
   f->dh.y = dx;
   f->dh.z = dx;
   
-  f->dims.x = 7;
-  f->dims.y = 7;
-  f->dims.z = 0;
+  nmax = 3;
+  f->dims.x = f->lens.x / f->dh.x;
+  f->dims.y = f->lens.y / f->dh.y;
+  f->dims.z = f->lens.z / f->dh.z;
+  ierr = PetscOptionsGetIntArray(0,"-fluid_dims", &f->dims.x, &nmax, 0); CHKERRQ(ierr);
 
-  f->is3D = PETSC_FALSE;
+  if( !f->is3D ) {
+    f->lens.z = 0;
+    f->dims.z = 0;
+    f->dh.z = 0;
+  }
 
   // Create BC index set
-  ierr = ArrayCreate("dirichletBC",sizeof(MatStencil),128,&f->dirichletBC); CHKERRQ(ierr);
+  ierr = ArrayCreate("dirichletBC",sizeof(MatStencil),&f->dirichletBC); CHKERRQ(ierr);
 
   ierr = FluidFieldRegisterEvents(); CHKERRQ(ierr);
 
@@ -102,6 +115,10 @@ PetscErrorCode FluidFieldSetup( FluidField f )
 
   // Assemble viscous matricies
   ierr = FluidFieldMatAssemble( f ); CHKERRQ(ierr);
+
+  ierr = PetscInfo3( 0, "Lengths: %e %e %e\n", f->lens.x, f->lens.y, f->lens.z ); CHKERRQ(ierr);
+  ierr = PetscInfo3( 0,    "Size: %d %d %d\n", f->dims.x, f->dims.y, f->dims.z ); CHKERRQ(ierr);
+  ierr = PetscInfo3( 0,      "dx: %e %e %e\n", f->dh.x,   f->dh.y,   f->dh.z ); CHKERRQ(ierr);
 
   ierr = PetscGetTime(&t1); CHKERRQ(ierr);
 

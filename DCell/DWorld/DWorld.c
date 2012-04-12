@@ -20,7 +20,8 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world )
   ierr = PetscViewerASCIIPrintf(w->temporalfile,"iter t dt dtcfl tiframe CFL\n"); CHKERRQ(ierr);
   
   ierr = DCellsArrayCreate(&w->dcells); CHKERRQ(ierr);
-  ierr = IIMCreate(!fluid->is3D,&fluid->mu,1.0,32,fluid->dh,&w->iim); CHKERRQ(ierr);
+  ierr = IIMCreate( !fluid->is3D, 64, fluid->dh, &w->iim); CHKERRQ(ierr);
+  ierr = IIMSetViscosity(w->iim, fluid->mu); CHKERRQ(ierr);
 
   w->fluid = fluid;
   w->timax = 1;

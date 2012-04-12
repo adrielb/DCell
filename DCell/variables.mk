@@ -61,3 +61,43 @@ CLEAN :=
 libraries :=
 
 #mpiexec -n 4 --bysocket --bind-to-socket --report-bindings
+
+#VTK building and visualization
+VTK_DIR=/share/apps/vtk/VTK
+VTK_INCLUDE= \
+-I${VTK_DIR} \
+-I${VTK_DIR}/Utilities \
+-I${VTK_DIR}/VolumeRendering \
+-I${VTK_DIR}/Rendering \
+-I${VTK_DIR}/Hybrid \
+-I${VTK_DIR}/Widgets \
+-I${VTK_DIR}/Rendering/Testing/Cxx \
+-I${VTK_DIR}/IO \
+-I${VTK_DIR}/Imaging \
+-I${VTK_DIR}/Graphics \
+-I${VTK_DIR}/GenericFiltering \
+-I${VTK_DIR}/Filtering \
+-I${VTK_DIR}/Common \
+-I${VTK_DIR}/Common/Testing/Cxx \
+-I${VTK_DIR}/Utilities/DICOMParser \
+-I${VTK_DIR}/Utilities/vtkfreetype/include \
+-I${VTK_DIR}/Utilities/vtknetcdf \
+-I${VTK_DIR}/Utilities/vtkexodus2/include
+VTK_LIB=-L${VTK_DIR}/bin -Wl,-rpath,${VTK_DIR}/bin                            \
+-lvtkHybrid       -lvtkmetaio            -lvtkRendering  -lvtkWidgets         \
+-lmpistubs        -lvtkFiltering         -lvtkImaging    -lvtksqlite          \
+-lvtkalglib       -lvtkfreetype          -lvtkInfovis    -lvtksys             \
+-lvtkCharts       -lvtkftgl              -lvtkIO         -lvtktiff            \
+-lvtkCommon       -lvtkGenericFiltering  -lvtkjpeg       -lvtkNetCDF          \
+-lvtkDICOMParser  -lvtklibxml2           -lvtkpng        -lvtkViews           \
+-lvtkexoIIc       -lvtkGraphics          -lvtkproj4      -lvtkVolumeRendering \
+-lvtkzlib         -lvtkverdict
+
+# ${call vtkviz,vizName,inputFile}
+define vtkviz
+CLEAN += ${subdirectory}/${1}.x
+${subdirectory}/${1}.x: ${subdirectory}/${1}.cxx
+	@g++ -g -Wno-deprecated ${VTK_INCLUDE} ${subdirectory}/${1}.cxx ${VTK_LIB} -o $$@
+viz-${1}: ${subdirectory}/${1}.x
+	${subdirectory}/${1}.x ${2}
+endef

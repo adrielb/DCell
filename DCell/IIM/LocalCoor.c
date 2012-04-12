@@ -22,7 +22,7 @@ PetscErrorCode LocalCoorCreate( int Np, LocalCoor *lc )
   LocalCoor l;
   
   PetscFunctionBegin;
-  
+
   if( Np < 5 ) 
     SETERRQ1( PETSC_COMM_SELF, PETSC_ERR_ARG_OUTOFRANGE,
         "Max points Np = %d need to be > 5", Np );
@@ -70,7 +70,7 @@ void LocalCoor2DNormal( LocalCoor lc, LevelSet ls, IrregularNode *n )
 void LocalCoor2DGetVecs( LocalCoor lc, PetscReal **s, PetscReal **n )
 {
   *n = lc->n;
-  *s  = lc->s;
+  *s = lc->s;
 }
 
 void LocalCoorSetLength( LocalCoor lc, PetscInt len)
@@ -123,24 +123,20 @@ void LocalCoor3DTangential( IrregularNode *n )
   n->rz /= h;
 }
 
-void LocalCoor3DSolve( LocalCoor lc, IrregularNode *N )
+void LocalCoor3DSolve( LocalCoor lc, Coor dh, IrregularNode *N )
 {
   PetscReal *n = lc->n, *s = lc->s, *r = lc->r;
   PetscReal x, y, z;
-  //TODO: need to verify rotation
+
   int i;
   for ( i = 0; i < lc->len; ++i)
   {
-    x = n[i] - N->X.x;
-    y = s[i] - N->X.y;
-    z = r[i] - N->X.z;
+    x = (n[i] - N->X.x) * dh.x;
+    y = (s[i] - N->X.y) * dh.y;
+    z = (r[i] - N->X.z) * dh.y;
     n[i] = N->nx * x + N->ny * y + N->nz * z;
     s[i] = N->sx * x + N->sy * y + N->sz * z;
     r[i] = N->rx * x + N->ry * y + N->rz * z;
-/*    n[i] = N->nx * n[i] + N->sx * s[i] + N->rx * r[i];
-    s[i] = N->ny * n[i] + N->sy * s[i] + N->ry * r[i];
-    r[i] = N->nz * n[i] + N->sz * s[i] + N->rz * r[i];
-    */
   }
 }
 

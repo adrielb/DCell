@@ -16,14 +16,16 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls );
 PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls );
 PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetGatherVelocity(LevelSet ls, int ga, Grid velgrid);
-PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);
+PetscErrorCode LevelSetAdvectSL_2D(LevelSet ls, Grid velgrid, PetscReal dt);
+PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid );
 PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op );
 PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3],  Coor *op );
 PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op );
-PetscErrorCode OrthogonalProjection3D( double phi[3][3][3], Coor *op );
-PetscErrorCode OrthogonalProjection3D_1st( double phi[3][3][3], Coor *op );
+PetscErrorCode OrthogonalProjection3D( double phi3[3][3][3], double phi[5][5][5], Coor *op );
+PetscErrorCode OrthogonalProjection3D_Quadratic( double phi[3][3][3], Coor *op );
+PetscErrorCode OrthogonalProjection3D_Linear( double phi[3][3][3], Coor *op );
 
 typedef struct _FMMNode
 {
@@ -35,7 +37,7 @@ PetscErrorCode FMM_InitializeEikonal( LevelSet ls, MemCache mc, Heap heap );
 PetscErrorCode FMM_SolveEikonal( LevelSet ls, MemCache mc, Heap heap, int sign );
 PetscErrorCode FMM_PushNeighbors2D( LevelSet ls, MemCache mc, Heap heap, int sign, iCoor pos );
 PetscErrorCode FMM_PushNeighbors3D( LevelSet ls, MemCache mc, Heap heap, int sign, iCoor pos );
-
+inline void AccumulateCoef( const PetscReal bw, const PetscReal phi[7], PetscReal *a, PetscReal *b, PetscReal *c );
 
 
 

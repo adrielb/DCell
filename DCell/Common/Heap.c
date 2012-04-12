@@ -9,16 +9,17 @@ struct _Heap {
 
 #undef __FUNCT__
 #define __FUNCT__ "HeapCreate"
-PetscErrorCode HeapCreate(Comparator cmp, Heap *heap)
+PetscErrorCode HeapCreate( const char name[], Comparator cmp, Heap *heap)
 {
   Heap h;
+  char tmp[256];
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = PetscNew(struct _Heap, &h); CHKERRQ(ierr);
   h->difference = cmp;
-  //TODO: tune initial array size
-  ierr = ArrayCreate("heap",sizeof(void*),1e5,&h->tree); CHKERRQ(ierr);
+  sprintf(tmp, "%s_%s", name, "heap");
+  ierr = ArrayCreate( tmp, sizeof(void*), &h->tree); CHKERRQ(ierr);
   // First index for array will start at one for an empty tree
   ierr = ArraySetSize(h->tree,1); CHKERRQ(ierr);
   *heap = h;

@@ -16,20 +16,24 @@ PetscLogEvent EVENT_ArraySetSize;
 
 #undef __FUNCT__
 #define __FUNCT__ "ArrayCreate"
-PetscErrorCode ArrayCreate( const char name[], int elemSize, size_t maxSize, Array *array )
+PetscErrorCode ArrayCreate( const char name[], int elemSize, Array *array )
 {
   Array a;
+  int initSize = 1024;
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
   ierr = PetscNew(struct _Array, &a); CHKERRQ(ierr);
-  ierr = PetscMalloc( elemSize*maxSize, &a->dataArray); CHKERRQ(ierr);
-  ierr = PetscMemzero(a->dataArray, elemSize*maxSize); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt( name, "-array_initsize", &initSize, 0); CHKERRQ(ierr);
+  ierr = PetscMalloc( elemSize*initSize, &a->dataArray); CHKERRQ(ierr);
+  ierr = PetscMemzero(a->dataArray, elemSize*initSize); CHKERRQ(ierr);
   a->ELEMSIZE = elemSize;
-  a->MAXSIZE = maxSize;
+  a->MAXSIZE = initSize;
   a->len = 0;
-  a->scale = 1.1; //TODO: make cmd line ex: -array_name_scale 2.0
+  a->scale = 1.1;
   ierr = PetscStrcpy(a->name, name); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal( name, "-array_scale", &a->scale, 0); CHKERRQ(ierr);
+  ierr = PetscInfo2(0, "%s initially %d MB\n", name, elemSize*initSize / (1024*1024)); CHKERRQ(ierr);
   
   *array = a;
   PetscFunctionReturn(0);
@@ -59,7 +63,8 @@ PetscErrorCode ArrayDuplicate( Array a, Array *newarray )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = ArrayCreate(a->name, a->ELEMSIZE, a->MAXSIZE, &new); CHKERRQ(ierr);
+  ierr = ArrayCreate(a->name, a->ELEMSIZE, &new); CHKERRQ(ierr);
+  ierr = ArraySetSize(new, a->MAXSIZE ); CHKERRQ(ierr);
   *newarray = new;
   PetscFunctionReturn(0);
 }
@@ -83,9 +88,9 @@ PetscErrorCode ArraySetSize( Array a, int size )
   if( a->MAXSIZE < size ) //TODO: report resizing in petsc info
   {
     ierr = PetscLogEventBegin(EVENT_ArraySetSize,0,0,0,0); CHKERRQ(ierr);
-    ierr = PetscInfo3(0,"%s resizing: %d to %d\n",a->name, a->MAXSIZE, (int)(a->scale*size)); CHKERRQ(ierr);
     int s = a->scale * size * a->ELEMSIZE;
     void *tmp;
+    ierr = PetscInfo4(0,"%s resizing: %d to %d (%d MB)\n",a->name, a->MAXSIZE, (int)(a->scale*size), s/(1024*1024) ); CHKERRQ(ierr);
     ierr = PetscMalloc( s, &tmp ); CHKERRQ(ierr);
     ierr = PetscMemzero(tmp, s); CHKERRQ(ierr); //TODO: is this redundant?
     ierr = PetscMemcpy(tmp,a->dataArray,a->ELEMSIZE*a->MAXSIZE); CHKERRQ(ierr);
@@ -176,14 +181,21 @@ PetscErrorCode ArrayGetCoor( Array a, iCoor pos, void *elem)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  // TODO: test if(debug flag) then check bounds
-  if( pos.x < a->p.x || pos.x >= a->q.x ||
-      pos.y < a->p.y || pos.y >= a->q.y ||
-      pos.z < a->p.z || pos.z >= a->q.z ){
-    SETERRQ4(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGetCoor[%s]: Coor [%d,%d,%d] not in array bounds",a->name,pos.x,pos.y,pos.z);
-  }
   idx = (pos.x - a->p.x) + a->size.x * (pos.y - a->p.y) + a->size.x * a->size.y * (pos.z - a->p.z);
   ierr = ArrayGet(a, idx, elem); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "ArrayGetCoorP"
+PetscErrorCode ArrayGetCoorP( Array a, iCoor pos, void *elem)
+{
+  int idx;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  idx = (pos.x - a->p.x) + a->size.x * (pos.y - a->p.y) + a->size.x * a->size.y * (pos.z - a->p.z);
+  ierr = ArrayGetP(a, idx, elem); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -191,12 +203,14 @@ PetscErrorCode ArrayGetCoor( Array a, iCoor pos, void *elem)
 #define __FUNCT__ "ArraySetCoor"
 PetscErrorCode ArraySetCoor( Array a, iCoor shift, iCoor size )
 {
+  PetscErrorCode ierr;
   PetscFunctionBegin;
   a->p = shift;
   a->size = size;
   a->q.x = shift.x + size.x;
   a->q.y = shift.y + size.y;
   a->q.z = shift.z + size.z;
+  ierr = ArraySetSize(a,size.x*size.y*size.z); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

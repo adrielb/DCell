@@ -4,8 +4,10 @@ include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
 all: sim
+
 SIM := NanoGrooves
 test: testDWorld-implicit
+viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}

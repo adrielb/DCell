@@ -16,14 +16,14 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
 
   PetscFunctionBegin;
   if( w->g0array == PETSC_NULL ) {
-    ierr = ArrayCreate("g0array",sizeof(double),16,&w->g0array); CHKERRQ(ierr);
-    ierr = ArrayCreate("g1array",sizeof(double),16,&w->g1array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g0array",sizeof(double),&w->g0array); CHKERRQ(ierr);
+    ierr = ArrayCreate("g1array",sizeof(double),&w->g1array); CHKERRQ(ierr);
   }
 
   // defaults
   w->MAX_STEPS_PICARD = 15;
   w->MAX_STEPS_LINE = 3;
-  w->MAX_STEPS_DT = 8;
+  w->MAX_STEPS_DT = 9;
   w->MAX_D = 0.1;
   w->TOL_G = 0.01;
 
@@ -47,7 +47,7 @@ PetscErrorCode DWorldSimulate_Implicit(DWorld w) {
 #define __FUNCT__ "DWorldSimulate_ImplicitStep"
 PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   int p, c, s;
-  PetscReal g0norm, g1norm;
+  PetscReal g0norm, g1norm = PETSC_MAX_REAL;
   PetscBLASInt n;
   PetscReal *d, *g0, *g1;
   PetscReal *temp; // swaps g0 <-> g1
@@ -118,6 +118,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
         dtcfl = w->CFL * w->fluid->dh.x / maxVel;
         if (dtcfl < w->dt) {
           // velocity too fast for current cfl condition
+          ierr = PetscInfo2(0,"Computed velocity too fast for current CFL condition: dtcfl = %f < dt = %f\n", dtcfl, w->dt); CHKERRQ(ierr);
           goto reset;
         }
         ierr = DCellsArrayAdvectImplicitRHS(dcells, w->fluid, w->dt, g1); CHKERRQ(ierr);
@@ -191,7 +192,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 PetscReal gnorm(int n, PetscReal *g) {
   //* max norm
   int j;
-  PetscReal abs, norm;
+  PetscReal abs, norm = 0;
   for (j = 0; j < n; ++j) {
     abs = PetscAbs(g[j]);
     norm = norm < abs ? abs : norm;

@@ -31,6 +31,7 @@ PetscErrorCode GridGet( Grid g, void *grid );
 PetscErrorCode GridGetBounds( Grid g, iCoor *p, iCoor *q );
 PetscErrorCode GridDrawBorder( Grid g, int borderWidth, PetscReal fill );
 PetscErrorCode GridFillRectangle( Grid g, Coor lo, Coor hi, PetscReal fill);
+PetscErrorCode GridFillBox( Grid g, Coor lo, Coor hi, PetscReal fill);
 PetscErrorCode GridInterpolate( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridInterpolate2D( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridInterpolate3D( Grid g, Coor X, PetscReal *val);

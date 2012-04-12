@@ -25,8 +25,8 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   ierr = PetscOptionsGetReal(0,"-levelset_bandwidth",&bandWidth,0); CHKERRQ(ierr);
   ierr = LevelSetSetBandWidth(ls, bandWidth); CHKERRQ(ierr);
   // TODO: make a better estimate for initial sizes
-  ierr = ArrayCreate("irregularNodes",sizeof(IrregularNode), PetscMax(size.x,size.y), &ls->irregularNodes); CHKERRQ(ierr);
-  ierr = ArrayCreate("band",sizeof(iCoor),2*ls->bandWidth*size.x,&ls->band); CHKERRQ(ierr);
+  ierr = ArrayCreate( "irregularNodes", sizeof(IrregularNode), &ls->irregularNodes); CHKERRQ(ierr);
+  ierr = ArrayCreate( "band", sizeof(iCoor), &ls->band); CHKERRQ(ierr);
 
   ls->Advect = LevelSetAdvectAndReinit;
   ierr = LevelSetRegisterEvents(); CHKERRQ(ierr);

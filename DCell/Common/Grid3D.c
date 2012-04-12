@@ -27,8 +27,6 @@ double Bilinear3D( GridFunction3D gf, PetscReal ***v3, Coor dh, Coor p )
     }
   }
   
-  sum /= 8.;
-  
   return sum;
 }
 
@@ -102,5 +100,56 @@ inline double GridFunction3D_Curv( double ***p, int i, int j, int k, Coor d )
   c   = px2*(pyy+pzz) + py2*(pxx+pzz) + pz2*(pxx+pyy);
   c  -= 2.*(px*py*pxy + px*pz*pxz + py*pz*pyz);
   c  /= sqrt(ppp*ppp*ppp);
+
+  if( c != c ) {
+    c = 0;
+  }
   return c;
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "GridFillBox"
+PetscErrorCode GridFillBox( Grid g, Coor lo, Coor hi, PetscReal fill)
+{
+  Coor dh = g->d;
+  iCoor p, q;
+  int i,j,k,t;
+  PetscReal *phi=0;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GridGetBounds(g,&p,&q); CHKERRQ(ierr);
+  t = lo.x/dh.x;
+  p.x = t < p.x ? p.x : t;
+  t = lo.y/dh.y;
+  p.y = t < p.y ? p.y : t;
+  t = lo.z/dh.z;
+  p.z = t < p.z ? p.z : t;
+
+  t = hi.x/dh.x;
+  q.x = q.x < t ? q.x : t;
+  t = hi.y/dh.y;
+  q.y = q.y < t ? q.y : t;
+  t = hi.z/dh.z;
+  q.z = q.z < t ? q.z : t;
+
+  ierr = GridGet(g,&phi); CHKERRQ(ierr);
+  if( g->is2D ) {
+    PetscReal **phi2D = (PetscReal**)phi;
+    for (j = p.y; j < q.y; ++j) {
+      for (i = p.x; i < q.x; ++i) {
+        phi2D[j][i] = fill;
+      }
+    }
+  } else {
+    PetscReal ***phi3D = (PetscReal***)phi;
+    for (k = p.z; k < q.z; ++k) {
+      for (j = p.y; j < q.y; ++j) {
+        for (i = p.x; i < q.x; ++i) {
+          phi3D[k][j][i] = fill;
+        }
+      }
+    }
+  }
+  PetscFunctionReturn(0);
 }

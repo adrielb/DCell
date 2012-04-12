@@ -6,24 +6,24 @@ int main(int argc, char **args)
 {
   PetscErrorCode  ierr;
   PetscFunctionBegin;
-  ierr = PetscInitialize(&argc, &args, (char *) 0, ""); CHKERRQ(ierr);
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "Start\n"); CHKERRQ(ierr);
+  ierr = DCellInit(); CHKERRQ(ierr);
+
+  PetscReal radius = 1;
+  PetscReal dx = 0.1;
+  Coor dh = { dx, dx, dx};
+  Coor center = { 0, 0, 0};
   
-  LevelSet3D ls;
-  ierr = LevelSet3DCreate(100,100,100,&ls); CHKERRQ(ierr);
-  ierr = LevelSetInitializeToStar3D(ls); CHKERRQ(ierr);
+  LevelSet ls;
+  ierr = LevelSetInitializeToSphere( dh, center, radius, &ls ); CHKERRQ(ierr);
   
-  ierr = IrregularNodeListWrite(ls->irregularNodes,0); CHKERRQ(ierr);
+  ierr = ArrayWrite(ls->band, "band", 0); CHKERRQ(ierr);
+  ierr = LevelSetWriteIrregularNodeList( ls, 0); CHKERRQ(ierr);
   
-//  ierr = ReinitializeLevelSet3D(ls); CHKERRQ(ierr);
+  int len = ArrayLength(ls->irregularNodes);
+  printf("len: %d\n", len);
+
+  ierr = GridWrite( ls->phi, 0); CHKERRQ(ierr);
   
-  PetscViewer viewer;
-  ierr = PetscViewerBinaryOpen(PETSC_COMM_SELF,"/home/abergman/Research/DCell/temp/reinit.Real64",FILE_MODE_WRITE,&viewer); CHKERRQ(ierr);
-  ierr = VecView(ls->g3d->v,viewer); CHKERRQ(ierr);
-  ierr = PetscViewerDestroy(viewer); CHKERRQ(ierr);
-//  LevelSet3DDestroy(ls);
-  
-  ierr = PetscPrintf(PETSC_COMM_WORLD, "End\n"); CHKERRQ(ierr);
-  ierr = PetscFinalize(); CHKERRQ(ierr);
+  ierr = DCellFinalize(); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

@@ -11,11 +11,12 @@ void LocalCoor2DNormal( LocalCoor lc, LevelSet ls, IrregularNode *n );
 void LocalCoor2DSolveStencil( LocalCoor lc, IrregularNode *n );
 void LocalCoor2DGetVecs( LocalCoor lc, PetscReal **eta, PetscReal **xi );
 void LocalCoor2DSolve( LocalCoor lc, Coor dh, IrregularNode *n);
+void LocalCoor3DSolve( LocalCoor lc, Coor dh, IrregularNode *n );
 void LocalCoor2DToArcLength( LocalCoor lc, IrregularNode *n,
     PetscReal n1, PetscReal n2, int i, PetscReal *s );
 void LocalCoor3DGetVecs( LocalCoor lc, PetscReal **s, PetscReal **r, PetscReal **n );
 void LocalCoor3DTangential( IrregularNode *n );
-void LocalCoor3DSolve( LocalCoor lc, IrregularNode *n );
+
 
 typedef void (*InterfacialForce)(IrregularNode *n, void *context);
 void InterfacialForceSurfaceTension( IrregularNode *n, void *context );
@@ -28,12 +29,13 @@ typedef struct _IIM
   LeastSq lsq; // TODO: No need for this object, array of 12 elements is enough for stack
   PetscInt Np;
   PetscReal eps; // Radius around node considered a neighbor
-  PetscReal *mu; // Fluid viscosity as pointed to FluidField value
+  PetscReal mu; // Fluid viscosity
 //  iCoor dim;     // Dimension of FluidField
   InterfacialForce F;  //Normal and tangential force functions
   void *context; // context passed to Interfacial force function
   Array idx,coor,val; //Interpolation indexes, coors and values
   Coor dh;       // Grid widths
+  SpatialIndex sidx; // Indexes irregular nodes in 3D bins
 
   iCoor p; // position of grid in space;
   iCoor n; // size of grid [H,W,L]
@@ -57,10 +59,12 @@ typedef void (*JumpCondition)( PetscReal mu, IrregularNode *n, Jump *j, PetscInt
 void JumpPressure( IrregularNode *n, Jump *j );
 void JumpVelocity(PetscReal mu, IrregularNode *n, Jump *j, int i );
 
-PetscErrorCode IIMCreate( PetscBool is2D, PetscReal *mu, PetscReal eps, int Np, Coor dh, IIM *iim );
+PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim );
 PetscErrorCode IIMDestroy( IIM iim );
 PetscErrorCode IIMSetForceComponents(IIM iim, InterfacialForce F );
 PetscErrorCode IIMSetForceContext(IIM iim, void *context);
+PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu );
+PetscErrorCode IIMSetEps( IIM iim, PetscReal eps );
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga );
 
 //Converts (x,y,z) to idx for spatial indexing

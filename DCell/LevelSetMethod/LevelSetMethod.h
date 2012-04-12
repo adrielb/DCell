@@ -49,6 +49,7 @@ struct _IrregularNode {
   PetscReal fa1, fa2; // Force of adhesion (in normal/tangential direction)
   Coor X;   // X.x = x + ox + shift.x/2  (absolute position in space)
   Coor op;  //Ortho proj relative to node location
+  int numNei;
 };
 
 /* Level Set */
@@ -61,6 +62,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls );
 PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx );
 PetscErrorCode LevelSetNormalDirection( LevelSet ls, Coor X, Coor *n );
 inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coor X );
+inline PetscReal LevelSetDiracDelta3D( PetscReal ***phi, const Coor dh, const Coor X );
 
 PetscErrorCode LevelSetAdvect( LevelSet ls, int ga, PetscReal dt );
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);
@@ -87,5 +89,6 @@ PetscErrorCode LevelSetReinitialize( LevelSet ls );
 PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radius, LevelSet *lset );
 PetscErrorCode LevelSetInitializeToSphere( Coor dh, Coor center, PetscReal radius, LevelSet *lset );
 PetscErrorCode LevelSetInitializeToStar2D( Coor dh, Coor center, PetscReal radius, PetscReal amp, PetscReal numPetals, LevelSet *lset );
+PetscErrorCode LevelSetInitializeToStar3D( Coor dh, Coor center, PetscReal radius, PetscReal amp, PetscReal numPetals, LevelSet *lset );
 PetscErrorCode LevelSetInitializeFromImage( LevelSet ls );
 #endif /*LEVELSETMETHOD_H_*/

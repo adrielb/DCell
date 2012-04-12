@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[    295136,       6860]*)
-(*NotebookOutlinePosition[    295815,       6884]*)
-(*  CellTagsIndexPosition[    295771,       6880]*)
+(*NotebookOptionsPosition[    203211,       5495]*)
+(*NotebookOutlinePosition[    203890,       5519]*)
+(*  CellTagsIndexPosition[    203846,       5515]*)
 (*WindowFrame->Normal*)
 
 
@@ -58,13 +58,12 @@ Cell[CellGroupData[{
 Cell[BoxData[{
     \(Get[Environment["\<ALT_DISP\>"]]\), "\[IndentingNewLine]", 
     \(\($IMAGESIZE = 650;\)\), "\[IndentingNewLine]", 
-    \(SetDirectory["\</home/abergman/Research/DCell/temp/\>"]\), "\
-\[IndentingNewLine]", 
+    \(SetDirectory[Environment["\<PETSC_TMP\>"]]\), "\[IndentingNewLine]", 
     \(Get["\</home/abergman/Research/DCell/PetscImport.m\>"]\)}], "Input",
   InitializationCell->True],
 
 Cell[BoxData[
-    \("/media/Documents/Research/DCell/temp"\)], "Output"]
+    \("/data/scratch"\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -392,8 +391,6 @@ Cell[BoxData[
       "FMM-err.pos", "FMM-err.size", ".rocks-release"}\)], "Output"]
 }, Open  ]],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[{
     \(ImportIrreg["\<irregNode.10000.array\>"]\), "\[IndentingNewLine]", 
     \(\({tmp, pos} = ImportGrid["\<tmp\>"];\)\), "\[IndentingNewLine]", 
@@ -402,24 +399,6 @@ Cell[BoxData[{
     \(\({ir`X} = \(Transpose[#\[Transpose]  - pos + 
                 0.5] &\) /@ {ir`X};\)\), "\[IndentingNewLine]", 
     \(Dimensions[phi]\)}], "Input"],
-
-Cell[BoxData[
-    RowBox[{\(Import::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found during \
-\\!\\(Import[\\(\\(\\\"tmp.size\\\", \\\"Table\\\"\\)\\)]\\). \
-\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
-\\\", ButtonFrame->None, ButtonData:>\\\"Import::nffil\\\"]\\)\"\>"}]], \
-"Message"],
-
-Cell[BoxData[
-    RowBox[{\(Import::"nffil"\), \(\(:\)\(\ \)\), "\<\"File not found during \
-\\!\\(Import[\\(\\(\\\"tmp.pos\\\", \\\"Table\\\"\\)\\)]\\). \
-\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
-\\\", ButtonFrame->None, ButtonData:>\\\"Import::nffil\\\"]\\)\"\>"}]], \
-"Message"],
-
-Cell[BoxData[
-    \({1, 62, 62}\)], "Output"]
-}, Open  ]],
 
 Cell[BoxData[{
     \(\(clear;\)\), "\n", 
@@ -469,15 +448,6 @@ Cell[BoxData[
 Cell[BoxData[
     \({0.`, 0.`, 1.7763568394002568`*^-14, 
       1.7763568394002568`*^-14}\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(pos\)], "Input"],
-
-Cell[BoxData[
-    \({\(-1\), \(-1\)}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -747,40 +717,54 @@ Cell[CellGroupData[{
 
 Cell["3D FMM", "Section"],
 
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"band.10000.array", "phi.10000.Real64", "phi.10000.Real64.info", 
+      "phi.irregNode.10000.array", "phi.irregNode.10000.array.info", 
+      "phi.pos", "phi.size"}\)], "Output"]
+}, Open  ]],
+
 Cell[CellGroupData[{
 
 Cell[BoxData[{
-    \(\(ls = Rest@Import["\<reinit.Real64\>", "\<Real64\>"];\)\), "\n", 
-    \(\(ls = Partition[ls, 100];\)\), "\n", 
-    \(\(ls = Partition[ls, 100];\)\), "\n", 
-    \(Dimensions[ls]\)}], "Input"],
+    \(\(sizes\  = \ Import["\<phi.size\>", "\<Table\>"];\)\), "\n", 
+    \(\(s = sizes[\([1]\)];\)\), "\n", 
+    \(\(phi = 
+        Rest@Import["\<phi.10000.Real64\>", "\<Real64\>", 
+            ByteOrdering \[Rule] 1];\)\), "\n", 
+    \(\(phi = Partition[phi, s[\([2]\)]*s[\([3]\)]];\)\), "\n", 
+    \(\(phi = \(Partition[#, s[\([1]\)]] &\) /@ phi;\)\), "\n", 
+    \(Dimensions[phi]\), "\[IndentingNewLine]", 
+    \(Quantile[Flatten@phi, {0, 1}]\)}], "Input"],
 
 Cell[BoxData[
-    \({100, 100, 100}\)], "Output"]
+    \({31, 37, 31}\)], "Output"],
+
+Cell[BoxData[
+    \({\(-0.9999999999999992`\), 7.5`}\)], "Output"]
 }, Open  ]],
 
-Cell[CellGroupData[{
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListDensityPlot[#, PlotRange \[Rule] {\(-1.5\), 1.5}] &\) /@ 
+        phi;\)\)}], "Input"],
 
-Cell[BoxData[
-    \(\(ListContourPlot[#, Contours \[Rule] {0}, 
-          ContourShading \[Rule] None] &\)[ls[\([All, All, 51]\)]]\)], "Input"],
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListContourPlot[#, Contours \[Rule] {0}, 
+            ContourShading \[Rule] None] &\) /@ phi;\)\)}], "Input"],
 
-Cell[BoxData[
-    TagBox[\(\[SkeletonIndicator]  ContourGraphics  \[SkeletonIndicator]\),
-      False,
-      Editable->False]], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(ListPlot3D[ls[\([All, All, 51]\)], PlotRange \[Rule] All]\)], "Input"],
-
-Cell[BoxData[
-    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
-      False,
-      Editable->False]], "Output"]
-}, Open  ]],
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(\(ListPlot3D[#, PlotRange \[Rule] {All, All, {\(-1.5\), 1.5}}] &\) /@ 
+        phi;\)\)}], "Input"],
 
 Cell[CellGroupData[{
 
@@ -789,34 +773,6 @@ Cell[BoxData[
       Epilog \[Rule] {Green, \(Point[ .5 + #] &\) /@ \(Select[
                 ir, #[\([1]\)] \[Equal] 25 &]\)[\([All, {2, 
                   3}]\)]}]\)], "Input"],
-
-Cell[BoxData[
-    RowBox[{\(DensityGraphics::"zval"\), \(\(:\)\(\ \)\), "\<\"Non-numerical \
-value \\!\\(Indeterminate\\) found at position \\!\\({26, 1}\\) in first \
-argument. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::zval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(DensityGraphics::"zval"\), \(\(:\)\(\ \)\), "\<\"Non-numerical \
-value \\!\\(Indeterminate\\) found at position \\!\\({26, 2}\\) in first \
-argument. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::zval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(DensityGraphics::"zval"\), \(\(:\)\(\ \)\), "\<\"Non-numerical \
-value \\!\\(Indeterminate\\) found at position \\!\\({26, 3}\\) in first \
-argument. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::zval\\\"]\\)\"\>"}]], "Message"],
-
-Cell[BoxData[
-    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
-\\!\\(DensityGraphics :: \\\"zval\\\"\\) will be suppressed during this \
-calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
-ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
-ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
 
 Cell[BoxData[
     TagBox[\(\[SkeletonIndicator]  DensityGraphics  \[SkeletonIndicator]\),
@@ -842,7 +798,115 @@ Cell[BoxData[
 
 Cell[BoxData[{
     \(\(pos = Position[ls, _?\((\(-1.1\) < # < 1.1 &)\)];\)\), "\n", 
-    \(Graphics3D[Point /@ pos] // Show\)}], "Input"]
+    \(Graphics3D[Point /@ pos] // Show\)}], "Input"],
+
+Cell[BoxData[
+    \(<< Graphics`Graphics3D`\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dx = 0.5;\)\), "\[IndentingNewLine]", 
+    \(ImportIrreg3D["\<phi.irregNode.10000.array\>"]\), \
+"\[IndentingNewLine]", 
+    \(\(ir`X = dx*ir`X;\)\), "\[IndentingNewLine]", 
+    \(Length[ir`X]\)}], "Input"],
+
+Cell[BoxData[
+    \(314\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(color = Rescale[\(Norm[{1, \(-1\), 1} - #] &\) /@ ir`X];\)\), "\n", 
+    \(\(g = 
+        Show[Graphics3D[{PointSize[0.05], 
+              MapThread[{GrayLevel[#1], Point[#2]} &, 
+                Take[{color, ir`X}\[Transpose] , {1, \(-1\), 
+                      1}]\[Transpose] ]}], Axes \[Rule] True, 
+          ImageSize \[Rule] 800, Background \[Rule] Blue];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(r = Total /@ \(ir`X\^2\);\)\), "\[IndentingNewLine]", 
+    \(\(Histogram[r];\)\), "\[IndentingNewLine]", 
+    \(Quantile[r, {0, 1}]\)}], "Input"],
+
+Cell[BoxData[
+    \({0.9167172756490094`, 1.0154172663360166`}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(<< Graphics`Animation`\)], "Input"],
+
+Cell[BoxData[
+    \(SpinShow[g]\)], "Input"],
+
+Cell[BoxData[
+    \(\(ScatterPlot3D[ir`X];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(ListPlot[ir`X, AspectRatio \[Rule] 1];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Length[ir`X]\)], "Input"],
+
+Cell[BoxData[
+    \(25970\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(band = 
+        BinaryReadList["\<band.10000.array\>", {"\<Integer32\>", "\<Integer32\
+\>", "\<Integer32\>"}, 
+          ByteOrdering \[Rule] \(-1\)];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[band]\), "\[IndentingNewLine]", 
+    \(\(b = 
+        Select[band, #[\([3]\)] \[Equal] 0 &];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[b]\), "\[IndentingNewLine]", 
+    \(\(ListPlot[b[\([All, {1, 2}]\)], AspectRatio \[Rule] 1];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({79054, 3}\)], "Output"],
+
+Cell[BoxData[
+    \({1888, 3}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(dx = 0.1;\)\), "\[IndentingNewLine]", 
+    \(ImportIrreg["\<phi.irregNode.10000.array\>"]\), "\[IndentingNewLine]", 
+    \(\(ir`X = dx*ir`X;\)\), "\[IndentingNewLine]", 
+    \(Length[ir`X]\), "\[IndentingNewLine]", 
+    \(\(ListPlot[ir`X, AspectRatio \[Rule] Automatic];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(128\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(box = 
+        Function[
+          o, \[IndentingNewLine]Join[\[IndentingNewLine]Table[
+              Line[{{i, j, 0} + o, {i, j, 1} + o} - 0.5], {i, 0, 1}, {j, 0, 
+                1}], \[IndentingNewLine]Table[
+              Line[{{i, 0, j} + o, {i, 1, j} + o} - 0.5], {i, 0, 1}, {j, 0, 
+                1}], \[IndentingNewLine]Table[
+              Line[{{0, i, j} + o, {1, i, j} + o} - 0.5], {i, 0, 1}, {j, 0, 
+                1}]\[IndentingNewLine]]];\)\)], "Input"],
+
+Cell[BoxData[
+    \(\(Show[
+        Graphics3D[{Table[box[{i, j, k}], {i, 0, 1}, {j, 0, 1}, {k, 0, 1}]}], 
+        Axes \[Rule] True, 
+        PlotRange \[Rule] 
+          2.  {{\(-1\), 1}, {\(-1\), 1}, {\(-1\), 1}}];\)\)], "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -1050,7 +1114,7 @@ Cell[BoxData[
 \(\(0.7033333333333334`\)\(\[InvisibleSpace]\)\) + 
             0.25558212422276766`\ \[ImaginaryI]}}\)], "Output"]
 }, Open  ]]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -3925,34 +3989,143 @@ Cell[CellGroupData[{
 Cell["Init", "Subsection"],
 
 Cell[BoxData[{
-    \(\(dh = 1/32;\)\), "\[IndentingNewLine]", 
-    \(\(center = {5, 5};\)\), "\n", 
-    \(\(radius =  .4;\)\), "\[IndentingNewLine]", 
+    \(\(dh = 1/25;\)\), "\[IndentingNewLine]", 
+    \(\(center = {5, 5, 5};\)\), "\n", 
+    \(\(radius = 3;\)\), "\[IndentingNewLine]", 
     \(\(amp = 0.4;\)\), "\[IndentingNewLine]", 
+    \(\(numPetals = 8;\)\), "\[IndentingNewLine]", 
     \(\(thres = 6;\)\), "\[IndentingNewLine]", 
-    \(\(BUF = 12;\)\), "\[IndentingNewLine]", 
+    \(\(BUF = 12;\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
     \(p = \((center - radius)\)/dh - BUF // Floor\), "\[IndentingNewLine]", 
     \(q = 
       2*\((\((radius)\)/dh + BUF)\) + p // Floor\), "\[IndentingNewLine]", 
+    \(\(z = \(Mean[{q, p}]\)[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(clear;\)\), "\[IndentingNewLine]", 
     \(\(img = 
         Table[\[IndentingNewLine]X = 
-            x*dh - center[\([1]\)]; \[IndentingNewLine]Y = 
-            y*dh - center[\([2]\)]; \[IndentingNewLine]phi = \(1\/radius\) \
-\((amp*Cos[8*ArcTan[Y, X]] + amp + radius)\) \@\((X\^2 + Y\^2)\) - 
-              radius; \[IndentingNewLine]If[phi === Indeterminate, 
-            phi = 0]; \[IndentingNewLine]Which[phi/dh > thres, 1, 
-            phi/dh < \(-thres\), \(-1\), True, 
-            0]\[IndentingNewLine], \[IndentingNewLine]{x, p[\([1]\)], 
-            q[\([1]\)], 1}, {y, p[\([2]\)], q[\([2]\)], 
-            1}];\)\), "\[IndentingNewLine]", 
-    \(\(ListDensityPlot[img];\)\)}], "Input"],
+            x*dh - center[\([\)\(1\)\(]\)]; \[IndentingNewLine]Y = 
+            y*dh - center[\([\)\(2\)\(]\)]; \[IndentingNewLine]A = \(radius + \
+amp + amp*Cos[numPetals*ArcTan[Y, X]]\)\/radius; \[IndentingNewLine]phi = 
+            A \@\( X\^2 + Y\^2\) - radius; \[IndentingNewLine]If[
+            Not@NumericQ[phi], 
+            phi = 0]; \[IndentingNewLine] (*Which[phi/dh > thres, 1, 
+              phi/dh < \(-thres\), \(-1\), True, 
+              0]*) \[IndentingNewLine]phi\[IndentingNewLine], \
+\[IndentingNewLine]{x, p[\([\)\(1\)\(]\)], q[\([\)\(1\)\(]\)], 
+            1}, \[IndentingNewLine]{y, p[\([\)\(2\)\(]\)], 
+            q[\([\)\(2\)\(]\)], 1}];\)\), "\n", 
+    \(\(ListContourPlot[img, Contours \[Rule] {0}];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({38, 38, 38}\)], "Output"],
+
+Cell[BoxData[
+    \({212, 212, 212}\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(ArcTan::"indet"\), \(\(:\)\(\ \)\), "\<\"Indeterminate \
+expression \\!\\(ArcTan[\\(\\(0, 0\\)\\)]\\) encountered. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::indet\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
 
 Cell[BoxData[{
-    \(amp = 0.1\), "\[IndentingNewLine]", 
-    \(Plot[\(amp*Cos[8*a] + radius + amp\)\/radius, {a, \(-1\), 
-        1}]\)}], "Input"]
+    \(p = \((center - radius)\)/dh - BUF // Floor\), "\[IndentingNewLine]", 
+    \(q = 
+      2*\((\((radius)\)/dh + BUF)\) + p // Floor\), "\[IndentingNewLine]", 
+    \(\(z = \(Mean[{q, p}]\)[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(\(clear;\)\), "\[IndentingNewLine]", 
+    \(Table[\[IndentingNewLine]img = 
+        Table[\[IndentingNewLine]X = 
+            x*dh - center[\([\)\(1\)\(]\)]; \[IndentingNewLine]Y = 
+            y*dh - center[\([\)\(2\)\(]\)]; \[IndentingNewLine]Z = 
+            z*dh - center[\([\)\(3\)\(]\)]; \[IndentingNewLine]A = \(radius + \
+amp + amp*Cos[numPetals*ArcTan[Y, X]]\)\/radius; \[IndentingNewLine]phi = \
+\@\(X\^2\/A + Y\^2\/A + Z\^2\) - radius; \[IndentingNewLine]If[
+            phi === Indeterminate, phi = 0]; \[IndentingNewLine]Which[
+            phi/dh > thres, 1, phi/dh < \(-thres\), \(-1\), True, 
+            0]; \[IndentingNewLine]phi\[IndentingNewLine], \
+\[IndentingNewLine]{x, p[\([\)\(1\)\(]\)], q[\([\)\(1\)\(]\)], 
+            1}, \[IndentingNewLine]{y, p[\([\)\(2\)\(]\)], 
+            q[\([\)\(2\)\(]\)], 1}]; \n
+      ListContourPlot[img, Contours \[Rule] {0}];\[IndentingNewLine], {z, 
+        p[\([3]\)], q[\([3]\)], 1}]\)}], "Input"],
+
+Cell[BoxData[
+    \({38, 38, 38}\)], "Output"],
+
+Cell[BoxData[
+    \({212, 212, 212}\)], "Output"],
+
+Cell[BoxData[
+    RowBox[{\(ArcTan::"indet"\), \(\(:\)\(\ \)\), "\<\"Indeterminate \
+expression \\!\\(ArcTan[\\(\\(0, 0\\)\\)]\\) encountered. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::indet\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ContourGraphics::"ctpnt"\), \(\(:\)\(\ \)\), "\<\"The contour \
+is attempting to traverse a cell in which some of the points have not \
+evaluated to numbers, and it will be dropped. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"ContourGraphics::ctpnt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ContourGraphics::"ctpnt"\), \(\(:\)\(\ \)\), "\<\"The contour \
+is attempting to traverse a cell in which some of the points have not \
+evaluated to numbers, and it will be dropped. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"ContourGraphics::ctpnt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ContourGraphics::"ctpnt"\), \(\(:\)\(\ \)\), "\<\"The contour \
+is attempting to traverse a cell in which some of the points have not \
+evaluated to numbers, and it will be dropped. \\!\\(\\*ButtonBox[\\\"More\
+\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"ContourGraphics::ctpnt\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(ContourGraphics :: \\\"ctpnt\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ArcTan::"indet"\), \(\(:\)\(\ \)\), "\<\"Indeterminate \
+expression \\!\\(ArcTan[\\(\\(0, 0\\)\\)]\\) encountered. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::indet\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(ArcTan::"indet"\), \(\(:\)\(\ \)\), "\<\"Indeterminate \
+expression \\!\\(ArcTan[\\(\\(0, 0\\)\\)]\\) encountered. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::indet\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(ArcTan :: \\\"indet\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(numPetals = 8;\)\), "\[IndentingNewLine]", 
+    \(\(Plot[\(radius + amp + amp*Cos[numPetals*a*\[Pi]]\)\/radius, {a, \
+\(-1\), 1}];\)\)}], "Input"]
 }, Open  ]]
-}, Closed]],
+}, Open  ]],
 
 Cell[CellGroupData[{
 
@@ -4501,12 +4674,14 @@ Cell[BoxData[{
 1]\)]\)\/2;\)\), "\[IndentingNewLine]", 
     \(\(D\[Phi]y := \(phi[\([j + y + 1, i + x]\)] - phi[\([j + y - 1, i + \
 x]\)]\)\/2;\)\), "\[IndentingNewLine]", 
-    \(\(D\[Phi]xy := \(phi[\([j + y + 1, i + x + 1]\)] + phi[\([j + y - 1, i \
-+ x - 1]\)] - phi[\([j + y - 1, i + x + 1]\)] - phi[\([j + y + 1, i + x - \
-1]\)]\)\/4;\)\[IndentingNewLine]\), "\[IndentingNewLine]", 
-    \(coor = 
+    \(\(\(D\[Phi]xy := \(phi[\([j + y + 1, i + x + 1]\)] + phi[\([j + y - 1, \
+i + x - 1]\)] - phi[\([j + y - 1, i + x + 1]\)] - phi[\([j + y + 1, i + x - \
+1]\)]\)\/4;\)\(\[IndentingNewLine]\)
+    \)\), "\[IndentingNewLine]", 
+    \(\(\(coor = 
       Table[{x \[Rule] m, y \[Rule] n}, {n, 1, 2}, {m, 1, 2}] // 
-        Flatten[#, 1] &\[IndentingNewLine]\), "\n", 
+        Flatten[#, 1] &\)\(\[IndentingNewLine]\)
+    \)\), "\n", 
     \(\(rhs = \({phi[\([j + y, i + x]\)], D\[Phi]x, D\[Phi]y, D\[Phi]xy} /. 
               coor // Transpose\) // Flatten[#, 1] &;\)\), "\n", 
     \(MatrixForm /@ {imat, matRows, N@rhs}\)}], "Input"],
@@ -5018,1550 +5193,7 @@ y3*a[13] + 2*x*y3*a[14] + 3*x2*y3*a[15];\npy = a[4] + x*a[5] + x2*a[6] + \
 x3*a[7] + 2*y*a[8] + 2*x*y*a[9] + 2*x2*y*a[10] + 2*x3*y*a[11] + 3*y2*a[12] + \
 3*x*y2*a[13] + 3*x2*y2*a[14] + 3*x3*y2*a[15];\n"\)], "Output"]
 }, Open  ]]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell["3D", "Subsection"],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
-    \(X = 
-      Table[x\^m*y\^n*z\^p, {p, 0, 3}, {n, 0, 3}, {m, 0, 3}] // 
-        Flatten\), "\[IndentingNewLine]", 
-    \(Length[X]\)}], "Input"],
-
-Cell[BoxData[
-    \({1, x, x\^2, x\^3, y, x\ y, x\^2\ y, x\^3\ y, y\^2, x\ y\^2, 
-      x\^2\ y\^2, x\^3\ y\^2, y\^3, x\ y\^3, x\^2\ y\^3, x\^3\ y\^3, z, x\ z, 
-      x\^2\ z, x\^3\ z, y\ z, x\ y\ z, x\^2\ y\ z, x\^3\ y\ z, y\^2\ z, 
-      x\ y\^2\ z, x\^2\ y\^2\ z, x\^3\ y\^2\ z, y\^3\ z, x\ y\^3\ z, 
-      x\^2\ y\^3\ z, x\^3\ y\^3\ z, z\^2, x\ z\^2, x\^2\ z\^2, x\^3\ z\^2, 
-      y\ z\^2, x\ y\ z\^2, x\^2\ y\ z\^2, x\^3\ y\ z\^2, y\^2\ z\^2, 
-      x\ y\^2\ z\^2, x\^2\ y\^2\ z\^2, x\^3\ y\^2\ z\^2, y\^3\ z\^2, 
-      x\ y\^3\ z\^2, x\^2\ y\^3\ z\^2, x\^3\ y\^3\ z\^2, z\^3, x\ z\^3, 
-      x\^2\ z\^3, x\^3\ z\^3, y\ z\^3, x\ y\ z\^3, x\^2\ y\ z\^3, 
-      x\^3\ y\ z\^3, y\^2\ z\^3, x\ y\^2\ z\^3, x\^2\ y\^2\ z\^3, 
-      x\^3\ y\^2\ z\^3, y\^3\ z\^3, x\ y\^3\ z\^3, x\^2\ y\^3\ z\^3, 
-      x\^3\ y\^3\ z\^3}\)], "Output"],
-
-Cell[BoxData[
-    \(64\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
-    \(coor = 
-      Table[{x \[Rule] m, y \[Rule] n, z \[Rule] p}, {p, 0, 1}, {n, 0, 
-            1}, {m, 0, 1}] // Flatten[#, 2] &\), "\[IndentingNewLine]", 
-    \(Length[coor]\)}], "Input"],
-
-Cell[BoxData[
-    \({{x \[Rule] 0, y \[Rule] 0, z \[Rule] 0}, {x \[Rule] 1, y \[Rule] 0, 
-        z \[Rule] 0}, {x \[Rule] 0, y \[Rule] 1, z \[Rule] 0}, {x \[Rule] 1, 
-        y \[Rule] 1, z \[Rule] 0}, {x \[Rule] 0, y \[Rule] 0, 
-        z \[Rule] 1}, {x \[Rule] 1, y \[Rule] 0, z \[Rule] 1}, {x \[Rule] 0, 
-        y \[Rule] 1, z \[Rule] 1}, {x \[Rule] 1, y \[Rule] 1, 
-        z \[Rule] 1}}\)], "Output"],
-
-Cell[BoxData[
-    \(8\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
-    \(\(mat = {X, D[X, x], D[X, y], D[X, z], D[X, x, y], D[X, x, z], 
-            D[X, y, z], D[X, x, y, z]} /. 
-          coor[\([1]\)];\)\), "\[IndentingNewLine]", 
-    \(Dimensions[mat]\), "\[IndentingNewLine]", 
-    \(MatrixForm[Join[{X}, RowReduce@mat]]\)}], "Input"],
-
-Cell[BoxData[
-    \({8, 64}\)], "Output"],
-
-Cell[BoxData[
-    TagBox[
-      RowBox[{"(", "\[NoBreak]", GridBox[{
-            {"1", "x", \(x\^2\), \(x\^3\), 
-              "y", \(x\ y\), \(x\^2\ y\), \(x\^3\ y\), \(y\^2\), \(x\ y\^2\), \
-\(x\^2\ y\^2\), \(x\^3\ y\^2\), \(y\^3\), \(x\ y\^3\), \(x\^2\ y\^3\), \(x\^3\
-\ y\^3\), 
-              "z", \(x\ z\), \(x\^2\ z\), \(x\^3\ z\), \(y\ z\), \(x\ y\ z\), \
-\(x\^2\ y\ z\), \(x\^3\ y\ z\), \(y\^2\ z\), \(x\ y\^2\ z\), \(x\^2\ y\^2\ \
-z\), \(x\^3\ y\^2\ z\), \(y\^3\ z\), \(x\ y\^3\ z\), \(x\^2\ y\^3\ z\), \
-\(x\^3\ y\^3\ z\), \(z\^2\), \(x\ z\^2\), \(x\^2\ z\^2\), \(x\^3\ z\^2\), \(y\
-\ z\^2\), \(x\ y\ z\^2\), \(x\^2\ y\ z\^2\), \(x\^3\ y\ z\^2\), \(y\^2\ \
-z\^2\), \(x\ y\^2\ z\^2\), \(x\^2\ y\^2\ z\^2\), \(x\^3\ y\^2\ z\^2\), \(y\^3\
-\ z\^2\), \(x\ y\^3\ z\^2\), \(x\^2\ y\^3\ z\^2\), \(x\^3\ y\^3\ z\^2\), \
-\(z\^3\), \(x\ z\^3\), \(x\^2\ z\^3\), \(x\^3\ z\^3\), \(y\ z\^3\), \(x\ y\ z\
-\^3\), \(x\^2\ y\ z\^3\), \(x\^3\ y\ z\^3\), \(y\^2\ z\^3\), \(x\ y\^2\ \
-z\^3\), \(x\^2\ y\^2\ z\^3\), \(x\^3\ y\^2\ z\^3\), \(y\^3\ z\^3\), \(x\ y\^3\
-\ z\^3\), \(x\^2\ y\^3\ z\^3\), \(x\^3\ y\^3\ z\^3\)},
-            {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"}
-            },
-          RowSpacings->1,
-          ColumnSpacings->1,
-          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
-      Function[ BoxForm`e$, 
-        MatrixForm[ BoxForm`e$]]]], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(D[X, x, y, z]\)], "Input"],
-
-Cell[BoxData[
-    \({0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 
-      2\ x, 3\ x\^2, 0, 2\ y, 4\ x\ y, 6\ x\^2\ y, 0, 3\ y\^2, 6\ x\ y\^2, 
-      9\ x\^2\ y\^2, 0, 0, 0, 0, 0, 2\ z, 4\ x\ z, 6\ x\^2\ z, 0, 4\ y\ z, 
-      8\ x\ y\ z, 12\ x\^2\ y\ z, 0, 6\ y\^2\ z, 12\ x\ y\^2\ z, 
-      18\ x\^2\ y\^2\ z, 0, 0, 0, 0, 0, 3\ z\^2, 6\ x\ z\^2, 9\ x\^2\ z\^2, 
-      0, 6\ y\ z\^2, 12\ x\ y\ z\^2, 18\ x\^2\ y\ z\^2, 0, 9\ y\^2\ z\^2, 
-      18\ x\ y\^2\ z\^2, 27\ x\^2\ y\^2\ z\^2}\)], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
-    \(\(mat = \({X, D[X, x], D[X, y], D[X, z], D[X, x, y], D[X, x, z], 
-                D[X, y, z], D[X, x, y, z]} /. coor // Transpose\) // 
-          Flatten[#, 1] &;\)\), "\[IndentingNewLine]", 
-    \(\(matRows = \({XX, Dx, Dy, Dz, Dxy, Dxz, Dyz, Dxyz} /. coor // 
-            Transpose\) // Flatten[#, 1] &;\)\), "\[IndentingNewLine]", 
-    \(MatrixForm /@ {mat, matRows}\)}], "Input"],
-
-Cell[BoxData[
-    RowBox[{"{", 
-      RowBox[{
-        TagBox[
-          RowBox[{"(", "\[NoBreak]", GridBox[{
-                {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0"},
-                {"1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1"},
-                {"0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "2", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "2", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "1", "2", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0"},
-                {"0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3"},
-                {"0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", "0", 
-                  "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "1", "1", "1", "2", "2", "2", "2", 
-                  "3", "3", "3", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", "0", 
-                  "3", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-                  "1", "0", "0", "0", "2", "0", "0", "0", "3", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", "0", 
-                  "3", "0", "0", "0"},
-                {"0", "0", "0", "0", "1", "1", "1", "1", "2", "2", "2", "2", 
-                  "3", "3", "3", "3", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "2", "2", "2", "2", "3", "3", "3", "3", "0", "0", "0", "0", 
-                  "1", "1", "1", "1", "2", "2", "2", "2", "3", "3", "3", "3", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "2", "2", "2", "2", 
-                  "3", "3", "3", "3"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "2", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "2", "2", "2", "2", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "3", "3", "3", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-                  "1", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", "0", 
-                  "2", "0", "0", "0", "2", "0", "0", "0", "2", "0", "0", "0", 
-                  "3", "0", "0", "0", "3", "0", "0", "0", "3", "0", "0", "0", 
-                  "3", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "1", "1", "1", "1", "1", "1", "1", "1", 
-                  "1", "1", "1", "1", "1", "1", "1", "1", "2", "2", "2", "2", 
-                  "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", "2", 
-                  "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", "3", 
-                  "3", "3", "3", "3"},
-                {"0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", 
-                  "0", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "2", "3", "0", "2", "4", "6", 
-                  "0", "3", "6", "9", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "1", "2", "3", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", 
-                  "0", "3", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", 
-                  "0", "1", "0", "0", "0", "2", "0", "0", "0", "3", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", 
-                  "0", "3", "0", "0"},
-                {"0", "0", "0", "0", "0", "1", "2", "3", "0", "2", "4", "6", 
-                  "0", "3", "6", "9", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "2", "4", "6", "0", "3", "6", "9", "0", "0", "0", "0", 
-                  "0", "1", "2", "3", "0", "2", "4", "6", "0", "3", "6", "9", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "2", "4", "6", 
-                  "0", "3", "6", "9"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "2", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "2", "4", "6", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "3", "6", "9", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-                  "0", "1", "0", "0", "0", "1", "0", "0", "0", "2", "0", "0", 
-                  "0", "2", "0", "0", "0", "2", "0", "0", "0", "2", "0", "0", 
-                  "0", "3", "0", "0", "0", "3", "0", "0", "0", "3", "0", "0", 
-                  "0", "3", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "1", "2", "3", "0", "1", "2", "3", 
-                  "0", "1", "2", "3", "0", "1", "2", "3", "0", "2", "4", "6", 
-                  "0", "2", "4", "6", "0", "2", "4", "6", "0", "2", "4", "6", 
-                  "0", "3", "6", "9", "0", "3", "6", "9", "0", "3", "6", "9", 
-                  "0", "3", "6", "9"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "2", "2", "2", "2", "3", "3", "3", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "2", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "2", "2", "2", "2", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "3", "3", "3", "3", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                  "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-                  "2", "0", "0", "0", "4", "0", "0", "0", "6", "0", "0", "0", 
-                  "0", "0", "0", "0", "3", "0", "0", "0", "6", "0", "0", "0", 
-                  "9", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "1", "1", "1", "1", 
-                  "2", "2", "2", "2", "3", "3", "3", "3", "0", "0", "0", "0", 
-                  "2", "2", "2", "2", "4", "4", "4", "4", "6", "6", "6", "6", 
-                  "0", "0", "0", "0", "3", "3", "3", "3", "6", "6", "6", "6", 
-                  "9", "9", "9", "9"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "2", "4", "6", "0", "3", "6", "9", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "2", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "2", "4", "6", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "3", "6", "9", "0", "0", "0", "0", 
-                  "0", "0", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                  "0", "2", "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", 
-                  "0", "2", "0", "0", "0", "4", "0", "0", "0", "6", "0", "0", 
-                  "0", "0", "0", "0", "0", "3", "0", "0", "0", "6", "0", "0", 
-                  "0", "9", "0", "0"},
-                {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                  "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "2", "3", 
-                  "0", "2", "4", "6", "0", "3", "6", "9", "0", "0", "0", "0", 
-                  "0", "2", "4", "6", "0", "4", "8", "12", "0", "6", "12", 
-                  "18", "0", "0", "0", "0", "0", "3", "6", "9", "0", "6", 
-                  "12", "18", "0", "9", "18", "27"}
-                },
-              RowSpacings->1,
-              ColumnSpacings->1,
-              ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
-          Function[ BoxForm`e$, 
-            MatrixForm[ BoxForm`e$]]], ",", 
-        TagBox[
-          RowBox[{"(", "\[NoBreak]", 
-            TagBox[GridBox[{
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"}
-                  },
-                RowSpacings->1,
-                ColumnAlignments->{Left}],
-              Column], "\[NoBreak]", ")"}],
-          Function[ BoxForm`e$, 
-            MatrixForm[ BoxForm`e$]]]}], "}"}]], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(MatrixForm /@ {MatrixForm[Join[{X}, RowReduce@mat]], 
-        matRows}\)], "Input"],
-
-Cell[BoxData[
-    RowBox[{"{", 
-      RowBox[{
-        TagBox[
-          TagBox[
-            RowBox[{"(", "\[NoBreak]", GridBox[{
-                  {"1", "x", \(x\^2\), \(x\^3\), 
-                    "y", \(x\ y\), \(x\^2\ y\), \(x\^3\ y\), \(y\^2\), \(x\ y\
-\^2\), \(x\^2\ y\^2\), \(x\^3\ y\^2\), \(y\^3\), \(x\ y\^3\), \(x\^2\ y\^3\), \
-\(x\^3\ y\^3\), 
-                    "z", \(x\ z\), \(x\^2\ z\), \(x\^3\ z\), \(y\ z\), \(x\ y\
-\ z\), \(x\^2\ y\ z\), \(x\^3\ y\ z\), \(y\^2\ z\), \(x\ y\^2\ z\), \(x\^2\ y\
-\^2\ z\), \(x\^3\ y\^2\ z\), \(y\^3\ z\), \(x\ y\^3\ z\), \(x\^2\ y\^3\ z\), \
-\(x\^3\ y\^3\ z\), \(z\^2\), \(x\ z\^2\), \(x\^2\ z\^2\), \(x\^3\ z\^2\), \(y\
-\ z\^2\), \(x\ y\ z\^2\), \(x\^2\ y\ z\^2\), \(x\^3\ y\ z\^2\), \(y\^2\ \
-z\^2\), \(x\ y\^2\ z\^2\), \(x\^2\ y\^2\ z\^2\), \(x\^3\ y\^2\ z\^2\), \(y\^3\
-\ z\^2\), \(x\ y\^3\ z\^2\), \(x\^2\ y\^3\ z\^2\), \(x\^3\ y\^3\ z\^2\), \
-\(z\^3\), \(x\ z\^3\), \(x\^2\ z\^3\), \(x\^3\ z\^3\), \(y\ z\^3\), \(x\ y\ z\
-\^3\), \(x\^2\ y\ z\^3\), \(x\^3\ y\ z\^3\), \(y\^2\ z\^3\), \(x\ y\^2\ \
-z\^3\), \(x\^2\ y\^2\ z\^3\), \(x\^3\ y\^2\ z\^3\), \(y\^3\ z\^3\), \(x\ y\^3\
-\ z\^3\), \(x\^2\ y\^3\ z\^3\), \(x\^3\ y\^3\ z\^3\)},
-                  {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
-                    "0", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "1", "0", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "1", "0", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "1", "0", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "1", "0", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "1", "0", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "1", "0", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "1", "0"},
-                  {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-                     "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-                    "0", "0", "0", "0", "0", "0", "0", "1"}
-                  },
-                RowSpacings->1,
-                ColumnSpacings->1,
-                ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
-            Function[ BoxForm`e$, 
-              MatrixForm[ BoxForm`e$]]],
-          Function[ BoxForm`e$, 
-            MatrixForm[ BoxForm`e$]]], ",", 
-        TagBox[
-          RowBox[{"(", "\[NoBreak]", 
-            TagBox[GridBox[{
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"XX"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dx"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dy"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dz"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxy"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dxz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"},
-                  {"Dxyz"}
-                  },
-                RowSpacings->1,
-                ColumnAlignments->{Left}],
-              Column], "\[NoBreak]", ")"}],
-          Function[ BoxForm`e$, 
-            MatrixForm[ BoxForm`e$]]]}], "}"}]], "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[
-    \(Inverse[mat] // MatrixForm\)], "Input"],
-
-Cell[BoxData[
-    TagBox[
-      RowBox[{"(", "\[NoBreak]", GridBox[{
-            {"1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {\(-3\), "3", "0", "0", "0", "0", "0", "0", \(-2\), \(-1\), "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0"},
-            {"2", \(-2\), "0", "0", "0", "0", "0", "0", "1", "1", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-3\), "3", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", \(-2\), \(-1\), "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "2", \(-2\), "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "1", "1", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0"},
-            {\(-3\), "0", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", \(-2\), "0", \(-1\), "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", \(-3\), "0", "3", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", \(-2\), "0", \(-1\), "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0"},
-            {"9", \(-9\), \(-9\), "9", "0", "0", "0", "0", "6", 
-              "3", \(-6\), \(-3\), "0", "0", "0", "0", "6", \(-6\), 
-              "3", \(-3\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "4", "2", "2", "1", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {\(-6\), "6", "6", \(-6\), "0", "0", "0", "0", \(-3\), \(-3\), 
-              "3", "3", "0", "0", "0", "0", \(-4\), "4", \(-2\), "2", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", \(-2\), \(-2\), \(-1\), \(-1\), "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {"2", "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "1", "0", "1", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "2", "0", \(-2\), "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "1", "0", "1", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {\(-6\), "6", "6", \(-6\), "0", "0", "0", "0", \(-4\), \(-2\), 
-              "4", "2", "0", "0", "0", "0", \(-3\), "3", \(-3\), "3", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", \(-2\), \(-1\), \(-2\), \(-1\), "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {"4", \(-4\), \(-4\), "4", "0", "0", "0", "0", "2", 
-              "2", \(-2\), \(-2\), "0", "0", "0", "0", "2", \(-2\), 
-              "2", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "1", "1", "1", "1", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-3\), 
-              "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", \(-2\), \(-1\), "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "2", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "1", "1", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-3\), "3", 
-              "0", "0", "0", "0", "0", "0", \(-2\), \(-1\), "0", "0", "0", 
-              "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2", \(-2\), 
-              "0", "0", "0", "0", "0", "0", "1", "1", "0", "0", "0", "0", "0",
-               "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-3\), 
-              "0", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-2\), 
-              "0", \(-1\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", \(-3\), "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", \(-2\), "0", \(-1\), "0", "0", 
-              "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "9", \(-9\), \(-9\), "9", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "6", "3", \(-6\), \(-3\), "0", "0", 
-              "0", "0", "6", \(-6\), "3", \(-3\), "0", "0", "0", "0", "4", 
-              "2", "2", "1", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-6\), 
-              "6", "6", \(-6\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-3\), \(-3\), "3", "3", "0", "0", "0", 
-              "0", \(-4\), "4", \(-2\), "2", "0", "0", "0", 
-              "0", \(-2\), \(-2\), \(-1\), \(-1\), "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "2", 
-              "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0",
-               "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "2", "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "1", "0", "1", "0", "0", "0", "0",
-               "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-6\), 
-              "6", "6", \(-6\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-4\), \(-2\), "4", "2", "0", "0", "0", 
-              "0", \(-3\), "3", \(-3\), "3", "0", "0", "0", 
-              "0", \(-2\), \(-1\), \(-2\), \(-1\), "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "4", \(-4\), \(-4\), "4", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "2", "2", \(-2\), \(-2\), "0", "0", 
-              "0", "0", "2", \(-2\), "2", \(-2\), "0", "0", "0", "0", "1", 
-              "1", "1", "1", "0", "0", "0", "0"},
-            {\(-3\), "0", "0", "0", "3", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", \(-2\), "0", "0", "0", \(-1\), "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", \(-3\), "0", "0", "0", 
-              "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-2\), "0", "0", "0", \(-1\), "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0"},
-            {"9", \(-9\), "0", "0", \(-9\), "9", "0", "0", "6", "3", "0", 
-              "0", \(-6\), \(-3\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "6", \(-6\), "0", "0", "3", \(-3\), "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "4", "2", "0", "0", "2", "1",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0"},
-            {\(-6\), "6", "0", "0", "6", \(-6\), "0", "0", \(-3\), \(-3\), 
-              "0", "0", "3", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", \(-4\), "4", "0", "0", \(-2\), "2", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", \(-2\), \(-2\), "0", 
-              "0", \(-1\), \(-1\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-3\), "0", "0", "0", "3", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-2\), "0", 
-              "0", "0", \(-1\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", \(-3\), "0", "0", "0", "3", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", \(-2\), "0", "0", "0", \(-1\), "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "9", \(-9\), "0", "0", \(-9\), "9", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "6", "3", "0", 
-              "0", \(-6\), \(-3\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "6", \(-6\), "0", "0", "3", \(-3\), "0", "0", "4", 
-              "2", "0", "0", "2", "1", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-6\), "6", "0", "0", "6", \(-6\), "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", \(-3\), \(-3\), "0", 
-              "0", "3", "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", \(-4\), "4", "0", "0", \(-2\), "2", "0", 
-              "0", \(-2\), \(-2\), "0", "0", \(-1\), \(-1\), "0", "0"},
-            {"9", "0", \(-9\), "0", \(-9\), "0", "9", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "6", "0", "3", "0", \(-6\), "0", \(-3\), 
-              "0", "6", "0", \(-6\), "0", "3", "0", \(-3\), "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "4", "0", "2", "0", "2", "0", "1", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "9", "0", \(-9\), 
-              "0", \(-9\), "0", "9", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "6", "0", "3", 
-              "0", \(-6\), "0", \(-3\), "0", "6", "0", \(-6\), "0", "3", 
-              "0", \(-3\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "4", 
-              "0", "2", "0", "2", "0", "1", "0"},
-            {\(-27\), "27", "27", \(-27\), "27", \(-27\), \(-27\), 
-              "27", \(-18\), \(-9\), "18", "9", "18", 
-              "9", \(-18\), \(-9\), \(-18\), "18", \(-9\), "9", "18", \(-18\),
-               "9", \(-9\), \(-18\), "18", "18", \(-18\), \(-9\), "9", 
-              "9", \(-9\), \(-12\), \(-6\), \(-6\), \(-3\), "12", "6", "6", 
-              "3", \(-12\), \(-6\), "12", "6", \(-6\), \(-3\), "6", 
-              "3", \(-12\), "12", \(-6\), "6", \(-6\), "6", \(-3\), 
-              "3", \(-8\), \(-4\), \(-4\), \(-2\), \(-4\), \(-2\), \(-2\), \
-\(-1\)},
-            {"18", \(-18\), \(-18\), "18", \(-18\), "18", "18", \(-18\), "9", 
-              "9", \(-9\), \(-9\), \(-9\), \(-9\), "9", "9", "12", \(-12\), 
-              "6", \(-6\), \(-12\), "12", \(-6\), "6", "12", \(-12\), \(-12\),
-               "12", "6", \(-6\), \(-6\), "6", "6", "6", "3", 
-              "3", \(-6\), \(-6\), \(-3\), \(-3\), "6", "6", \(-6\), \(-6\), 
-              "3", "3", \(-3\), \(-3\), "8", \(-8\), "4", \(-4\), "4", \(-4\),
-               "2", \(-2\), "4", "4", "2", "2", "2", "2", "1", "1"},
-            {\(-6\), "0", "6", "0", "6", "0", \(-6\), "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", \(-3\), "0", \(-3\), "0", "3", "0", "3", 
-              "0", \(-4\), "0", "4", "0", \(-2\), "0", "2", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", \(-2\), "0", \(-2\), "0", \(-1\), "0", \(-1\), "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", \(-6\), "0", "6", "0", 
-              "6", "0", \(-6\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", \(-3\), "0", \(-3\), 
-              "0", "3", "0", "3", "0", \(-4\), "0", "4", "0", \(-2\), "0", 
-              "2", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-2\), 
-              "0", \(-2\), "0", \(-1\), "0", \(-1\), "0"},
-            {"18", \(-18\), \(-18\), "18", \(-18\), "18", "18", \(-18\), "12",
-               "6", \(-12\), \(-6\), \(-12\), \(-6\), "12", "6", "9", \(-9\), 
-              "9", \(-9\), \(-9\), "9", \(-9\), "9", "12", \(-12\), \(-12\), 
-              "12", "6", \(-6\), \(-6\), "6", "6", "3", "6", 
-              "3", \(-6\), \(-3\), \(-6\), \(-3\), "8", "4", \(-8\), \(-4\), 
-              "4", "2", \(-4\), \(-2\), "6", \(-6\), "6", \(-6\), "3", \(-3\),
-               "3", \(-3\), "4", "2", "4", "2", "2", "1", "2", "1"},
-            {\(-12\), "12", "12", \(-12\), "12", \(-12\), \(-12\), 
-              "12", \(-6\), \(-6\), "6", "6", "6", 
-              "6", \(-6\), \(-6\), \(-6\), "6", \(-6\), "6", "6", \(-6\), 
-              "6", \(-6\), \(-8\), "8", "8", \(-8\), \(-4\), "4", 
-              "4", \(-4\), \(-3\), \(-3\), \(-3\), \(-3\), "3", "3", "3", 
-              "3", \(-4\), \(-4\), "4", "4", \(-2\), \(-2\), "2", "2", \(-4\),
-               "4", \(-4\), "4", \(-2\), "2", \(-2\), 
-              "2", \(-2\), \(-2\), \(-2\), \(-2\), \(-1\), \(-1\), \(-1\), \
-\(-1\)},
-            {"2", "0", "0", "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1",
-               "0", "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "2", "0", "0", 
-              "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0"},
-            {\(-6\), "6", "0", "0", "6", \(-6\), "0", "0", \(-4\), \(-2\), 
-              "0", "0", "4", "2", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", \(-3\), "3", "0", "0", \(-3\), "3", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", \(-2\), \(-1\), "0", 
-              "0", \(-2\), \(-1\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"},
-            {"4", \(-4\), "0", "0", \(-4\), "4", "0", "0", "2", "2", "0", 
-              "0", \(-2\), \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "2", \(-2\), "0", "0", "2", \(-2\), "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "1", "1", "0", "0", "1", "1",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "2", "0", "0", "0", \(-2\), "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", "0", 
-              "0", "0", "1", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "0", "2", "0", "0", "0", \(-2\), "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "0", "1", "0", "0", "0", "1", "0", "0", 
-              "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", \(-6\), "6", "0", "0", "6", \(-6\), "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", \(-4\), \(-2\), "0", 
-              "0", "4", "2", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", \(-3\), "3", "0", "0", \(-3\), "3", "0", 
-              "0", \(-2\), \(-1\), "0", "0", \(-2\), \(-1\), "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "4", \(-4\), "0", "0", \(-4\), "4", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "2", "2", "0", 
-              "0", \(-2\), \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "2", \(-2\), "0", "0", "2", \(-2\), "0", "0", "1", 
-              "1", "0", "0", "1", "1", "0", "0"},
-            {\(-6\), "0", "6", "0", "6", "0", \(-6\), "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", \(-4\), "0", \(-2\), "0", "4", "0", "2", 
-              "0", \(-3\), "0", "3", "0", \(-3\), "0", "3", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", \(-2\), "0", \(-1\), "0", \(-2\), "0", \(-1\), "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", \(-6\), "0", "6", "0", 
-              "6", "0", \(-6\), "0", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", \(-4\), "0", \(-2\), 
-              "0", "4", "0", "2", "0", \(-3\), "0", "3", "0", \(-3\), "0", 
-              "3", "0", "0", "0", "0", "0", "0", "0", "0", "0", \(-2\), 
-              "0", \(-1\), "0", \(-2\), "0", \(-1\), "0"},
-            {"18", \(-18\), \(-18\), "18", \(-18\), "18", "18", \(-18\), "12",
-               "6", \(-12\), \(-6\), \(-12\), \(-6\), "12", "6", 
-              "12", \(-12\), "6", \(-6\), \(-12\), "12", \(-6\), "6", 
-              "9", \(-9\), \(-9\), "9", "9", \(-9\), \(-9\), "9", "8", "4", 
-              "4", "2", \(-8\), \(-4\), \(-4\), \(-2\), "6", 
-              "3", \(-6\), \(-3\), "6", "3", \(-6\), \(-3\), "6", \(-6\), 
-              "3", \(-3\), "6", \(-6\), "3", \(-3\), "4", "2", "2", "1", "4", 
-              "2", "2", "1"},
-            {\(-12\), "12", "12", \(-12\), "12", \(-12\), \(-12\), 
-              "12", \(-6\), \(-6\), "6", "6", "6", 
-              "6", \(-6\), \(-6\), \(-8\), "8", \(-4\), "4", "8", \(-8\), 
-              "4", \(-4\), \(-6\), "6", "6", \(-6\), \(-6\), "6", 
-              "6", \(-6\), \(-4\), \(-4\), \(-2\), \(-2\), "4", "4", "2", 
-              "2", \(-3\), \(-3\), "3", "3", \(-3\), \(-3\), "3", "3", \(-4\),
-               "4", \(-2\), "2", \(-4\), "4", \(-2\), 
-              "2", \(-2\), \(-2\), \(-1\), \(-1\), \(-2\), \(-2\), \(-1\), \
-\(-1\)},
-            {"4", "0", \(-4\), "0", \(-4\), "0", "4", "0", "0", "0", "0", "0",
-               "0", "0", "0", "0", "2", "0", "2", "0", \(-2\), "0", \(-2\), 
-              "0", "2", "0", \(-2\), "0", "2", "0", \(-2\), "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0",
-               "0", "1", "0", "1", "0", "1", "0", "1", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0"},
-            {"0", "0", "0", "0", "0", "0", "0", "0", "4", "0", \(-4\), 
-              "0", \(-4\), "0", "4", "0", "0", "0", "0", "0", "0", "0", "0", 
-              "0", "0", "0", "0", "0", "0", "0", "0", "0", "2", "0", "2", 
-              "0", \(-2\), "0", \(-2\), "0", "2", "0", \(-2\), "0", "2", 
-              "0", \(-2\), "0", "0", "0", "0", "0", "0", "0", "0", "0", "1", 
-              "0", "1", "0", "1", "0", "1", "0"},
-            {\(-12\), "12", "12", \(-12\), "12", \(-12\), \(-12\), 
-              "12", \(-8\), \(-4\), "8", "4", "8", 
-              "4", \(-8\), \(-4\), \(-6\), "6", \(-6\), "6", "6", \(-6\), 
-              "6", \(-6\), \(-6\), "6", "6", \(-6\), \(-6\), "6", 
-              "6", \(-6\), \(-4\), \(-2\), \(-4\), \(-2\), "4", "2", "4", 
-              "2", \(-4\), \(-2\), "4", "2", \(-4\), \(-2\), "4", "2", \(-3\),
-               "3", \(-3\), "3", \(-3\), "3", \(-3\), 
-              "3", \(-2\), \(-1\), \(-2\), \(-1\), \(-2\), \(-1\), \(-2\), \
-\(-1\)},
-            {"8", \(-8\), \(-8\), "8", \(-8\), "8", "8", \(-8\), "4", 
-              "4", \(-4\), \(-4\), \(-4\), \(-4\), "4", "4", "4", \(-4\), 
-              "4", \(-4\), \(-4\), "4", \(-4\), "4", "4", \(-4\), \(-4\), "4",
-               "4", \(-4\), \(-4\), "4", "2", "2", "2", 
-              "2", \(-2\), \(-2\), \(-2\), \(-2\), "2", "2", \(-2\), \(-2\), 
-              "2", "2", \(-2\), \(-2\), "2", \(-2\), "2", \(-2\), "2", \(-2\),
-               "2", \(-2\), "1", "1", "1", "1", "1", "1", "1", "1"}
-            },
-          RowSpacings->1,
-          ColumnSpacings->1,
-          ColumnAlignments->{Left}], "\[NoBreak]", ")"}],
-      Function[ BoxForm`e$, 
-        MatrixForm[ BoxForm`e$]]]], "Output"]
 }, Open  ]]
-}, Closed]]
 }, Closed]],
 
 Cell[CellGroupData[{
@@ -6854,15 +5486,18 @@ Cell[BoxData[
     \(A . X /. sol\)], "Input"],
 
 Cell[BoxData[
-    \(0.007636533076345112`\)], "Output"]
+    \(0.007636533076345112`\)], "Output"],
+
+Cell[BoxData[
+    \($Aborted\)], "Output"]
 }, Open  ]]
 }, Closed]]
 },
 FrontEndVersion->"5.2 for X",
-ScreenRectangle->{{0, 1920}, {0, 1105}},
+ScreenRectangle->{{0, 2400}, {0, 1600}},
 AutoGeneratedPackage->None,
-WindowSize->{708, 1026},
-WindowMargins->{{0, Automatic}, {Automatic, 25}},
+WindowSize->{1200, 1525},
+WindowMargins->{{Automatic, 0}, {0, Automatic}},
 ShowSelection->True
 ]
 
@@ -6888,1264 +5523,1264 @@ Cell[CellGroupData[{
 Cell[1776, 53, 23, 0, 74, "Section"],
 
 Cell[CellGroupData[{
-Cell[1824, 57, 329, 6, 70, "Input",
+Cell[1824, 57, 314, 5, 75, "Input",
   InitializationCell->True],
-Cell[2156, 65, 72, 1, 70, "Output"]
+Cell[2141, 64, 49, 1, 70, "Output"]
 }, Open  ]],
-Cell[2243, 69, 600, 15, 70, "Input",
+Cell[2205, 68, 600, 15, 91, "Input",
   InitializationCell->True]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[2880, 89, 26, 0, 44, "Section"],
-Cell[2909, 91, 62, 1, 70, "Input"],
+Cell[2842, 88, 26, 0, 44, "Section"],
+Cell[2871, 90, 62, 1, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[2996, 96, 338, 5, 70, "Input"],
-Cell[3337, 103, 77, 1, 70, "Output"]
+Cell[2958, 95, 338, 5, 70, "Input"],
+Cell[3299, 102, 77, 1, 70, "Output"]
 }, Open  ]],
-Cell[3429, 107, 425, 7, 70, "Input"]
+Cell[3391, 106, 425, 7, 70, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[3891, 119, 30, 0, 44, "Section"],
-Cell[3924, 121, 39, 1, 70, "Input"],
+Cell[3853, 118, 30, 0, 44, "Section"],
+Cell[3886, 120, 39, 1, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[3988, 126, 167, 3, 70, "Input"],
-Cell[4158, 131, 45, 1, 70, "Output"]
+Cell[3950, 125, 167, 3, 70, "Input"],
+Cell[4120, 130, 45, 1, 70, "Output"]
 }, Open  ]],
-Cell[4218, 135, 196, 3, 70, "Input"],
+Cell[4180, 134, 196, 3, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[4439, 142, 668, 12, 70, "Input"],
-Cell[5110, 156, 130, 3, 70, "Output"]
+Cell[4401, 141, 668, 12, 70, "Input"],
+Cell[5072, 155, 130, 3, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[5277, 164, 64, 1, 70, "Input"],
-Cell[5344, 167, 50, 1, 70, "Output"]
+Cell[5239, 163, 64, 1, 70, "Input"],
+Cell[5306, 166, 50, 1, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[5443, 174, 36, 0, 44, "Section"],
+Cell[5405, 173, 36, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[5504, 178, 44, 1, 27, "Input"],
-Cell[5551, 181, 199, 3, 43, "Output"]
+Cell[5466, 177, 44, 1, 27, "Input"],
+Cell[5513, 180, 199, 3, 43, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[5787, 189, 322, 6, 91, "Input"],
-Cell[6112, 197, 47, 1, 27, "Output"]
+Cell[5749, 188, 322, 6, 91, "Input"],
+Cell[6074, 196, 47, 1, 27, "Output"]
 }, Open  ]],
-Cell[6174, 201, 215, 4, 43, "Input"],
-Cell[6392, 207, 140, 2, 27, "Input"],
-Cell[6535, 211, 284, 6, 75, "Input"],
-Cell[6822, 219, 261, 5, 59, "Input"],
+Cell[6136, 200, 215, 4, 43, "Input"],
+Cell[6354, 206, 140, 2, 27, "Input"],
+Cell[6497, 210, 284, 6, 75, "Input"],
+Cell[6784, 218, 261, 5, 59, "Input"],
 
 Cell[CellGroupData[{
-Cell[7108, 228, 71, 1, 27, "Input"],
-Cell[7182, 231, 130, 3, 27, "Output"]
+Cell[7070, 227, 71, 1, 27, "Input"],
+Cell[7144, 230, 130, 3, 27, "Output"]
 }, Open  ]],
-Cell[7327, 237, 90, 1, 27, "Input"],
+Cell[7289, 236, 90, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[7442, 242, 38, 1, 31, "Input"],
-Cell[7483, 245, 53, 1, 27, "Output"]
+Cell[7404, 241, 38, 1, 31, "Input"],
+Cell[7445, 244, 53, 1, 27, "Output"]
 }, Open  ]],
-Cell[7551, 249, 701, 16, 181, "Input"],
+Cell[7513, 248, 701, 16, 181, "Input"],
 
 Cell[CellGroupData[{
-Cell[8277, 269, 74, 1, 27, "Input"],
-Cell[8354, 272, 130, 3, 27, "Output"]
+Cell[8239, 268, 74, 1, 27, "Input"],
+Cell[8316, 271, 130, 3, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[8521, 280, 798, 15, 172, "Input"],
-Cell[9322, 297, 53, 1, 27, "Output"]
+Cell[8483, 279, 798, 15, 172, "Input"],
+Cell[9284, 296, 53, 1, 27, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[9424, 304, 38, 0, 44, "Section"],
+Cell[9386, 303, 38, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[9487, 308, 466, 8, 107, "Input"],
-Cell[9956, 318, 43, 1, 27, "Output"]
+Cell[9449, 307, 466, 8, 107, "Input"],
+Cell[9918, 317, 43, 1, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[10036, 324, 53, 1, 27, "Input"],
-Cell[10092, 327, 41, 1, 27, "Output"]
+Cell[9998, 323, 53, 1, 27, "Input"],
+Cell[10054, 326, 41, 1, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[10170, 333, 119, 3, 27, "Input"],
-Cell[10292, 338, 165, 3, 29, "Output"]
+Cell[10132, 332, 119, 3, 27, "Input"],
+Cell[10254, 337, 165, 3, 29, "Output"]
 }, Open  ]],
-Cell[10472, 344, 466, 9, 91, "Input"],
+Cell[10434, 343, 466, 9, 91, "Input"],
 
 Cell[CellGroupData[{
-Cell[10963, 357, 65, 1, 27, "Input"],
-Cell[11031, 360, 51, 1, 27, "Output"]
+Cell[10925, 356, 65, 1, 27, "Input"],
+Cell[10993, 359, 51, 1, 27, "Output"]
 }, Open  ]],
-Cell[11097, 364, 112, 2, 27, "Input"],
-Cell[11212, 368, 115, 2, 27, "Input"],
-Cell[11330, 372, 39, 1, 27, "Input"]
+Cell[11059, 363, 112, 2, 27, "Input"],
+Cell[11174, 367, 115, 2, 27, "Input"],
+Cell[11292, 371, 39, 1, 27, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[11406, 378, 25, 0, 44, "Section"],
-Cell[11434, 380, 39, 1, 27, "Input"],
+Cell[11368, 377, 25, 0, 44, "Section"],
+Cell[11396, 379, 39, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[11498, 385, 44, 1, 27, "Input"],
-Cell[11545, 388, 221, 3, 43, "Output"]
+Cell[11460, 384, 44, 1, 27, "Input"],
+Cell[11507, 387, 221, 3, 41, "Output"]
+}, Open  ]],
+Cell[11743, 393, 446, 7, 107, "Input"],
+Cell[12192, 402, 188, 3, 43, "Input"],
+Cell[12383, 407, 186, 3, 43, "Input"],
+Cell[12572, 412, 339, 7, 91, "Input"],
+Cell[12914, 421, 194, 3, 27, "Input"],
+Cell[13111, 426, 243, 4, 43, "Input"],
+Cell[13357, 432, 209, 3, 43, "Input"],
+Cell[13569, 437, 181, 3, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[13775, 444, 71, 1, 27, "Input"],
+Cell[13849, 447, 103, 2, 27, "Output"]
+}, Open  ]],
+Cell[13967, 452, 436, 10, 75, "Input"],
+Cell[14406, 464, 307, 6, 43, "Input"],
+Cell[14716, 472, 596, 13, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[15337, 489, 62, 1, 27, "Input"],
+Cell[15402, 492, 137, 3, 26, "Output"]
+}, Open  ]],
+Cell[15554, 498, 211, 4, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[15790, 506, 904, 17, 171, "Input"],
+Cell[16697, 525, 197, 3, 26, "Output"],
+Cell[16897, 530, 499, 13, 55, "Output"]
+}, Open  ]],
+Cell[17411, 546, 249, 5, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[17685, 555, 295, 6, 53, "Input"],
+Cell[17983, 563, 819, 20, 189, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[11803, 396, 446, 7, 107, "Input"],
-Cell[12252, 405, 320, 5, 20, "Message"],
-Cell[12575, 412, 319, 5, 20, "Message"],
-Cell[12897, 419, 45, 1, 27, "Output"]
+Cell[18839, 588, 54, 1, 27, "Input"],
+Cell[18896, 591, 56, 1, 26, "Output"]
 }, Open  ]],
-Cell[12957, 423, 188, 3, 43, "Input"],
-Cell[13148, 428, 186, 3, 43, "Input"],
-Cell[13337, 433, 339, 7, 91, "Input"],
-Cell[13679, 442, 194, 3, 27, "Input"],
-Cell[13876, 447, 243, 4, 43, "Input"],
-Cell[14122, 453, 209, 3, 43, "Input"],
-Cell[14334, 458, 181, 3, 43, "Input"],
+Cell[18967, 595, 62, 1, 27, "Input"],
+Cell[19032, 598, 150, 3, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[14540, 465, 71, 1, 27, "Input"],
-Cell[14614, 468, 103, 2, 29, "Output"]
+Cell[19207, 605, 92, 1, 27, "Input"],
+Cell[19302, 608, 542, 13, 55, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[14754, 475, 36, 1, 27, "Input"],
-Cell[14793, 478, 50, 1, 27, "Output"]
-}, Open  ]],
-Cell[14858, 482, 436, 10, 75, "Input"],
-Cell[15297, 494, 307, 6, 43, "Input"],
-Cell[15607, 502, 596, 13, 75, "Input"],
-
-Cell[CellGroupData[{
-Cell[16228, 519, 62, 1, 27, "Input"],
-Cell[16293, 522, 137, 3, 27, "Output"]
-}, Open  ]],
-Cell[16445, 528, 211, 4, 43, "Input"],
-
-Cell[CellGroupData[{
-Cell[16681, 536, 904, 17, 171, "Input"],
-Cell[17588, 555, 197, 3, 27, "Output"],
-Cell[17788, 560, 499, 13, 63, "Output"]
-}, Open  ]],
-Cell[18302, 576, 249, 5, 43, "Input"],
-
-Cell[CellGroupData[{
-Cell[18576, 585, 295, 6, 53, "Input"],
-Cell[18874, 593, 819, 20, 225, "Output"]
+Cell[19881, 626, 445, 10, 57, "Input"],
+Cell[20329, 638, 249, 4, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[19730, 618, 54, 1, 27, "Input"],
-Cell[19787, 621, 56, 1, 27, "Output"]
+Cell[20615, 647, 90, 1, 27, "Input"],
+Cell[20708, 650, 130, 3, 26, "Output"]
 }, Open  ]],
-Cell[19858, 625, 62, 1, 27, "Input"],
-Cell[19923, 628, 150, 3, 43, "Input"],
+Cell[20853, 656, 205, 4, 33, "Input"],
 
 Cell[CellGroupData[{
-Cell[20098, 635, 92, 1, 27, "Input"],
-Cell[20193, 638, 542, 13, 63, "Output"]
+Cell[21083, 664, 57, 1, 27, "Input"],
+Cell[21143, 667, 47, 1, 26, "Output"]
 }, Open  ]],
-
-Cell[CellGroupData[{
-Cell[20772, 656, 445, 10, 63, "Input"],
-Cell[21220, 668, 249, 4, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[21506, 677, 90, 1, 27, "Input"],
-Cell[21599, 680, 130, 3, 27, "Output"]
-}, Open  ]],
-Cell[21744, 686, 205, 4, 33, "Input"],
-
-Cell[CellGroupData[{
-Cell[21974, 694, 57, 1, 27, "Input"],
-Cell[22034, 697, 47, 1, 27, "Output"]
-}, Open  ]],
-Cell[22096, 701, 131, 2, 27, "Input"],
-Cell[22230, 705, 293, 5, 59, "Input"],
-Cell[22526, 712, 79, 1, 27, "Input"],
-Cell[22608, 715, 319, 6, 43, "Input"],
-Cell[22930, 723, 340, 6, 59, "Input"],
-Cell[23273, 731, 164, 3, 27, "Input"],
-Cell[23440, 736, 70, 1, 27, "Input"],
-Cell[23513, 739, 179, 3, 27, "Input"]
+Cell[21205, 671, 131, 2, 27, "Input"],
+Cell[21339, 675, 293, 5, 59, "Input"],
+Cell[21635, 682, 79, 1, 27, "Input"],
+Cell[21717, 685, 319, 6, 43, "Input"],
+Cell[22039, 693, 340, 6, 59, "Input"],
+Cell[22382, 701, 164, 3, 27, "Input"],
+Cell[22549, 706, 70, 1, 27, "Input"],
+Cell[22622, 709, 179, 3, 27, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[23729, 747, 25, 0, 44, "Section"],
+Cell[22838, 717, 25, 0, 44, "Section"],
+Cell[22866, 719, 39, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[23779, 751, 212, 4, 70, "Input"],
-Cell[23994, 757, 49, 1, 70, "Output"]
+Cell[22930, 724, 44, 1, 27, "Input"],
+Cell[22977, 727, 199, 3, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[24080, 763, 143, 2, 70, "Input"],
-Cell[24226, 767, 137, 3, 70, "Output"]
+Cell[23213, 735, 475, 9, 123, "Input"],
+Cell[23691, 746, 46, 1, 26, "Output"],
+Cell[23740, 749, 66, 1, 26, "Output"]
+}, Open  ]],
+Cell[23821, 753, 154, 3, 43, "Input"],
+Cell[23978, 758, 174, 3, 43, "Input"],
+Cell[24155, 763, 161, 3, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[24341, 770, 237, 4, 27, "Input"],
+Cell[24581, 776, 137, 3, 26, "Output"]
+}, Open  ]],
+Cell[24733, 782, 134, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[24892, 788, 151, 2, 27, "Input"],
+Cell[25046, 792, 137, 3, 26, "Output"]
+}, Open  ]],
+Cell[25198, 798, 137, 2, 43, "Input"],
+Cell[25338, 802, 56, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[25419, 807, 229, 5, 75, "Input"],
+Cell[25651, 814, 37, 1, 26, "Output"]
+}, Open  ]],
+Cell[25703, 818, 402, 7, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[26130, 829, 168, 3, 60, "Input"],
+Cell[26301, 834, 76, 1, 26, "Output"]
+}, Open  ]],
+Cell[26392, 838, 55, 1, 27, "Input"],
+Cell[26450, 841, 44, 1, 27, "Input"],
+Cell[26497, 844, 57, 1, 27, "Input"],
+Cell[26557, 847, 75, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[26657, 852, 45, 1, 27, "Input"],
+Cell[26705, 855, 39, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[24400, 775, 90, 1, 70, "Input"],
-Cell[24493, 778, 137, 3, 70, "Output"]
+Cell[26781, 861, 467, 9, 91, "Input"],
+Cell[27251, 872, 44, 1, 26, "Output"],
+Cell[27298, 875, 43, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[24667, 786, 237, 4, 70, "Input"],
-Cell[24907, 792, 341, 5, 70, "Message"],
-Cell[25251, 799, 341, 5, 70, "Message"],
-Cell[25595, 806, 341, 5, 70, "Message"],
-Cell[25939, 813, 339, 5, 70, "Message"],
-Cell[26281, 820, 137, 3, 70, "Output"]
+Cell[27378, 881, 309, 5, 91, "Input"],
+Cell[27690, 888, 37, 1, 26, "Output"]
 }, Open  ]],
-Cell[26433, 826, 134, 2, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[26592, 832, 151, 2, 70, "Input"],
-Cell[26746, 836, 137, 3, 70, "Output"]
-}, Open  ]],
-Cell[26898, 842, 137, 2, 70, "Input"]
+Cell[27742, 892, 491, 9, 107, "Input"],
+Cell[28236, 903, 232, 5, 27, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[27072, 849, 26, 0, 44, "Section"],
-Cell[27101, 851, 39, 1, 27, "Input"],
-Cell[27143, 854, 44, 1, 27, "Input"],
+Cell[28505, 913, 26, 0, 44, "Section"],
+Cell[28534, 915, 39, 1, 27, "Input"],
+Cell[28576, 918, 44, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[27212, 859, 272, 5, 91, "Input"],
-Cell[27487, 866, 47, 1, 27, "Output"]
+Cell[28645, 923, 272, 5, 91, "Input"],
+Cell[28920, 930, 47, 1, 26, "Output"]
 }, Open  ]],
-Cell[27549, 870, 122, 2, 43, "Input"],
-Cell[27674, 874, 243, 5, 43, "Input"],
-Cell[27920, 881, 142, 3, 27, "Input"],
-Cell[28065, 886, 106, 2, 27, "Input"],
-Cell[28174, 890, 46, 1, 27, "Input"],
+Cell[28982, 934, 122, 2, 43, "Input"],
+Cell[29107, 938, 243, 5, 27, "Input"],
+Cell[29353, 945, 142, 3, 27, "Input"],
+Cell[29498, 950, 106, 2, 27, "Input"],
+Cell[29607, 954, 46, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[28245, 895, 403, 7, 91, "Input"],
-Cell[28651, 904, 1142, 23, 148, "Output"]
+Cell[29678, 959, 403, 7, 91, "Input"],
+Cell[30084, 968, 1142, 23, 115, "Output"]
 }, Open  ]],
-Cell[29808, 930, 369, 7, 91, "Input"],
-Cell[30180, 939, 317, 6, 59, "Input"],
+Cell[31241, 994, 369, 7, 75, "Input"],
+Cell[31613, 1003, 317, 6, 59, "Input"],
 
 Cell[CellGroupData[{
-Cell[30522, 949, 81, 1, 31, "Input"],
-Cell[30606, 952, 90, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[30733, 958, 265, 4, 79, "Input"],
-Cell[31001, 964, 264, 4, 27, "Output"]
+Cell[31955, 1013, 81, 1, 31, "Input"],
+Cell[32039, 1016, 90, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[31302, 973, 42, 1, 27, "Input"],
-Cell[31347, 976, 39, 1, 27, "Output"]
+Cell[32166, 1022, 265, 4, 79, "Input"],
+Cell[32434, 1028, 264, 4, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[31423, 982, 82, 1, 29, "Input"],
-Cell[31508, 985, 102, 2, 29, "Output"]
-}, Open  ]],
-Cell[31625, 990, 107, 2, 31, "Input"],
-
-Cell[CellGroupData[{
-Cell[31757, 996, 452, 7, 113, "Input"],
-Cell[32212, 1005, 223, 3, 27, "Output"],
-Cell[32438, 1010, 114, 2, 29, "Output"]
+Cell[32735, 1037, 42, 1, 27, "Input"],
+Cell[32780, 1040, 39, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[32589, 1017, 67, 1, 31, "Input"],
-Cell[32659, 1020, 117, 2, 27, "Output"]
+Cell[32856, 1046, 82, 1, 28, "Input"],
+Cell[32941, 1049, 102, 2, 27, "Output"]
+}, Open  ]],
+Cell[33058, 1054, 107, 2, 31, "Input"],
+
+Cell[CellGroupData[{
+Cell[33190, 1060, 452, 7, 112, "Input"],
+Cell[33645, 1069, 223, 3, 26, "Output"],
+Cell[33871, 1074, 114, 2, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[32813, 1027, 67, 1, 31, "Input"],
-Cell[32883, 1030, 92, 1, 27, "Output"]
-}, Open  ]],
-Cell[32990, 1034, 256, 5, 79, "Input"],
-
-Cell[CellGroupData[{
-Cell[33271, 1043, 67, 1, 31, "Input"],
-Cell[33341, 1046, 262, 4, 27, "Output"]
-}, Open  ]]
+Cell[34022, 1081, 67, 1, 31, "Input"],
+Cell[34092, 1084, 117, 2, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[33652, 1056, 31, 0, 74, "Section"],
-
-Cell[CellGroupData[{
-Cell[33708, 1060, 56, 1, 70, "Input"],
-Cell[33767, 1063, 56, 1, 70, "Output"]
+Cell[34246, 1091, 67, 1, 31, "Input"],
+Cell[34316, 1094, 92, 1, 27, "Output"]
 }, Open  ]],
-Cell[33838, 1067, 166, 4, 70, "Input"],
-Cell[34007, 1073, 139, 2, 70, "Input"],
+Cell[34423, 1098, 256, 5, 79, "Input"],
 
 Cell[CellGroupData[{
-Cell[34171, 1079, 43, 1, 70, "Input"],
-Cell[34217, 1082, 38, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[34292, 1088, 159, 4, 70, "Input"],
-Cell[34454, 1094, 132, 3, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[34623, 1102, 49, 1, 70, "Input"],
-Cell[34675, 1105, 37, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[34749, 1111, 233, 4, 70, "Input"],
-Cell[34985, 1117, 355, 5, 70, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[35377, 1127, 45, 1, 70, "Input"],
-Cell[35425, 1130, 38, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[35500, 1136, 187, 4, 70, "Input"],
-Cell[35690, 1142, 132, 3, 70, "Output"]
-}, Open  ]],
-Cell[35837, 1148, 55, 1, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[35917, 1153, 64, 1, 70, "Input"],
-Cell[35984, 1156, 359, 5, 70, "Message"],
-Cell[36346, 1163, 227, 5, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[36610, 1173, 323, 5, 70, "Input"],
-Cell[36936, 1180, 130, 3, 70, "Output"]
+Cell[34704, 1107, 67, 1, 31, "Input"],
+Cell[34774, 1110, 262, 4, 27, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[37115, 1189, 28, 0, 44, "Section"],
+Cell[35085, 1120, 31, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[37168, 1193, 260, 6, 70, "Input"],
-Cell[37431, 1201, 354, 5, 70, "Message"],
-Cell[37788, 1208, 52, 1, 70, "Output"],
-Cell[37843, 1211, 354, 5, 70, "Message"],
-Cell[38200, 1218, 58, 1, 70, "Output"]
+Cell[35141, 1124, 56, 1, 70, "Input"],
+Cell[35200, 1127, 56, 1, 70, "Output"]
+}, Open  ]],
+Cell[35271, 1131, 166, 4, 70, "Input"],
+Cell[35440, 1137, 139, 2, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[35604, 1143, 43, 1, 70, "Input"],
+Cell[35650, 1146, 38, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[38295, 1224, 315, 5, 70, "Input"],
-Cell[38613, 1231, 107, 2, 70, "Output"]
+Cell[35725, 1152, 159, 4, 70, "Input"],
+Cell[35887, 1158, 132, 3, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[38757, 1238, 57, 1, 70, "Input"],
-Cell[38817, 1241, 43, 1, 70, "Output"]
+Cell[36056, 1166, 49, 1, 70, "Input"],
+Cell[36108, 1169, 37, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[38897, 1247, 164, 3, 70, "Input"],
-Cell[39064, 1252, 107, 2, 70, "Output"]
-}, Open  ]],
-Cell[39186, 1257, 155, 2, 70, "Input"],
-Cell[39344, 1261, 135, 2, 70, "Input"],
-Cell[39482, 1265, 68, 1, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[39575, 1270, 185, 3, 70, "Input"],
-Cell[39763, 1275, 40, 1, 70, "Output"]
-}, Open  ]],
-Cell[39818, 1279, 39, 1, 70, "Input"]
-}, Closed]],
-
-Cell[CellGroupData[{
-Cell[39894, 1285, 28, 0, 44, "Section"],
-Cell[39925, 1287, 336, 8, 70, "Input"],
-Cell[40264, 1297, 254, 4, 70, "Input"],
-Cell[40521, 1303, 78, 1, 70, "Input"],
-Cell[40602, 1306, 48, 1, 70, "Input"],
-Cell[40653, 1309, 701, 10, 70, "Input"],
-Cell[41357, 1321, 142, 3, 70, "Input"],
-Cell[41502, 1326, 69, 1, 70, "Input"],
-Cell[41574, 1329, 151, 2, 70, "Input"]
-}, Closed]],
-
-Cell[CellGroupData[{
-Cell[41762, 1336, 27, 0, 44, "Section"],
-Cell[41792, 1338, 39, 1, 70, "Input"],
-Cell[41834, 1341, 44, 1, 70, "Input"],
-Cell[41881, 1344, 580, 11, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[42486, 1359, 329, 5, 70, "Input"],
-Cell[42818, 1366, 76, 1, 70, "Output"]
-}, Open  ]],
-Cell[42909, 1370, 214, 4, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[43148, 1378, 654, 12, 70, "Input"],
-Cell[43805, 1392, 1554, 26, 70, "Message"],
-Cell[45362, 1420, 308, 4, 70, "Message"],
-Cell[45673, 1426, 1554, 26, 70, "Message"],
-Cell[47230, 1454, 308, 4, 70, "Message"],
-Cell[47541, 1460, 1554, 26, 70, "Message"],
-Cell[49098, 1488, 333, 5, 70, "Message"],
-Cell[49434, 1495, 308, 4, 70, "Message"],
-Cell[49745, 1501, 339, 5, 70, "Message"]
+Cell[36182, 1175, 233, 4, 70, "Input"],
+Cell[36418, 1181, 355, 5, 70, "Message"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[50121, 1511, 85, 1, 70, "Input"],
-Cell[50209, 1514, 48, 1, 70, "Output"]
+Cell[36810, 1191, 45, 1, 70, "Input"],
+Cell[36858, 1194, 38, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[50294, 1520, 137, 2, 70, "Input"],
-Cell[50434, 1524, 784, 11, 70, "Output"]
+Cell[36933, 1200, 187, 4, 70, "Input"],
+Cell[37123, 1206, 132, 3, 70, "Output"]
+}, Open  ]],
+Cell[37270, 1212, 55, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[37350, 1217, 64, 1, 70, "Input"],
+Cell[37417, 1220, 359, 5, 70, "Message"],
+Cell[37779, 1227, 227, 5, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[51255, 1540, 61, 1, 70, "Input"],
-Cell[51319, 1543, 81, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[51437, 1549, 151, 3, 70, "Input"],
-Cell[51591, 1554, 135, 3, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[51763, 1562, 314, 6, 70, "Input"],
-Cell[52080, 1570, 347, 5, 70, "Message"],
-Cell[52430, 1577, 347, 5, 70, "Message"],
-Cell[52780, 1584, 347, 5, 70, "Message"],
-Cell[53130, 1591, 333, 5, 70, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[53500, 1601, 24, 0, 70, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[53549, 1605, 250, 5, 70, "Input"],
-Cell[53802, 1612, 77, 1, 70, "Output"],
-Cell[53882, 1615, 42, 1, 70, "Output"]
-}, Open  ]],
-Cell[53939, 1619, 72, 1, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[54036, 1624, 84, 1, 70, "Input"],
-Cell[54123, 1627, 48, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[54208, 1633, 73, 1, 70, "Input"],
-Cell[54284, 1636, 130, 3, 70, "Output"]
-}, Open  ]],
-Cell[54429, 1642, 272, 4, 70, "Input"],
-Cell[54704, 1648, 86, 1, 70, "Input"],
-Cell[54793, 1651, 248, 4, 70, "Input"],
-Cell[55044, 1657, 148, 2, 70, "Input"],
-Cell[55195, 1661, 108, 2, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[55328, 1667, 83, 1, 70, "Input"],
-Cell[55414, 1670, 141, 2, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[55592, 1677, 92, 1, 70, "Input"],
-Cell[55687, 1680, 268, 4, 70, "Message"],
-Cell[55958, 1686, 268, 4, 70, "Message"],
-Cell[56229, 1692, 268, 4, 70, "Message"],
-Cell[56500, 1698, 329, 5, 70, "Message"]
-}, Open  ]],
-Cell[56844, 1706, 56, 1, 70, "Input"],
-Cell[56903, 1709, 131, 2, 70, "Input"],
-Cell[57037, 1713, 155, 2, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[57217, 1719, 340, 6, 70, "Input"],
-Cell[57560, 1727, 355, 5, 70, "Message"],
-Cell[57918, 1734, 342, 5, 70, "Message"],
-Cell[58263, 1741, 342, 5, 70, "Message"],
-Cell[58608, 1748, 329, 5, 70, "Message"],
-Cell[58940, 1755, 372, 5, 70, "Message"],
-Cell[59315, 1762, 371, 5, 70, "Message"],
-Cell[59689, 1769, 395, 6, 70, "Message"],
-Cell[60087, 1777, 394, 6, 70, "Message"],
-Cell[60484, 1785, 792, 11, 70, "Message"],
-Cell[61279, 1798, 329, 5, 70, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[61645, 1808, 50, 1, 70, "Input"],
-Cell[61698, 1811, 44, 1, 70, "Output"]
-}, Open  ]],
-Cell[61757, 1815, 456, 8, 70, "Input"],
-Cell[62216, 1825, 56, 1, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[62297, 1830, 148, 4, 70, "Input"],
-Cell[62448, 1836, 47, 1, 70, "Output"],
-Cell[62498, 1839, 52, 1, 70, "Output"],
-Cell[62553, 1842, 55, 1, 70, "Output"],
-Cell[62611, 1845, 59, 1, 70, "Output"]
-}, Open  ]],
-Cell[62685, 1849, 124, 2, 70, "Input"],
-Cell[62812, 1853, 162, 3, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[62999, 1860, 447, 8, 70, "Input"],
-Cell[63449, 1870, 107, 2, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[63593, 1877, 72, 1, 70, "Input"],
-Cell[63668, 1880, 54, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[63759, 1886, 151, 2, 70, "Input"],
-Cell[63913, 1890, 58, 1, 70, "Output"],
-Cell[63974, 1893, 53, 1, 70, "Output"]
-}, Open  ]],
-Cell[64042, 1897, 117, 2, 70, "Input"],
-Cell[64162, 1901, 63, 1, 70, "Input"],
-Cell[64228, 1904, 63, 1, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[64316, 1909, 180, 3, 70, "Input"],
-Cell[64499, 1914, 58, 1, 70, "Output"],
-Cell[64560, 1917, 52, 1, 70, "Output"]
-}, Open  ]],
-Cell[64627, 1921, 139, 2, 70, "Input"],
-Cell[64769, 1925, 86, 1, 70, "Input"],
-Cell[64858, 1928, 360, 8, 70, "Input"],
-Cell[65221, 1938, 180, 3, 70, "Input"],
-Cell[65404, 1943, 200, 3, 70, "Input"],
-Cell[65607, 1948, 186, 3, 70, "Input"],
-Cell[65796, 1953, 72, 1, 70, "Input"]
+Cell[38043, 1237, 323, 5, 70, "Input"],
+Cell[38369, 1244, 130, 3, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[65917, 1960, 22, 0, 44, "Section"],
+Cell[38548, 1253, 28, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[65964, 1964, 44, 1, 70, "Input"],
-Cell[66011, 1967, 117, 2, 70, "Output"]
-}, Open  ]],
-Cell[66143, 1972, 938, 18, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[67106, 1994, 61, 1, 70, "Input"],
-Cell[67170, 1997, 42, 1, 70, "Output"]
+Cell[38601, 1257, 260, 6, 70, "Input"],
+Cell[38864, 1265, 354, 5, 70, "Message"],
+Cell[39221, 1272, 52, 1, 70, "Output"],
+Cell[39276, 1275, 354, 5, 70, "Message"],
+Cell[39633, 1282, 58, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[67249, 2003, 332, 6, 70, "Input"],
-Cell[67584, 2011, 130, 3, 70, "Output"]
+Cell[39728, 1288, 315, 5, 70, "Input"],
+Cell[40046, 1295, 107, 2, 70, "Output"]
 }, Open  ]],
-Cell[67729, 2017, 131, 2, 70, "Input"],
-Cell[67863, 2021, 90, 1, 70, "Input"]
+
+Cell[CellGroupData[{
+Cell[40190, 1302, 57, 1, 70, "Input"],
+Cell[40250, 1305, 43, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[40330, 1311, 164, 3, 70, "Input"],
+Cell[40497, 1316, 107, 2, 70, "Output"]
+}, Open  ]],
+Cell[40619, 1321, 155, 2, 70, "Input"],
+Cell[40777, 1325, 135, 2, 70, "Input"],
+Cell[40915, 1329, 68, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[41008, 1334, 185, 3, 70, "Input"],
+Cell[41196, 1339, 40, 1, 70, "Output"]
+}, Open  ]],
+Cell[41251, 1343, 39, 1, 70, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[67990, 2027, 28, 0, 44, "Section"],
+Cell[41327, 1349, 28, 0, 44, "Section"],
+Cell[41358, 1351, 336, 8, 70, "Input"],
+Cell[41697, 1361, 254, 4, 70, "Input"],
+Cell[41954, 1367, 78, 1, 70, "Input"],
+Cell[42035, 1370, 48, 1, 70, "Input"],
+Cell[42086, 1373, 701, 10, 70, "Input"],
+Cell[42790, 1385, 142, 3, 70, "Input"],
+Cell[42935, 1390, 69, 1, 70, "Input"],
+Cell[43007, 1393, 151, 2, 70, "Input"]
+}, Closed]],
 
 Cell[CellGroupData[{
-Cell[68043, 2031, 35, 0, 38, "Subsection"],
-Cell[68081, 2033, 337, 6, 80, "Input"],
+Cell[43195, 1400, 27, 0, 44, "Section"],
+Cell[43225, 1402, 39, 1, 70, "Input"],
+Cell[43267, 1405, 44, 1, 70, "Input"],
+Cell[43314, 1408, 580, 11, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[68443, 2043, 50, 1, 27, "Input"],
-Cell[68496, 2046, 41, 1, 27, "Output"]
+Cell[43919, 1423, 329, 5, 70, "Input"],
+Cell[44251, 1430, 76, 1, 70, "Output"]
 }, Open  ]],
-Cell[68552, 2050, 79, 1, 27, "Input"],
+Cell[44342, 1434, 214, 4, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[68656, 2055, 136, 3, 27, "Input"],
-Cell[68795, 2060, 328, 5, 20, "Message"],
-Cell[69126, 2067, 328, 5, 20, "Message"],
-Cell[69457, 2074, 311, 5, 20, "Message"],
-Cell[69771, 2081, 329, 5, 20, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[70137, 2091, 88, 1, 27, "Input"],
-Cell[70228, 2094, 2302, 40, 149, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[72567, 2139, 573, 12, 75, "Input"],
-Cell[73143, 2153, 4303, 66, 328, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[77483, 2224, 58, 1, 27, "Input"],
-Cell[77544, 2227, 3913, 52, 555, "Output"]
-}, Open  ]]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[81506, 2285, 22, 0, 38, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[81553, 2289, 44, 1, 27, "Input"],
-Cell[81600, 2292, 114, 2, 27, "Output"]
+Cell[44581, 1442, 654, 12, 70, "Input"],
+Cell[45238, 1456, 1554, 26, 70, "Message"],
+Cell[46795, 1484, 308, 4, 70, "Message"],
+Cell[47106, 1490, 1554, 26, 70, "Message"],
+Cell[48663, 1518, 308, 4, 70, "Message"],
+Cell[48974, 1524, 1554, 26, 70, "Message"],
+Cell[50531, 1552, 333, 5, 70, "Message"],
+Cell[50867, 1559, 308, 4, 70, "Message"],
+Cell[51178, 1565, 339, 5, 70, "Message"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[81751, 2299, 317, 8, 75, "Input"],
-Cell[82071, 2309, 54, 1, 27, "Output"]
-}, Open  ]],
-Cell[82140, 2313, 88, 1, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[82253, 2318, 235, 4, 27, "Input"],
-Cell[82491, 2324, 137, 3, 27, "Output"]
+Cell[51554, 1575, 85, 1, 70, "Input"],
+Cell[51642, 1578, 48, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[82665, 2332, 69, 1, 27, "Input"],
-Cell[82737, 2335, 65, 1, 27, "Output"]
-}, Open  ]],
-Cell[82817, 2339, 230, 4, 59, "Input"],
-Cell[83050, 2345, 61, 1, 27, "Input"],
-Cell[83114, 2348, 82, 1, 27, "Input"],
-Cell[83199, 2351, 639, 13, 91, "Input"],
-Cell[83841, 2366, 382, 9, 96, "Input"],
-Cell[84226, 2377, 152, 2, 59, "Input"],
-
-Cell[CellGroupData[{
-Cell[84403, 2383, 427, 7, 70, "Input"],
-Cell[84833, 2392, 278, 4, 37, "Message"],
-Cell[85114, 2398, 311, 5, 20, "Message"],
-Cell[85428, 2405, 342, 5, 20, "Message"]
-}, Open  ]],
-Cell[85785, 2413, 118, 2, 50, "Input"],
-
-Cell[CellGroupData[{
-Cell[85928, 2419, 74, 1, 27, "Input"],
-Cell[86005, 2422, 5195, 143, 108, "Output"]
+Cell[51727, 1584, 137, 2, 70, "Input"],
+Cell[51867, 1588, 784, 11, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[91237, 2570, 109, 2, 27, "Input"],
-Cell[91349, 2574, 2038, 58, 36, "Output"]
-}, Open  ]],
-Cell[93402, 2635, 53, 1, 29, "Input"],
-
-Cell[CellGroupData[{
-Cell[93480, 2640, 82, 1, 31, "Input"],
-Cell[93565, 2643, 89, 1, 50, "Output"]
-}, Open  ]],
-Cell[93669, 2647, 108, 2, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[93802, 2653, 102, 2, 27, "Input"],
-Cell[93907, 2657, 137, 3, 27, "Output"]
+Cell[52688, 1604, 61, 1, 70, "Input"],
+Cell[52752, 1607, 81, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[94081, 2665, 247, 5, 91, "Input"],
-Cell[94331, 2672, 38, 1, 27, "Output"],
-Cell[94372, 2675, 38, 1, 27, "Output"],
-Cell[94413, 2678, 35, 1, 27, "Output"],
-Cell[94451, 2681, 35, 1, 27, "Output"],
-Cell[94489, 2684, 35, 1, 27, "Output"]
+Cell[52870, 1613, 151, 3, 70, "Input"],
+Cell[53024, 1618, 135, 3, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[94561, 2690, 79, 1, 29, "Input"],
-Cell[94643, 2693, 51, 1, 29, "Output"]
+Cell[53196, 1626, 314, 6, 70, "Input"],
+Cell[53513, 1634, 347, 5, 70, "Message"],
+Cell[53863, 1641, 347, 5, 70, "Message"],
+Cell[54213, 1648, 347, 5, 70, "Message"],
+Cell[54563, 1655, 333, 5, 70, "Message"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[94731, 2699, 61, 1, 32, "Input"],
-Cell[94795, 2702, 66, 1, 30, "Output"]
-}, Open  ]]
+Cell[54933, 1665, 24, 0, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[54982, 1669, 250, 5, 70, "Input"],
+Cell[55235, 1676, 77, 1, 70, "Output"],
+Cell[55315, 1679, 42, 1, 70, "Output"]
+}, Open  ]],
+Cell[55372, 1683, 72, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[55469, 1688, 84, 1, 70, "Input"],
+Cell[55556, 1691, 48, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[55641, 1697, 73, 1, 70, "Input"],
+Cell[55717, 1700, 130, 3, 70, "Output"]
+}, Open  ]],
+Cell[55862, 1706, 272, 4, 70, "Input"],
+Cell[56137, 1712, 86, 1, 70, "Input"],
+Cell[56226, 1715, 248, 4, 70, "Input"],
+Cell[56477, 1721, 148, 2, 70, "Input"],
+Cell[56628, 1725, 108, 2, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[56761, 1731, 83, 1, 70, "Input"],
+Cell[56847, 1734, 141, 2, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[57025, 1741, 92, 1, 70, "Input"],
+Cell[57120, 1744, 268, 4, 70, "Message"],
+Cell[57391, 1750, 268, 4, 70, "Message"],
+Cell[57662, 1756, 268, 4, 70, "Message"],
+Cell[57933, 1762, 329, 5, 70, "Message"]
+}, Open  ]],
+Cell[58277, 1770, 56, 1, 70, "Input"],
+Cell[58336, 1773, 131, 2, 70, "Input"],
+Cell[58470, 1777, 155, 2, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[58650, 1783, 340, 6, 70, "Input"],
+Cell[58993, 1791, 355, 5, 70, "Message"],
+Cell[59351, 1798, 342, 5, 70, "Message"],
+Cell[59696, 1805, 342, 5, 70, "Message"],
+Cell[60041, 1812, 329, 5, 70, "Message"],
+Cell[60373, 1819, 372, 5, 70, "Message"],
+Cell[60748, 1826, 371, 5, 70, "Message"],
+Cell[61122, 1833, 395, 6, 70, "Message"],
+Cell[61520, 1841, 394, 6, 70, "Message"],
+Cell[61917, 1849, 792, 11, 70, "Message"],
+Cell[62712, 1862, 329, 5, 70, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[63078, 1872, 50, 1, 70, "Input"],
+Cell[63131, 1875, 44, 1, 70, "Output"]
+}, Open  ]],
+Cell[63190, 1879, 456, 8, 70, "Input"],
+Cell[63649, 1889, 56, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[63730, 1894, 148, 4, 70, "Input"],
+Cell[63881, 1900, 47, 1, 70, "Output"],
+Cell[63931, 1903, 52, 1, 70, "Output"],
+Cell[63986, 1906, 55, 1, 70, "Output"],
+Cell[64044, 1909, 59, 1, 70, "Output"]
+}, Open  ]],
+Cell[64118, 1913, 124, 2, 70, "Input"],
+Cell[64245, 1917, 162, 3, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[64432, 1924, 447, 8, 70, "Input"],
+Cell[64882, 1934, 107, 2, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65026, 1941, 72, 1, 70, "Input"],
+Cell[65101, 1944, 54, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[65192, 1950, 151, 2, 70, "Input"],
+Cell[65346, 1954, 58, 1, 70, "Output"],
+Cell[65407, 1957, 53, 1, 70, "Output"]
+}, Open  ]],
+Cell[65475, 1961, 117, 2, 70, "Input"],
+Cell[65595, 1965, 63, 1, 70, "Input"],
+Cell[65661, 1968, 63, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[65749, 1973, 180, 3, 70, "Input"],
+Cell[65932, 1978, 58, 1, 70, "Output"],
+Cell[65993, 1981, 52, 1, 70, "Output"]
+}, Open  ]],
+Cell[66060, 1985, 139, 2, 70, "Input"],
+Cell[66202, 1989, 86, 1, 70, "Input"],
+Cell[66291, 1992, 360, 8, 70, "Input"],
+Cell[66654, 2002, 180, 3, 70, "Input"],
+Cell[66837, 2007, 200, 3, 70, "Input"],
+Cell[67040, 2012, 186, 3, 70, "Input"],
+Cell[67229, 2017, 72, 1, 70, "Input"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[94922, 2710, 28, 0, 44, "Section"],
+Cell[67350, 2024, 22, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[94975, 2714, 44, 1, 27, "Input"],
-Cell[95022, 2717, 305, 4, 43, "Output"]
+Cell[67397, 2028, 44, 1, 70, "Input"],
+Cell[67444, 2031, 117, 2, 70, "Output"]
+}, Open  ]],
+Cell[67576, 2036, 938, 18, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[68539, 2058, 61, 1, 70, "Input"],
+Cell[68603, 2061, 42, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[95364, 2726, 207, 5, 59, "Input"],
-Cell[95574, 2733, 47, 1, 27, "Output"]
+Cell[68682, 2067, 332, 6, 70, "Input"],
+Cell[69017, 2075, 130, 3, 70, "Output"]
 }, Open  ]],
-
-Cell[CellGroupData[{
-Cell[95658, 2739, 62, 1, 27, "Input"],
-Cell[95723, 2742, 344, 5, 20, "Message"],
-Cell[96070, 2749, 137, 3, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[96244, 2757, 82, 1, 27, "Input"],
-Cell[96329, 2760, 137, 3, 27, "Output"]
-}, Open  ]],
-Cell[96481, 2766, 55, 1, 27, "Input"],
-Cell[96539, 2769, 84, 1, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[96648, 2774, 103, 2, 43, "Input"],
-Cell[96754, 2778, 37, 1, 27, "Output"],
-Cell[96794, 2781, 37, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[96868, 2787, 124, 2, 43, "Input"],
-Cell[96995, 2791, 38, 1, 27, "Output"]
-}, Open  ]],
-Cell[97048, 2795, 101, 2, 43, "Input"],
-Cell[97152, 2799, 581, 11, 123, "Input"],
-
-Cell[CellGroupData[{
-Cell[97758, 2814, 172, 4, 75, "Input"],
-Cell[97933, 2820, 137, 3, 27, "Output"],
-Cell[98073, 2825, 2558, 45, 135, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[100668, 2875, 255, 5, 59, "Input"],
-Cell[100926, 2882, 137, 3, 27, "Output"]
-}, Open  ]],
-Cell[101078, 2888, 229, 4, 75, "Input"],
-Cell[101310, 2894, 144, 4, 27, "Input"],
-Cell[101457, 2900, 551, 10, 155, "Input"],
-Cell[102011, 2912, 128, 2, 27, "Input"],
-Cell[102142, 2916, 293, 5, 59, "Input"],
-Cell[102438, 2923, 322, 7, 75, "Input"],
-
-Cell[CellGroupData[{
-Cell[102785, 2934, 69, 1, 27, "Input"],
-Cell[102857, 2937, 36, 1, 27, "Output"]
-}, Open  ]],
-Cell[102908, 2941, 767, 14, 139, "Input"],
-Cell[103678, 2957, 160, 3, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[103863, 2964, 87, 1, 27, "Input"],
-Cell[103953, 2967, 883, 13, 33, "Message"],
-Cell[104839, 2982, 295, 6, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[105171, 2993, 128, 3, 27, "Input"],
-Cell[105302, 2998, 130, 3, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[105469, 3006, 385, 7, 91, "Input"],
-Cell[105857, 3015, 563, 8, 20, "Message"],
-Cell[106423, 3025, 563, 8, 20, "Message"],
-Cell[106989, 3035, 563, 8, 20, "Message"],
-Cell[107555, 3045, 332, 5, 20, "Message"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[107924, 3055, 205, 3, 75, "Input"],
-Cell[108132, 3060, 230, 5, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[108399, 3070, 587, 10, 107, "Input"],
-Cell[108989, 3082, 623, 8, 75, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[109649, 3095, 44, 1, 27, "Input"],
-Cell[109696, 3098, 130, 3, 27, "Output"]
-}, Open  ]],
-Cell[109841, 3104, 150, 3, 27, "Input"],
-Cell[109994, 3109, 167, 4, 27, "Input"],
-Cell[110164, 3115, 171, 4, 27, "Input"],
-Cell[110338, 3121, 89, 1, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[110452, 3126, 1138, 22, 171, "Input"],
-Cell[111593, 3150, 383, 6, 25, "Message"],
-Cell[111979, 3158, 383, 6, 25, "Message"],
-Cell[112365, 3166, 383, 6, 25, "Message"],
-Cell[112751, 3174, 332, 5, 20, "Message"]
-}, Open  ]],
-Cell[113098, 3182, 222, 5, 27, "Input"],
-Cell[113323, 3189, 453, 8, 59, "Input"],
-Cell[113779, 3199, 188, 4, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[113992, 3207, 46, 1, 27, "Input"],
-Cell[114041, 3210, 53, 1, 27, "Output"]
-}, Open  ]],
-Cell[114109, 3214, 119, 2, 27, "Input"],
-Cell[114231, 3218, 89, 1, 27, "Input"],
-Cell[114323, 3221, 478, 9, 91, "Input"]
+Cell[69162, 2081, 131, 2, 70, "Input"],
+Cell[69296, 2085, 90, 1, 70, "Input"]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[114838, 3235, 27, 0, 44, "Section"],
-Cell[114868, 3237, 39, 1, 70, "Input"],
+Cell[69423, 2091, 28, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[114932, 3242, 37, 0, 70, "Subsection"],
-Cell[114972, 3244, 69, 1, 70, "Input"],
-Cell[115044, 3247, 87, 1, 70, "Input"],
+Cell[69476, 2095, 35, 0, 38, "Subsection"],
+Cell[69514, 2097, 337, 6, 80, "Input"],
 
 Cell[CellGroupData[{
-Cell[115156, 3252, 91, 1, 70, "Input"],
-Cell[115250, 3255, 150, 3, 70, "Output"]
+Cell[69876, 2107, 50, 1, 27, "Input"],
+Cell[69929, 2110, 41, 1, 27, "Output"]
 }, Open  ]],
-Cell[115415, 3261, 115, 2, 70, "Input"],
-Cell[115533, 3265, 150, 2, 70, "Input"]
-}, Open  ]],
+Cell[69985, 2114, 79, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[115720, 3272, 26, 0, 70, "Subsection"],
-Cell[115749, 3274, 68, 1, 70, "Input"],
-Cell[115820, 3277, 384, 8, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[116229, 3289, 57, 1, 70, "Input"],
-Cell[116289, 3292, 130, 3, 70, "Output"]
+Cell[70089, 2119, 136, 3, 27, "Input"],
+Cell[70228, 2124, 328, 5, 20, "Message"],
+Cell[70559, 2131, 328, 5, 20, "Message"],
+Cell[70890, 2138, 311, 5, 20, "Message"],
+Cell[71204, 2145, 329, 5, 20, "Message"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[116456, 3300, 150, 4, 70, "Input"],
-Cell[116609, 3306, 133, 3, 70, "Output"]
+Cell[71570, 2155, 88, 1, 27, "Input"],
+Cell[71661, 2158, 2302, 40, 149, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[116779, 3314, 263, 5, 70, "Input"],
-Cell[117045, 3321, 64, 1, 70, "Output"]
+Cell[74000, 2203, 573, 12, 75, "Input"],
+Cell[74576, 2217, 4303, 66, 328, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[78916, 2288, 58, 1, 27, "Input"],
+Cell[78977, 2291, 3913, 52, 555, "Output"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[117158, 3328, 26, 0, 70, "Subsection"],
+Cell[82939, 2349, 22, 0, 38, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[117209, 3332, 56, 1, 70, "Input"],
-Cell[117268, 3335, 1228, 18, 70, "Output"]
-}, Open  ]],
-Cell[118511, 3356, 158, 3, 70, "Input"],
-Cell[118672, 3361, 257, 4, 70, "Input"],
-
-Cell[CellGroupData[{
-Cell[118954, 3369, 391, 8, 70, "Input"],
-Cell[119348, 3379, 7260, 202, 70, "Output"]
+Cell[82986, 2353, 44, 1, 27, "Input"],
+Cell[83033, 2356, 114, 2, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[126645, 3586, 48, 1, 70, "Input"],
-Cell[126696, 3589, 37, 1, 70, "Output"]
+Cell[83184, 2363, 317, 8, 75, "Input"],
+Cell[83504, 2373, 54, 1, 27, "Output"]
 }, Open  ]],
-Cell[126748, 3593, 646, 12, 70, "Input"],
-Cell[127397, 3607, 402, 8, 70, "Input"],
-Cell[127802, 3617, 316, 6, 70, "Input"],
+Cell[83573, 2377, 88, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[128143, 3627, 63, 1, 70, "Input"],
-Cell[128209, 3630, 49, 1, 70, "Output"]
+Cell[83686, 2382, 235, 4, 27, "Input"],
+Cell[83924, 2388, 137, 3, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[128295, 3636, 43, 1, 70, "Input"],
-Cell[128341, 3639, 38, 1, 70, "Output"]
+Cell[84098, 2396, 69, 1, 27, "Input"],
+Cell[84170, 2399, 65, 1, 27, "Output"]
+}, Open  ]],
+Cell[84250, 2403, 230, 4, 59, "Input"],
+Cell[84483, 2409, 61, 1, 27, "Input"],
+Cell[84547, 2412, 82, 1, 27, "Input"],
+Cell[84632, 2415, 639, 13, 91, "Input"],
+Cell[85274, 2430, 382, 9, 96, "Input"],
+Cell[85659, 2441, 152, 2, 59, "Input"],
+
+Cell[CellGroupData[{
+Cell[85836, 2447, 427, 7, 70, "Input"],
+Cell[86266, 2456, 278, 4, 37, "Message"],
+Cell[86547, 2462, 311, 5, 20, "Message"],
+Cell[86861, 2469, 342, 5, 20, "Message"]
+}, Open  ]],
+Cell[87218, 2477, 118, 2, 50, "Input"],
+
+Cell[CellGroupData[{
+Cell[87361, 2483, 74, 1, 27, "Input"],
+Cell[87438, 2486, 5195, 143, 108, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[128416, 3645, 40, 1, 70, "Input"],
-Cell[128459, 3648, 38, 1, 70, "Output"]
+Cell[92670, 2634, 109, 2, 27, "Input"],
+Cell[92782, 2638, 2038, 58, 36, "Output"]
+}, Open  ]],
+Cell[94835, 2699, 53, 1, 29, "Input"],
+
+Cell[CellGroupData[{
+Cell[94913, 2704, 82, 1, 31, "Input"],
+Cell[94998, 2707, 89, 1, 50, "Output"]
+}, Open  ]],
+Cell[95102, 2711, 108, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[95235, 2717, 102, 2, 27, "Input"],
+Cell[95340, 2721, 137, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[95514, 2729, 247, 5, 91, "Input"],
+Cell[95764, 2736, 38, 1, 27, "Output"],
+Cell[95805, 2739, 38, 1, 27, "Output"],
+Cell[95846, 2742, 35, 1, 27, "Output"],
+Cell[95884, 2745, 35, 1, 27, "Output"],
+Cell[95922, 2748, 35, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[95994, 2754, 79, 1, 29, "Input"],
+Cell[96076, 2757, 51, 1, 29, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[96164, 2763, 61, 1, 32, "Input"],
+Cell[96228, 2766, 66, 1, 30, "Output"]
 }, Open  ]]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[128558, 3656, 30, 0, 44, "Section"],
-Cell[128591, 3658, 94, 2, 70, "Input"],
+Cell[96355, 2774, 28, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[128710, 3664, 48, 1, 70, "Input"],
-Cell[128761, 3667, 85, 1, 70, "Output"]
+Cell[96408, 2778, 44, 1, 27, "Input"],
+Cell[96455, 2781, 305, 4, 43, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[128883, 3673, 97, 2, 70, "Input"],
-Cell[128983, 3677, 39, 1, 70, "Output"]
+Cell[96797, 2790, 207, 5, 59, "Input"],
+Cell[97007, 2797, 47, 1, 27, "Output"]
 }, Open  ]],
-Cell[129037, 3681, 54, 1, 70, "Input"],
-Cell[129094, 3684, 55, 1, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[129174, 3689, 37, 1, 70, "Input"],
-Cell[129214, 3692, 38, 1, 70, "Output"]
+Cell[97091, 2803, 62, 1, 27, "Input"],
+Cell[97156, 2806, 344, 5, 20, "Message"],
+Cell[97503, 2813, 137, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[97677, 2821, 82, 1, 27, "Input"],
+Cell[97762, 2824, 137, 3, 27, "Output"]
+}, Open  ]],
+Cell[97914, 2830, 55, 1, 27, "Input"],
+Cell[97972, 2833, 84, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[98081, 2838, 103, 2, 43, "Input"],
+Cell[98187, 2842, 37, 1, 27, "Output"],
+Cell[98227, 2845, 37, 1, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[98301, 2851, 124, 2, 43, "Input"],
+Cell[98428, 2855, 38, 1, 27, "Output"]
+}, Open  ]],
+Cell[98481, 2859, 101, 2, 43, "Input"],
+Cell[98585, 2863, 581, 11, 123, "Input"],
+
+Cell[CellGroupData[{
+Cell[99191, 2878, 172, 4, 75, "Input"],
+Cell[99366, 2884, 137, 3, 27, "Output"],
+Cell[99506, 2889, 2558, 45, 135, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[102101, 2939, 255, 5, 59, "Input"],
+Cell[102359, 2946, 137, 3, 27, "Output"]
+}, Open  ]],
+Cell[102511, 2952, 229, 4, 75, "Input"],
+Cell[102743, 2958, 144, 4, 27, "Input"],
+Cell[102890, 2964, 551, 10, 155, "Input"],
+Cell[103444, 2976, 128, 2, 27, "Input"],
+Cell[103575, 2980, 293, 5, 59, "Input"],
+Cell[103871, 2987, 322, 7, 75, "Input"],
+
+Cell[CellGroupData[{
+Cell[104218, 2998, 69, 1, 27, "Input"],
+Cell[104290, 3001, 36, 1, 27, "Output"]
+}, Open  ]],
+Cell[104341, 3005, 767, 14, 139, "Input"],
+Cell[105111, 3021, 160, 3, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[105296, 3028, 87, 1, 27, "Input"],
+Cell[105386, 3031, 883, 13, 33, "Message"],
+Cell[106272, 3046, 295, 6, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[106604, 3057, 128, 3, 27, "Input"],
+Cell[106735, 3062, 130, 3, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[106902, 3070, 385, 7, 91, "Input"],
+Cell[107290, 3079, 563, 8, 20, "Message"],
+Cell[107856, 3089, 563, 8, 20, "Message"],
+Cell[108422, 3099, 563, 8, 20, "Message"],
+Cell[108988, 3109, 332, 5, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[109357, 3119, 205, 3, 75, "Input"],
+Cell[109565, 3124, 230, 5, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[109832, 3134, 587, 10, 107, "Input"],
+Cell[110422, 3146, 623, 8, 75, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[111082, 3159, 44, 1, 27, "Input"],
+Cell[111129, 3162, 130, 3, 27, "Output"]
+}, Open  ]],
+Cell[111274, 3168, 150, 3, 27, "Input"],
+Cell[111427, 3173, 167, 4, 27, "Input"],
+Cell[111597, 3179, 171, 4, 27, "Input"],
+Cell[111771, 3185, 89, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[111885, 3190, 1138, 22, 171, "Input"],
+Cell[113026, 3214, 383, 6, 25, "Message"],
+Cell[113412, 3222, 383, 6, 25, "Message"],
+Cell[113798, 3230, 383, 6, 25, "Message"],
+Cell[114184, 3238, 332, 5, 20, "Message"]
+}, Open  ]],
+Cell[114531, 3246, 222, 5, 27, "Input"],
+Cell[114756, 3253, 453, 8, 59, "Input"],
+Cell[115212, 3263, 188, 4, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[115425, 3271, 46, 1, 27, "Input"],
+Cell[115474, 3274, 53, 1, 27, "Output"]
+}, Open  ]],
+Cell[115542, 3278, 119, 2, 27, "Input"],
+Cell[115664, 3282, 89, 1, 27, "Input"],
+Cell[115756, 3285, 478, 9, 91, "Input"]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[116271, 3299, 27, 0, 44, "Section"],
+Cell[116301, 3301, 39, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[116365, 3306, 37, 0, 70, "Subsection"],
+Cell[116405, 3308, 69, 1, 70, "Input"],
+Cell[116477, 3311, 87, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[116589, 3316, 91, 1, 70, "Input"],
+Cell[116683, 3319, 150, 3, 70, "Output"]
+}, Open  ]],
+Cell[116848, 3325, 115, 2, 70, "Input"],
+Cell[116966, 3329, 150, 2, 70, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[117153, 3336, 26, 0, 70, "Subsection"],
+Cell[117182, 3338, 68, 1, 70, "Input"],
+Cell[117253, 3341, 384, 8, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[117662, 3353, 57, 1, 70, "Input"],
+Cell[117722, 3356, 130, 3, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[117889, 3364, 150, 4, 70, "Input"],
+Cell[118042, 3370, 133, 3, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[118212, 3378, 263, 5, 70, "Input"],
+Cell[118478, 3385, 64, 1, 70, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[118591, 3392, 26, 0, 70, "Subsection"],
+
+Cell[CellGroupData[{
+Cell[118642, 3396, 56, 1, 70, "Input"],
+Cell[118701, 3399, 1228, 18, 70, "Output"]
+}, Open  ]],
+Cell[119944, 3420, 158, 3, 70, "Input"],
+Cell[120105, 3425, 257, 4, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[120387, 3433, 391, 8, 70, "Input"],
+Cell[120781, 3443, 7260, 202, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[128078, 3650, 48, 1, 70, "Input"],
+Cell[128129, 3653, 37, 1, 70, "Output"]
+}, Open  ]],
+Cell[128181, 3657, 646, 12, 70, "Input"],
+Cell[128830, 3671, 402, 8, 70, "Input"],
+Cell[129235, 3681, 316, 6, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[129576, 3691, 63, 1, 70, "Input"],
+Cell[129642, 3694, 49, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[129728, 3700, 43, 1, 70, "Input"],
+Cell[129774, 3703, 38, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[129849, 3709, 40, 1, 70, "Input"],
+Cell[129892, 3712, 38, 1, 70, "Output"]
+}, Open  ]]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[129301, 3699, 24, 0, 44, "Section"],
-Cell[129328, 3701, 44, 1, 27, "Input"],
-Cell[129375, 3704, 627, 12, 139, "Input"],
-Cell[130005, 3718, 158, 2, 43, "Input"],
-Cell[130166, 3722, 128, 2, 27, "Input"],
-Cell[130297, 3726, 207, 4, 43, "Input"],
+Cell[129991, 3720, 30, 0, 44, "Section"],
+Cell[130024, 3722, 94, 2, 70, "Input"],
 
 Cell[CellGroupData[{
-Cell[130529, 3734, 326, 6, 59, "Input"],
-Cell[130858, 3742, 137, 3, 27, "Output"]
-}, Open  ]],
-Cell[131010, 3748, 73, 1, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[131108, 3753, 383, 7, 75, "Input"],
-Cell[131494, 3762, 137, 3, 27, "Output"]
+Cell[130143, 3728, 48, 1, 70, "Input"],
+Cell[130194, 3731, 85, 1, 70, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[131668, 3770, 59, 1, 27, "Input"],
-Cell[131730, 3773, 130, 3, 27, "Output"]
+Cell[130316, 3737, 97, 2, 70, "Input"],
+Cell[130416, 3741, 39, 1, 70, "Output"]
+}, Open  ]],
+Cell[130470, 3745, 54, 1, 70, "Input"],
+Cell[130527, 3748, 55, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[130607, 3753, 37, 1, 70, "Input"],
+Cell[130647, 3756, 38, 1, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[131909, 3782, 27, 0, 44, "Section"],
-Cell[131939, 3784, 39, 1, 27, "Input"],
+Cell[130734, 3763, 24, 0, 44, "Section"],
+Cell[130761, 3765, 44, 1, 27, "Input"],
+Cell[130808, 3768, 627, 12, 139, "Input"],
+Cell[131438, 3782, 158, 2, 43, "Input"],
+Cell[131599, 3786, 128, 2, 27, "Input"],
+Cell[131730, 3790, 207, 4, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[132003, 3789, 44, 1, 27, "Input"],
-Cell[132050, 3792, 187, 3, 27, "Output"]
+Cell[131962, 3798, 326, 6, 59, "Input"],
+Cell[132291, 3806, 137, 3, 27, "Output"]
 }, Open  ]],
-Cell[132252, 3798, 26, 0, 27, "Input"],
-Cell[132281, 3800, 114, 2, 43, "Input"],
+Cell[132443, 3812, 73, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[132420, 3806, 62, 1, 27, "Input"],
-Cell[132485, 3809, 137, 3, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[132659, 3817, 96, 2, 43, "Input"],
-Cell[132758, 3821, 168, 4, 27, "Output"]
-}, Open  ]],
-Cell[132941, 3828, 39, 1, 27, "Input"],
-Cell[132983, 3831, 73, 1, 27, "Input"],
-Cell[133059, 3834, 360, 7, 75, "Input"],
-Cell[133422, 3843, 363, 7, 75, "Input"],
-Cell[133788, 3852, 82, 1, 27, "Input"],
-Cell[133873, 3855, 221, 4, 27, "Input"],
-Cell[134097, 3861, 281, 5, 27, "Input"],
-
-Cell[CellGroupData[{
-Cell[134403, 3870, 48, 1, 27, "Input"],
-Cell[134454, 3873, 41, 1, 27, "Output"]
+Cell[132541, 3817, 383, 7, 75, "Input"],
+Cell[132927, 3826, 137, 3, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[134532, 3879, 61, 1, 27, "Input"],
-Cell[134596, 3882, 49, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[134682, 3888, 55, 1, 27, "Input"],
-Cell[134740, 3891, 42, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[134819, 3897, 56, 1, 29, "Input"],
-Cell[134878, 3900, 53, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[134968, 3906, 39, 1, 29, "Input"],
-Cell[135010, 3909, 42, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[135089, 3915, 40, 1, 29, "Input"],
-Cell[135132, 3918, 42, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[135211, 3924, 26, 0, 38, "Subsection"],
-Cell[135240, 3926, 1118, 21, 312, "Input"],
-Cell[136361, 3949, 148, 3, 62, "Input"]
+Cell[133101, 3834, 59, 1, 27, "Input"],
+Cell[133163, 3837, 130, 3, 27, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[136558, 3958, 23, 0, 44, "Section"],
+Cell[133342, 3846, 27, 0, 44, "Section"],
+Cell[133372, 3848, 39, 1, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[136606, 3962, 44, 1, 70, "Input"],
-Cell[136653, 3965, 138, 2, 70, "Output"]
+Cell[133436, 3853, 44, 1, 27, "Input"],
+Cell[133483, 3856, 187, 3, 26, "Output"]
+}, Open  ]],
+Cell[133685, 3862, 26, 0, 27, "Input"],
+Cell[133714, 3864, 114, 2, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[133853, 3870, 62, 1, 27, "Input"],
+Cell[133918, 3873, 137, 3, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[136828, 3972, 107, 2, 70, "Input"],
-Cell[136938, 3976, 37, 1, 70, "Output"]
+Cell[134092, 3881, 96, 2, 43, "Input"],
+Cell[134191, 3885, 168, 4, 26, "Output"]
 }, Open  ]],
-Cell[136990, 3980, 176, 3, 70, "Input"],
-Cell[137169, 3985, 73, 1, 70, "Input"],
+Cell[134374, 3892, 39, 1, 27, "Input"],
+Cell[134416, 3895, 73, 1, 27, "Input"],
+Cell[134492, 3898, 360, 7, 75, "Input"],
+Cell[134855, 3907, 363, 7, 75, "Input"],
+Cell[135221, 3916, 82, 1, 27, "Input"],
+Cell[135306, 3919, 221, 4, 27, "Input"],
+Cell[135530, 3925, 281, 5, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[137267, 3990, 45, 1, 70, "Input"],
-Cell[137315, 3993, 37, 1, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[137389, 3999, 155, 3, 70, "Input"],
-Cell[137547, 4004, 130, 3, 70, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[137714, 4012, 189, 4, 70, "Input"],
-Cell[137906, 4018, 137, 3, 70, "Output"]
+Cell[135836, 3934, 48, 1, 27, "Input"],
+Cell[135887, 3937, 41, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[138080, 4026, 166, 3, 70, "Input"],
-Cell[138249, 4031, 130, 3, 70, "Output"]
+Cell[135965, 3943, 61, 1, 27, "Input"],
+Cell[136029, 3946, 49, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[136115, 3952, 55, 1, 27, "Input"],
+Cell[136173, 3955, 42, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[136252, 3961, 56, 1, 28, "Input"],
+Cell[136311, 3964, 53, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[136401, 3970, 39, 1, 28, "Input"],
+Cell[136443, 3973, 42, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[136522, 3979, 40, 1, 28, "Input"],
+Cell[136565, 3982, 42, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[136644, 3988, 26, 0, 40, "Subsection"],
+Cell[136673, 3990, 333, 7, 123, "Input"],
+
+Cell[CellGroupData[{
+Cell[137031, 4001, 1089, 19, 306, "Input"],
+Cell[138123, 4022, 46, 1, 26, "Output"],
+Cell[138172, 4025, 49, 1, 26, "Output"],
+Cell[138224, 4028, 307, 4, 20, "Message"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[138568, 4037, 1210, 20, 379, "Input"],
+Cell[139781, 4059, 46, 1, 26, "Output"],
+Cell[139830, 4062, 49, 1, 26, "Output"],
+Cell[139882, 4065, 307, 4, 20, "Message"],
+Cell[140192, 4071, 382, 5, 20, "Message"],
+Cell[140577, 4078, 382, 5, 20, "Message"],
+Cell[140962, 4085, 382, 5, 20, "Message"],
+Cell[141347, 4092, 340, 5, 20, "Message"],
+Cell[141690, 4099, 307, 4, 20, "Message"],
+Cell[142000, 4105, 307, 4, 20, "Message"],
+Cell[142310, 4111, 331, 5, 20, "Message"],
+Cell[142644, 4118, 42, 1, 26, "Output"]
+}, Open  ]],
+Cell[142701, 4122, 169, 3, 60, "Input"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[142919, 4131, 23, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[142967, 4135, 44, 1, 70, "Input"],
+Cell[143014, 4138, 138, 2, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[143189, 4145, 107, 2, 70, "Input"],
+Cell[143299, 4149, 37, 1, 70, "Output"]
+}, Open  ]],
+Cell[143351, 4153, 176, 3, 70, "Input"],
+Cell[143530, 4158, 73, 1, 70, "Input"],
+
+Cell[CellGroupData[{
+Cell[143628, 4163, 45, 1, 70, "Input"],
+Cell[143676, 4166, 37, 1, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[143750, 4172, 155, 3, 70, "Input"],
+Cell[143908, 4177, 130, 3, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[144075, 4185, 189, 4, 70, "Input"],
+Cell[144267, 4191, 137, 3, 70, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[144441, 4199, 166, 3, 70, "Input"],
+Cell[144610, 4204, 130, 3, 70, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[138428, 4040, 31, 0, 44, "Section"],
+Cell[144789, 4213, 31, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[138484, 4044, 44, 1, 27, "Input"],
-Cell[138531, 4047, 647, 10, 75, "Output"]
+Cell[144845, 4217, 44, 1, 27, "Input"],
+Cell[144892, 4220, 647, 10, 75, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[139215, 4062, 303, 7, 75, "Input"],
-Cell[139521, 4071, 38, 1, 27, "Output"]
+Cell[145576, 4235, 303, 7, 75, "Input"],
+Cell[145882, 4244, 38, 1, 27, "Output"]
 }, Open  ]],
-Cell[139574, 4075, 204, 4, 43, "Input"],
+Cell[145935, 4248, 204, 4, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[139803, 4083, 66, 1, 27, "Input"],
-Cell[139872, 4086, 130, 3, 27, "Output"]
+Cell[146164, 4256, 66, 1, 27, "Input"],
+Cell[146233, 4259, 130, 3, 27, "Output"]
 }, Open  ]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[140051, 4095, 40, 0, 44, "Section"],
+Cell[146412, 4268, 40, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[140116, 4099, 133, 2, 43, "Input"],
-Cell[140252, 4103, 171, 3, 29, "Output"]
+Cell[146477, 4272, 133, 2, 43, "Input"],
+Cell[146613, 4276, 171, 3, 27, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[140460, 4111, 130, 3, 27, "Input"],
-Cell[140593, 4116, 155, 2, 27, "Output"]
+Cell[146821, 4284, 130, 3, 27, "Input"],
+Cell[146954, 4289, 155, 2, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[140785, 4123, 182, 3, 43, "Input"],
-Cell[140970, 4128, 920, 20, 114, "Output"]
+Cell[147146, 4296, 182, 3, 43, "Input"],
+Cell[147331, 4301, 920, 20, 87, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[141927, 4153, 317, 5, 59, "Input"],
-Cell[142247, 4160, 2936, 67, 297, "Output"]
+Cell[148288, 4326, 317, 5, 59, "Input"],
+Cell[148608, 4333, 2936, 67, 249, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[145220, 4232, 111, 2, 43, "Input"],
-Cell[145334, 4236, 2158, 40, 297, "Output"]
+Cell[151581, 4405, 111, 2, 43, "Input"],
+Cell[151695, 4409, 2158, 40, 249, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[147529, 4281, 512, 8, 168, "Input"],
-Cell[148044, 4291, 5095, 109, 650, "Output"]
+Cell[153890, 4454, 512, 8, 162, "Input"],
+Cell[154405, 4464, 5095, 109, 249, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[153176, 4405, 125, 3, 27, "Input"],
-Cell[153304, 4410, 618, 9, 75, "Output"]
+Cell[159537, 4578, 125, 3, 27, "Input"],
+Cell[159665, 4583, 618, 9, 41, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[153959, 4424, 215, 4, 59, "Input"],
-Cell[154177, 4430, 36, 1, 27, "Output"]
+Cell[160320, 4597, 215, 4, 59, "Input"],
+Cell[160538, 4603, 36, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[154250, 4436, 292, 6, 75, "Input"],
-Cell[154545, 4444, 804, 17, 45, "Output"],
-Cell[155352, 4463, 1235, 25, 67, "Output"]
+Cell[160611, 4609, 292, 6, 75, "Input"],
+Cell[160906, 4617, 804, 17, 39, "Output"],
+Cell[161713, 4636, 1235, 25, 59, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[156624, 4493, 37, 0, 38, "Subsection"],
+Cell[162985, 4666, 37, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[156686, 4497, 842, 14, 248, "Input"],
-Cell[157531, 4513, 155, 2, 27, "Output"],
-Cell[157689, 4517, 315, 5, 20, "Message"],
-Cell[158007, 4524, 315, 5, 20, "Message"],
-Cell[158325, 4531, 315, 5, 20, "Message"],
-Cell[158643, 4538, 329, 5, 20, "Message"],
-Cell[158975, 4545, 7684, 148, 297, "Output"]
+Cell[163047, 4670, 872, 16, 210, "Input"],
+Cell[163922, 4688, 155, 2, 26, "Output"],
+Cell[164080, 4692, 315, 5, 20, "Message"],
+Cell[164398, 4699, 315, 5, 20, "Message"],
+Cell[164716, 4706, 315, 5, 20, "Message"],
+Cell[165034, 4713, 329, 5, 20, "Message"],
+Cell[165366, 4720, 7684, 148, 249, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[166696, 4698, 280, 7, 59, "Input"],
-Cell[166979, 4707, 9441, 137, 297, "Output"]
+Cell[173087, 4873, 280, 7, 59, "Input"],
+Cell[173370, 4882, 9441, 137, 249, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[176457, 4849, 221, 4, 27, "Input"],
-Cell[176681, 4855, 210, 3, 27, "Output"]
+Cell[182848, 5024, 221, 4, 27, "Input"],
+Cell[183072, 5030, 210, 3, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[176928, 4863, 146, 2, 43, "Input"],
-Cell[177077, 4867, 342, 5, 20, "Message"],
-Cell[177422, 4874, 342, 5, 20, "Message"],
-Cell[177767, 4881, 342, 5, 20, "Message"],
-Cell[178112, 4888, 329, 5, 20, "Message"],
-Cell[178444, 4895, 821, 15, 27, "Output"],
-Cell[179268, 4912, 182, 3, 27, "Output"]
+Cell[183319, 5038, 146, 2, 43, "Input"],
+Cell[183468, 5042, 342, 5, 20, "Message"],
+Cell[183813, 5049, 342, 5, 20, "Message"],
+Cell[184158, 5056, 342, 5, 20, "Message"],
+Cell[184503, 5063, 329, 5, 20, "Message"],
+Cell[184835, 5070, 821, 15, 26, "Output"],
+Cell[185659, 5087, 182, 3, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[179487, 4920, 163, 4, 27, "Input"],
-Cell[179653, 4926, 4544, 59, 411, "Output"]
+Cell[185878, 5095, 163, 4, 27, "Input"],
+Cell[186044, 5101, 4544, 59, 551, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[184234, 4990, 66, 1, 27, "Input"],
-Cell[184303, 4993, 49, 1, 27, "Output"]
+Cell[190625, 5165, 66, 1, 27, "Input"],
+Cell[190694, 5168, 49, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[184389, 4999, 456, 10, 75, "Input"],
-Cell[184848, 5011, 543, 7, 75, "Output"]
+Cell[190780, 5174, 456, 10, 75, "Input"],
+Cell[191239, 5186, 543, 7, 101, "Output"]
 }, Open  ]]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[185440, 5024, 24, 0, 38, "Subsection"],
-
-Cell[CellGroupData[{
-Cell[185489, 5028, 163, 4, 43, "Input"],
-Cell[185655, 5034, 834, 12, 47, "Output"],
-Cell[186492, 5048, 36, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[186565, 5054, 206, 4, 43, "Input"],
-Cell[186774, 5060, 407, 6, 27, "Output"],
-Cell[187184, 5068, 35, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[187256, 5074, 287, 5, 59, "Input"],
-Cell[187546, 5081, 41, 1, 27, "Output"],
-Cell[187590, 5084, 4581, 71, 186, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[192208, 5160, 46, 1, 27, "Input"],
-Cell[192257, 5163, 518, 7, 47, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[192812, 5175, 404, 6, 59, "Input"],
-Cell[193219, 5183, 30067, 467, 1161, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[223323, 5655, 103, 2, 27, "Input"],
-Cell[223429, 5659, 31989, 485, 1181, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[255455, 6149, 59, 1, 27, "Input"],
-Cell[255517, 6152, 28235, 409, 1174, "Output"]
 }, Open  ]]
-}, Closed]]
 }, Closed]],
 
 Cell[CellGroupData[{
-Cell[283813, 6568, 36, 0, 44, "Section"],
+Cell[191843, 5200, 36, 0, 44, "Section"],
 
 Cell[CellGroupData[{
-Cell[283874, 6572, 443, 7, 107, "Input"],
-Cell[284320, 6581, 749, 17, 112, "Output"]
+Cell[191904, 5204, 443, 7, 75, "Input"],
+Cell[192350, 5213, 749, 17, 85, "Output"]
 }, Open  ]],
-Cell[285084, 6601, 141, 3, 59, "Input"],
-Cell[285228, 6606, 396, 7, 91, "Input"],
+Cell[193114, 5233, 141, 3, 59, "Input"],
+Cell[193258, 5238, 396, 7, 75, "Input"],
 
 Cell[CellGroupData[{
-Cell[285649, 6617, 40, 1, 27, "Input"],
-Cell[285692, 6620, 357, 6, 59, "Output"]
+Cell[193679, 5249, 40, 1, 27, "Input"],
+Cell[193722, 5252, 357, 6, 41, "Output"]
 }, Open  ]],
-Cell[286064, 6629, 150, 2, 27, "Input"],
+Cell[194094, 5261, 150, 2, 27, "Input"],
 
 Cell[CellGroupData[{
-Cell[286239, 6635, 80, 1, 27, "Input"],
-Cell[286322, 6638, 137, 3, 27, "Output"]
+Cell[194269, 5267, 80, 1, 27, "Input"],
+Cell[194352, 5270, 137, 3, 26, "Output"]
 }, Open  ]],
-Cell[286474, 6644, 834, 12, 171, "Input"],
-Cell[287311, 6658, 578, 12, 155, "Input"],
+Cell[194504, 5276, 834, 12, 107, "Input"],
+Cell[195341, 5290, 578, 12, 123, "Input"],
 
 Cell[CellGroupData[{
-Cell[287914, 6674, 179, 4, 75, "Input"],
-Cell[288096, 6680, 407, 6, 65, "Output"],
-Cell[288506, 6688, 554, 8, 101, "Output"]
+Cell[195944, 5306, 179, 4, 75, "Input"],
+Cell[196126, 5312, 407, 6, 43, "Output"],
+Cell[196536, 5320, 554, 8, 59, "Output"]
 }, Open  ]],
-Cell[289075, 6699, 987, 18, 302, "Input"],
+Cell[197105, 5331, 987, 18, 263, "Input"],
 
 Cell[CellGroupData[{
-Cell[290087, 6721, 163, 3, 59, "Input"],
-Cell[290253, 6726, 1090, 30, 62, "Output"]
+Cell[198117, 5353, 163, 3, 59, "Input"],
+Cell[198283, 5358, 1090, 30, 43, "Output"]
 }, Open  ]],
-Cell[291358, 6759, 756, 18, 197, "Input"],
+Cell[199388, 5391, 756, 18, 187, "Input"],
 
 Cell[CellGroupData[{
-Cell[292139, 6781, 443, 11, 97, "Input"],
-Cell[292585, 6794, 109, 2, 27, "Output"],
-Cell[292697, 6798, 76, 1, 27, "Output"]
-}, Open  ]],
-
-Cell[CellGroupData[{
-Cell[292810, 6804, 1527, 29, 325, "Input"],
-Cell[294340, 6835, 522, 8, 59, "Message"],
-Cell[294865, 6845, 103, 2, 27, "Output"]
+Cell[200169, 5413, 443, 11, 91, "Input"],
+Cell[200615, 5426, 109, 2, 26, "Output"],
+Cell[200727, 5430, 76, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[295005, 6852, 45, 1, 27, "Input"],
-Cell[295053, 6855, 55, 1, 27, "Output"]
+Cell[200840, 5436, 1527, 29, 287, "Input"],
+Cell[202370, 5467, 522, 8, 33, "Message"],
+Cell[202895, 5477, 103, 2, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[203035, 5484, 45, 1, 27, "Input"],
+Cell[203083, 5487, 55, 1, 26, "Output"],
+Cell[203141, 5490, 42, 1, 26, "Output"]
 }, Open  ]]
 }, Closed]]
 }

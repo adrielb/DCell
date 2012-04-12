@@ -20,40 +20,12 @@ PetscErrorCode IIMUpdateSurfaceQuantities( IIM iim, LevelSet ls )
     ierr = IIMUpdateSurfaceQuantities_2D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_2D( iim, ls ); CHKERRQ(ierr);
   } else {
-    SETERRQ(PETSC_COMM_SELF,0,"NOT IMPLEMENTED\nIIMUpdateSurfaceQuantities_3D\nIIMUpdateSurfaceDerivatives_3D");
-    /*
-    ierr = IIMUpdateSurfaceQuantities_3D( iim, ls ); CHKERRQ(ierr);
+    ierr = IIMUpdateIrregularNodeGrid_3D ( iim, ls ); CHKERRQ(ierr);
+    ierr = IIMUpdateSurfaceQuantities_3D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_3D( iim, ls ); CHKERRQ(ierr);
-    */
   }
   
   PetscFunctionReturn(0);
-}
-
-double LevelSetCurvature( Grid phi, Coor X, PetscReal dx )
-{
-  double px, py, px2, py2, pxx, pyy, pxy, k;
-  double p[3][3];
-  Coor x;
-  Coor d = {dx,dx,0};
-  int j,i;
-  for (j = 0; j < 3; ++j) {
-    for (i = 0; i < 3; ++i) {
-      x.x = X.x - (i-1) * d.x;
-      x.y = X.y - (j-1) * d.y;
-      GridInterpolate( phi, x, &p[j][i] );
-    }
-  }
-  i = j = 1;
-  px = (p[j][i+1]-p[j][i-1]) / (2. * d.x);
-  py = (p[j+1][i]-p[j-1][i]) / (2. * d.y);
-  px2 = px * px;
-  py2 = py * py;
-  pxx = (p[j][i-1] - 2.*p[j][i] + p[j][i+1]) / (d.x*d.x);
-  pyy = (p[j-1][i] - 2.*p[j][i] + p[j+1][i]) / (d.y*d.y);
-  pxy = (p[j-1][i-1] + p[j+1][i+1] - p[j+1][i-1] - p[j-1][i+1]) / (4.*d.x*d.y);
-  k   = (pxx*py2 - 2.*px*py*pxy + pyy*px2) / sqrt((px2+py2)*(px2+py2)*(px2+py2));
-  return k;
 }
 
 #undef __FUNCT__
@@ -102,12 +74,14 @@ PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls )
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
+  ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceQuantities,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   int i;
   for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
   {
     ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
     
+    // Surface Normal
     n->nx = Bilinear3D(GridFunction3D_DerivX, phi, dh, n->X );
     n->ny = Bilinear3D(GridFunction3D_DerivY, phi, dh, n->X );
     n->nz = Bilinear3D(GridFunction3D_DerivZ, phi, dh, n->X );
@@ -115,8 +89,11 @@ PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls )
     n->nx /= h;
     n->ny /= h;
     n->nz /= h;
+
+    // Tangential Vectors
     LocalCoor3DTangential( n );
     
+    // Principal Curvatures
     j.x = n->nx * h;
     j.y = n->ny * h;
     j.z = n->nz * h;
@@ -136,6 +113,6 @@ PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls )
     iim->F( n, iim->context );
   }
   //TODO: try to calculate # flops here
-  
+  ierr = PetscLogEventEnd(EVENT_IIMUpdateSurfaceQuantities,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
