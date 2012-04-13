@@ -1,1 +1,0 @@
-vncviewer -via precis -passwd ~/Research/configurations/vncpasswd localhost:1

@@ -1,1 +1,0 @@
-svn up ~/Research/; cd /home/abergman/Research/DCell ; make rebuild

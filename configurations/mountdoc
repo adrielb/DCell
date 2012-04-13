@@ -1,1 +1,0 @@
-su -c 'mount -t vboxsf Documents -o uid=abergman,gid=abergman /home/abergman/Documents'

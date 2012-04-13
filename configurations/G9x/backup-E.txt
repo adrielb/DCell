@@ -1,7 +1,0 @@
-open freenas
-option batch continue
-option exclude "E:\$RECYCLE.BIN;E:\Steam;E:\Riot Games; E:\scratch"
-cd E
-synchronize remote E:\
-close
-exit
