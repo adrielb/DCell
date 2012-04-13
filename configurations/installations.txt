@@ -95,7 +95,13 @@ git clone git://vtk.org/VTK.git
 git clone git://vtk.org/VTKData.git
 git clone git://vtk.org/VTKLargeData.git
 git checkout --track -b release origin/release
-
+paraview
+git clone --recursive git://paraview.org/ParaView.git
+git pull
+git submodule update --init
+git checkout --track -b release origin/release
+mkdir paraview/bin
+/share/apps/cmake/cmake-2.8.7/bin/ccmake /share/apps/paraview/Paraview
 
 CGAL
 ./install_cgal -i
