@@ -1,7 +1,0 @@
-open freenas
-option batch continue
-#option exclude "E:\temp\pickup"
-cd test
-synchronize -delete remote E:\temp
-close
-exit

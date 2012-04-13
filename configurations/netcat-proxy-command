@@ -1,6 +1,0 @@
-#!/bin/bash
-bouncehost=$1
-target=$2
-
-ssh $bouncehost   nc $target 22
-

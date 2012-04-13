@@ -1,9 +1,0 @@
-; system-config-network GtkAccelMap rc-file         -*- scheme -*-
-; this file is an automated accelerator map dump
-;
-; (gtk_accel_path "<system-config-network>/-Orphan/_About" "")
-; (gtk_accel_path "<system-config-network>/-Orphan/_New..." "<Control>n")
-; (gtk_accel_path "<system-config-network>/-Orphan/_Save" "<Control>s")
-; (gtk_accel_path "<system-config-network>/-Orphan/_Properties" "")
-; (gtk_accel_path "<system-config-network>/-Orphan/_Copy" "<Control>c")
-; (gtk_accel_path "<system-config-network>/-Orphan/_Quit" "<Control>q")
