@@ -21,7 +21,13 @@ PetscErrorCode  DCellInitialize(int *argc,char ***args, const char file[])
   ierr = PetscInitialize(argc, args, (char *) 0, ""); CHKERRQ(ierr);
 
   PetscFunctionBegin;
-  ierr = PetscOptionsView(PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
+  PetscViewer viewer;
+  ierr = PetscViewerCreate(PETSC_COMM_SELF,&viewer); CHKERRQ(ierr);
+  ierr = PetscViewerSetType(viewer, PETSCVIEWERASCII); CHKERRQ(ierr);
+  ierr = PetscViewerFileSetMode(viewer, FILE_MODE_WRITE); CHKERRQ(ierr);
+  ierr = PetscViewerFileSetName(viewer, "params.txt"); CHKERRQ(ierr);
+  ierr = PetscOptionsView(viewer); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
   //TODO: Open HDF5 simulation file here
   ierr = RegisterEvents(); CHKERRQ(ierr);
   ierr = HeapRegisterEvents(); CHKERRQ(ierr);

@@ -13,6 +13,7 @@ RUNOPTS := \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
+-cell_radius 3.0 \
 -contactThres 0.2 \
 -adhesionRadius 0.4 \
 -fluid_dx 0.20 \

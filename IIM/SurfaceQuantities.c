@@ -16,11 +16,11 @@ PetscErrorCode IIMUpdateSurfaceQuantities( IIM iim, LevelSet ls )
 
   if( ls->phi->is2D )
   {
-    ierr = IIMUpdateIrregularNodeGrid_2D ( iim, ls ); CHKERRQ(ierr);
+    ierr = IIMUpdateSurfaceIndex_2D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceQuantities_2D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_2D( iim, ls ); CHKERRQ(ierr);
   } else {
-    ierr = IIMUpdateIrregularNodeGrid_3D ( iim, ls ); CHKERRQ(ierr);
+    ierr = IIMUpdateSurfaceIndex_3D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceQuantities_3D ( iim, ls ); CHKERRQ(ierr);
     ierr = IIMUpdateSurfaceDerivatives_3D( iim, ls ); CHKERRQ(ierr);
   }

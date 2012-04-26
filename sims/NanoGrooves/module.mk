@@ -7,17 +7,27 @@ ${subdirectory}/${1}.o: ${LIBDCELL}
 RUNOPTS := \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
--Fa 3 \
--Fk 1 \
+-Fa 0.1 \
+-Fk 0 \
+-Fk0 10 \
 -Fn 0 \
 -ecm 0.033 \
 -kclip 0.1 \
--groove_width 2 \
--timax 10 \
+-cell_radius 3.0 \
+-contactThres 0.05 \
+-adhesionRadius 0.45 \
+-fluid_dx 0.20 \
+-fluid_lens 20,9 \
+-timax 100000 \
 -CFL 0.1 \
--dtmax 1 \
+-dtmax 1.0 \
 -ksp_monitor \
--ksp_atol 1e-2 -ksp_rtol 1e-3 -fieldsplit_p_ksp_max_it 4 -ksp_max_it 100 \
+-ksp_atol 1e-12 -ksp_rtol 1e-3 -ksp_max_it 100 \
+-fieldsplit_p_ksp_max_it 4 \
+-fieldsplit_v_fieldsplit_0_pc_type cholesky \
+-fieldsplit_v_fieldsplit_1_pc_type cholesky \
+-fieldsplit_v_fieldsplit_0_pc_factor_mat_ordering_type nd \
+-fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
 -log_summary -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
 

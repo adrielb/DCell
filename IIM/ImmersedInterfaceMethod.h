@@ -78,15 +78,13 @@ PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j );
 PetscErrorCode IIMPressureGradientCorrection( IIM iim, IrregularNode *n, Jump j );
 PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j );
 PetscErrorCode IIMUpdateSurfaceQuantities( IIM iim, LevelSet ls );
-PetscErrorCode IIMGetIrregularNodeGridPoint_2D( IIM iim, int x, int y, GridPoint **pt );
-PetscErrorCode IIMUpdateIrregularNodeGrid_2D( IIM iim, LevelSet ls );
-PetscErrorCode IIMUpdateIrregularNodeGrid_3D( IIM iim, LevelSet ls );
+PetscErrorCode IIMUpdateSurfaceIndex_2D( IIM iim, LevelSet ls );
+PetscErrorCode IIMUpdateSurfaceIndex_3D( IIM iim, LevelSet ls );
 PetscErrorCode IIMUpdateSurfaceQuantities_2D( IIM iim, LevelSet ls );
 PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls );
 PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls );
 PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls );
-PetscErrorCode IIMSurfaceNeighbors_2D( IIM iim, LevelSet ls, IrregularNode *n, IrregularNode **nodes, int *l );
-PetscErrorCode IIMSurfaceNeighbors_3D( IIM iim, LevelSet ls, IrregularNode *n, IrregularNode **nodes, int *l );
+
 void IIMLocalToGlobal_1st( IrregularNode *n, Jump *j);
 void IIMLocalToGlobal_2nd( IrregularNode *n, Jump *j);
 void IIMGlobalToLocal_1st( IrregularNode *n, Jump *j);

@@ -164,7 +164,7 @@ PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscVie
       row[j++] = node->nx;
       row[j++] = node->ny;
       row[j++] = node->f1;
-      row[j++] = node->f2;
+      row[j++] = node->fa1;
       row[j++] = node->k;
       ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
     }

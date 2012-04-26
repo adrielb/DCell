@@ -22,6 +22,7 @@ PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radiu
   PetscFunctionBegin;
   pos.x = (center.x - radius ) / dh.x - BUF;
   pos.y = (center.y - radius ) / dh.y - BUF;
+  pos.z = 0;
   size.x = 2 * (radius/dh.x + BUF);
   size.y = 2 * (radius/dh.y + BUF);
   size.z = 0;

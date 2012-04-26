@@ -129,6 +129,11 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
   PetscFunctionBegin;
   ierr = Grid_RestoreGrid(g); CHKERRQ(ierr);
 
+  if( g->is2D ) {
+    pos.z  = 0;
+    size.z = 0;
+  }
+
   g->p = pos;
   g->n = size;
   g->SIZE = g->is2D ? size.x*size.y*g->dof : size.x*size.y*size.z*g->dof;

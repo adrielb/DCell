@@ -1,8 +1,8 @@
 # Immersed Interface Method Module
 
-LOCOBJS := SurfaceNei.o CrossProductIIM.o SurfaceQuantities.o SurfaceDerivatives.o \
+LOCOBJS := SurfaceIndex.o SurfaceQuantities.o SurfaceDerivatives.o \
         LocalCoor.o ImmersedInterfaceContext.o ForceComponents.o Rotations.o \
-        RHSUpdate.o GridToArray.o 
+        RHSUpdate.o CrossProductIIM.o
         #Interpolation.o 
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}

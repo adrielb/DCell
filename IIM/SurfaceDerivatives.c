@@ -7,8 +7,8 @@ void RemoveDuplicates( int *len, IrregularNode *nodes[] ) ;
 #define __FUNCT__ "IIMUpdateSurfaceDerivatives_2D"
 PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
 {
-  IrregularNode *n, *nodes[iim->Np];
   int len, j;
+  IrregularNode *n, *nodes[iim->Np];
   PetscReal *eta, *xi;    // Local Coordinates in iim->lc
   PetscReal *s, *g;       // Arc length and surface quantity in lsq
   PetscErrorCode ierr;
@@ -22,9 +22,10 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
   for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
   {
     ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
-    ierr = IIMSurfaceNeighbors_2D(iim,ls,n,(IrregularNode**)&nodes,&len); CHKERRQ(ierr);
+    ierr = SpatialIndexQueryPoints(iim->sidx, n->X, iim->eps, iim->Np, &len, (void**)nodes); CHKERRQ(ierr);
+    RemoveDuplicates( &len, nodes);
+    n->numNei = len;
 
-    // TODO: this is a hack, need to ensure that all nodes are not islands ( have neighbors in IrregNodes update )
     if( len < 3 ) {
       n->f1    = 0;
       n->f1_n  = 0;
@@ -54,21 +55,16 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
 
     for( j = 0; j < len; j++ )
     {
-      g[j] = nodes[j]->f1;
+      g[j+0*len] = nodes[j]->f1;
+      g[j+1*len] = nodes[j]->f2;
     }
     LeastSqSolve(iim->lsq);
-//    n->f1    = g[0];
-    n->f1_n  = g[1];
-    n->f1_nn = g[2];
-    
-    for( j = 0; j < len; j++ )
-    {
-      g[j] = nodes[j]->f2;
-    }
-    LeastSqSolve(iim->lsq);
-//    n->f2    = g[0];
-    n->f2_n  = g[1];
-    n->f2_nn = g[2];
+//  n->f1    = g[0+0*len];
+    n->f1_n  = g[1+0*len];
+    n->f1_nn = g[2+0*len];
+//  n->f2    = g[0+1*len];
+    n->f2_n  = g[1+1*len];
+    n->f2_nn = g[2+1*len];
   }
   
   ierr = PetscLogEventEnd(EVENT_IIMUpdateSurfaceDerivatives,0,0,0,0); CHKERRQ(ierr);
