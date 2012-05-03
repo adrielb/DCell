@@ -122,7 +122,7 @@ int main(int argc, char **args) {
   world->CFL = 0.1;
   world->tend = 1e9;
   ierr = DWorldSetFromOptions(world); CHKERRQ(ierr);
-//  world->Simulate = DWorldSimulate_Euler;
+  world->Simulate = DWorldSimulate_Euler;
   ierr = DWorldSimulate(world); CHKERRQ(ierr);
 
   ierr = DWorldDestroy(world); CHKERRQ(ierr);
@@ -140,7 +140,7 @@ PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
   PetscFunctionBegin;
   ierr = PetscNew( struct _MyCell, &cell); CHKERRQ(ierr);
   ierr = DCellSetup( ls, (DCell)cell ); CHKERRQ(ierr);
-  const PetscBool implicit = PETSC_TRUE;
+  const PetscBool implicit = PETSC_FALSE;
   if( implicit ) {
     cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldImplicitRHS;
     cell->dcell.Write = MyCellWriteImplicit;
@@ -204,8 +204,8 @@ PetscErrorCode MyCellSetFromOptions( MyCell cell )
 PetscErrorCode MyCellAccumulateAdhesiveForce( MyCell cell )
 {
   int i, j;
-//  Array irregNodes = cell->dcell.lsPlasmaMembrane->irregularNodes;
-  Array irregNodes = cell->dcell.lsPlasmaMembrane->psi->irregularNodes;
+  Array irregNodes = cell->dcell.lsPlasmaMembrane->irregularNodes;
+//  Array irregNodes = cell->dcell.lsPlasmaMembrane->psi->irregularNodes;
   int numNodes = ArrayLength( irregNodes );
   const int MAXLEN = 500;
   int len;

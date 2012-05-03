@@ -19,7 +19,7 @@ RUNOPTS := \
 -adhesionRadius 0.45 \
 -fluid_dx 0.20 \
 -fluid_lens 20,9 \
--timax 100000 \
+-timax 10000 \
 -CFL 0.1 \
 -dtmax 1.0 \
 -ksp_monitor \
