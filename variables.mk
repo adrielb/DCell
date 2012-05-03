@@ -42,7 +42,7 @@ ${subdirectory}/${1}.x: ${subdirectory}/${1}.o
 sim-${1}: ${subdirectory}/${1}.x
 	@echo Simulation: sim-${1}
 run-${1}: sim-${1}
-	-find ${PETSC_TMP}/ -print0 | xargs -n1000 -0 rm
+	-find ${PETSC_TMP}/ -print0 -type f | xargs -n1000 -0 rm
 	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3}
 endef
 

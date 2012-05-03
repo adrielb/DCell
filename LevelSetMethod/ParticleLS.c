@@ -29,7 +29,7 @@ PetscErrorCode LevelSetInitializeParticles( LevelSet ls )
   ierr = PetscOptionsGetReal(0,"-pls_rmin",&pls->R_MIN,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-pls_rmax",&pls->R_MAX,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-pls_dinit",&pls->D_INIT,0); CHKERRQ(ierr);
-  ierr = PetscOptionsGetReal(0,"-pls_sinit",&pls->S_INIT,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt( 0,"-pls_sinit",&pls->S_INIT,0); CHKERRQ(ierr);
 
   ierr = ArrayCreate( "particles", sizeof(struct _Particle), &pls->particles); CHKERRQ(ierr);
   ierr = PetscRandomCreate(PETSC_COMM_WORLD,&pls->rnd); CHKERRQ(ierr);

@@ -51,7 +51,7 @@ struct _ParticleLS {
   PetscReal R_MIN;   // minimum particle radius
   PetscReal R_MAX;   // maximum particle radius
   PetscReal D_INIT;  // initial placement with +/-3 of zero LS
-  PetscReal S_INIT;    // initial seeding density
+  PetscInt  S_INIT;    // initial seeding density
   int L_MAX;    // max iterations for finding phi_goal
   PetscReal G_TOL;   // tolerance when phi == phi_goal
 

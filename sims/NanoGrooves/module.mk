@@ -7,6 +7,7 @@ ${subdirectory}/${1}.o: ${LIBDCELL}
 RUNOPTS := \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
+-pls_sinit 128 \
 -Fa 0.1 \
 -Fk 0 \
 -Fk0 10 \

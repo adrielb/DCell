@@ -21,7 +21,7 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   ls->CFLthres = 3;
   ls->CFLcount = 0;
   ls->AdvectCount = 0;
-  ls->AdvectThres = 100;
+  ls->AdvectThres = 1000;
   ierr = PetscOptionsGetReal(0,"-levelset_bandwidth",&bandWidth,0); CHKERRQ(ierr);
   ierr = LevelSetSetBandWidth(ls, bandWidth); CHKERRQ(ierr);
   // TODO: make a better estimate for initial sizes

@@ -154,7 +154,7 @@ PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscVie
   PetscFunctionBegin;
   for ( i = 0; i < len; ++i) {
     node = &nodes[i];
-    if( (node->shift == -1 && node->axis == -1) )
+//    if( (node->shift == -1 && node->axis == -1) )
     {
       j=0;
       row[j++] = node->X.x;
