@@ -105,7 +105,7 @@ PetscErrorCode ArraySetSize( Array a, int size )
 
 #undef __FUNCT__
 #define __FUNCT__ "ArrayWrite"
-PetscErrorCode ArrayWrite( Array a, const char *name, int t )
+PetscErrorCode ArrayWrite( Array a, int t )
 {
   size_t len = 512;
   char tempdir[512];
@@ -116,7 +116,7 @@ PetscErrorCode ArrayWrite( Array a, const char *name, int t )
 
   PetscFunctionBegin;
   ierr = PetscGetTmp( PETSC_COMM_WORLD, tempdir, len); CHKERRQ(ierr);
-  ierr = PetscSNPrintf(filename,len,"%s/%s.%d.array",tempdir,name,time); CHKERRQ(ierr);
+  ierr = PetscSNPrintf(filename,len,"%s/%s.%d.array",tempdir,a->name,time); CHKERRQ(ierr);
   ierr = PetscBinaryOpen(filename,FILE_MODE_WRITE,&fp); CHKERRQ(ierr);
   ierr = PetscBinaryWrite(fp,a->dataArray,a->len*a->ELEMSIZE,PETSC_CHAR,PETSC_FALSE); CHKERRQ(ierr);
   ierr = PetscBinaryClose(fp); CHKERRQ(ierr);
@@ -205,6 +205,7 @@ PetscErrorCode ArraySetCoor( Array a, iCoor shift, iCoor size )
 {
   PetscErrorCode ierr;
   PetscFunctionBegin;
+  if( size.z == 0 ) size.z = 1;
   a->p = shift;
   a->size = size;
   a->q.x = shift.x + size.x;

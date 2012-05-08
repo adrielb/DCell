@@ -22,7 +22,9 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   ls->CFLcount = 0;
   ls->AdvectCount = 0;
   ls->AdvectThres = 1000;
-  ierr = PetscOptionsGetReal(0,"-levelset_bandwidth",&bandWidth,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-ls_bandwidth",&bandWidth,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-ls_cflthres",&ls->CFLthres,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt(0,"-ls_advectthres",&ls->AdvectThres,0); CHKERRQ(ierr);
   ierr = LevelSetSetBandWidth(ls, bandWidth); CHKERRQ(ierr);
   // TODO: make a better estimate for initial sizes
   ierr = ArrayCreate( "irregularNodes", sizeof(IrregularNode), &ls->irregularNodes); CHKERRQ(ierr);

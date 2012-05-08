@@ -23,7 +23,7 @@ rebuild: cleanDCell build
 opt:
 	export PETSC_ARCH=gcc-opt; \
 	make cleanDCell; \
-	make -j16 build
+	make -j16 run
 
 cleanDCell:
 	rm -f ${CLEAN}

@@ -78,7 +78,7 @@ PetscErrorCode ArrayAppend( Array a, void *elem );
 PetscErrorCode ArrayAppendPtr( Array a, void *elem );
 PetscErrorCode ArrayGet( Array a, int i, void *elem );
 PetscErrorCode ArrayGetP( Array a, int i, void *elem );
-PetscErrorCode ArrayWrite( Array a, const char *name, int t );
+PetscErrorCode ArrayWrite( Array a, int t );
 PetscErrorCode ArrayZero( Array a );
 PetscErrorCode ArrayDelete1( Array a, int idx );
 PetscErrorCode ArrayCopy( Array src, Array copy );
