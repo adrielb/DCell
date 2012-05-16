@@ -203,7 +203,7 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
   iCoor *band, cell;
   PetscReal dist, sign;
   PetscReal **phi;
-//  PetscReal phimin, phimax, phi_goal;
+  PetscReal phimin, phimax;
   PetscReal phi_goal;
   Particle p;
   int *count;
@@ -243,9 +243,9 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
     ierr = GridInterpolate( ls->phi, p->X, &sign); CHKERRQ(ierr);
     sign = PetscSign(sign);
 
-    cell.x = (int)(p->X.x + 0.5);
-    cell.y = (int)(p->X.y + 0.5);
-    cell.z = (int)(p->X.z + 0.5);
+    cell.x = (int)floor(p->X.x + 0.5);
+    cell.y = (int)floor(p->X.y + 0.5);
+    cell.z = (int)floor(p->X.z + 0.5);
 
     ArrayGetCoor(particleCounts, cell, &count);
     (*count)++;
@@ -254,7 +254,6 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
     if(p->radius * sign > 0) {
     }
   }
-  static int filecount;
 
   // Add particles where density too low
   for ( b = 0; b < ArrayLength(ls->band); ++b) {
@@ -262,22 +261,7 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
     dist = PetscAbs(phi[band->y][band->x]);
     if( dist > pls->D_INIT ) continue;
     ierr = ArrayGetCoor(particleCounts, *band, &count); CHKERRQ(ierr);
-    if(  (*count) > 1e3 ) {
-      printf("*****count: %d\n", *count );
-      printf("filecount: %d\n", filecount );
-      printf("%d: { %d, %d, %d}\n", b, band->x, band->y, band->z );
-      exit(0);
-    }
 
-    if( filecount == 153 ) {
-      int *c;
-      iCoor a = {47, 0, 0};
-      ierr = ArrayGetCoor(particleCounts, a, &c); CHKERRQ(ierr);
-      printf("@@@@c: %d \t %d: {%d, %d} %d \n", *c, b, band->x, band->y, *count );
-      iCoor A = {47,-1, 0};
-      ierr = ArrayGetCoor(particleCounts, A, &c); CHKERRQ(ierr);
-      printf("$$$$c: %d \t %d: {%d, %d} %d \n", *c, b, band->x, band->y, *count );
-    }
     for (; *count < targetDensity; (*count)++) {
       ierr = ArrayAppend(pls->particles,(void*)&p); CHKERRQ(ierr);
 
@@ -291,37 +275,22 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
 
       ierr = GridInterpolate( ls->phi, p->X, &phi_goal); CHKERRQ(ierr);
       sign = PetscSign(phi_goal);
+/*
       phi_goal = PetscAbs(phi_goal);
       phi_goal = PetscMax(pls->R_MIN,phi_goal);
       phi_goal = PetscMin(pls->D_INIT,phi_goal);
       phi_goal = phi_goal * sign;
-/*
+*/
       PetscRandomGetValue(pls->rnd,&phi_goal);
-      phimax = PetscMin(pls->R_MAX,dist+0.71);
+      phimax = PetscMin(pls->D_INIT,dist+0.71);
       phimin = PetscMax(pls->R_MIN,dist-0.71);
       phi_goal = (phimax - phimin) * phi_goal + phimin;
       phi_goal*= sign;
-*/
+
       p->radius = sign;
-//      ierr = ParticleLS_AttractParticleToPhiGoal( pls, ls, p, phi_goal ); CHKERRQ(ierr);
+      ierr = ParticleLS_AttractParticleToPhiGoal( pls, ls, p, phi_goal ); CHKERRQ(ierr);
     } // add particle to cell b
   } // for each b in band
-
-    // Count number of particles in each cell.
-  	ierr = ArraySetCoor(postCounts,ls->phi->p,ls->phi->n); CHKERRQ(ierr);
-    ierr = ArrayZero(postCounts); CHKERRQ(ierr);
-    for ( i = 0; i < ArrayLength(pls->particles); ++i) {
-      ierr = ArrayGet(pls->particles,i,&p); CHKERRQ(ierr);
-      cell.x = (int)(p->X.x + 0.5);
-      cell.y = (int)(p->X.y + 0.5);
-      cell.z = (int)(p->X.z + 0.5);
-      ArrayGetCoor(postCounts, cell, &count);
-      (*count)++;
-    }
-
-    ierr = ArrayWrite(particleCounts, filecount); CHKERRQ(ierr);
-    ierr = ArrayWrite(postCounts, filecount); CHKERRQ(ierr);
-    filecount++;
 
   ierr = PetscLogEventEnd(EVENT_ParticleLS_ReseedParticles,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);

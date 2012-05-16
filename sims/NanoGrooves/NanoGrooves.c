@@ -82,8 +82,12 @@ int main(int argc, char **args) {
   ierr = GridSetName(lsGrooves->phi,"grooves"); CHKERRQ(ierr);
   ierr = GridWrite(lsGrooves->phi,0); CHKERRQ(ierr);
   ierr = LevelSetInitializeFromImage(lsGrooves); CHKERRQ(ierr);
+  ierr = VecShift(lsGrooves->phi->v, -0.5); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
   ierr = GridWrite(lsGrooves->phi,1); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(lsGrooves,0); CHKERRQ(ierr);
+  ierr = VecShift(lsGrooves->phi->v,  0.5); CHKERRQ(ierr);
+  ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
 
   ierr = FluidFieldSetMask(fluid, lsGrooves->phi ); CHKERRQ(ierr);
   ierr = FluidFieldSetup(fluid); CHKERRQ(ierr);

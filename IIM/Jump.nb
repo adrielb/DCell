@@ -1,0 +1,333 @@
+(************** Content-type: application/mathematica **************
+                     CreatedBy='Mathematica 5.2'
+
+                    Mathematica-Compatible Notebook
+
+This notebook can be used with any Mathematica-compatible
+application, such as Mathematica, MathReader or Publicon. The data
+for the notebook starts with the line containing stars above.
+
+To get the notebook into a Mathematica-compatible application, do
+one of the following:
+
+* Save the data starting with the line of stars above into a file
+  with a name ending in .nb, then open the file inside the
+  application;
+
+* Copy the data starting with the line of stars above to the
+  clipboard, then use the Paste menu command inside the application.
+
+Data for notebooks contains only printable 7-bit ASCII and can be
+sent directly in email or through ftp in text mode.  Newlines can be
+CR, LF or CRLF (Unix, Macintosh or MS-DOS style).
+
+NOTE: If you modify the data for this notebook not in a Mathematica-
+compatible application, you must delete the line below containing
+the word CacheID, otherwise Mathematica-compatible applications may
+try to use invalid cache data.
+
+For more information on notebooks and Mathematica-compatible 
+applications, contact Wolfram Research:
+  web: http://www.wolfram.com
+  email: info@wolfram.com
+  phone: +1-217-398-0700 (U.S.)
+
+Notebook reader applications are available free of charge from 
+Wolfram Research.
+*******************************************************************)
+
+(*CacheID: 232*)
+
+
+(*NotebookFileLineBreakTest
+NotebookFileLineBreakTest*)
+(*NotebookOptionsPosition[      9279,        254]*)
+(*NotebookOutlinePosition[      9927,        277]*)
+(*  CellTagsIndexPosition[      9883,        273]*)
+(*WindowFrame->Normal*)
+
+
+
+Notebook[{
+Cell[BoxData[
+    \(<< \n\(<< Graphics`Graphics`\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell["1D", "Section"],
+
+Cell[BoxData[{
+    \(\(\[Alpha] = 0.5;\)\), "\[IndentingNewLine]", 
+    \(\(ux = 4;\)\), "\[IndentingNewLine]", 
+    \(\(u1 = 0;\)\), "\[IndentingNewLine]", 
+    \(\(u2 = 0;\)\), "\[IndentingNewLine]", 
+    \(\(f = 
+        Function[
+          x, \[IndentingNewLine]\((1 - x)\) u1 + x*u2 + 
+            If[x < \[Alpha], \[IndentingNewLine]\((1 - \[Alpha])\) x\ *
+                ux, \[IndentingNewLine]\[Alpha]*\((1 - x)\)*
+                ux\[IndentingNewLine]]];\)\), "\[IndentingNewLine]", 
+    \(\(Plot[f[x], {x, 0, 1}];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(df = D[f[x], x];\)\), "\n", 
+    \(ua = df /. x \[Rule] 0.02\), "\n", 
+    \(ub = df /. x \[Rule] 0.8\), "\n", 
+    \(ua - ub\)}], "Input"],
+
+Cell[BoxData[
+    \(2.8`\)], "Output"],
+
+Cell[BoxData[
+    \(\(-1.2`\)\)], "Output"],
+
+Cell[BoxData[
+    \(4.`\)], "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["2D", "Section"],
+
+Cell[BoxData[
+    \(Exit[]\)], "Input"],
+
+Cell[BoxData[{
+    \(ux1 = 4; a1 = 0.3;\), "\[IndentingNewLine]", 
+    \(ux2 = \(-4\); a2 = 0.7;\), "\[IndentingNewLine]", 
+    \(uy1 = 4; b1 = 0.7;\), "\[IndentingNewLine]", 
+    \(uy2 = \(-4\); b2 = 0.3;\), "\[IndentingNewLine]", 
+    \(u1 = 0; u2 = 0;\), "\[IndentingNewLine]", 
+    \(u3 = 0; u4 = 0;\), "\[IndentingNewLine]", 
+    \(\(f = 
+        Function[{x, y}, \((1 - x)\) \((1 - y)\) u1 + 
+            x*\((1 - y)\) u2 + \((1 - x)\) y*u3 + 
+            x*y*u4 + \[IndentingNewLine]\((1 - y)\) 
+              If[x < a1, \((1 - a1)\)*x*ux1, 
+                a1*\((1 - x)\)*ux1] + \[IndentingNewLine]y*
+              If[x < a2, \((1 - a2)\)*x*ux2, 
+                a2*\((1 - x)\)*ux2] + \[IndentingNewLine]\((1 - x)\) 
+              If[y < b1, \((1 - b1)\)*y*uy1, 
+                b1*\((1 - y)\)*uy1] + \[IndentingNewLine]x*
+              If[y < b2, \((1 - b2)\)*y*uy2, 
+                b2*\((1 - y)\)*
+                  uy2]\[IndentingNewLine]];\)\), "\[IndentingNewLine]", 
+    \(\(DisplayTogetherArray[\[IndentingNewLine]Plot3D[
+          f[x, y], {x, 0, 1}, {y, 0, 1}, PlotRange \[Rule] All, 
+          PlotPoints \[Rule] 100, Mesh \[Rule] False, 
+          PlotLabel \[Rule] "\<f\>"], \[IndentingNewLine]Plot3D[
+          Evaluate@D[f[x, y], x], {x, 0, 1}, {y, 0, 1}, 
+          PlotRange \[Rule] All, PlotPoints \[Rule] 100, Mesh \[Rule] False, 
+          PlotLabel \[Rule] "\<dx\>"], \[IndentingNewLine]Plot3D[
+          Evaluate@D[f[x, y], y], {x, 0, 1}, {y, 0, 1}, 
+          PlotRange \[Rule] All, PlotPoints \[Rule] 100, Mesh \[Rule] False, 
+          PlotLabel \[Rule] "\<dy\>"]];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(Plot[Evaluate@D[f[x, 0], x], {x, 0, 1}];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(\(df = D[f[x, y], x];\)\), "\[IndentingNewLine]", 
+    \(\((\(df /. x \[Rule] 0.2\) /. 
+          y \[Rule] 0)\) - \((\(df /. x \[Rule] 0.6\) /. 
+          y \[Rule] 0)\)\)}], "Input"],
+
+Cell[BoxData[
+    \(4.`\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(\(ux = 4;\)\), "\[IndentingNewLine]", 
+    \(\(uy = 0;\)\), "\[IndentingNewLine]", 
+    \(u1 = 0; u2 = 0;\), "\[IndentingNewLine]", 
+    \(u3 = 0; u4 = 0;\), "\[IndentingNewLine]", 
+    \(\(f = 
+        Function[{x, y}, \[IndentingNewLine]{a, b} = 
+            ls1[{y, x}]; \[IndentingNewLine]\[IndentingNewLine]If[
+            pi[x, y] < 0, \[IndentingNewLine]\((1 - a)\)*x*ux*0 + 
+              x, \[IndentingNewLine]a*\((1 - x)\)*ux*0 + 
+              x\[IndentingNewLine]]\[IndentingNewLine]];\)\), "\
+\[IndentingNewLine]", 
+    \(\(Plot3D[x, {x, 0, 1}, {y, 0, 1}, PlotRange \[Rule] All];\)\)}], "Input"],
+
+Cell[BoxData[
+    \(\(DensityPlot[y, {x, 0, 1}, {y, 0, 1}];\)\)], "Input"],
+
+Cell[BoxData[{
+    \(\(Plot3D[pi[x, y], {x, 0, 1}, {y, 0, 1}];\)\), "\[IndentingNewLine]", 
+    \(\(Plot3D[\(ls1[{y, x}]\)[\([1]\)], {x, 0, 1}, {y, 0, 1}];\)\), "\n", 
+    \(\(Plot3D[\(ls1[{y, x}]\)[\([2]\)], {x, 0, 1}, {y, 0, 1}];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(\(Plot[\(ls1[{x, 0.5}]\)[\([1]\)], {x, 0, 1}];\)\), "\n", 
+    \(\(Plot[\(ls1[{0.5, y}]\)[\([1]\)], {y, 0, 1}];\)\)}], "Input"],
+
+Cell[BoxData[{
+    \(Off[Power::"\<infy\>"]\), "\[IndentingNewLine]", 
+    \(Off[\[Infinity]::"\<indet\>"]\)}], "Input"],
+
+Cell[BoxData[
+    \(\((1 - x)\) \((1 - y)\) u1 + x*\((1 - y)\) u2 + \((1 - x)\) y*u3 + 
+      x*y*u4 + \)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ls1[{0.5, 0.5}]\)], "Input"],
+
+Cell[BoxData[
+    \({0, 0.3`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(Clear[p1, p2, p3, p4, x, y, b, a]\), "\[IndentingNewLine]", 
+    \(\(Solve[\((1 - x)\) \((1 - y)\) p1 + 
+              x*\((1 - y)\) p2 + \((1 - x)\) y*p3 + x*y*p4 \[Equal] 0 /. 
+          y \[Rule] b, x]\)[\([1, 1]\)]\), "\[IndentingNewLine]", 
+    \(\(Solve[\((1 - x)\) \((1 - y)\) p1 + 
+              x*\((1 - y)\) p2 + \((1 - x)\) y*p3 + x*y*p4 \[Equal] 0 /. 
+          x \[Rule] a, y]\)[\([1, 1]\)]\)}], "Input"],
+
+Cell[BoxData[
+    \(x \[Rule] \(\(-p1\) + b\ p1 - b\ p3\)\/\(\(-p1\) + b\ p1 + p2 - b\ p2 - \
+b\ p3 + b\ p4\)\)], "Output"],
+
+Cell[BoxData[
+    \(y \[Rule] \(\(-p1\) + a\ p1 - a\ p2\)\/\(\(-p1\) + a\ p1 - a\ p2 + p3 - \
+a\ p3 + a\ p4\)\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(ls1[{a_, b_}] := 
+      Module[{xa, 
+          yb}, \[IndentingNewLine]xa = \(-p1\) + b\ p1 + p2 - b\ p2 - b\ p3 + 
+            b\ p4; \[IndentingNewLine]xa = 
+          If[xa \[Equal] 0.0, 
+            0.0, \(\(-p1\) + b\ p1 - b\ p3\)\/xa]; \[IndentingNewLine]yb = \
+\(-p1\) + a\ p1 - a\ p2 + p3 - a\ p3 + a\ p4; \[IndentingNewLine]yb = 
+          If[yb \[Equal] 0.0, 
+            0.0, \(\(-p1\) + a\ p1 - a\ p2\)\/yb]; \[IndentingNewLine]xa = 
+          If[xa === ComplexInfinity || xa === Indeterminate || xa < 0 || 
+              xa > 1, 0, xa]; \[IndentingNewLine]yb = 
+          If[xb === ComplexInfinity || xb === Indeterminate || yb < 0 || 
+              yb > 1, 0, yb]; \[IndentingNewLine]{xa, 
+          yb}\[IndentingNewLine]]\)], "Input"],
+
+Cell[BoxData[
+    \(<< Graphics`Graphics`\)], "Input"],
+
+Cell[BoxData[{\(p1 = \(-0.7\);\), "\[IndentingNewLine]", \(p2 = \(-0.7\);\), \
+"\[IndentingNewLine]", \(p3 = 0.7;\), "\[IndentingNewLine]", \(p4 = 
+        0.7;\), "\[IndentingNewLine]", \(ls[{a_, 
+          b_}] := {{\(\(-p1\) + b\ p1 - b\ p3\)\/\(\(-p1\) + b\ p1 + p2 - b\ \
+p2 - b\ p3 + b\ p4\), 
+          b}, {a, \(\(-p1\) + a\ p1 - a\ p2\)\/\(\(-p1\) + a\ p1 - a\ p2 + p3 \
+- a\ p3 + a\ p4\)}}\), "\[IndentingNewLine]", 
+    RowBox[{
+      RowBox[{"pi", "=", 
+        RowBox[{"ListInterpolation", "[", 
+          RowBox[{
+            RowBox[{"(", GridBox[{
+                  {"p1", "p2"},
+                  {"p3", "p4"}
+                  }], ")"}], ",", \({{0, 1}, {0, 1}}\), 
+            ",", \(InterpolationOrder \[Rule] 1\)}], "]"}]}], 
+      ";"}], "\[IndentingNewLine]", \(pts = 
+        Table[{Random[], 
+            Random[]}, {100}];\), "\[IndentingNewLine]", \(DisplayTogether[\
+\[IndentingNewLine]DensityPlot[pi[x, y], {x, 0, 1}, {y, 0, 1}, 
+          Mesh \[Rule] False, PlotPoints \[Rule] 100, PlotRange \[Rule] All, 
+          Epilog \[Rule] {PointSize[0.03], \(Point[Reverse[#]] &\) /@ 
+                pts, \(Transpose[{{Blue, Green}, Point /@ ls[#]}] &\) /@ 
+                pts}], \[IndentingNewLine]ContourPlot[
+          pi[x, y], {x, 0, 1}, {y, 0, 1}, Contours \[Rule] {0}, 
+          PlotPoints \[Rule] 100, 
+          ContourShading \[Rule] None]\[IndentingNewLine]];\)}], "Input"]
+}, Open  ]]
+},
+FrontEndVersion->"5.2 for X",
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1523},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
+Magnification->1
+]
+
+(*******************************************************************
+Cached data follows.  If you edit this Notebook file directly, not
+using Mathematica, you must remove the line containing CacheID at
+the top of  the file.  The cache data will then be recreated when
+you save this file from within Mathematica.
+*******************************************************************)
+
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+
+(*NotebookFileOutline
+Notebook[{
+Cell[1754, 51, 63, 1, 43, "Input"],
+
+Cell[CellGroupData[{
+Cell[1842, 56, 21, 0, 74, "Section"],
+Cell[1866, 58, 540, 11, 171, "Input"],
+
+Cell[CellGroupData[{
+Cell[2431, 73, 162, 4, 75, "Input"],
+Cell[2596, 79, 38, 1, 26, "Output"],
+Cell[2637, 82, 43, 1, 26, "Output"],
+Cell[2683, 85, 37, 1, 26, "Output"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[2769, 92, 21, 0, 74, "Section"],
+Cell[2793, 94, 39, 1, 27, "Input"],
+Cell[2835, 97, 1614, 29, 267, "Input"],
+Cell[4452, 128, 77, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4554, 133, 205, 4, 43, "Input"],
+Cell[4762, 139, 37, 1, 26, "Output"]
+}, Open  ]],
+Cell[4814, 143, 629, 12, 219, "Input"],
+Cell[5446, 157, 74, 1, 27, "Input"],
+Cell[5523, 160, 247, 3, 59, "Input"],
+Cell[5773, 165, 148, 2, 43, "Input"],
+Cell[5924, 169, 120, 2, 43, "Input"],
+Cell[6047, 173, 116, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[6188, 179, 48, 1, 27, "Input"],
+Cell[6239, 182, 43, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[6319, 188, 438, 7, 59, "Input"],
+Cell[6760, 197, 123, 2, 43, "Output"],
+Cell[6886, 201, 123, 2, 43, "Output"]
+}, Open  ]],
+Cell[7024, 206, 770, 14, 203, "Input"],
+Cell[7797, 222, 54, 1, 27, "Input"],
+Cell[7854, 225, 1409, 26, 240, "Input"]
+}, Open  ]]
+}
+]
+*)
+
+
+
+(*******************************************************************
+End of Mathematica Notebook file.
+*******************************************************************)
+
