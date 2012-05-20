@@ -3,10 +3,10 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: sim
+all: test
 
 SIM := NanoGrooves
-test: testDWorld-implicit
+test: testIIM-interpolate
 viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}

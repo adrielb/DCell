@@ -25,10 +25,9 @@ ALLTESTS += test${1}-${2}
 ${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
 ${1}/tests/${2}.x: ${1}/tests/${2}.o
 	@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
-test${1}-${2}: ${1}/tests/${2}.x
+test${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
 	@echo Test target: $$@
-	-rm -rf ${PETSC_TMP}/*
 	@${MPIEXEC} -np ${4} ./${1}/tests/${2}.x ${5}
 endef
 
@@ -41,10 +40,13 @@ ${subdirectory}/${1}.x: ${subdirectory}/${1}.o
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
 sim-${1}: ${subdirectory}/${1}.x
 	@echo Simulation: sim-${1}
-run-${1}: sim-${1}
-	-find ${PETSC_TMP}/ -print0 -type f | xargs -n1000 -0 rm
+run-${1}: sim-${1} rmTemp
 	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3}
 endef
+
+.PHONY: rmTemp
+rmTemp: 
+	-find ${PETSC_TMP}/ -print0 -type f | xargs -n1000 -0 rm
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
