@@ -6,7 +6,7 @@ int main(int argc, char **args)
 {
   PetscErrorCode  ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
-  
+
 
 
   ierr = DCellFinalize(); CHKERRQ(ierr);

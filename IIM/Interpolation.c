@@ -1,54 +1,43 @@
 #include "ImmersedInterfaceMethod.h"
 
-inline PetscReal IIMVelocityCorrection(
-    PetscReal x, PetscReal ux1, PetscReal a1, PetscReal ux2, PetscReal a2,
-    PetscReal y, PetscReal uy1, PetscReal uy2 )
+inline PetscReal IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
 {
-  const PetscReal C12 = x < a1 ? (1-a1)*x*ux1 : a1*(1-x)*ux1;
-  const PetscReal C34 = x < a2 ? (1-a2)*x*ux2 : a2*(1-x)*ux2;
-  const PetscReal C13 = y < b1 ? (1-b1)*y*uy1 : b1*(1-y)*uy1;
-  const PetscReal C24 = y < b2 ? (1-b2)*y*uy2 : b2*(1-y)*uy2;
+  PetscReal s,a;
+  Coor o0;
+  Coor o1 = {o0.x+1, o0.y+1, o0.z+1};
+  xs = x - n->X.x;
+  ys = y - n->X.y;
+  zs = z - n->X.z;
 
-  return (1-y) * C12 + y * C34 +
-         (1-x) * C13 + x * C24;
+  xi = 1 - PetscAbs( xs );
+  yi = 1 - PetscAbs( ys );
+  zi = 1 - PetscAbs( zs );
+
+  if( xi < 0 ) return 0;
+  if( yi < 0 ) return 0;
+  if( zi < 0 ) return 0;
+
+  if( n->shift == CELL_CENTER ) {
+    s = x[n->axis];
+    a = ((PetscReal)n->X)[n->axis];
+  }
+  const PetscReal C = s < a ? (1-a) * s : a * (1-s);
+
+  vel[dof] += xi * yi * zi * C * uj;
 }
 
-inline PetscReal IIMVelocityCorrection( PetscReal x, PetscReal y, PetscReal z, PetscReal ux1, PetscReal a1 )
+PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel )
 {
-  const PetscReal C12 = X.x < a1 ? (1-a1) * X.x * ux1 : a1 * (1-X.x) * ux1;
+  int i;
+  int len;
+  const int MAXLEN = 64;
+  const PetscReal radius = 2.0;
+  IrregularNode *nodes[MAXLEN];
+  PetscErrorCode ierr;
 
-  return (1-y) * C12;
-}
-
-PetscErrorCode InterpolateVelocity2D( const int udof, const Coor X, Coor *vel )
-{
-  int dof,i,j;
-  int xs, ys;
-  PetscReal sx, sy;
-  PetscReal sum;
-  PetscReal *v = &(vel->x);
-
-  IrregularNode *n;
-
-  n->
-
-  for( dof = 0; dof < 2; dof++ )
-  {
-    xs = (int)floor(X.x + Tensor1[dof][0]);
-    ys = (int)floor(X.y + Tensor1[dof][1]);
-    sx = X.x - xs + Tensor1[dof][0];
-    sy = X.y - ys + Tensor1[dof][1];
-    sum = 0;
-    for( j = 0; j < 2; ++j) {
-      for( i = 0; i < 2; ++i) {
-        sum += ((1 - sx) * (1 - i) + i * sx) *
-               ((1 - sy) * (1 - j) + j * sy) * field[ys+j][xs+i][dof+udof];
-      }
-    }
-    v[dof] = sum;
-    v[dof] += IIMVelocityCorrection(
-        sx, ujx[ys][xs], ujx[ys+1][xs],
-        sy, ujy[ys][xs], ujy[ys][xs+1] );
+  ierr = SpatialIndexQueryPoints( iim->sidx, X, radius, MAXLEN, &len, (void*)&nodes); CHKERRQ(ierr);
+  for (i = 0; i < len; ++i) {
+    IIMVelocityCorrection( X, nodes[i], vel );
   }
   return 0;
 }
