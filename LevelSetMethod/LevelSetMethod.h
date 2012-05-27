@@ -50,6 +50,7 @@ struct _IrregularNode {
   Coor X;   // X.x = x + ox + shift.x/2  (absolute position in space)
   Coor op;  //Ortho proj relative to node location
   int numNei;
+  PetscReal uj; // jump in velocity;
 };
 
 /* Level Set */
