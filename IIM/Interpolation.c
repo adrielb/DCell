@@ -9,8 +9,6 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   int uvw = n->shift == CELL_CENTER ? n->axis : n->shift - U_FACE;
 
   PetscReal s,a;
-  Coor O0;
-  Coor O1 = {O0.x+1, O0.y+1, O0.z+1};
   PetscReal o0=0, o1=1;
   PetscReal *x = &X.x;
   PetscReal *v = &vel->x;
@@ -19,7 +17,6 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   PetscReal xs, ys, zs;
   Coor Xi;
   PetscReal *xi = &Xi.x;
-
 
   Tensor1[uvw][0];
 
@@ -35,14 +32,16 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   if( Xi.y < 0 ) return;
   if( Xi.z < 0 ) return;
 
+  s = x[n->axis];
+  a = nX[n->axis];
+  xi[n->axis] = 1;
+
   if( n->shift == CELL_CENTER ) {
-    s = x[n->axis];
-    a = nX[n->axis];
-    xi[n->axis] = 1;
     o0 = p[n->axis] - 0.5;
     o1 = p[n->axis] + 0.5;
   } else {
-
+    o0 = p[n->axis] - 1.0;
+    o1 = p[n->axis];
   }
 
   if( s < o0 ) return;

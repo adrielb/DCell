@@ -46,7 +46,7 @@ endef
 
 .PHONY: rmTemp
 rmTemp: 
-	-find ${PETSC_TMP}/ -print0 -type f | xargs -n1000 -0 rm
+	-find ${PETSC_TMP}/ -type f -print0 | xargs -n1000 -0 rm
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})

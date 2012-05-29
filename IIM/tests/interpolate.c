@@ -10,7 +10,8 @@ int main(int argc, char **args)
   ierr = DCellInit(); CHKERRQ(ierr);
 
   IrregularNode n = {
-      .shift = CELL_CENTER,
+//      .shift = CELL_CENTER,
+      .shift = U_FACE,
       .axis  = 1,
       .X     = {0,1,0},
       .pos   = {0,1,0}
