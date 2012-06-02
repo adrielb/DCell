@@ -36,10 +36,6 @@ typedef struct _IIM
   Array idx,coor,val; //Interpolation indexes, coors and values
   Coor dh;       // Grid widths
   SpatialIndex sidx; // Indexes irregular nodes in 3D bins
-
-  iCoor p; // position of grid in space;
-  iCoor n; // size of grid [H,W,L]
-  Array irregularNodeGrid; // converts (x,y,z) to index in irregNodes array (TODO: implement this as a quad/octree or HRLE)
 } *IIM;
 
 typedef struct Jump
@@ -66,12 +62,7 @@ PetscErrorCode IIMSetForceContext(IIM iim, void *context);
 PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu );
 PetscErrorCode IIMSetEps( IIM iim, PetscReal eps );
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga );
-
-//Converts (x,y,z) to idx for spatial indexing
-typedef struct {
-  int idx;  // index of first node in irregularNode array at (x,y,z)
-  int len;  // number of irregular nodes at (x,y,z)
-} GridPoint;
+PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel );
 
 PetscErrorCode IIMCorrection( IIM iim, iCoor x, Jump j, int axis, VelFace dof, int sign, PetscReal h, PetscReal dd, PetscReal mu );
 PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j );

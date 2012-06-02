@@ -10,11 +10,12 @@ int main(int argc, char **args)
   ierr = DCellInit(); CHKERRQ(ierr);
 
   IrregularNode n = {
-//      .shift = CELL_CENTER,
-      .shift = U_FACE,
-      .axis  = 1,
-      .X     = {0,1,0},
-      .pos   = {0,1,0}
+      .shift = CELL_CENTER,
+//      .shift = U_FACE,
+      .axis  = 0,
+      .X     = {0.8,0,0},
+      .pos   = {1,0,0},
+      .uj    = 10
   };
 
   PetscViewer velfield;
@@ -22,12 +23,12 @@ int main(int argc, char **args)
   ierr = PetscViewerASCIIOpen(PETSC_COMM_SELF,filename,&velfield); CHKERRQ(ierr);
 
   Coor X;
-  for (X.y = -1.5; X.y < 1.5; X.y += 0.1 ) {
-    for (X.x = -1.5; X.x < 1.5; X.x += 0.1 ) {
+  for (X.y = -1.5; X.y < 1.5; X.y += 0.02 ) {
+    for (X.x = -1.5; X.x < 1.5; X.x += 0.02 ) {
       Coor vel = {0,0,0};
       PetscReal *v = &vel.x;
       IIMVelocityCorrection( X, &n, &vel);
-      ierr = PetscViewerASCIIPrintf(velfield,"%f ", v[n.axis] ); CHKERRQ(ierr);
+      ierr = PetscViewerASCIIPrintf(velfield,"%f ", v[0] ); CHKERRQ(ierr);
     }
   }
 
@@ -35,4 +36,3 @@ int main(int argc, char **args)
   ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;
 }
-

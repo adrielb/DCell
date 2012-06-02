@@ -15,7 +15,6 @@ PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
   ierr = ArrayCreate( "iim_idx", sizeof(int*), &i->idx); CHKERRQ(ierr);
   ierr = ArrayCreate( "iim_coor", 4*sizeof(int), &i->coor); CHKERRQ(ierr); // [ x y z d ]
   ierr = ArrayCreate( "iim_val", sizeof(PetscReal), &i->val); CHKERRQ(ierr);
-  ierr = ArrayCreate( "iim_grid",sizeof(GridPoint), &i->irregularNodeGrid); CHKERRQ(ierr);
 
   i->dh = dh;
   i->mu = 1.0;
@@ -47,7 +46,6 @@ PetscErrorCode IIMDestroy( IIM iim )
   ierr = ArrayDestroy(iim->coor); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->val); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->idx); CHKERRQ(ierr);
-  ierr = ArrayDestroy(iim->irregularNodeGrid); CHKERRQ(ierr);
   ierr = LocalCoorDestroy( iim->lc ); CHKERRQ(ierr);
   ierr = LeastSqDestroy( iim->lsq ); CHKERRQ(ierr);
   ierr = PetscFree(iim); CHKERRQ(ierr);

@@ -18,8 +18,6 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   Coor Xi;
   PetscReal *xi = &Xi.x;
 
-  Tensor1[uvw][0];
-
   xs = X.x - n->X.x;
   ys = X.y - n->X.y;
   zs = X.z - n->X.z;
@@ -40,18 +38,15 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
     o0 = p[n->axis] - 0.5;
     o1 = p[n->axis] + 0.5;
   } else {
-    o0 = p[n->axis] - 1.0;
     o1 = p[n->axis];
+    o0 = o1 - 1;
   }
 
   if( s < o0 ) return;
   if( s > o1 ) return;
   PetscReal C = s < a ? (o1-a) * (s-o0) : (a-o0) * (o1-s);
 
-  PetscReal uj = 1;
-
-  v[uvw] += Xi.x * Xi.y * Xi.z * C * uj;
-//  v[uvw] = a;
+  v[uvw] += Xi.x * Xi.y * Xi.z * C * n->uj;
 }
 
 PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel )
@@ -59,7 +54,7 @@ PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel )
   int i;
   int len;
   const int MAXLEN = 64;
-  const PetscReal radius = 2.0;
+  const PetscReal radius = 2.25; // approx sqrt( 1^2 + 2^2 )
   IrregularNode *nodes[MAXLEN];
   PetscErrorCode ierr;
 

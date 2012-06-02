@@ -156,4 +156,7 @@ void JumpVelocity( PetscReal mu, IrregularNode *n, Jump *j, int i )
 
   IIMLocalToGlobal_1st( n, j );
   IIMLocalToGlobal_2nd( n, j );
+
+  PetscReal *jpq  = &j->x;
+  n->uj = jpq[i];
 }

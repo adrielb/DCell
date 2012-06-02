@@ -8,6 +8,8 @@ ${LOCOBJS}: FluidField/FluidField.h FluidField/FluidField_private.h
 
 LOCDEPS := FluidField IIM LevelSetMethod Common
 ${eval ${call test-library,${subdirectory},viewMat,${LOCDEPS}, 2 }}
+${eval ${call test-library,${subdirectory},interpolation,${LOCDEPS}, 1 }}
+
 
 
 ULIMIT=ulimit -v 500000; 
