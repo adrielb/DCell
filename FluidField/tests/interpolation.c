@@ -10,11 +10,11 @@ typedef struct _Context {
 
 void InterfacialForceAdhesion(IrregularNode *n, void *context )
 {
-  const Context *c = (Context*)context;
+//  const Context *c = (Context*)context;
 
 //  n->f1 = c->scale*(-c->K * n->k);
-  n->f1 = c->scale;
-  n->f2 = c->scale;
+  n->f1 = -n->k*100;
+  n->f2 = 0;
 }
 
 int main(int argc, char **args) {
@@ -22,7 +22,7 @@ int main(int argc, char **args) {
   ierr = DCellInit(); CHKERRQ(ierr);
   ierr = PetscInfoAllow(PETSC_TRUE,"info.log"); CHKERRQ(ierr);
 
-  PetscReal d1 = 32, dx = 1./(d1-1);
+  PetscReal d1 = 16, dx = 1./(d1-1);
   iCoor size = {d1,d1,0};
 
   FluidField fluid;
@@ -31,6 +31,9 @@ int main(int argc, char **args) {
   ierr = FluidFieldSetDx(fluid,dx); CHKERRQ(ierr);
   ierr = FluidFieldSetup(fluid); CHKERRQ(ierr);
 
+  ierr = KSPSetTolerances(fluid->ksp,1e-12,1e-10,PETSC_DEFAULT,PETSC_DEFAULT); CHKERRQ(ierr);
+  ierr = KSPMonitorSet(fluid->ksp,KSPMonitorDefault,0,0); CHKERRQ(ierr);
+
   IIM iim;
   ierr = IIMCreate( !fluid->is3D, 64, fluid->dh, &iim); CHKERRQ(ierr);
   ierr = IIMSetViscosity(iim, fluid->mu); CHKERRQ(ierr);
@@ -38,7 +41,8 @@ int main(int argc, char **args) {
   ierr = IIMSetForceComponents(iim,InterfacialForceAdhesion ); CHKERRQ(ierr);
 
   LevelSet ls;
-  ierr = LevelSetInitializeToCircle(fluid->dh, (Coor) {0.5,0.5,0}, 0.4, &ls); CHKERRQ(ierr);
+//  ierr = LevelSetInitializeToCircle(fluid->dh, (Coor) {0.5,0.5,0}, 0.2, &ls); CHKERRQ(ierr);
+  ierr = LevelSetInitializeToStar2D(fluid->dh, (Coor) {0.5,0.5,0}, 0.3, 0.1, 3, &ls); CHKERRQ(ierr);
 
   Context context;
   context.K = 10;
@@ -53,26 +57,28 @@ int main(int argc, char **args) {
   ierr = FluidFieldWrite( fluid, 0); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(ls, 0); CHKERRQ(ierr);
 
-  PetscReal di = 0.1;
-  iCoor s = {fluid->lens.x / di, fluid->lens.y / di, 0};
+  int factor = 1;
+  PetscReal di = dx / factor;
+  iCoor s = {size.x * factor, size.y * factor, 0};
   Grid g;
-  ierr = GridCreate(fluid->dh, (iCoor){0,0,0}, s, 1, &g); CHKERRQ(ierr);
+  ierr = GridCreate(fluid->dh, (iCoor){0,0,0}, s, 2, &g); CHKERRQ(ierr);
 
+  iCoor p, q;
   int x, y;
   Coor  X;
-  PetscReal ***vel, **grid;
+  PetscReal ***vel, ***grid;
   ierr = DMDAVecGetArrayDOF(fluid->daV,fluid->vel,&vel); CHKERRQ(ierr);
   ierr = GridGet( g, &grid); CHKERRQ(ierr);
-  for (y = 0; y < s.y; y++ ) {
-    for (x = 0; x < s.x; x++ ) {
+  ierr = GridGetBounds(g, &p, &q); CHKERRQ(ierr);
+  for (y = p.y; y < q.y; y++ ) {
+    for (x = p.x; x < q.x; x++ ) {
       Coor V = {0,0,0};
-      PetscReal *v = &V.x;
       X.x = x * di;
       X.y = y * di;
-      ierr = InterpolateVelocity2D( 0, vel, X, &V ); CHKERRQ(ierr);
+      ierr = InterpolateVelocity2D( 1, vel, X, &V ); CHKERRQ(ierr);
 //      ierr = IIMCorrectVelocity( iim, X, &V ); CHKERRQ(ierr);
-//      grid[y][x] = v[0];
-      grid[y][x] = v[0];
+      grid[y][x][0] = V.x;
+      grid[y][x][1] = V.y;
     }
   }
   ierr = DMDAVecRestoreArrayDOF(fluid->daV,fluid->vel,&vel); CHKERRQ(ierr);
