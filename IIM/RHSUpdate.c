@@ -22,6 +22,7 @@ PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga )
   for( i = 0; i < len; i++ )
   {
     ierr = ArrayGet(ls->irregularNodes,i,(void*)&node); CHKERRQ(ierr);
+    if( node->axis == -1 ) continue;
     JumpPressure( node, &jump );
 
     // C{ px = p[i] - p[i-1] }

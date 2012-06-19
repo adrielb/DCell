@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[    198956,       5604]*)
-(*NotebookOutlinePosition[    199635,       5628]*)
-(*  CellTagsIndexPosition[    199591,       5624]*)
+(*NotebookOptionsPosition[    201437,       5661]*)
+(*NotebookOutlinePosition[    202116,       5685]*)
+(*  CellTagsIndexPosition[    202072,       5681]*)
 (*WindowFrame->Normal*)
 
 
@@ -5514,15 +5514,31 @@ Cell[BoxData[
 Cell[CellGroupData[{
 
 Cell[BoxData[{
+    \(\(factor = 20;\)\), "\[IndentingNewLine]", 
     \(clear\), "\[IndentingNewLine]", 
-    \(\({g, pos} = ImportGrid["\<grid\>", 2];\)\), "\n", 
+    \(\({g, pos} = ImportGrid["\<grid\>", 4];\)\), "\n", 
     \(\(ui = g[\([1, All, All, 1]\)];\)\), "\[IndentingNewLine]", 
     \(\(vi = g[\([1, All, All, 2]\)];\)\), "\n", 
+    \(\(uc = g[\([\)\(1, All, All, 3\)\(]\)];\)\), "\[IndentingNewLine]", 
+    \(\(vc = g[\([\)\(1, All, All, 4\)\(]\)];\)\), "\[IndentingNewLine]", 
     \(Dimensions[g]\), "\n", 
-    \(\(ListDensityPlot[ui];\)\)}], "Input"],
+    \(\({pres1, uvel1, vvel1} = 
+        ImportFluid1[size[\([\)\(1\)\(]\)], size[\([\)\(2\)\(]\)], 
+          dx, "\<uvp\>", 10000];\)\), "\[IndentingNewLine]", 
+    \(\(DisplayTogetherArray[{\[IndentingNewLine]{ListDensityPlot[ui], 
+            ListDensityPlot[
+              vi]}, \[IndentingNewLine]\(ListDensityPlot[#, 
+                Epilog \[Rule] {Green, 
+                    Point /@ \((factor*ir`X)\)}] &\) /@ {uc, 
+              vc}, \[IndentingNewLine]\(DensityPlot[#[y, x], {x, 0, 
+                  len[\([\)\(1\)\(]\)] - 2  dx}, {y, 0, 
+                  len[\([\)\(2\)\(]\)] - 2  dx}, 
+                Epilog \[Rule] {Green, Point /@ \((dx*ir`X)\)}, 
+                Frame \[Rule] False] &\) /@ {uvel1, 
+              vvel1}\[IndentingNewLine]}];\)\)}], "Input"],
 
 Cell[BoxData[
-    \({1, 16, 16, 2}\)], "Output"]
+    \({1, 320, 320, 4}\)], "Output"]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -5557,7 +5573,7 @@ Cell[BoxData[
 
 Cell[BoxData[{
     \(\({pres, uvel, vvel} = 
-        ImportFluid[size[\([\)\(1\)\(]\)], size[\([\)\(2\)\(]\)], "\<rhs\>", 
+        ImportFluid[size[\([1]\)], size[\([2]\)], "\<rhs\>", 
           10000];\)\), "\[IndentingNewLine]", 
     \(clear\), "\[IndentingNewLine]", 
     \(\(ListDensityPlot /@ {pres, uvel, vvel};\)\)}], "Input"],
@@ -5566,13 +5582,12 @@ Cell[CellGroupData[{
 
 Cell[BoxData[{
     \(\({pres, uvel, vvel} = 
-        ImportFluid[size[\([\)\(1\)\(]\)], size[\([\)\(2\)\(]\)], "\<uvp\>", 
+        ImportFluid[size[\([1]\)], size[\([2]\)], "\<uvp\>", 
           10000];\)\), "\n", 
     \(\(div = 
         Table[uvel[\([y, x + 1]\)] - uvel[\([y, x]\)] + 
-            vvel[\([y + 1, x]\)] - vvel[\([\)\(y, x\)\(]\)], {y, 1, 
-            size[\([\)\(2\)\(]\)] - 1}, {x, 1, 
-            size[\([\)\(1\)\(]\)] - 1}];\)\), "\n", 
+            vvel[\([y + 1, x]\)] - vvel[\([y, x]\)], {y, 1, 
+            size[\([2]\)] - 1}, {x, 1, size[\([1]\)] - 1}];\)\), "\n", 
     \(rng = Quantile[Flatten@div, {0, 1}]\), "\n", 
     \(Quantile[Flatten@uvel, {0, 1}]\), "\[IndentingNewLine]", 
     \(Quantile[Flatten@vvel, {0, 1}]\), "\[IndentingNewLine]", 
@@ -5589,24 +5604,66 @@ Cell[BoxData[
     \({\(-9802.675961417472`\), 10947.337420541024`}\)], "Output"]
 }, Open  ]],
 
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(\(Total[pres] // Sort\) // ListPlot\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
 Cell[BoxData[
     \(\(ListPlot3D[div];\)\)], "Input"],
 
 Cell[BoxData[
     \(\(ListPlot3D /@ {pres, uvel, vvel, div};\)\)], "Input"],
 
+Cell[CellGroupData[{
+
 Cell[BoxData[{
     \(clear\), "\[IndentingNewLine]", 
     \(\(\(ListDensityPlot[#, 
             Epilog \[Rule] {Green, Point /@ \((ir`X)\)}] &\) /@ {pres, uvel, 
-          vvel};\)\)}], "Input"]
+          vvel};\)\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), "\<\"\\!\\(ir`X\\) was \
+encountered where a \\!\\(Graphics\\) primitive or directive was expected. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), "\<\"\\!\\(ir`X\\) was \
+encountered where a \\!\\(Graphics\\) primitive or directive was expected. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Graphics::"gprim"\), \(\(:\)\(\ \)\), "\<\"\\!\\(ir`X\\) was \
+encountered where a \\!\\(Graphics\\) primitive or directive was expected. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::gprim\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Graphics :: \\\"gprim\\\"\\) will be suppressed during this \
+calculation. \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], "Message"]
+}, Open  ]]
 }, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
-ScreenRectangle->{{0, 1920}, {0, 1106}},
+ScreenRectangle->{{0, 2400}, {0, 1600}},
 AutoGeneratedPackage->None,
-WindowSize->{719, 1026},
-WindowMargins->{{0, Automatic}, {Automatic, 25}},
+WindowSize->{1200, 1523},
+WindowMargins->{{0, Automatic}, {0, Automatic}},
 ShowSelection->True
 ]
 
@@ -6786,7 +6843,7 @@ Cell[195123, 5480, 41, 0, 44, "Section"],
 
 Cell[CellGroupData[{
 Cell[195189, 5484, 44, 1, 27, "Input"],
-Cell[195236, 5487, 315, 5, 56, "Output"]
+Cell[195236, 5487, 315, 5, 41, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -6797,24 +6854,36 @@ Cell[195845, 5509, 63, 1, 26, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[195945, 5515, 303, 6, 107, "Input"],
-Cell[196251, 5523, 48, 1, 26, "Output"]
+Cell[195945, 5515, 1238, 22, 235, "Input"],
+Cell[197186, 5539, 50, 1, 26, "Output"]
 }, Open  ]],
-Cell[196314, 5527, 687, 15, 123, "Input"],
-Cell[197004, 5544, 292, 5, 59, "Input"],
-Cell[197299, 5551, 52, 1, 27, "Input"],
-Cell[197354, 5554, 54, 1, 27, "Input"],
-Cell[197411, 5557, 271, 5, 59, "Input"],
+Cell[197251, 5543, 687, 15, 107, "Input"],
+Cell[197941, 5560, 292, 5, 43, "Input"],
+Cell[198236, 5567, 52, 1, 27, "Input"],
+Cell[198291, 5570, 54, 1, 27, "Input"],
+Cell[198348, 5573, 255, 5, 59, "Input"],
 
 Cell[CellGroupData[{
-Cell[197707, 5566, 642, 13, 139, "Input"],
-Cell[198352, 5581, 80, 1, 26, "Output"],
-Cell[198435, 5584, 79, 1, 26, "Output"],
-Cell[198517, 5587, 80, 1, 26, "Output"]
+Cell[198628, 5582, 589, 12, 123, "Input"],
+Cell[199220, 5596, 80, 1, 26, "Output"],
+Cell[199303, 5599, 79, 1, 26, "Output"],
+Cell[199385, 5602, 80, 1, 26, "Output"]
 }, Open  ]],
-Cell[198612, 5591, 53, 1, 27, "Input"],
-Cell[198668, 5594, 75, 1, 27, "Input"],
-Cell[198746, 5597, 194, 4, 43, "Input"]
+
+Cell[CellGroupData[{
+Cell[199502, 5608, 68, 1, 27, "Input"],
+Cell[199573, 5611, 130, 3, 26, "Output"]
+}, Open  ]],
+Cell[199718, 5617, 53, 1, 27, "Input"],
+Cell[199774, 5620, 75, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[199874, 5625, 194, 4, 43, "Input"],
+Cell[200071, 5631, 332, 5, 20, "Message"],
+Cell[200406, 5638, 332, 5, 20, "Message"],
+Cell[200741, 5645, 332, 5, 20, "Message"],
+Cell[201076, 5652, 333, 5, 20, "Message"]
+}, Open  ]]
 }, Open  ]]
 }
 ]
