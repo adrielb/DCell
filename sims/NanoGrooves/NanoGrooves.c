@@ -61,7 +61,7 @@ int main(int argc, char **args) {
   PetscReal dx = dh.x;
 
   // Make NanoSurface
-  int borderwidth = 2;
+  int borderwidth = 3;
   PetscReal c,
             b = borderwidth*dx,
             w = 1,
@@ -82,12 +82,8 @@ int main(int argc, char **args) {
   ierr = GridSetName(lsGrooves->phi,"grooves"); CHKERRQ(ierr);
   ierr = GridWrite(lsGrooves->phi,0); CHKERRQ(ierr);
   ierr = LevelSetInitializeFromImage(lsGrooves); CHKERRQ(ierr);
-  ierr = VecShift(lsGrooves->phi->v, -0.5); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
   ierr = GridWrite(lsGrooves->phi,1); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(lsGrooves,0); CHKERRQ(ierr);
-  ierr = VecShift(lsGrooves->phi->v,  0.5); CHKERRQ(ierr);
-  ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
 
   ierr = FluidFieldSetMask(fluid, lsGrooves->phi ); CHKERRQ(ierr);
   ierr = FluidFieldSetup(fluid); CHKERRQ(ierr);
@@ -115,10 +111,10 @@ int main(int argc, char **args) {
     ierr = MyCellSetFromOptions(cell); CHKERRQ(ierr);
     ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
 
-    ierr = VecShift(lsGrooves->phi->v,cell->contactThres/dx); CHKERRQ(ierr);
-    ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
-    ierr = LevelSetWriteIrregularNodeList(lsGrooves,1); CHKERRQ(ierr);
-    ierr = VecShift(lsGrooves->phi->v,-cell->contactThres/dx); CHKERRQ(ierr);
+//    ierr = VecShift(lsGrooves->phi->v,cell->contactThres/dx); CHKERRQ(ierr);
+//    ierr = LevelSetUpdateIrregularNodeList(lsGrooves); CHKERRQ(ierr);
+//    ierr = LevelSetWriteIrregularNodeList(lsGrooves,1); CHKERRQ(ierr);
+//    ierr = VecShift(lsGrooves->phi->v,-cell->contactThres/dx); CHKERRQ(ierr);
   }
 
   world->timax = 10;
