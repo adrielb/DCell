@@ -55,6 +55,7 @@ struct _ParticleLS {
   PetscInt  S_INIT;    // initial seeding density
   int L_MAX;    // max iterations for finding phi_goal
   PetscReal G_TOL;   // tolerance when phi == phi_goal
+  PetscReal E_DIST;  // escaped particle distance threshold when deleted
 
   /* ACTIONS */
   PetscErrorCode (*AdvectParticles)(ParticleLS pls, Coor dh, Grid velgrid, PetscReal dt);

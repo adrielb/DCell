@@ -8,11 +8,11 @@ RUNOPTS := \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
 -pls_sinit 128 \
--ls_advectthres 10000 \
+-ls_advectthres 1 \
 -groove_width 2.0 \
 -Fa 0.1 \
 -Fk 0 \
--Fk0 10 \
+-Fk0 30 \
 -Fn 0 \
 -ecm 1 \
 -kclip 0.1 \
@@ -20,9 +20,9 @@ RUNOPTS := \
 -contactThres 0.05 \
 -adhesionRadius 0.45 \
 -fluid_dx 0.20 \
--fluid_lens 20,9 \
+-fluid_lens 35,9 \
 -timax 50000 \
--CFL 0.1 \
+-CFL 0.05 \
 -dtmax 0.3 \
 -ksp_monitor \
 -ksp_atol 1e-12 -ksp_rtol 1e-3 -ksp_max_it 100 \

@@ -24,12 +24,14 @@ PetscErrorCode LevelSetInitializeParticles( LevelSet ls )
   pls->S_INIT = ls->phi->is2D ? 16 : 32;
   pls->L_MAX = 30;
   pls->G_TOL = 1e-3;
+  pls->E_DIST = 0.5;
 
 // use command line parameters for particle properties
   ierr = PetscOptionsGetReal(0,"-pls_rmin",&pls->R_MIN,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-pls_rmax",&pls->R_MAX,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetReal(0,"-pls_dinit",&pls->D_INIT,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetInt( 0,"-pls_sinit",&pls->S_INIT,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-pls_edist",&pls->E_DIST,0); CHKERRQ(ierr);
 
   ierr = ArrayCreate( "particles", sizeof(struct _Particle), &pls->particles); CHKERRQ(ierr);
   ierr = PetscRandomCreate(PETSC_COMM_WORLD,&pls->rnd); CHKERRQ(ierr);
@@ -205,30 +207,32 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
   PetscReal **phi;
   PetscReal phimin, phimax;
   PetscReal phi_goal;
+  PetscReal thres;
   Particle p;
   int *count;
   const int targetDensity = pls->S_INIT;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  static Array particleCounts, postCounts;
+  static Array particleCounts;
   if( particleCounts == NULL ) {
     ierr = ArrayCreate( "particleCounts", sizeof(int), &particleCounts); CHKERRQ(ierr);
-    ierr = ArrayCreate( "postCounts", sizeof(int), &postCounts); CHKERRQ(ierr);
   }
   ierr = PetscLogEventBegin(EVENT_ParticleLS_ReseedParticles,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   /* Delete particles that are
    *   1) too far: p->sign*phi(p->X) > D_INIT
-   *   2) TODO: too dense: delete particles farthest from the interface
+   *   2) too far: phi(p->X) > E_DIST for escaped particle
+   *   3) TODO: too dense: delete particles farthest from the interface
    */
   for ( i = 0; i < ArrayLength(pls->particles); ++i) {
     ierr = ArrayGet(pls->particles,i,&p); CHKERRQ(ierr);
-
     ierr = GridInterpolate( ls->phi, p->X, &dist ); CHKERRQ(ierr);
-    if( PetscAbs(dist) > pls->D_INIT ) {
-      // TODO: this deletes both escaped and non-escaped particles. Is it possible for an escaped particle to be so far from an interface?
-      // If so, it may not be in the level set bounding box and thus not have a velocity field for interpolation
+    sign = PetscSign(p->radius);
+
+    // Delete both escaped and non-escaped particles.
+    thres = sign * dist < 0 ? pls->E_DIST : pls->D_INIT;
+    if( PetscAbs(dist) > thres ) {
       ierr = ArrayDelete1(pls->particles, i); CHKERRQ(ierr);
       i--;
       continue;
@@ -306,7 +310,7 @@ PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt)
    * 2) Evolve LS by SL1
    * 3) Error correction
    * 4) Reinit LS w/FMM
-   * 5) Error correction
+   * X) Error correction      <--- Eliminated: causes bubbles
    * 6) Adjust particle radii
    * 7) Reseed particles
    */
@@ -321,7 +325,7 @@ PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt)
   if( ls->AdvectCount >= ls->AdvectThres || ls->CFLcount >= ls->CFLthres ) {
     ierr = PetscInfo4(0,"CFLcount: %f:%f  AdvectCount: %d:%d\n", ls->CFLcount, ls->CFLthres, ls->AdvectCount,ls->AdvectThres); CHKERRQ(ierr);
     ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
-    ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
+//    ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
     ierr = ParticleLS_ReseedParticles(pls,ls); CHKERRQ(ierr);
     ierr = ParticleLS_AdjustRadii(pls,ls); CHKERRQ(ierr);
     ls->CFLcount = 0;
