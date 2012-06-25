@@ -21,8 +21,9 @@ PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid );
 PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op );
-PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3],  Coor *op );
-PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op );
+PetscErrorCode OrthogonalProjection2D_Bicubic( double phi[5][5],  Coor *op, PetscReal *dist );
+PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3],  Coor *op, PetscReal *dist );
+PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op, PetscReal *dist );
 PetscErrorCode OrthogonalProjection3D( double phi3[3][3][3], double phi[5][5][5], Coor *op );
 PetscErrorCode OrthogonalProjection3D_Quadratic( double phi[3][3][3], Coor *op );
 PetscErrorCode OrthogonalProjection3D_Linear( double phi[3][3][3], Coor *op );
@@ -54,6 +55,7 @@ struct _ParticleLS {
   PetscInt  S_INIT;    // initial seeding density
   int L_MAX;    // max iterations for finding phi_goal
   PetscReal G_TOL;   // tolerance when phi == phi_goal
+  PetscReal E_DIST;  // escaped particle distance threshold when deleted
 
   /* ACTIONS */
   PetscErrorCode (*AdvectParticles)(ParticleLS pls, Coor dh, Grid velgrid, PetscReal dt);

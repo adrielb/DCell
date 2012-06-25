@@ -57,11 +57,11 @@ int main(int argc, char **args) {
   ierr = FluidFieldWrite( fluid, 0); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(ls, 0); CHKERRQ(ierr);
 
-  int factor = 1;
-  PetscReal di = dx / factor;
+  int factor = 20;
+  PetscReal di = 1.0 / factor;
   iCoor s = {size.x * factor, size.y * factor, 0};
   Grid g;
-  ierr = GridCreate(fluid->dh, (iCoor){0,0,0}, s, 2, &g); CHKERRQ(ierr);
+  ierr = GridCreate(fluid->dh, (iCoor){0,0,0}, s, 4, &g); CHKERRQ(ierr);
 
   iCoor p, q;
   int x, y;
@@ -70,15 +70,17 @@ int main(int argc, char **args) {
   ierr = DMDAVecGetArrayDOF(fluid->daV,fluid->vel,&vel); CHKERRQ(ierr);
   ierr = GridGet( g, &grid); CHKERRQ(ierr);
   ierr = GridGetBounds(g, &p, &q); CHKERRQ(ierr);
-  for (y = p.y; y < q.y; y++ ) {
-    for (x = p.x; x < q.x; x++ ) {
+  for (y = p.y; y < q.y - 1.5*factor; y++ ) {
+    for (x = p.x; x < q.x - 1.5*factor; x++ ) {
       Coor V = {0,0,0};
       X.x = x * di;
       X.y = y * di;
       ierr = InterpolateVelocity2D( 1, vel, X, &V ); CHKERRQ(ierr);
-//      ierr = IIMCorrectVelocity( iim, X, &V ); CHKERRQ(ierr);
       grid[y][x][0] = V.x;
       grid[y][x][1] = V.y;
+      ierr = IIMCorrectVelocity( iim, X, &V ); CHKERRQ(ierr);
+      grid[y][x][2] = V.x;
+      grid[y][x][3] = V.y;
     }
   }
   ierr = DMDAVecRestoreArrayDOF(fluid->daV,fluid->vel,&vel); CHKERRQ(ierr);

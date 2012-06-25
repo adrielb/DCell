@@ -69,7 +69,7 @@ PetscErrorCode ParticleLS_ErrorCorrection2D( ParticleLS pls, LevelSet ls )
     // error identification
     // if a particle is classified as "escaped"
     if( sign * dist      < 0 &&        // particle on wrong side of interface
-        PetscAbs( dist ) > p->radius ) // by more than its radius
+        PetscAbs( dist ) > PetscAbs( p->radius ) ) // by more than its radius
     {
       A.x = floor(p->X.x);
       A.y = floor(p->X.y);

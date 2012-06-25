@@ -41,14 +41,15 @@ inline void AccumulateCoef( const PetscReal bw, const PetscReal phi[7], PetscRea
   PetscReal Dp, ap, bp, cp;
   PetscReal t;
 
-  if( p[1] < bw && p[2] < bw && D2p > 0 ) {
+  if( 0 <= p[1] && p[1] < bw &&
+      0 <= p[2] && p[2] < bw && D2p > 0 ) {
     // 2nd order Dx
     t = (4*p[1]-p[2])/3;
     ap =  9./4.;
     bp = -9./2.*t;
     cp =  9./4.*t*t;
     Dp = D2p;
-  } else if( p[1] < bw && D1p > 0) {
+  } else if( 0 <= p[1] && p[1] < bw && D1p > 0) {
     // 1st order Dx
     ap = 1.;
     bp = -2.*p[1];
@@ -61,14 +62,15 @@ inline void AccumulateCoef( const PetscReal bw, const PetscReal phi[7], PetscRea
     Dp = 0;
   }
 
-  if( p[-1] < bw && p[-2] < bw && D2m > 0 ) {
+  if( 0 <= p[-1] && p[-1] < bw &&
+      0 <= p[-2] && p[-2] < bw && D2m > 0 ) {
     // 2nd order Dx
     t = (4*p[-1]-p[-2])/3;
     am =  9./4.;
     bm = -9./2.*t;
     cm =  9./4.*t*t;
     Dm = D2m;
-  } else if( p[-1] < bw && D1m  > 0) {
+  } else if( 0 <= p[-1] && p[-1] < bw && D1m  > 0) {
     // 1st order Dx
     am = 1;
     bm = -2.*p[-1];

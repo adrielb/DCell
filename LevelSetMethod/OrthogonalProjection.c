@@ -1,12 +1,32 @@
 #include "LevelSetMethod.h"
 #include "LSM_private.h"
 
+#undef __FUNCT__
+#define __FUNCT__ "OrthogonalProjection2D"
+PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op )
+{
+  Coor opB, opQ, opL;
+  PetscReal distB, distQ, distL;
+  PetscFunctionBegin;
+  OrthogonalProjection2D_Bicubic( phi, &opB, &distB );
+//  OrthogonalProjection2D_Quadratic( phi3, &opQ, &distQ );
+  OrthogonalProjection2D_Linear( phi3, &opL, &distL );
+
+  if( distB < distL ) {
+    *op = opB;
+  } else {
+    *op = opL;
+  }
+  PetscFunctionReturn(0);
+}
+
 // Some improvements of the fast marching method
 // SIAM J Sci Comput Vol. 23, No. 1, pp 230-244
 
 #undef __FUNCT__
-#define __FUNCT__ "OrthogonalProjection2D"
-PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op ){
+#define __FUNCT__ "OrthogonalProjection2D_Bicubic"
+PetscErrorCode OrthogonalProjection2D_Bicubic( double phi[5][5], Coor *op, PetscReal *minDist )
+{
   const PetscReal TOL = 1e-3;
   const PetscReal TOL2 = TOL*TOL; // TOL^2
   const int MAXITER = 20;
@@ -20,7 +40,6 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
   Coor x0;
   int i,j,m;
 
-  PetscFunctionBegin;
   for (j = 0; j <= 1; ++j) {
     for (i = 0; i <= 1; ++i) {
       // Bicubic interpolation
@@ -98,30 +117,9 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
       }
     } // i
   } // j
-//  printf("MINDIST: %e\n", mindist);
-//  printf("Local: {%d, %d}\n", i, j);
-  if( PetscAbs( mindist - PETSC_MAX_REAL) < 1 ) {
-    OrthogonalProjection2D_Quadratic( phi3, op);
-/*
-    printf("PHI\n");
-    printf("{");
-    for (j = 0; j < 5; ++j) {
-      printf("{");
-      for (i = 0; i < 4; ++i) {
-        printf("%f, ", phi[j][i]);
-      }
-      printf("%f},", phi[j][4]);
-    }
-    printf("}\n");
-    printf("{");
-    for (i = 0; i < 15; ++i) {
-      printf("%f, ", a[i]);
-    }
-    printf("%f}\n", a[15]);
-    exit(1);
-*/
-  }
-  PetscFunctionReturn(0);
+
+  *minDist = mindist;
+  return 0;
 }
 
 /* Orthogonal Projection solves:
@@ -135,13 +133,11 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
  */
 #undef __FUNCT__
 #define __FUNCT__ "OrthogonalProjection2D_Quadratic"
-PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3], Coor *op)
+PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3], Coor *op, PetscReal *mindist )
 {
   int m;
   const int i = 1, j = 1; //makes indexing easier
   double p, px, py, px2, py2, pxx, pyy, pxy, pn, c, a, f, df;
-
-  PetscFunctionBegin;
 
   p  = phi[j][i];
   px = ( phi[j][i+1] - phi[j][i-1] ) / 2.;
@@ -163,36 +159,35 @@ PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3], Coor *op)
     a = a - f / df;
   }
 
+  *mindist = 2;
   if( PetscAbs(a) < 1 ) {
     op->x = a * px / pn;
     op->y = a * py / pn;
-  } else {
-    OrthogonalProjection2D_Linear( phi, op );
+    *mindist = a;
   }
-
-  PetscFunctionReturn(0);
+  return 0;
 }
 
 #undef __FUNCT__
 #define __FUNCT__ "OrthogonalProjection2D_Linear"
-PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op )
+PetscErrorCode OrthogonalProjection2D_Linear( double phi[3][3],  Coor *op, PetscReal *mindist )
 {
   int i;
   int x,y;
-  double mindist = 2, dist;
+  double dist;
 
-  PetscFunctionBegin;
+  *mindist = 2;
   for (i = 0; i < 4; ++i) {
     x = STAR[i][0] + 1;
     y = STAR[i][1] + 1;
     if( phi[1][1] * phi[y][x] <= 0 ) {
       dist = phi[1][1] / (phi[1][1] - phi[y][x]);
-      if( dist < mindist ) {
-        mindist = dist;
+      if( dist < *mindist ) {
+        *mindist = dist;
         op->x = dist * STAR[i][0];
         op->y = dist * STAR[i][1];
       }
     }
   }
-  PetscFunctionReturn(0);
+  return 0;
 }

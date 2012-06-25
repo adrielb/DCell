@@ -47,6 +47,7 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   PetscReal C = s < a ? (o1-a) * (s-o0) : (a-o0) * (o1-s);
 
   v[uvw] += Xi.x * Xi.y * Xi.z * C * n->uj;
+  v[uvw] = n->uj;
 }
 
 PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel )
