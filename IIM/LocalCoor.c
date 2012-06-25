@@ -90,6 +90,13 @@ void LocalCoor2DSolve( LocalCoor lc, Coor dh, IrregularNode *n)
   
 //  cblas_drot(lc->len, lc->s, 1, lc->n, 1, n->nx, n->ny);
   DROT(&lc->len, lc->s, &incx, lc->n, &incy, &n->nx, &n->ny);
+
+  for( i = 0; i < lc->len; i++)
+  {
+    lc->s[i] = PetscSign(lc->s[i]) * PetscSqrtReal(
+                ( lc->s[i] * lc->s[i] ) +
+                ( lc->n[i] * lc->n[i] ) );
+  }
 }
 
 void LocalCoor3DTangential( IrregularNode *n )
@@ -137,6 +144,12 @@ void LocalCoor3DSolve( LocalCoor lc, Coor dh, IrregularNode *N )
     n[i] = N->nx * x + N->ny * y + N->nz * z;
     s[i] = N->sx * x + N->sy * y + N->sz * z;
     r[i] = N->rx * x + N->ry * y + N->rz * z;
+  }
+
+  for ( i = 0; i < lc->len; ++i)
+  {
+    s[i] = PetscSign(s[i]) * PetscSqrtReal( s[i]*s[i] + n[i]*n[i] );
+    r[i] = PetscSign(r[i]) * PetscSqrtReal( r[i]*r[i] + n[i]*n[i] );
   }
 }
 
