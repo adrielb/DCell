@@ -59,10 +59,10 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
       g[j+1*len] = nodes[j]->f2;
     }
     LeastSqSolve(iim->lsq);
-//  n->f1    = g[0+0*len];
+    n->f1    = g[0+0*len];
     n->f1_n  = g[1+0*len];
     n->f1_nn = g[2+0*len];
-//  n->f2    = g[0+1*len];
+    n->f2    = g[0+1*len];
     n->f2_n  = g[1+1*len];
     n->f2_nn = g[2+1*len];
   }
