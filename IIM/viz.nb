@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     64053,       1927]*)
-(*NotebookOutlinePosition[     64732,       1951]*)
-(*  CellTagsIndexPosition[     64688,       1947]*)
+(*NotebookOptionsPosition[     65664,       1991]*)
+(*NotebookOutlinePosition[     66343,       2015]*)
+(*  CellTagsIndexPosition[     66299,       2011]*)
 (*WindowFrame->Normal*)
 
 
@@ -1751,7 +1751,7 @@ Cell[BoxData[
 
 Cell[BoxData[
     \({100.219, 30.8854}\)], "Input"]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
 
@@ -1923,7 +1923,71 @@ Cell[BoxData[
 Cell[BoxData[
     \(4000.`\)], "Output"]
 }, Open  ]]
-}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["surfcoor", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"localcoor.10000.array", "params.txt"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(coor = 
+      Import["\<localcoor.10000.array\>", "\<Real64\>"]\), "\
+\[IndentingNewLine]", 
+    \(\({s, n, r} = Partition[coor, Length[coor]/3];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({\(-2.0000006188979045`\), \(-1.0000003094489522`\), 0.`, 
+      1.4142140000000003`, 4.472137338897364`, 1.414214`, 0.707107`, 0.`, 
+      1.1102230246251565`*^-16, 1.414214`, 0.`, 0.`, 0.`, 0.`, 
+      0.`}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(TableForm[{s, n}\[Transpose] ]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[GridBox[{
+          {\(-2.0000006188979045`\), "1.414214`"},
+          {\(-1.0000003094489522`\), "0.707107`"},
+          {"0.`", "0.`"},
+          {"1.4142140000000003`", "1.1102230246251565`*^-16"},
+          {"4.472137338897364`", "1.414214`"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      Function[ BoxForm`e$, 
+        TableForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(ListPlot[{s, n}\[Transpose] , PlotRange \[Rule] All, 
+        AspectRatio \[Rule] Automatic];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(s\)], "Input"],
+
+Cell[BoxData[
+    \({\(-2.0000006188979045`\), \(-1.0000003094489522`\), 0.`, 
+      1.4142140000000003`, 4.472137338897364`}\)], "Output"]
+}, Open  ]]
+}, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
 ScreenRectangle->{{0, 2400}, {0, 1600}},
@@ -2428,10 +2492,10 @@ Cell[57722, 1744, 42, 1, 26, "Output"]
 }, Open  ]],
 Cell[57779, 1748, 67, 1, 27, "Input"],
 Cell[57849, 1751, 51, 1, 27, "Input"]
-}, Open  ]],
+}, Closed]],
 
 Cell[CellGroupData[{
-Cell[57937, 1757, 22, 0, 74, "Section"],
+Cell[57937, 1757, 22, 0, 44, "Section"],
 
 Cell[CellGroupData[{
 Cell[57984, 1761, 44, 1, 27, "Input"],
@@ -2470,7 +2534,32 @@ Cell[CellGroupData[{
 Cell[63940, 1919, 42, 1, 27, "Input"],
 Cell[63985, 1922, 40, 1, 26, "Output"]
 }, Open  ]]
-}, Closed]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[64074, 1929, 27, 0, 44, "Section"],
+
+Cell[CellGroupData[{
+Cell[64126, 1933, 44, 1, 27, "Input"],
+Cell[64173, 1936, 73, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64283, 1942, 182, 4, 43, "Input"],
+Cell[64468, 1948, 242, 4, 27, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[64747, 1957, 63, 1, 27, "Input"],
+Cell[64813, 1960, 477, 13, 100, "Output"]
+}, Open  ]],
+Cell[65305, 1976, 130, 2, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[65460, 1982, 34, 1, 27, "Input"],
+Cell[65497, 1985, 139, 2, 26, "Output"]
+}, Open  ]]
+}, Open  ]]
 }
 ]
 *)

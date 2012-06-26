@@ -4,17 +4,11 @@
 #include "LevelSetMethod.h"
 
 typedef struct _LocalCoor *LocalCoor;
-PetscErrorCode LocalCoorCreate( int Np, LocalCoor *lc );
+PetscErrorCode LocalCoorCreate( LocalCoor *lc );
 PetscErrorCode LocalCoorDestroy( LocalCoor lc );
 void LocalCoorSetLength( LocalCoor lc, PetscInt len);
-void LocalCoor2DNormal( LocalCoor lc, LevelSet ls, IrregularNode *n );
-void LocalCoor2DSolveStencil( LocalCoor lc, IrregularNode *n );
-void LocalCoor2DGetVecs( LocalCoor lc, PetscReal **eta, PetscReal **xi );
-void LocalCoor2DSolve( LocalCoor lc, Coor dh, IrregularNode *n);
-void LocalCoor3DSolve( LocalCoor lc, Coor dh, IrregularNode *n );
-void LocalCoor2DToArcLength( LocalCoor lc, IrregularNode *n,
-    PetscReal n1, PetscReal n2, int i, PetscReal *s );
-void LocalCoor3DGetVecs( LocalCoor lc, PetscReal **s, PetscReal **r, PetscReal **n );
+void LocalCoorSolve( LocalCoor lc, Coor dh, IrregularNode *N, IrregularNode *nodes[] );
+void LocalCoorGetVecs( LocalCoor lc, PetscReal **s, PetscReal **n, PetscReal **r );
 void LocalCoor3DTangential( IrregularNode *n );
 
 

@@ -25,7 +25,7 @@ PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
   ierr = PetscOptionsGetReal(0, "-iim_eps", &i->eps, 0 ); CHKERRQ(ierr);
   ierr = PetscOptionsGetInt( 0, "-iim_Np", &i->Np, 0 ); CHKERRQ(ierr);
 
-  ierr = LocalCoorCreate(i->Np, &i->lc); CHKERRQ(ierr);
+  ierr = LocalCoorCreate( &i->lc ); CHKERRQ(ierr);
   ierr = LeastSqCreate(i->Np, is2D, &i->lsq); CHKERRQ(ierr);
   ierr = SpatialIndexCreate( "irregNodes", &i->sidx); CHKERRQ(ierr);
 

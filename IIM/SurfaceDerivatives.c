@@ -15,7 +15,6 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
   
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceDerivatives,0,0,0,0); CHKERRQ(ierr);
-  LocalCoor2DGetVecs(iim->lc, &eta, &xi);
   LeastSqGetVecs(iim->lsq, &s, PETSC_NULL, &g, PETSC_NULL);
   
   int i;
@@ -36,25 +35,13 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
       continue;
     }
 
-    for( j = 0; j < len; j++ )
-    {
-      eta[j] = nodes[j]->X.x;
-      xi[j]  = nodes[j]->X.y;
-    }
-    
     LocalCoorSetLength(iim->lc, len);
-    LocalCoor2DSolve( iim->lc, iim->dh, n);
-    
-    for( j = 0; j < len; j++ )
-    {
-//      LocalCoor2DToArcLength(iim->lc, n, nodes[j]->nx, nodes[j]->ny, j, &s[j]);
-      s[j] = -xi[j];
-    }
-    
+    LocalCoorSolve( iim->lc, iim->dh, n, nodes);
     ierr = LeastSqSetNumPoints(iim->lsq, len); CHKERRQ(ierr);
-
+    LocalCoorGetVecs(iim->lc, &eta, &xi, 0);
     for( j = 0; j < len; j++ )
     {
+      s[j] = eta[j];
       g[j+0*len] = nodes[j]->f1;
       g[j+1*len] = nodes[j]->f2;
     }
@@ -84,9 +71,7 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
   
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceDerivatives,0,0,0,0); CHKERRQ(ierr);
-  
   LeastSqGetVecs(iim->lsq, &s, &r, &g, PETSC_NULL);
-  LocalCoor3DGetVecs( iim->lc, &ss, &rr, &nn );
   
   for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
   {
@@ -108,25 +93,14 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
       continue;
     }
 
-    for( j = 0; j < len; j++ )
-    {
-      nn[j] = nodes[j]->X.x;
-      ss[j] = nodes[j]->X.y;
-      rr[j] = nodes[j]->X.z;
-    }
-    
     LocalCoorSetLength( iim->lc, len);
-    LocalCoor3DSolve( iim->lc, iim->dh, n);
-
+    LocalCoorSolve( iim->lc, iim->dh, n, nodes);
+    ierr = LeastSqSetNumPoints(iim->lsq, len); CHKERRQ(ierr);
+    LocalCoorGetVecs( iim->lc, &ss, &nn, &rr );
     for( j = 0; j < len; j++ )
     {
       s[j] = ss[j];
       r[j] = rr[j];
-    }
-    
-    ierr = LeastSqSetNumPoints(iim->lsq, len); CHKERRQ(ierr);
-
-    for( j = 0; j < len; j++ ) {
       g[j+0*len] = nodes[j]->f1;
       g[j+1*len] = nodes[j]->f2;
       g[j+2*len] = nodes[j]->f3;
