@@ -245,7 +245,9 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
   for ( i = 0; i < ArrayLength(pls->particles); ++i) {
     ierr = ArrayGet(pls->particles,i,&p); CHKERRQ(ierr);
     ierr = GridInterpolate( ls->phi, p->X, &sign); CHKERRQ(ierr);
-    sign = PetscSign(sign);
+
+    // if it is an escaped particle, dont count it.
+    if(p->radius * sign < 0) continue;
 
     cell.x = (int)floor(p->X.x + 0.5);
     cell.y = (int)floor(p->X.y + 0.5);
@@ -253,17 +255,13 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
 
     ArrayGetCoor(particleCounts, cell, &count);
     (*count)++;
-
-    // if its a non-escaped particle
-    if(p->radius * sign > 0) {
-    }
   }
 
   // Add particles where density too low
   for ( b = 0; b < ArrayLength(ls->band); ++b) {
     ierr = ArrayGet(ls->band,b,(void*)&band); CHKERRQ(ierr);
-    dist = PetscAbs(phi[band->y][band->x]);
-    if( dist > pls->D_INIT ) continue;
+    dist = phi[band->y][band->x];
+    if( PetscAbs(dist) > pls->D_INIT ) continue;
     ierr = ArrayGetCoor(particleCounts, *band, &count); CHKERRQ(ierr);
 
     for (; *count < targetDensity; (*count)++) {
@@ -277,21 +275,17 @@ PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls )
       p->X.y += band->y - 0.5;
       p->X.z += band->z - 0.5;
 
-      ierr = GridInterpolate( ls->phi, p->X, &phi_goal); CHKERRQ(ierr);
-      sign = PetscSign(phi_goal);
-/*
-      phi_goal = PetscAbs(phi_goal);
-      phi_goal = PetscMax(pls->R_MIN,phi_goal);
-      phi_goal = PetscMin(pls->D_INIT,phi_goal);
-      phi_goal = phi_goal * sign;
-*/
-      PetscRandomGetValue(pls->rnd,&phi_goal);
-      phimax = PetscMin(pls->D_INIT,dist+0.71);
-      phimin = PetscMax(pls->R_MIN,dist-0.71);
-      phi_goal = (phimax - phimin) * phi_goal + phimin;
-      phi_goal*= sign;
+      //TODO: directly map probability distribution to exclude interface
+      for(;;) {
+        PetscRandomGetValue(pls->rnd,&phi_goal);
+        phimax = PetscMin( pls->D_INIT, dist+0.71);
+        phimin = PetscMax(-pls->D_INIT, dist-0.71);
+        phi_goal = (phimax - phimin) * phi_goal + phimin;
+        if( phi_goal < -pls->R_MIN || pls->R_MIN < phi_goal )
+          break;
+      }
 
-      p->radius = sign;
+      p->radius = phi_goal;
       ierr = ParticleLS_AttractParticleToPhiGoal( pls, ls, p, phi_goal ); CHKERRQ(ierr);
     } // add particle to cell b
   } // for each b in band
@@ -327,10 +321,10 @@ PetscErrorCode LevelSetAdvectPLS(LevelSet ls, Grid velgrid, PetscReal dt)
     ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
 //    ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
     ierr = ParticleLS_ReseedParticles(pls,ls); CHKERRQ(ierr);
-    ierr = ParticleLS_AdjustRadii(pls,ls); CHKERRQ(ierr);
     ls->CFLcount = 0;
     ls->AdvectCount = 0;
   }
+  ierr = ParticleLS_AdjustRadii(pls,ls); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -373,10 +367,10 @@ PetscErrorCode LevelSetAdvectPLSRK2FullStep( LevelSet ls, Grid velgrid, PetscRea
     ierr = LevelSetReinitialize(ls); CHKERRQ(ierr);
     ierr = pls->ErrorCorrection(pls,ls); CHKERRQ(ierr);
     ierr = ParticleLS_ReseedParticles(pls,ls); CHKERRQ(ierr);
-    ierr = ParticleLS_AdjustRadii(pls,ls); CHKERRQ(ierr);
     ls->CFLcount = 0;
     ls->AdvectCount = 0;
   }
+  ierr = ParticleLS_AdjustRadii(pls,ls); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

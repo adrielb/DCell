@@ -3,7 +3,7 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: test
+all: sim
 
 SIM := NanoGrooves
 test: testIIM-surfcoor

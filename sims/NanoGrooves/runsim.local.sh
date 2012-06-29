@@ -1,34 +1,41 @@
 #!/bin/bash
 
-JOBNAME=implicit
-JOBID=03
+JOBNAME=Fk
+JOBID=08
 
 export PETSC_TMP=/data/sims/$JOBNAME/$JOBID
 mkdir -p $PETSC_TMP
 
-./NanoGrooves.x \
--Fa 1 \
--ecm 1 \
--Fk 0 \
--Fk0 10.0 \
--kclip 0.1 \
--groove_width 1 \
--timax 10000 \
--CFL 0.1 \
--dtmax 1 \
+mpiexec -wdir ${PETSC_TMP} /home/abergman/Research/DCell/sims/NanoGrooves/NanoGrooves.x \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
+-pls_sinit 128 \
+-ls_advectthres 1 \
+-groove_width 2.0 \
+-Fa 0.1 \
+-Fk 0 \
+-Fk0 500 \
+-Fn 0 \
+-ecm 1 \
+-kclip 0.1 \
+-cell_radius 3.0 \
+-contactThres 0.05 \
+-adhesionRadius 0.45 \
+-fluid_dx 0.20 \
+-fluid_lens 35,9 \
+-timax 50000 \
+-CFL 0.05 \
+-dtmax 0.05 \
+-dtframe 1.0 \
 -ksp_monitor \
--ksp_atol 1e-2 -ksp_rtol 1e-3 -ksp_max_it 100 \
+-ksp_atol 1e-12 -ksp_rtol 1e-3 -ksp_max_it 100 \
 -fieldsplit_p_ksp_max_it 4 \
--fieldsplit_v_fieldsplit_0_ksp_type preonly \
--fieldsplit_v_fieldsplit_1_ksp_type preonly \
 -fieldsplit_v_fieldsplit_0_pc_type cholesky \
 -fieldsplit_v_fieldsplit_1_pc_type cholesky \
 -fieldsplit_v_fieldsplit_0_pc_factor_mat_ordering_type nd \
 -fieldsplit_v_fieldsplit_1_pc_factor_mat_ordering_type nd \
 -log_summary -viewer_binary_skip_info \
--info $PETSC_TMP/info.log > $PETSC_TMP/output &
+-info ${PETSC_TMP}/info.log > $PETSC_TMP/output &
 
 #SPOOLES
 #-fieldsplit_v_fieldsplit_0_ksp_type preonly \

@@ -8,11 +8,12 @@ RUNOPTS := \
 -pls_rmin 0.1 \
 -pls_rmax 0.5 \
 -pls_sinit 128 \
+-pls_edist 1.1 \
 -ls_advectthres 1 \
 -groove_width 2.0 \
--Fa 0.1 \
+-Fa 0.05 \
 -Fk 0 \
--Fk0 30 \
+-Fk0 20 \
 -Fn 0 \
 -ecm 1 \
 -kclip 0.1 \
@@ -23,7 +24,7 @@ RUNOPTS := \
 -fluid_lens 35,9 \
 -timax 50000 \
 -CFL 0.05 \
--dtmax 0.3 \
+-dtmax 0.05 \
 -ksp_monitor \
 -ksp_atol 1e-12 -ksp_rtol 1e-3 -ksp_max_it 100 \
 -fieldsplit_p_ksp_max_it 4 \
