@@ -23,7 +23,7 @@ int main(int argc, char **args)
 
   PetscReal mu=1;
   IIM iim;
-  ierr = IIMCreate(ls->phi->is2D,&mu,1,20,dh,&iim); CHKERRQ(ierr);
+  ierr = IIMCreate(ls->phi->is2D,20,dh,&iim); CHKERRQ(ierr);
   ierr = IIMSetForceComponents(iim,InterfacialForceSpin); CHKERRQ(ierr);
   ierr = IIMUpdateSurfaceQuantities(iim,ls); CHKERRQ(ierr);
   ierr = LevelSetWriteIrregularNodeList(ls,1); CHKERRQ(ierr);
@@ -59,6 +59,6 @@ int main(int argc, char **args)
 
 void InterfacialForceSpin( IrregularNode *n, void *ctx )
 {
-  n->f1 = 0;
-  n->f2 = 1;
+  n->F1 = 0;
+  n->F2 = 1;
 }

@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     65664,       1991]*)
-(*NotebookOutlinePosition[     66343,       2015]*)
-(*  CellTagsIndexPosition[     66299,       2011]*)
+(*NotebookOptionsPosition[     70927,       2123]*)
+(*NotebookOutlinePosition[     71606,       2147]*)
+(*  CellTagsIndexPosition[     71562,       2143]*)
 (*WindowFrame->Normal*)
 
 
@@ -1987,12 +1987,144 @@ Cell[BoxData[
     \({\(-2.0000006188979045`\), \(-1.0000003094489522`\), 0.`, 
       1.4142140000000003`, 4.472137338897364`}\)], "Output"]
 }, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["iimtest", "Section"],
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[{
+    \(LoadData[] := 
+      Module[{}, \[IndentingNewLine]{phi, pos} = 
+          ImportGrid["\<phi\>"]; \[IndentingNewLine]f = \
+\(ListInterpolation[#, {{\(-2\), 3}, {\(-2\), 3}}, 
+                InterpolationOrder \[Rule] 1] &\) /@ 
+            phi; \[IndentingNewLine]rng = \(ToString[10000 + #] &\) /@ 
+            Range[0, Length[phi] - 1]; \[IndentingNewLine]{X, F1, F1n} = 
+          Transpose[
+            Function[i, 
+                ImportIrreg["\<phi.irregNode.\>" <> 
+                    i <> "\<.array\>"]; {ir`X, ir`f1, ir`f1n}] /@ 
+              rng]; \[IndentingNewLine]coors = \(Partition[
+                Import["\<iim_coor.\>" <> # <> "\<.array\>", \
+"\<Integer32\>"], 4] &\) /@ 
+            rng; \[IndentingNewLine]vals = \(Import["\<iim_val.\>" <> # <> \
+"\<.array\>", "\<Real64\>"] &\) /@ 
+            rng;\[IndentingNewLine]]\), "\[IndentingNewLine]", 
+    \(LoadData[]\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(clear\), "\n", 
+    \(\(\(ListDensityPlot[#, Mesh \[Rule] True, 
+            PlotRange \[Rule] {Min[phi], Max[phi]}] &\) /@ phi;\)\), "\n", 
+    \(\(ListPlot[phi[\([\)\(All, 3, 3\)\(]\)]];\)\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[{
+    \(LoadData[]\), "\[IndentingNewLine]", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Function[
+          i, \[IndentingNewLine]ContourPlot[\(f[\([i]\)]\)[x, y], {x, \(-2\), 
+              2}, {y, \(-2\), 2}, Contours \[Rule] {0}, 
+            ContourShading \[Rule] None, PlotPoints \[Rule] 100, 
+            ImageSize \[Rule] 800, 
+            Epilog \[Rule] {\[IndentingNewLine]Green, 
+                PointSize[0.02], \(Point[#] &\) /@ 
+                  X[\([i]\)], \(Circle[#, 1.1] &\) /@ 
+                  X[\([i]\)], \({\[IndentingNewLine]Black, Thickness[0.01], 
+                      Line[{{# - 0.5, \(-3\)}, {# - 0.5, 10}}], 
+                      Line[{{\(-3\), # - 0.5}, {10, # - 0.5}}], 
+                      Thickness[0.003], \[IndentingNewLine]Cyan, 
+                      Line[{{# - 0.5, \(-3\)}, {# - 0.5, 10}}], 
+                      Line[{{\(-3\), #}, {10, #}}], \[IndentingNewLine]Red, 
+                      Line[{{#, \(-3\)}, {#, 10}}], 
+                      Line[{{\(-3\), # - 0.5}, {10, # - 
+                              0.5}}]\[IndentingNewLine]} &\) /@ 
+                  Range[\(-3\), 3], \[IndentingNewLine]Black, 
+                MapThread[\[IndentingNewLine]Function[{v, c}, 
+                    Text[v, 
+                      If[c[\([1]\)] \[Equal] 1, c[\([{2, 3}]\)] - {0.5, 0}, 
+                          c[\([{2, 3}]\)] - {0, 0.5}] + 
+                        0.25 \(({Random[], Random[]} - 0.5)\), 
+                      TextStyle \[Rule] {"\<Title\>"}]], \
+\[IndentingNewLine]Cases[{vals[\([i]\)], 
+                          coors[\([i]\)]}\[Transpose] , {_, {_, _, _, 
+                          0}}]\[Transpose] ]\[IndentingNewLine]}]\
+\[IndentingNewLine]] /@ Range[Length[phi]];\)\)}], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(LoadData[]\), "\[IndentingNewLine]", 
+    \(Length /@ vals\)}], "Input"],
+
+Cell[BoxData[
+    \({8, 8, 24, 24, 24, 24, 24, 24, 24, 24, 24}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(LoadData[]\), "\[IndentingNewLine]", 
+    \(clear\), "\[IndentingNewLine]", 
+    \(\(Function[
+        i, \[IndentingNewLine]ContourPlot[\(f[\([i]\)]\)[x, y], {x, \(-2\), 
+            2}, {y, \(-2\), 2}, Contours \[Rule] {0}, 
+          ContourShading \[Rule] None, PlotPoints \[Rule] 100, 
+          ImageSize \[Rule] 800, 
+          Epilog \[Rule] {\[IndentingNewLine]Green, 
+              PointSize[0.02], \(Point[#] &\) /@ X[\([i]\)], 
+              Circle[X[\([i, 4]\)], 
+                1.1], \({\[IndentingNewLine]Black, Thickness[0.01], 
+                    Line[{{# - 0.5, \(-3\)}, {# - 0.5, 10}}], 
+                    Line[{{\(-3\), # - 0.5}, {10, # - 0.5}}], 
+                    Thickness[0.003], \[IndentingNewLine]Cyan, 
+                    Line[{{# - 0.5, \(-3\)}, {# - 0.5, 10}}], 
+                    Line[{{\(-3\), #}, {10, #}}], \[IndentingNewLine]Red, 
+                    Line[{{#, \(-3\)}, {#, 10}}], 
+                    Line[{{\(-3\), # - 0.5}, {10, # - 
+                            0.5}}]\[IndentingNewLine]} &\) /@ 
+                Range[\(-3\), 3], \[IndentingNewLine]Black, 
+              MapThread[\[IndentingNewLine]Function[{v, c}, 
+                  Text[v, c + 0 \(({Random[], Random[]} - 0.5)\) + {0,  .05}, 
+                    TextStyle \[Rule] {"\<Title\>"}]], \
+\[IndentingNewLine]{F1[\([i]\)], 
+                  X[\([\)\(i\)\(]\)]}]\[IndentingNewLine]}]\[IndentingNewLine]\
+]\)[11]\)}], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  ContourGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(\(\(/@\)\(Range[Length[phi]]\)\);\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(X[\([11, 4]\)]\)], "Input"],
+
+Cell[BoxData[
+    \({\(-0.6666666666666666`\), \(-0.5`\)}\)], "Output"]
+}, Open  ]]
 }, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
 ScreenRectangle->{{0, 2400}, {0, 1600}},
 AutoGeneratedPackage->None,
-WindowSize->{1200, 1523},
+WindowSize->{1196, 1519},
 WindowMargins->{{0, Automatic}, {0, Automatic}},
 ShowSelection->True
 ]
@@ -2551,13 +2683,41 @@ Cell[64468, 1948, 242, 4, 27, "Output"]
 
 Cell[CellGroupData[{
 Cell[64747, 1957, 63, 1, 27, "Input"],
-Cell[64813, 1960, 477, 13, 100, "Output"]
+Cell[64813, 1960, 477, 13, 87, "Output"]
 }, Open  ]],
 Cell[65305, 1976, 130, 2, 27, "Input"],
 
 Cell[CellGroupData[{
 Cell[65460, 1982, 34, 1, 27, "Input"],
 Cell[65497, 1985, 139, 2, 26, "Output"]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+Cell[65685, 1993, 26, 0, 44, "Section"],
+Cell[65714, 1995, 44, 1, 27, "Input"],
+Cell[65761, 1998, 921, 18, 155, "Input"],
+
+Cell[CellGroupData[{
+Cell[66707, 2020, 225, 4, 59, "Input"],
+Cell[66935, 2026, 130, 3, 26, "Output"]
+}, Open  ]],
+Cell[67080, 2032, 1757, 30, 235, "Input"],
+
+Cell[CellGroupData[{
+Cell[68862, 2066, 93, 2, 43, "Input"],
+Cell[68958, 2070, 76, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[69071, 2076, 1457, 26, 235, "Input"],
+Cell[70531, 2104, 137, 3, 26, "Output"]
+}, Open  ]],
+Cell[70683, 2110, 70, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[70778, 2115, 47, 1, 27, "Input"],
+Cell[70828, 2118, 71, 1, 26, "Output"]
 }, Open  ]]
 }, Open  ]]
 }

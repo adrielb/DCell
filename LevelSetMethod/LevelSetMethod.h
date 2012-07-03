@@ -42,9 +42,9 @@ struct _IrregularNode {
   PetscReal d;        //distance from central node
   PetscReal k;        //Curvature in 2D or 3D
   PetscReal k_nn, k_tt, k_nt;  // Principal Curvatures (k_nn used in 2D)
-  PetscReal f1, f1_n, f1_t, f1_nn, f1_tt, f1_nt; // the normal force
-  PetscReal f2, f2_n, f2_t, f2_nn, f2_tt, f2_nt; // the tangential force in local coor
-  PetscReal f3, f3_n, f3_t, f3_nn, f3_tt, f3_nt;
+  PetscReal F1, f1, f1_n, f1_t, f1_nn, f1_tt, f1_nt; // the normal force
+  PetscReal F2, f2, f2_n, f2_t, f2_nn, f2_tt, f2_nt; // the tangential force in local coor
+  PetscReal F3, f3, f3_n, f3_t, f3_nn, f3_tt, f3_nt;
   PetscReal ftx, fty, ftz;   // tangential force in global coor
   PetscReal fa1, fa2; // Force of adhesion (in normal/tangential direction)
   Coor X;   // X.x = x + ox + shift.x/2  (absolute position in space)

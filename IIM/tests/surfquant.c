@@ -43,14 +43,14 @@ int main(int argc, char **args)
 void InterfacialForceAdhesion( IrregularNode *n, void *context )
 {
   const int gx = 0, gy = -1;
-  n->f1 = n->nx * gx + n->ny * gy;
-  n->f2 = -n->ny * gx + n->nx * gy;
+  n->F1 = n->nx * gx + n->ny * gy;
+  n->F2 = -n->ny * gx + n->nx * gy;
 }
 
 void InterfacialForceCurvature( IrregularNode *n, void *context )
 {
   PetscReal dx = *(PetscReal*)context;
-  n->f1 = n->X.y * dx;
-  n->f2 = 0;
-  n->f3 = 0;
+  n->F1 = n->X.y * dx;
+  n->F2 = 0;
+  n->F3 = 0;
 }

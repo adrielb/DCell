@@ -12,9 +12,9 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
 {
 //  const Context *c = (Context*)context;
 
-//  n->f1 = c->scale*(-c->K * n->k);
-  n->f1 = -n->k*100;
-  n->f2 = 0;
+//  n->F1 = c->scale*(-c->K * n->k);
+  n->F1 = -n->k*100;
+  n->F2 = 0;
 }
 
 int main(int argc, char **args) {

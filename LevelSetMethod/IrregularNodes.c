@@ -146,15 +146,16 @@ PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscVie
 {
   int i,j;
   int len = ArrayLength( irregularNodes );
-  const int rowlen = 9;
-  PetscReal row[rowlen]; // { X, Y, nv, nv, f1, f2, k }
+  const int rowlen = 10;
+  PetscReal row[rowlen]; // { X, Y, nv, nv, f1, f2, k, f1_n }
   IrregularNode *node, *nodes = ArrayGetData( irregularNodes );
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   for ( i = 0; i < len; ++i) {
     node = &nodes[i];
-    if( (node->shift == -1 && node->axis == -1) )
+    if( node->axis == -1 ) continue;
+//    if( (node->shift == -1 && node->axis == -1) )
     {
       j=0;
       row[j++] = node->X.x;
@@ -166,6 +167,7 @@ PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscVie
       row[j++] = node->f1;
       row[j++] = node->fa1;
       row[j++] = node->k;
+      row[j++] = node->f1_n;
       ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
     }
   }

@@ -28,8 +28,8 @@ void InterfacialForceSurfaceTension(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
 
-  n->f1 = -c->K * ClipCurvature(n->k);
-  n->f2 = 0;
+  n->F1 = -c->K * ClipCurvature(n->k);
+  n->F2 = 0;
 }
 
 #undef __FUNCT__

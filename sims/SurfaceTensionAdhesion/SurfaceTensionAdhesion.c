@@ -41,8 +41,8 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
 
-  n->f1 = c->scale * ( n->fa1 - c->Fk * k + Fn );
-  n->f2 = c->scale * ( n->fa2 );
+  n->F1 = c->scale * ( n->fa1 - c->Fk * k + Fn );
+  n->F2 = c->scale * ( n->fa2 );
 }
 
 int main(int argc, char **args) {

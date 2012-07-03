@@ -50,8 +50,8 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
     n->fa1 = AdhesionForce( n->X.x * c->dh.x ) / c->dh.x; //direction of adhesion normal to membrane
     n->fa2 = 0;
   }
-  n->f1 = c->scale*(n->fa1 - c->K * n->k);
-  n->f2 = c->scale*(n->fa2);
+  n->F1 = c->scale*(n->fa1 - c->K * n->k);
+  n->F2 = c->scale*(n->fa2);
 }
 
 PetscErrorCode UpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t ) {

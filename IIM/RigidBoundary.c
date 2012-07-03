@@ -52,6 +52,6 @@ IIMRigidBoundarySolve( IIM iim, LevelSet ls ) {
 
 void InterfacialForceSurfaceTension( IrregularNode *n )
 {
-  n->f1 = 1;
-  n->f2 = 0;
+  n->F1 = 1;
+  n->F2 = 0;
 }

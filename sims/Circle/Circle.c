@@ -4,10 +4,10 @@ static PetscReal mu = 0.02;
 
 void MyInterfacialForce(IrregularNode *n, void *context )
 {
-  n->f1 = 0;
-  n->f2 = 10*mu;
-//  n->f1 = n->k;
-//  n->f2 = 0;
+  n->F1 = 0;
+  n->F2 = 10*mu;
+//  n->F1 = n->k;
+//  n->F2 = 0;
 }
 
 #undef __FUNCT__

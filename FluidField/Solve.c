@@ -66,6 +66,7 @@ PetscErrorCode FluidField_DiscreteCompatibilityCondition( FluidField f )
   ierr = MPI_Allreduce(&sum,&sum,1,MPI_DOUBLE,MPI_SUM,f->comm); CHKERRQ(ierr);
   ierr = MPI_Allreduce(&count,&count,1,MPI_INT,MPI_SUM,f->comm); CHKERRQ(ierr);
   avg = sum / count;
+  ierr = PetscInfo1( 0, "avg C{div.u} = %e\n", avg); CHKERRQ(ierr);
 
   for ( i = lo+CELL_CENTER; i < hi; i+=bs ) {
     if( PetscAbs( rhs[i] ) > eps )

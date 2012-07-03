@@ -24,8 +24,8 @@ void InterfacialForceAdhesionFeedback(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
 
-  n->f1 = -c->K * n->k;
-  n->f2 =  0;
+  n->F1 = -c->K * n->k;
+  n->F2 =  0;
 }
 
 PetscErrorCode UpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t ) {

@@ -65,8 +65,8 @@ void InterfacialForceAdhesionFeedback(IrregularNode *n, void *context )
   }
 
   const PetscReal Fk = (c->K + c->contactArea * c->fa*c->fa * c->Ka )* n->k;
-  n->f1 = c->scale*(n->fa1 - Fk);
-  n->f2 = c->scale*(n->fa2);
+  n->F1 = c->scale*(n->fa1 - Fk);
+  n->F2 = c->scale*(n->fa2);
 }
 
 void ECMFunction( MyCell cell, PetscReal t ) {
@@ -173,6 +173,6 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
     n->fa2 = 0;
   }
 
-  n->f1 = c->scale*(n->fa1 - c->K * n->k);
-  n->f2 = c->scale*(n->fa2);
+  n->F1 = c->scale*(n->fa1 - c->K * n->k);
+  n->F2 = c->scale*(n->fa2);
 }

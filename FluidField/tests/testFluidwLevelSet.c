@@ -45,8 +45,8 @@ void InterfacialForceAdhesion(IrregularNode *n, void *context )
 //    n->fa2 = (-n->ny * g.x + n->nx * g.y)*c->fa/c->dh.x;
   }
 
-  n->f1 = c->scale*(n->fa1 - c->K * n->k);
-  n->f2 = c->scale*(n->fa2);
+  n->F1 = c->scale*(n->fa1 - c->K * n->k);
+  n->F2 = c->scale*(n->fa2);
 }
 
 int main(int argc, char **args) {

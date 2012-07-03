@@ -37,8 +37,8 @@ void InterfacialForceSurfaceTension(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
 
-  n->f1 = -c->K * n->k;
-//  n->f1 = -(k - 10*c->k0);
+  n->F1 = -c->K * n->k;
+//  n->F1 = -(k - 10*c->k0);
   n->f2 = 0;
 }
 

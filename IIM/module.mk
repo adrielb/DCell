@@ -13,3 +13,4 @@ ${eval ${call test-library,${subdirectory},corrections,${LOCDEPS}, 2 }}
 ${eval ${call test-library,${subdirectory},surfquant,${LOCDEPS}, 1 }}
 ${eval ${call test-library,${subdirectory},interpolate,${LOCDEPS}, 1 }}
 ${eval ${call test-library,${subdirectory},surfcoor,${LOCDEPS}, 1 }}
+${eval ${call test-library,${subdirectory},iimtest,${LOCDEPS}, 1 }}
