@@ -18,6 +18,18 @@ PetscErrorCode MyCellWrite( DCell dcell, int ti )
   PetscFunctionReturn(0);
 }
 
+
+#undef __FUNCT__
+#define __FUNCT__ "MyCellUpdateFluidFieldRHS"
+PetscErrorCode MyCellUpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t ) {
+  PetscErrorCode ierr;
+  PetscFunctionBegin;
+  ierr = IIMSetForceComponents(iim, InterfacialForceSurfaceTension ); CHKERRQ(ierr);
+  ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
+  ierr = IIMUpdateRHS(iim, dcell->lsPlasmaMembrane, ga); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
 #undef __FUNCT__
 #define __FUNCT__ "MyCellCreate"
 PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
@@ -29,6 +41,7 @@ PetscErrorCode MyCellCreate( LevelSet ls, MyCell *mycell )
   ierr = PetscNew( struct _MyCell, &cell); CHKERRQ(ierr);
   ierr = DCellSetup( ls, (DCell)cell ); CHKERRQ(ierr);
   cell->dcell.Write = MyCellWrite;
+  cell->dcell.UpdateFluidFieldRHS = MyCellUpdateFluidFieldRHS;
   *mycell = cell;
   PetscFunctionReturn(0);
 }
@@ -37,6 +50,7 @@ void InterfacialForceSurfaceTension(IrregularNode *n, void *context )
 {
   const MyCell c = (MyCell)context;
 
+  n->F1 = -10;
   n->F1 = -c->K * n->k;
 //  n->F1 = -(k - 10*c->k0);
   n->f2 = 0;
@@ -53,33 +67,13 @@ inline PetscReal ClipCurvature( PetscReal k )
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "UpdateFluidFieldRHS"
-PetscErrorCode UpdateFluidFieldRHS( DCell dcell, IIM iim, int ga, PetscReal t ) {
-  PetscErrorCode ierr;
-  PetscFunctionBegin
-  ierr = IIMSetForceComponents(iim, InterfacialForceSurfaceTension ); CHKERRQ(ierr);
-  ierr = IIMSetForceContext(iim, dcell); CHKERRQ(ierr);
-  ierr = IIMUpdateRHS(iim, dcell->lsPlasmaMembrane, ga); CHKERRQ(ierr);
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
 #define __FUNCT__ "main"
 int main(int argc, char **args) {
   PetscErrorCode ierr;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.5;
-  Coor len = {24,24,0};
-  Coor dh  = {dx,dx,0};
-  iCoor size = {len.x/dx,len.y/dx,0};
-  printf("MX = %d;\n", size.x);
-  printf("MY = %d;\n", size.y);
-
   FluidField fluid;
   ierr = FluidFieldCreate(PETSC_COMM_WORLD, &fluid);  CHKERRQ(ierr);
-  ierr = FluidFieldSetDims(fluid,size); CHKERRQ(ierr);
-  ierr = FluidFieldSetDx(fluid,dx); CHKERRQ(ierr);
   ierr = FluidFieldSetup(fluid); CHKERRQ(ierr);
 
   DWorld world;
@@ -89,7 +83,7 @@ int main(int argc, char **args) {
   PetscReal radius = 9;
   LevelSet ls;
   ierr = LevelSetInitializeToStar2D(fluid->dh,center,radius,0.5*radius, 5,&ls); CHKERRQ(ierr);
-//  ierr = LevelSetInitializeToCircle(dh, center, radius, &ls); CHKERRQ(ierr);
+//  ierr = LevelSetInitializeToCircle(fluid->dh, center, radius, &ls); CHKERRQ(ierr);
   ierr = LevelSetInitializeParticles(ls); CHKERRQ(ierr);
   MyCell cell;
   ierr = MyCellCreate( ls, &cell ); CHKERRQ(ierr);
@@ -98,15 +92,11 @@ int main(int argc, char **args) {
   cell->k0 = 1 / radius;
   cell->dh = fluid->dh;
   cell->K = 20;
-  cell->dcell.UpdateFluidFieldRHS = UpdateFluidFieldRHS;
-  ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
-  world->timax = 3000;
-  world->dtmax = 10;
-  world->CFL = 0.1;
-  world->tend = 3;
-//  world->dtframe = 0.05;
 
-  ierr = DWorldSimulate_Euler(world); CHKERRQ(ierr);
+  ierr = DWorldAddDCell( world, cell ); CHKERRQ(ierr);
+  ierr = DWorldSetFromOptions(world); CHKERRQ(ierr);
+  world->Simulate = DWorldSimulate_Euler;
+  ierr = DWorldSimulate(world); CHKERRQ(ierr);
   ierr = DWorldDestroy(world); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;

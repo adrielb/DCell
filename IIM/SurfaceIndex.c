@@ -23,7 +23,7 @@ PetscErrorCode IIMUpdateSurfaceIndex_2D( IIM iim, LevelSet ls )
   ierr = SpatialIndexClear( iim->sidx ); CHKERRQ(ierr);
   ierr = SpatialIndexSetDomain( iim->sidx, lo, hi, dh ); CHKERRQ(ierr);
   for ( i = 0; i < len; ++i) {
-//    if( nodes[i].axis == -1 ) continue;
+    if( nodes[i].axis == -1 ) continue;
     ierr = SpatialIndexInsertPoint( iim->sidx, nodes[i].X, &nodes[i] ); CHKERRQ(ierr);
   }
   PetscFunctionReturn(0);

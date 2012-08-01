@@ -15,6 +15,7 @@ PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
   ierr = ArrayCreate( "iim_idx", sizeof(int*), &i->idx); CHKERRQ(ierr);
   ierr = ArrayCreate( "iim_coor", 4*sizeof(int), &i->coor); CHKERRQ(ierr); // [ x y z d ]
   ierr = ArrayCreate( "iim_val", sizeof(PetscReal), &i->val); CHKERRQ(ierr);
+  ierr = ArrayCreate( "debug", sizeof(IIMDebug), &i->debug); CHKERRQ(ierr);
 
   i->dh = dh;
   i->mu = 1.0;

@@ -73,6 +73,7 @@ PetscErrorCode InterpolateVelocity3D( const int udof, PetscReal ****field, const
 typedef struct _Array *Array;
 PetscErrorCode ArrayCreate( const char name[], int elemSize, Array *array );
 PetscErrorCode ArrayDestroy( Array a );
+PetscErrorCode ArraySetName( Array a, const char name[] );
 PetscErrorCode ArraySetSize( Array a, int size );
 PetscErrorCode ArrayAppend( Array a, void *elem );
 PetscErrorCode ArrayAppendPtr( Array a, void *elem );

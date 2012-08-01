@@ -43,8 +43,9 @@ void InterfacialForceAdhesion( IrregularNode *n, void *context )
   const PetscReal clip = c->kclip;
   k = k >  clip ?  clip : k;
   k = k < -clip ? -clip : k;
+  n->k = k;
 
-  n->F1 = c->scale * ( n->fa1*c->ecm - (c->Fk * ecmTot + c->Fk0 ) * k);
+  n->F1 = -c->scale * ( n->fa1*c->ecm - (c->Fk * ecmTot + c->Fk0 ) * k);
   n->F2 = c->scale * ( n->fa2 );
 }
 

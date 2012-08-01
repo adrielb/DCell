@@ -1,4 +1,5 @@
 #include "ImmersedInterfaceMethod.h"
+#include "IIM_private.h"
 
 // -mu L(u) + px == mu uc - pxc
 //   div(u)      ==   -uc
@@ -52,6 +53,7 @@ PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
 PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j )
 {
   PetscReal h;
+  const int negone = -1; // Correction is subtracted on RHS
   const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
   iCoor pos = n->pos;
   int sign;
@@ -61,17 +63,14 @@ PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j 
   if( n->shift != CELL_CENTER )
     PetscFunctionReturn(0);
 
-  if( n->signFace * n->signCenter >= 0 ) {
+  if( n->signFace * n->signCenter >= 0 )
     (((int*)&pos.x)[n->axis])--;
-    sign = n->signFace;
-  } else {
-    sign = n->signCenter;
-  }
 
+  sign = n->signCenter;
   h = n->d - 0.5;
   h *= dh;
 
-  ierr = IIMCorrection( iim, pos, j, n->axis, CELL_CENTER, sign, h, dh, 1 ); CHKERRQ(ierr);
+  ierr = IIMCorrection( iim, pos, j, n->axis, CELL_CENTER, negone*sign, h, dh, 1 ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -91,9 +90,39 @@ PetscErrorCode IIMPressureGradientCorrection( IIM iim, IrregularNode *n, Jump j 
   h = n->d > 0.5 ? n->d - 1 : n->d;
   h *= dh;
 
-  ierr = IIMCorrection(iim, n->pos, j, n->axis, n->axis+U_FACE, n->signCenter, h, dh, 1); CHKERRQ(ierr);
+  ierr = IIMCorrection(iim, n->pos, j, n->axis, n->axis+U_FACE, -n->signCenter, h, dh, 1); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
+
+#if 1
+// for iimtest.c
+#undef __FUNCT__
+#define __FUNCT__ "IIMCorrection"
+PetscErrorCode IIMCorrection( IIM iim, iCoor x, Jump j, int axis, VelFace dof, int sign, PetscReal h, PetscReal dd, PetscReal mu )
+{
+  PetscReal *jpq  = &j.x;
+  PetscReal *jpqq = &j.xx;
+  IIMDebug *debug;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+
+  ierr = ArrayAppend(iim->debug, &debug); CHKERRQ(ierr);
+  debug->dof = dof;
+  debug->X = x;
+  debug->sign = sign;
+  debug->axis = axis;
+  debug->h = h;
+  debug->dd = dd;
+  debug->j = j.j;
+  debug->jp = jpq[axis];
+  debug->jpp = jpqq[axis];
+  debug->C = mu * sign * ( j.j + h * jpq[axis] + 0.5 * h * h * jpqq[axis] ) / dd;
+
+  PetscFunctionReturn(0);
+}
+
+#else
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMCorrection"
@@ -117,6 +146,8 @@ PetscErrorCode IIMCorrection( IIM iim, iCoor x, Jump j, int axis, VelFace dof, i
 
   PetscFunctionReturn(0);
 }
+
+#endif
 
 void JumpPressure( IrregularNode *n, Jump *j )
 {

@@ -28,6 +28,7 @@ typedef struct _IIM
   InterfacialForce F;  //Normal and tangential force functions
   void *context; // context passed to Interfacial force function
   Array idx,coor,val; //Interpolation indexes, coors and values
+  Array debug;    // for iimtest.c
   Coor dh;       // Grid widths
   SpatialIndex sidx; // Indexes irregular nodes in 3D bins
 } *IIM;

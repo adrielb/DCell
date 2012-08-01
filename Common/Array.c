@@ -56,6 +56,17 @@ PetscErrorCode ArrayDestroy( Array a )
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "ArraySetName"
+PetscErrorCode ArraySetName( Array a, const char name[] )
+{
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = PetscStrcpy(a->name, name); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "ArrayDuplicate"
 PetscErrorCode ArrayDuplicate( Array a, Array *newarray )
 {

@@ -35,14 +35,4 @@ RUNOPTS := \
 -log_summary -viewer_binary_skip_info \
 -info ${PETSC_TMP}/info.log
 
-#-ksp_atol 1e3
-#-ksp_rtol 1e-3
-#-fieldsplit_p_ksp_monitor 
-#-fieldsplit_1_ksp_max_it 4
-#-ksp_monitor -ksp_converged_reason -viewer_binary_skip_info -log_summary
-#-log_summary -ksp_view 
-#-ksp_monitor_range -ksp_monitor_singular_value
-#-fieldsplit_1_ksp_monitor_draw -ksp_rtol 1e-50
-#-ksp_max_it 4 
-
-${eval ${call simulation,NanoGrooves,1,${RUNOPTS}}}
+${eval ${call simulation,Circle,1,${RUNOPTS}}}
