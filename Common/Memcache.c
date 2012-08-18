@@ -51,8 +51,8 @@ PetscErrorCode MemCacheAlloc( MemCache mc, void *ptr )
 {
   size_t elemsize = mc->elemsize;
   size_t chunksize = mc->chunksize;
+  size_t i;
   int len;
-  int i;
   void **cache;
   PetscErrorCode ierr;
 
@@ -67,13 +67,13 @@ PetscErrorCode MemCacheAlloc( MemCache mc, void *ptr )
     ierr = PetscMalloc(elemsize*chunksize,chunk); CHKERRQ(ierr);
     ierr = PetscMemzero(*chunk,elemsize*chunksize); CHKERRQ(ierr);
     //Add all free ptr to cache array
-    ierr = ArraySetSize(mc->cache,chunksize); CHKERRQ(ierr);
+    ierr = ArraySetSize(mc->cache,(int)chunksize); CHKERRQ(ierr);
     cache = ArrayGetData(mc->cache);
     //Mem added in reverse order since popped off last first
     for ( i = 0; i < chunksize; ++i) {
-      cache[i] = *chunk + (chunksize-1-i)*elemsize;
+      cache[i] = ((char*)*chunk) + (chunksize-1-i)*elemsize;
     }
-    const int s = ArrayLength(mc->chunks) * chunksize * elemsize / (1024*1024);
+    const size_t s = (size_t)ArrayLength(mc->chunks) * chunksize * elemsize / (1024*1024);
     ierr = PetscInfo1(0, "MemCache allocation: %d MB\n", s ); CHKERRQ(ierr);
   }
   //Pop off and return last mem location

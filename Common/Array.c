@@ -3,9 +3,9 @@
 struct _Array {
   MPI_Comm comm;
   void *dataArray;
-  int len;        // actual length of data in array
-  int ELEMSIZE;   // a constant
-  size_t MAXSIZE; // current max allocate number of elements
+  int len;        // current number of elements in array
+  int ELEMSIZE;   // element size in bytes 
+  int MAXSIZE;    // max allocate number of elements before resize needed
   PetscReal scale;// scaling factor when resizing array beyond requested size
   char name[64];  // name used for PetscInfo()
   iCoor p,q;
@@ -25,8 +25,8 @@ PetscErrorCode ArrayCreate( const char name[], int elemSize, Array *array )
   PetscFunctionBegin;
   ierr = PetscNew(struct _Array, &a); CHKERRQ(ierr);
   ierr = PetscOptionsGetInt( name, "-array_initsize", &initSize, 0); CHKERRQ(ierr);
-  ierr = PetscMalloc( elemSize*initSize, &a->dataArray); CHKERRQ(ierr);
-  ierr = PetscMemzero(a->dataArray, elemSize*initSize); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)(elemSize*initSize), &a->dataArray); CHKERRQ(ierr);
+  ierr = PetscMemzero(a->dataArray, (size_t)(elemSize*initSize) ); CHKERRQ(ierr);
   a->ELEMSIZE = elemSize;
   a->MAXSIZE = initSize;
   a->len = 0;
@@ -99,15 +99,15 @@ PetscErrorCode ArraySetSize( Array a, int size )
   if( a->MAXSIZE < size ) //TODO: report resizing in petsc info
   {
     ierr = PetscLogEventBegin(EVENT_ArraySetSize,0,0,0,0); CHKERRQ(ierr);
-    int s = a->scale * size * a->ELEMSIZE;
+    size_t s = (size_t)(a->scale * size * a->ELEMSIZE);
     void *tmp;
     ierr = PetscInfo4(0,"%s resizing: %d to %d (%d MB)\n",a->name, a->MAXSIZE, (int)(a->scale*size), s/(1024*1024) ); CHKERRQ(ierr);
     ierr = PetscMalloc( s, &tmp ); CHKERRQ(ierr);
     ierr = PetscMemzero(tmp, s); CHKERRQ(ierr); //TODO: is this redundant?
-    ierr = PetscMemcpy(tmp,a->dataArray,a->ELEMSIZE*a->MAXSIZE); CHKERRQ(ierr);
+    ierr = PetscMemcpy(tmp,a->dataArray, (size_t)(a->ELEMSIZE*a->MAXSIZE)); CHKERRQ(ierr);
     ierr = PetscFree(a->dataArray); CHKERRQ(ierr);
     a->dataArray = tmp;
-    a->MAXSIZE = s / a->ELEMSIZE;
+    a->MAXSIZE = (int)s / a->ELEMSIZE;
     ierr = PetscLogEventEnd(EVENT_ArraySetSize,0,0,0,0); CHKERRQ(ierr);
   }
   
@@ -166,7 +166,7 @@ PetscErrorCode ArrayGet( Array a, int i, void *elem )
 {
   PetscFunctionBegin;
   if( 0 <= i && i < a->len )
-    *((void**)elem) = a->dataArray + a->ELEMSIZE * i;
+    *((void**)elem) = (char*)a->dataArray + a->ELEMSIZE * i;
   else
     SETERRQ3(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
   PetscFunctionReturn(0);
@@ -178,7 +178,7 @@ PetscErrorCode ArrayGetP( Array a, int i, void *elem )
 {
   PetscFunctionBegin;
   if( 0 <= i && i < a->len )
-    *(void**)elem = *(void**)(a->dataArray + a->ELEMSIZE * i);
+    *(void**)elem = *(void**)((char*)a->dataArray + a->ELEMSIZE * i);
   else
     SETERRQ3(a->comm, PETSC_ERR_ARG_OUTOFRANGE,"ArrayGet[%s]: Index %d not in [0 - %d)",a->name,i,a->len);
   PetscFunctionReturn(0);
@@ -231,11 +231,6 @@ int ArrayLength( Array a )
   return a->len;
 }
 
-size_t ArrayMaxSize( Array a )
-{
-  return a->MAXSIZE;
-}
-
 void* ArrayGetData( Array a )
 {
   return a->dataArray;
@@ -248,7 +243,7 @@ PetscErrorCode ArrayZero( Array a )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscMemzero(a->dataArray, a->ELEMSIZE*a->MAXSIZE); CHKERRQ(ierr);
+  ierr = PetscMemzero(a->dataArray, (size_t)(a->ELEMSIZE*a->MAXSIZE) ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -259,16 +254,16 @@ PetscErrorCode ArrayDelete1( Array a, int idx )
   /* Overwrites the deleted element of the array
    * with the last element: O(1) delete op
    */
-  void* dest = a->dataArray + a->ELEMSIZE * idx;
-  void* src  = a->dataArray + a->ELEMSIZE * (a->len-1);
+  void* dest = (char*)a->dataArray + a->ELEMSIZE * idx;
+  void* src  = (char*)a->dataArray + a->ELEMSIZE * (a->len-1);
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscMemcpy(dest,src,a->ELEMSIZE); CHKERRQ(ierr);
+  ierr = PetscMemcpy(dest,src,(size_t)a->ELEMSIZE); CHKERRQ(ierr);
   a->len--;
   PetscFunctionReturn(0);
 }
-
+/*
 #undef __FUNCT__
 #define __FUNCT__ "ArrayMap"
 PetscErrorCode ArrayMap( Array a )
@@ -282,7 +277,7 @@ PetscErrorCode ArrayMap( Array a )
   }
   PetscFunctionReturn(0);
 }
-
+*/
 #undef __FUNCT__
 #define __FUNCT__ "ArrayCopy"
 PetscErrorCode ArrayCopy( Array src, Array copy )
@@ -291,6 +286,6 @@ PetscErrorCode ArrayCopy( Array src, Array copy )
 
   PetscFunctionBegin;
   ierr = ArraySetSize(copy, ArrayLength(src) ); CHKERRQ(ierr);
-  ierr = PetscMemcpy(copy->dataArray,src->dataArray, src->len*src->ELEMSIZE ); CHKERRQ(ierr);
+  ierr = PetscMemcpy(copy->dataArray,src->dataArray, (size_t)(src->len*src->ELEMSIZE) ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

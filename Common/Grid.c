@@ -22,7 +22,7 @@ PetscErrorCode GridCreate( Coor dh, iCoor pos, iCoor size, int dof, Grid *grid )
   g->SIZE = g->is2D ? size.x*size.y*dof : size.x*size.y*size.z*dof;
   g->MAXSIZE = g->SIZE;
   
-  ierr = PetscMalloc(g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
+  ierr = PetscMalloc((size_t)g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
   ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
   ierr = VecZeroEntries(g->v); CHKERRQ(ierr); // TODO: is this redundant?
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
@@ -142,13 +142,13 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
   if( g->SIZE > g->MAXSIZE )
   {
     ierr = PetscFree(g->v1); CHKERRQ(ierr);
-    ierr = PetscMalloc(g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
+    ierr = PetscMalloc((size_t)g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
     g->MAXSIZE = g->SIZE;
     ierr = PetscInfo3(0,"%s resizing: %d (%d MB)\n",g->name, g->MAXSIZE, g->MAXSIZE/(1024*1024) ); CHKERRQ(ierr);
   }
   ierr = VecDestroy(&g->v); CHKERRQ(ierr);
   ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
-  ierr = PetscMemzero(g->v1,g->MAXSIZE*sizeof(PetscReal)); CHKERRQ(ierr);
+  ierr = PetscMemzero(g->v1,(size_t)g->MAXSIZE*sizeof(PetscReal)); CHKERRQ(ierr);
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -319,14 +319,14 @@ PetscErrorCode GridFillRectangle( Grid g, Coor lo, Coor hi, PetscReal fill)
 
   PetscFunctionBegin;
   ierr = GridGetBounds(g,&p,&q); CHKERRQ(ierr);
-  t = lo.x/dh.x;
+  t = (int)(lo.x/dh.x);
   p.x = t < p.x ? p.x : t;
-  t = lo.y/dh.y;
+  t = (int)(lo.y/dh.y);
   p.y = t < p.y ? p.y : t;
 
-  t = hi.x/dh.x;
+  t = (int)(hi.x/dh.x);
   q.x = q.x < t ? q.x : t;
-  t = hi.y/dh.y;
+  t = (int)(hi.y/dh.y);
   q.y = q.y < t ? q.y : t;
 
   ierr = GridGet(g,&phi); CHKERRQ(ierr);
@@ -419,5 +419,25 @@ PetscErrorCode GridCopy( Grid g, Grid copy )
   PetscFunctionBegin;
   ierr = GridResize(copy,g->p,g->n); CHKERRQ(ierr);
   ierr = VecCopy(g->v,copy->v); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "GridRoots"
+PetscErrorCode GridRoots( Grid g, Coor s, Coor dF, Array roots )
+{
+  const Coor dg = g->d;
+  const Coor dx = (Coor){ dg.x < dF.x ? dg.x : dF.x,
+                          dg.y < dF.y ? dg.y : dF.y,
+                          dg.z < dF.z ? dg.z : dF.z };
+
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  for (j = 0; j < 10; ++j) {
+    for (i = 0; i < 10; ++i) {
+
+    }
+  }
   PetscFunctionReturn(0);
 }

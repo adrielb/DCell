@@ -2,7 +2,7 @@
 
 LOCOBJS := SurfaceIndex.o SurfaceQuantities.o SurfaceDerivatives.o \
         LocalCoor.o ImmersedInterfaceContext.o ForceComponents.o Rotations.o \
-        RHSUpdate.o CrossProductIIM.o Interpolation.o
+        RHSUpdate.o CrossProductIIM.o Interpolation.o IrregularNodes.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
@@ -14,3 +14,4 @@ ${eval ${call test-library,${subdirectory},surfquant,${LOCDEPS}, 1 }}
 ${eval ${call test-library,${subdirectory},interpolate,${LOCDEPS}, 1 }}
 ${eval ${call test-library,${subdirectory},surfcoor,${LOCDEPS}, 1 }}
 ${eval ${call test-library,${subdirectory},iimtest,${LOCDEPS}, 1 }}
+${eval ${call test-library,${subdirectory},irregnodes,${LOCDEPS}, 1 }}

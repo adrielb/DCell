@@ -50,7 +50,8 @@ rmTemp:
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
-CFLAGS += ${DCELL_INCLUDE} -I/share/apps/include/ -Wall -fPIC
+CFLAGS += ${DCELL_INCLUDE} -isystem /share/apps/include/ -fPIC -Wall -Wshadow -Wpointer-arith -Wcast-qual \
+-Wcast-align -Wstrict-prototypes -Wmissing-prototypes -Wconversion -fdiagnostics-show-option
 
 GA_LIB = -L/share/apps/lib -lga
 PETSC_LIB := ${PETSC_LIB} ${GA_LIB}

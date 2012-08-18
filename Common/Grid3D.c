@@ -5,9 +5,9 @@ double Bilinear3D( GridFunction3D gf, PetscReal ***v3, Coor dh, Coor p )
 {
   int i,j,k;
   PetscReal xb, yb, zb, sum = 0.0;
-  PetscInt xs = floor(p.x);
-  PetscInt ys = floor(p.y);
-  PetscInt zs = floor(p.z);
+  PetscInt xs = (PetscInt)floor(p.x);
+  PetscInt ys = (PetscInt)floor(p.y);
+  PetscInt zs = (PetscInt)floor(p.z);
   PetscReal sx = p.x - xs,
             sy = p.y - ys,
             sz = p.z - zs;
@@ -119,18 +119,18 @@ PetscErrorCode GridFillBox( Grid g, Coor lo, Coor hi, PetscReal fill)
 
   PetscFunctionBegin;
   ierr = GridGetBounds(g,&p,&q); CHKERRQ(ierr);
-  t = lo.x/dh.x;
+  t = (int)(lo.x/dh.x);
   p.x = t < p.x ? p.x : t;
-  t = lo.y/dh.y;
+  t = (int)(lo.y/dh.y);
   p.y = t < p.y ? p.y : t;
-  t = lo.z/dh.z;
+  t = (int)(lo.z/dh.z);
   p.z = t < p.z ? p.z : t;
 
-  t = hi.x/dh.x;
+  t = (int)(hi.x/dh.x);
   q.x = q.x < t ? q.x : t;
-  t = hi.y/dh.y;
+  t = (int)(hi.y/dh.y);
   q.y = q.y < t ? q.y : t;
-  t = hi.z/dh.z;
+  t = (int)(hi.z/dh.z);
   q.z = q.z < t ? q.z : t;
 
   ierr = GridGet(g,&phi); CHKERRQ(ierr);

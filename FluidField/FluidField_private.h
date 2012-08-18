@@ -1,5 +1,3 @@
-#ifndef FLUIDFIELD_PRIVATE_H_
-#define FLUIDFIELD_PRIVATE_H_
 
 //Log Events
 PetscLogEvent EVENT_FluidFieldMaxVelocityMag;
@@ -14,5 +12,3 @@ PetscErrorCode FluidField_EnforceNoSlipBC( FluidField f );
 PetscErrorCode FluidField_PressureBC( FluidField f );
 PetscErrorCode FluidField_AppendDBC( Array dbc, MatStencil row );
 PetscErrorCode FluidFieldRegisterEvents(  );
-
-#endif /* FLUIDFIELD_PRIVATE_H_ */

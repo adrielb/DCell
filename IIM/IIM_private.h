@@ -1,5 +1,5 @@
-#ifndef IIM_PRIVATE_H_
-#define IIM_PRIVATE_H_
+//#ifndef IIM_PRIVATE_H_
+//#define IIM_PRIVATE_H_
 
 struct _LocalCoor {
   Array coor;
@@ -20,7 +20,8 @@ PetscLogEvent EVENT_IIMUpdateIrregularNodeGrid;
 PetscLogEvent EVENT_IIMUpdateSurfaceQuantities;
 PetscLogEvent EVENT_IIMUpdateSurfaceDerivatives;
 PetscLogEvent EVENT_IIMUpdateRHS;
+PetscLogEvent EVENT_IIMIrregularNodes;
 
 PetscErrorCode IIMRegisterEvents();
 
-#endif /* IIM_PRIVATE_H_ */
+//#endif /* IIM_PRIVATE_H_ */

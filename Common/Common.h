@@ -1,9 +1,14 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+// ignore warnings in other project headers
+#pragma GCC diagnostic ignored "-Wpragmas"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
 #include "ga.h"
 #include "macdecls.h"
 #include "petsc.h"
+#pragma GCC diagnostic pop
 
 #define LINE() { \
   int rank; \
@@ -50,7 +55,7 @@ static const int STAR[][3] = { {1,0,0},{-1, 0, 0},
 
 #define DCellInit() DCellInitialize(&argc,&args, __FILE__)
 PetscErrorCode DCellInitialize(int *argc,char ***args, const char sourcefile[]);
-PetscErrorCode DCellFinalize();
+PetscErrorCode DCellFinalize(void);
 PetscErrorCode DCellGetWorkingDirectory( char* workingdirectory );
 
 // Start offset of first file, so temporal files are alphabetically sorted properly
@@ -119,7 +124,7 @@ PetscErrorCode HeapCheck( Heap h );
 PetscErrorCode HeapPrint( Heap h, HeapPrintNode printNode );
 int HeapSize( Heap h );
 PetscBool HeapIsEmpty( Heap h );
-PetscErrorCode  HeapRegisterEvents();
+PetscErrorCode  HeapRegisterEvents(void);
 
 // UniqueID
 typedef struct _UniqueID *UniqueID;
@@ -131,13 +136,19 @@ PetscErrorCode UniqueIDGenerate( UniqueID uid, UniqueIDType *id );
 
 // SpatialIndex
 typedef struct _SpatialIndex *SpatialIndex;
-typedef struct _SpatialItem  *SpatialItem;
-typedef struct _AABB *AABB;
+typedef struct _AABB {
+  Coor lo, hi;
+} AABB;
 PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx );
 PetscErrorCode SpatialIndexSetDomain( SpatialIndex sidx, Coor lo, Coor hi, Coor dh );
 PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx );
 PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data );
+PetscErrorCode SpatialIndexInsertBox( SpatialIndex sidx, AABB box, void *item );
 PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items[] );
+PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *items );
 PetscErrorCode SpatialIndexClear( SpatialIndex sidx );
+PetscErrorCode SpatialIndexInsertBox( SpatialIndex sidx, AABB box, void *item );
+PetscErrorCode SpatialIndexCollide( SpatialIndex sidx, AABB box, void *items );
+PetscErrorCode SpatialIndexPrint( SpatialIndex sidx );
 
 #endif /* COMMON_H_ */

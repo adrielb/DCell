@@ -37,25 +37,29 @@ PetscErrorCode LeastSqCreate( int Np, PetscBool is2D, LeastSq *ls )
   lsq->Np = Np;  
   lsq->m = Np;
   lsq->n = is2D ? 3 : 6;
-  ierr = PetscMalloc(lsq->m*lsq->n*sizeof(double), &lsq->a); CHKERRQ(ierr);
+  ierr = PetscMalloc((size_t)(lsq->m*lsq->n)*sizeof(double), &lsq->a); CHKERRQ(ierr);
   
   lsq->nrhs = is2D ? 2 : 3;
-  ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->b); CHKERRQ(ierr);
-  ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->s); CHKERRQ(ierr);
-  ierr = PetscMalloc( lsq->Np*lsq->nrhs*sizeof(double), &lsq->r); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)(lsq->Np*lsq->nrhs)*sizeof(double), &lsq->b); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)(lsq->Np*lsq->nrhs)*sizeof(double), &lsq->s); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)(lsq->Np*lsq->nrhs)*sizeof(double), &lsq->r); CHKERRQ(ierr);
   
-  ierr = PetscMalloc( lsq->m*sizeof(double), &lsq->sv); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)lsq->m*sizeof(double), &lsq->sv); CHKERRQ(ierr);
   lsq->rcond = -1;
   
-  //Run dgelss to find lwork value
+  /* Run dgelss to find lwork value
+   * If LWORK = -1, then a workspace query is assumed; the routine
+   * only calculates the optimal size of the WORK array, returns
+   * this value as the first entry of the WORK array
+   */
   PetscReal work;
   lsq->lwork = -1;
   DGELSS( &lsq->m, &lsq->n, &lsq->nrhs, lsq->a, &lsq->m,
     lsq->b, &lsq->m, lsq->sv, &lsq->rcond, &lsq->rank,
     &work, &lsq->lwork, &lsq->info ); CHKERRQ(lsq->info);
-  lsq->lwork = work;
+  lsq->lwork = (int)(work+1);
   
-  ierr = PetscMalloc( lsq->lwork*sizeof(double), &lsq->work); CHKERRQ(ierr);
+  ierr = PetscMalloc( (size_t)lsq->lwork*sizeof(double), &lsq->work); CHKERRQ(ierr);
   
   *ls = lsq;
   

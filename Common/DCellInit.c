@@ -1,6 +1,6 @@
 #include "Common.h"
 
-PetscErrorCode  RegisterEvents();
+PetscErrorCode  RegisterEvents(void);
 
 // source file = __FILE__
 const static char MAINFILE[PETSC_MAX_PATH_LEN];
@@ -60,7 +60,7 @@ PetscLogEvent EVENT_GAScatterAcc;
 
 #undef __FUNCT__
 #define __FUNCT__ "RegisterEvents"
-PetscErrorCode  RegisterEvents()
+PetscErrorCode  RegisterEvents(void)
 {
   PetscErrorCode  ierr;
   PetscFunctionBegin;
