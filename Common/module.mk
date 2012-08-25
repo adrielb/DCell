@@ -1,7 +1,8 @@
 # Common Module
 
 LOCOBJS := LeastSq.o Serialize.o Array.o Grid.o Grid3D.o InterpolateVelocity.o \
-           GlobalArrays.o DCellInit.o Memcache.o Heap.o UniqueID.o SpatialIndex.o
+           GlobalArrays.o DCellInit.o Memcache.o Heap.o UniqueID.o SpatialIndex.o \
+           Coor.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 

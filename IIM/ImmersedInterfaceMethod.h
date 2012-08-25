@@ -56,6 +56,7 @@ PetscErrorCode IIMSetForceComponents(IIM iim, InterfacialForce F );
 PetscErrorCode IIMSetForceContext(IIM iim, void *context);
 PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu );
 PetscErrorCode IIMSetEps( IIM iim, PetscReal eps );
+PetscErrorCode IIMSetNp( IIM iim, int Np );
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga );
 PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel );
 

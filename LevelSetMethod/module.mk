@@ -1,7 +1,7 @@
 # LevelSetMethod Module
 
 #LOCDIR := ${DCELL_DIR}/${subdirectory}/
-LOCOBJS := Curvature.o Resize.o FastMarching.o FastMarching2D.o FastMarching3D.o \
+LOCOBJS := Resize.o FastMarching.o FastMarching2D.o FastMarching3D.o \
          LevelSet.o IrregularNodes.o IrregularNodes3D.o Advect.o AdvectSL.o AdvectRK2.o \
          OrthogonalProjection.o OrthogonalProjection3D.o ParticleLS.o ParticleLS2D.o \
          ParticleLS3D.o NormalDirection.o AdvectImplicit.o Initializations.o

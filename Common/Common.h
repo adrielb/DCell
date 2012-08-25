@@ -26,10 +26,19 @@ typedef struct {
   PetscInt x, y, z;
 } iCoor;
 
+typedef struct _AABB {
+  Coor lo;
+  Coor hi;
+} AABB;
+
+inline void CoorToIndex( const Coor origin, const Coor dh, const Coor point, iCoor* P );
+inline void CoorToIndex2( const Coor origin, const Coor dh, const Coor point, Coor* p, iCoor* P);
+inline PetscBool AABBPointInBox( const AABB box, const Coor p );
+
 static const PetscReal Tensor1[][3] = {
-  {0.5,   0,   0}, // u
-  {  0, 0.5,   0}, // v
-  {  0,   0, 0.5}  // w
+  {0.5, 0.0, 0.0}, // u
+  {0.0, 0.5, 0.0}, // v
+  {0.0, 0.0, 0.5}  // w
 };
 
 static const PetscReal Tensor2[][3] = {
@@ -136,9 +145,6 @@ PetscErrorCode UniqueIDGenerate( UniqueID uid, UniqueIDType *id );
 
 // SpatialIndex
 typedef struct _SpatialIndex *SpatialIndex;
-typedef struct _AABB {
-  Coor lo, hi;
-} AABB;
 PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx );
 PetscErrorCode SpatialIndexSetDomain( SpatialIndex sidx, Coor lo, Coor hi, Coor dh );
 PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx );

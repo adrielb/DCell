@@ -71,8 +71,8 @@ PetscErrorCode ParticleLS_ErrorCorrection2D( ParticleLS pls, LevelSet ls )
     if( sign * dist      < 0 &&        // particle on wrong side of interface
         PetscAbs( dist ) > PetscAbs( p->radius ) ) // by more than its radius
     {
-      A.x = floor(p->X.x);
-      A.y = floor(p->X.y);
+      A.x = (int)floor(p->X.x);
+      A.y = (int)floor(p->X.y);
 
       // for each corner of the cell containing the particle
       for (j = 0; j < 2; ++j) {

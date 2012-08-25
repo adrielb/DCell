@@ -11,7 +11,7 @@ PetscLogEvent EVENT_ParticleLS_ErrorCorrection;
 PetscLogEvent EVENT_ParticleLS_AdjustRadii;
 PetscLogEvent EVENT_ParticleLS_ReseedParticles;
 
-PetscErrorCode LevelSetRegisterEvents( );
+PetscErrorCode LevelSetRegisterEvents( void );
 PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls );
 PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls );
 PetscErrorCode LevelSetGetVelocity(LevelSet ls, int ga, Grid velgrid);
@@ -20,6 +20,8 @@ PetscErrorCode LevelSetAdvectSL_2D(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt);
 PetscErrorCode LevelSetCFLIncrement( LevelSet ls, Grid velgrid, PetscReal dt );
 PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid );
+PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscViewer viewer );
+PetscErrorCode LevelSetWriteIrregularNodeList_3D( Array irregularNodes, PetscViewer viewer );
 PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op );
 PetscErrorCode OrthogonalProjection2D_Bicubic( double phi[5][5],  Coor *op, PetscReal *dist );
 PetscErrorCode OrthogonalProjection2D_Quadratic( double phi[3][3],  Coor *op, PetscReal *dist );
@@ -73,5 +75,6 @@ PetscErrorCode ParticleLS_AdvectParticles2D(ParticleLS pls, Coor dh, Grid velgri
 PetscErrorCode ParticleLS_AdvectParticles3D(ParticleLS pls, Coor dh, Grid velgrid, PetscReal dt);
 PetscErrorCode ParticleLS_ErrorCorrection2D( ParticleLS pls, LevelSet ls );
 PetscErrorCode ParticleLS_ErrorCorrection3D( ParticleLS pls, LevelSet ls );
+PetscErrorCode ParticleLS_ReseedParticles( ParticleLS pls, LevelSet ls );
 
 #endif /* LSM_PRIVATE_H_ */

@@ -10,7 +10,7 @@ PetscErrorCode LevelSetResize(LevelSet ls)
   iCoor shift;    // shift amount in new memory
   iCoor dim;      // minimum size of new memory to hold ls
   iCoor p,q;  // Current size of grid
-  const int thres = ls->bandWidth + 1; // threshold that bounding box is on border
+  const int thres = (int)(ls->bandWidth + 1); // threshold that bounding box is on border
   const int BUF = thres + 5; // 5 grids of additional buffer on each edge
   PetscErrorCode ierr;
 

@@ -221,9 +221,7 @@ PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *i
         ierr = ArrayGetCoorP( sidx->bins, b, &iter); CHKERRQ(ierr);
         while( iter != PETSC_NULL ) {
           p = iter->p;
-          if( p.x < box.lo.x || box.hi.x < p.x ||
-              p.y < box.lo.y || box.hi.y < p.y ||
-              p.z < box.lo.z || box.hi.z < p.z  ) {
+          if( AABBPointInBox(box, p) ) {
           } else {
             ierr = ArrayAppend(sidx->queriedItems, &newItem); CHKERRQ(ierr);
             *newItem = iter->item;

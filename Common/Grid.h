@@ -8,6 +8,7 @@ typedef struct _Grid *Grid;
 struct _Grid {
   Vec v;
   char name[PETSC_MAX_PATH_LEN]; // TODO: name when saving to disk
+  AABB aabb; // bounding box in world coor
   iCoor p; // Position of this local grid within a global grid
   iCoor n; // Number of grid points
   Coor d;  // grid spacing in units of length

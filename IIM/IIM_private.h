@@ -21,7 +21,9 @@ PetscLogEvent EVENT_IIMUpdateSurfaceQuantities;
 PetscLogEvent EVENT_IIMUpdateSurfaceDerivatives;
 PetscLogEvent EVENT_IIMUpdateRHS;
 PetscLogEvent EVENT_IIMIrregularNodes;
+PetscErrorCode IIMRegisterEvents( void );
 
-PetscErrorCode IIMRegisterEvents();
+void IIMRotation1st_2D( IrregularNode *n, Jump *j );
+void IIMRotation2nd_2D( IrregularNode *n, Jump *j );
 
 //#endif /* IIM_PRIVATE_H_ */

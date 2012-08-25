@@ -20,19 +20,19 @@ PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radiu
   PetscErrorCode ierr = 0;
   
   PetscFunctionBegin;
-  pos.x = (center.x - radius ) / dh.x - BUF;
-  pos.y = (center.y - radius ) / dh.y - BUF;
+  pos.x = (int)( (center.x - radius ) / dh.x - BUF );
+  pos.y = (int)( (center.y - radius ) / dh.y - BUF );
   pos.z = 0;
-  size.x = 2 * (radius/dh.x + BUF);
-  size.y = 2 * (radius/dh.y + BUF);
+  size.x = (int)( 2 * (radius/dh.x + BUF) );
+  size.y = (int)( 2 * (radius/dh.y + BUF) );
   size.z = 0;
   ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
-  int est = PETSC_PI*PetscSqr(radius/dh.x+6) - PETSC_PI*PetscSqr(PetscMax(0,radius/dh.x-6));
-  ierr = ArraySetSize(ls->band,1.1*est); CHKERRQ(ierr);
+  int est = (int)( PETSC_PI*PetscSqr(radius/dh.x+6) - PETSC_PI*PetscSqr(PetscMax(0,radius/dh.x-6)) );
+  ierr = ArraySetSize(ls->band,(int)(1.1*est) ); CHKERRQ(ierr);
   ierr = ArraySetSize(ls->band,0); CHKERRQ(ierr);
-  est = 2*PETSC_PI*radius/dh.x*2.6; // Circumference estimate
+  est = (int)( 2*PETSC_PI*radius/dh.x*2.6 ); // Circumference estimate
   ierr = ArraySetSize(ls->irregularNodes,est); CHKERRQ(ierr);
   for (j = p.y; j < q.y; ++j) {
     for (i = p.x; i < q.x; ++i) {
@@ -71,20 +71,20 @@ PetscErrorCode LevelSetInitializeToSphere( Coor dh, Coor center, PetscReal radiu
   PetscErrorCode ierr = 0;
   
   PetscFunctionBegin;
-  pos.x = (center.x - radius ) / dh.x - BUF;
-  pos.y = (center.y - radius ) / dh.y - BUF;
-  pos.z = (center.z - radius ) / dh.z - BUF;
-  size.x = 2 * (radius/dh.x + BUF);
-  size.y = 2 * (radius/dh.y + BUF);
-  size.z = 2 * (radius/dh.z + BUF);
+  pos.x = (int)( (center.x - radius ) / dh.x - BUF );
+  pos.y = (int)( (center.y - radius ) / dh.y - BUF );
+  pos.z = (int)( (center.z - radius ) / dh.z - BUF );
+  size.x = (int)( 2 * (radius/dh.x + BUF) );
+  size.y = (int)( 2 * (radius/dh.y + BUF) );
+  size.z = (int)( 2 * (radius/dh.z + BUF) );
 
   ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
-  int est = PETSC_PI*PetscSqr(radius/dh.x+6) - PETSC_PI*PetscSqr(PetscMax(0,radius/dh.x-6));
-  ierr = ArraySetSize(ls->band,1.1*est); CHKERRQ(ierr);
+  int est = (int)( PETSC_PI*PetscSqr(radius/dh.x+6) - PETSC_PI*PetscSqr(PetscMax(0,radius/dh.x-6)) );
+  ierr = ArraySetSize(ls->band,(int)(1.1*est) ); CHKERRQ(ierr);
   ierr = ArraySetSize(ls->band,0); CHKERRQ(ierr);
-  est = 2*PETSC_PI*radius/dh.x*2.6; // Circumference estimate
+  est = (int)(2*PETSC_PI*radius/dh.x*2.6); // Circumference estimate
   ierr = ArraySetSize(ls->irregularNodes,est); CHKERRQ(ierr);
   for (k = p.z; k < q.z; ++k) {
     for (j = p.y; j < q.y; ++j) {
@@ -182,11 +182,11 @@ PetscErrorCode LevelSetInitializeToStar2D( Coor dh, Coor center, PetscReal radiu
   PetscErrorCode ierr = 0;
   
   PetscFunctionBegin;
-  pos.x = (center.x - radius ) / dh.x - BUF;
-  pos.y = (center.y - radius ) / dh.y - BUF;
+  pos.x = (int)( (center.x - radius ) / dh.x - BUF );
+  pos.y = (int)( (center.y - radius ) / dh.y - BUF );
   pos.z = 0;
-  size.x = 2 * (radius/dh.x + BUF );
-  size.y = 2 * (radius/dh.y + BUF );
+  size.x = (int)( 2 * (radius/dh.x + BUF) );
+  size.y = (int)( 2 * (radius/dh.y + BUF) );
   size.z = 0;
   ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
@@ -234,12 +234,12 @@ PetscErrorCode LevelSetInitializeToStar3D( Coor dh, Coor center, PetscReal radiu
   
   PetscFunctionBegin;
   M = sqrt( 1+2*amp/radius ) * radius;
-  pos.x = (center.x - M ) / dh.x - BUF;
-  pos.y = (center.y - M ) / dh.y - BUF;
-  pos.z = (center.z - M ) / dh.z - BUF;;
-  size.x = 2 * (M/dh.x + BUF );
-  size.y = 2 * (M/dh.y + BUF );
-  size.z = 2 * (M/dh.z + BUF );
+  pos.x = (int)( (center.x - M) / dh.x - BUF );
+  pos.y = (int)( (center.y - M) / dh.y - BUF );
+  pos.z = (int)( (center.z - M) / dh.z - BUF );
+  size.x = (int)( 2 * (M/dh.x + BUF) );
+  size.y = (int)( 2 * (M/dh.y + BUF) );
+  size.z = (int)( 2 * (M/dh.z + BUF) );
   ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
   ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);

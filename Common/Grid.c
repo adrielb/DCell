@@ -13,19 +13,11 @@ PetscErrorCode GridCreate( Coor dh, iCoor pos, iCoor size, int dof, Grid *grid )
   PetscFunctionBegin;
   ierr = PetscNew( struct _Grid, &g); CHKERRQ(ierr);
   g->d = dh;
-  g->n = size;
-  g->p = pos;
   g->dof = dof;
-  ierr = PetscStrcpy(g->name,"grid"); CHKERRQ(ierr);
-  
   g->is2D = size.z < 2 ? PETSC_TRUE : PETSC_FALSE; //TODO: alert user that for z < 2, will create a 2D grid
-  g->SIZE = g->is2D ? size.x*size.y*dof : size.x*size.y*size.z*dof;
-  g->MAXSIZE = g->SIZE;
-  
-  ierr = PetscMalloc((size_t)g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
-  ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
-  ierr = VecZeroEntries(g->v); CHKERRQ(ierr); // TODO: is this redundant?
-  ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
+
+  ierr = GridResize( g, pos, size ); CHKERRQ(ierr);
+  ierr = PetscStrcpy(g->name,"grid"); CHKERRQ(ierr);
   
   g->Interpolate = g->is2D ? GridInterpolate2D : GridInterpolate3D;
 
@@ -96,6 +88,7 @@ PetscErrorCode Grid_MakeGrid( Grid g )
 #define __FUNCT__ "Grid_RestoreGrid"
 PetscErrorCode Grid_RestoreGrid( Grid g )
 {
+  if( g->v == NULL ) return 0;
   int dof = g->dof;
   iCoor s = g->n;
   iCoor p = g->p;
@@ -137,6 +130,12 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
   g->p = pos;
   g->n = size;
   g->SIZE = g->is2D ? size.x*size.y*g->dof : size.x*size.y*size.z*g->dof;
+  g->aabb = (AABB) {
+      (Coor){g->d.x*pos.x, g->d.y*pos.y, g->d.z*pos.z},
+      (Coor){ g->d.x*(pos.x + size.x),
+              g->d.y*(pos.y + size.y),
+              g->d.z*(pos.z + size.z) }
+    };
 
   //If requested size is smaller than previously allocated, enlarge
   if( g->SIZE > g->MAXSIZE )
@@ -419,25 +418,5 @@ PetscErrorCode GridCopy( Grid g, Grid copy )
   PetscFunctionBegin;
   ierr = GridResize(copy,g->p,g->n); CHKERRQ(ierr);
   ierr = VecCopy(g->v,copy->v); CHKERRQ(ierr);
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
-#define __FUNCT__ "GridRoots"
-PetscErrorCode GridRoots( Grid g, Coor s, Coor dF, Array roots )
-{
-  const Coor dg = g->d;
-  const Coor dx = (Coor){ dg.x < dF.x ? dg.x : dF.x,
-                          dg.y < dF.y ? dg.y : dF.y,
-                          dg.z < dF.z ? dg.z : dF.z };
-
-  PetscErrorCode ierr;
-
-  PetscFunctionBegin;
-  for (j = 0; j < 10; ++j) {
-    for (i = 0; i < 10; ++i) {
-
-    }
-  }
   PetscFunctionReturn(0);
 }

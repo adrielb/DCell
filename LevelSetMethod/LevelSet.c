@@ -80,7 +80,7 @@ PetscErrorCode LevelSetDuplicate( LevelSet ls, LevelSet *copy)
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
-PetscErrorCode LevelSetRegisterEvents(  )
+PetscErrorCode LevelSetRegisterEvents( void )
 {
   PetscErrorCode ierr;
   if( EVENTS_registered )

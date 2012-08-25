@@ -2,7 +2,7 @@
 
 LOCOBJS := SurfaceIndex.o SurfaceQuantities.o SurfaceDerivatives.o \
         LocalCoor.o ImmersedInterfaceContext.o ForceComponents.o Rotations.o \
-        RHSUpdate.o CrossProductIIM.o Interpolation.o IrregularNodes.o
+        RHSUpdate.o CrossProductIIM.o IrregularNodes.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 

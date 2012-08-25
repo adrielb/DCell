@@ -1,5 +1,5 @@
 #include "ImmersedInterfaceMethod.h"
-
+#include "IIM_private.h"
 //TODO: eliminate cross derivatives from rotation application, dont need them for correction terms
 
 /*
@@ -11,7 +11,7 @@ GlobalToLocal
 }
 */
 
-void IIMRotation1st_2D( IrregularNode *n, Jump *j)
+void IIMRotation1st_2D( IrregularNode *n, Jump *j )
 {
   j->x = j->e*n->nx + j->n*n->sx;
   j->y = j->e*n->ny + j->n*n->sy;
