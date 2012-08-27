@@ -192,10 +192,10 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 PetscReal gnorm(int n, PetscReal *g) {
   //* max norm
   int j;
-  PetscReal abs, norm = 0;
+  PetscReal a, norm = 0;
   for (j = 0; j < n; ++j) {
-    abs = PetscAbs(g[j]);
-    norm = norm < abs ? abs : norm;
+    a = PetscAbs(g[j]);
+    norm = norm < a ? a : norm;
   }
   return norm;
   //*/

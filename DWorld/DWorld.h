@@ -80,6 +80,7 @@ PetscErrorCode DWorldSimulate_Euler( DWorld world );
 PetscErrorCode DWorldSimulate_RK2( DWorld world );
 PetscErrorCode DWorldSimulate_Implicit( DWorld world );
 PetscErrorCode DWorldSetTimeStep( DWorld w, PetscReal dt );
+PetscErrorCode DWorldSetWriteInterval( DWorld w, PetscInt interval );
 
 // DCells Array
 PetscErrorCode DCellsArrayCreate(DCellsArray *dcellsarray);
@@ -109,4 +110,6 @@ PetscErrorCode DCellAdvectImplicitInit( DCell this, PetscInt *n );
 PetscErrorCode DCellAdvectImplicitRHS( DCell this, int ga, PetscReal dt, PetscReal *g );
 PetscErrorCode DCellAdvectImplicitUpdate( DCell this, PetscReal lambda, PetscReal *dpsi );
 PetscErrorCode DCellAdvectImplicitReinit( DCell this, PetscReal dt);
+PetscErrorCode DCellSetLocalCount( int start );
+
 #endif /*DWORLD_H_*/

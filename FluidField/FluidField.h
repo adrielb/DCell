@@ -25,15 +25,6 @@ typedef struct _FluidField {
   Array dirichletBC;
   int ga;
 
-  /*
-   * DA for strain tensor
-   *  [exx exy exz]
-   *  [exy eyy eyz]
-   *  [exz eyz ezz]
-   */
-  DM daE;
-  Vec E;
-
   // DA for single component buffer
   DM daB;
   Vec buf;

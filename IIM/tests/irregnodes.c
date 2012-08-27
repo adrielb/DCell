@@ -40,9 +40,14 @@ int main(int argc, char **args)
     for (S.x = P.x; S.x < Q.x; ++S.x ) {
       s.x = f.x + S.x * df.x;
       s.y = f.y + S.y * df.y;
+
+      t = s;
+      t.x = f.x + (S.x + 1) * df.x;
+
       printf("%f, %f; %d, %d\n", s.x, s.y, S.x, S.y );
 
       t = s;
+      t.y = f.y + (S.y + 1) * df.y;
       for (t.y = s.y; t.y < s.y + df.y; t.y += dg.y ) {
         Coor *root;
         ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
@@ -69,7 +74,7 @@ int main(int argc, char **args)
   PetscFunctionReturn(0);
 }
 
-PetscErrorCode findroots( Grid g, const Coor p, const Coor dr, Array roots )
+PetscErrorCode findroots( Grid g, const Coor p, const Coor df, Array roots )
 {
   if( !AABBPointInBox(g->aabb, p) )
     return 0;

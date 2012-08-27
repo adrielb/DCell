@@ -1,6 +1,6 @@
 #include "DWorld.h"
 
-PetscErrorCode DCellsRegisterEvents( );
+PetscErrorCode DCellsRegisterEvents( void );
 
 #undef __FUNCT__
 #define __FUNCT__ "DCellsArrayCreate"
@@ -212,7 +212,7 @@ PetscErrorCode DCellsArrayAdvectImplicitReinit( DCellsArray dcells, double dt )
 #undef __FUNCT__
 #define __FUNCT__ "DCellsRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
-PetscErrorCode DCellsRegisterEvents(  )
+PetscErrorCode DCellsRegisterEvents( void )
 {
   PetscErrorCode ierr;
   if( EVENTS_registered )

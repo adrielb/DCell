@@ -1,6 +1,6 @@
 # FluidField Module
 
-LOCOBJS := Solve.o FluidField.o MatrixAssembly.o Strain.o SemiLagrange.o MaskDomain.o
+LOCOBJS := Solve.o FluidField.o MatrixAssembly.o MaskDomain.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 

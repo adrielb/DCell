@@ -20,11 +20,6 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
               dims.x,dims.y,dims.z,  PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
               dof,1,  0,0,0, &f->daV); CHKERRQ(ierr);
 
-    dof = 6; // [xx xy xz yy yz zz]
-    ierr = DMDACreate3d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
-              dims.x,dims.y,dims.z, PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
-              dof,1,  0,0,0, &f->daE); CHKERRQ(ierr);
-
     dof = 1; // buf
     ierr = DMDACreate3d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
               dims.x,dims.y,dims.z, PETSC_DECIDE,PETSC_DECIDE,PETSC_DECIDE,
@@ -34,10 +29,6 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
     dof = 3; // [u v p]
     ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_STAR,
               dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daV); CHKERRQ(ierr);
-
-    dof = 3; // [xx xy yy]
-    ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,
-              dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daE); CHKERRQ(ierr);
 
     dof = 1; // buf
     ierr = DMDACreate2d(f->comm,DMDA_BOUNDARY_NONE,DMDA_BOUNDARY_NONE,DMDA_STENCIL_BOX,

@@ -31,9 +31,7 @@ PetscErrorCode FluidFieldCreate(MPI_Comm comm, FluidField *fluid)
   f->dh.z = dx;
   
   nmax = 3;
-  f->dims.x = f->lens.x / f->dh.x;
-  f->dims.y = f->lens.y / f->dh.y;
-  f->dims.z = f->lens.z / f->dh.z;
+  CoorToIndex( (Coor){0,0,0}, f->dh, f->lens, &f->dims );
   ierr = PetscOptionsGetIntArray(0,"-fluid_dims", &f->dims.x, &nmax, 0); CHKERRQ(ierr);
 
   if( !f->is3D ) {
@@ -59,6 +57,7 @@ PetscErrorCode FluidFieldDestroy(FluidField f)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  GA_Destroy(f->ga);
   ierr = DMDestroy(&f->daV); CHKERRQ(ierr);
   ierr = MatDestroy(&f->mat); CHKERRQ(ierr);
   ierr = KSPDestroy(&f->ksp); CHKERRQ(ierr);
@@ -66,11 +65,6 @@ PetscErrorCode FluidFieldDestroy(FluidField f)
   ierr = VecDestroy(&f->vel); CHKERRQ(ierr);
   ierr = VecDestroy(&f->vel0); CHKERRQ(ierr);
   ierr = ArrayDestroy(f->dirichletBC); CHKERRQ(ierr);
-  GA_Destroy(f->ga);
-
-  ierr = DMDestroy(&f->daE); CHKERRQ(ierr);
-//  ierr = VecDestroy(f->E); CHKERRQ(ierr);
-
   ierr = DMDestroy(&f->daB); CHKERRQ(ierr);
   ierr = VecDestroy(&f->buf); CHKERRQ(ierr);
   ierr = PetscFree(f); CHKERRQ(ierr);
@@ -197,7 +191,7 @@ PetscErrorCode FluidFieldWrite(FluidField f, int t)
 #undef __FUNCT__
 #define __FUNCT__ "FluidFieldRegisterEvents"
 static int EVENTS_registered = PETSC_FALSE;
-PetscErrorCode FluidFieldRegisterEvents(  )
+PetscErrorCode FluidFieldRegisterEvents( void )
 {
   PetscErrorCode ierr;
   if( EVENTS_registered )
