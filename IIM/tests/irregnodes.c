@@ -23,44 +23,23 @@ int main(int argc, char **args)
   val[0][0] = -1; val[0][1] =  1; val[0][2] =  1;
   ierr = GridWrite(g, 0); CHKERRQ(ierr);
 
-
   Array roots;
   ierr = ArrayCreate("roots", sizeof(Coor), &roots); CHKERRQ(ierr);
 
+  const Coor  f = (Coor){0.5,-1.0, 0};
+  const Coor df = (Coor){1.0, 4.0, 1};
   iCoor P,Q;
   ierr = GridGetBounds(g, &P, &Q); CHKERRQ(ierr);
-  const Coor  f = (Coor){0.5,-1.0,-2.1};
-  const Coor df = (Coor){0.5, 3.0,   2};
-
   CoorToIndex(f, df, g->aabb.lo, &P );
   CoorToIndex(f, df, g->aabb.hi, &Q );
-  iCoor S = P;
-  Coor s, t;
-  for (S.y = P.y; S.y < Q.y; ++S.y ) {
-    for (S.x = P.x; S.x < Q.x; ++S.x ) {
-      s.x = f.x + S.x * df.x;
-      s.y = f.y + S.y * df.y;
-
-      t = s;
-      t.x = f.x + (S.x + 1) * df.x;
-
+  iCoor S = {0,0,0};
+  Coor s;
+  for (S.y = P.y; S.y <= Q.y; ++S.y ) {
+    for (S.x = P.x; S.x <= Q.x; ++S.x ) {
+      IndexToCoor( f, df, S, &s);
       printf("%f, %f; %d, %d\n", s.x, s.y, S.x, S.y );
 
-      t = s;
-      t.y = f.y + (S.y + 1) * df.y;
-      for (t.y = s.y; t.y < s.y + df.y; t.y += dg.y ) {
-        Coor *root;
-        ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
-        root->x = t.x;
-        root->y = t.y;
-        root->z = t.z;
-//        findroots(g, t, df, roots);
-      }
-
-      t = s;
-      for (t.x = s.x; t.x < s.x + df.x; t.x += dg.x ) {
-//        findroots(g, t, df, roots);
-      }
+      findroots(g, s, df, roots);
     }
   }
 
@@ -74,22 +53,16 @@ int main(int argc, char **args)
   PetscFunctionReturn(0);
 }
 
-PetscErrorCode findroots( Grid g, const Coor p, const Coor df, Array roots )
+PetscErrorCode findroots( Grid g, const Coor p0, const Coor df, Array roots )
 {
-  if( !AABBPointInBox(g->aabb, p) )
-    return 0;
   // upper case: index coor system (P,O,L)
   // lower case: world coor system (p,o)
-  const Coor s = g->aabb.lo;
-  const Coor d = g->d;
-  const Coor P = {
-      (p.x - s.x) / d.x,
-      (p.y - s.y) / d.y,
-      (p.z - s.z) / d.z };
-  const iCoor O = { (int)floor( P.x ), (int)floor( P.y ), (int)floor( P.z ) };
-  const  Coor LL = { P.x - O.x, P.y - O.y, P.z - O.z };
+  const Coor dg = g->d;
   const double TOL = 1e-6;
-  Coor L;
+  const Coor dr = (Coor) { PetscMin( dg.x, df.x), PetscMin( dg.y, df.y), PetscMin( dg.z, df.z) };
+  iCoor O;
+  Coor P;
+  Coor p;
   Coor sol;
   Coor *root;
   PetscErrorCode ierr;
@@ -97,35 +70,37 @@ PetscErrorCode findroots( Grid g, const Coor p, const Coor df, Array roots )
   if( g->is2D ) {
     const PetscReal **phi;
     ierr = GridGet(g, &phi); CHKERRQ(ierr);
-
-    L = LL;
-    for (; L.y < 1.0; L.y += dr.y ) {
+    for ( p = p0; p.y < p0.y + df.y; p.y += dr.y ) {
+      CoorToIndex2( g->aabb.lo, dg, p, &O, &P);
+      if( !GridIndexInBox( g, O) ) continue;
+      const Coor L = { P.x - O.x, P.y - O.y, P.z - O.z };
       sol.x = -phi[O.y][O.x] + L.y*phi[O.y][O.x] + phi[O.y][1 + O.x] -
                L.y*phi[O.y][1 + O.x] - L.y*phi[1 + O.y][O.x] + L.y*phi[1 + O.y][1 + O.x];
-      if( PetscAbs( sol.x ) > TOL ) {
-        sol.x = ( -phi[O.y][O.x] + L.y*phi[O.y][O.x] - L.y*phi[1 + O.y][O.x] ) / sol.x;
-        if( 0 <= sol.x && sol.x < 1 ) {
-          ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
-          root->x = O.x + sol.x ;
-          root->y = O.y + L.y;
-          root->z = O.z + L.z;
-        }
-      }
+      if( PetscAbs( sol.x ) < TOL ) continue;
+      sol.x = ( -phi[O.y][O.x] + L.y*phi[O.y][O.x] - L.y*phi[1 + O.y][O.x] ) / sol.x;
+      if( sol.x < 0 && 1 < sol.x ) continue;
+      sol.x *= dg.x;
+      if( sol.x < p0.x && p0.x + df.x < sol.x ) continue;
+      ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
+      root->x = p.x + sol.x ;
+      root->y = p.y;
+      root->z = p.z;
     }
-
-    L = LL;
-    for (; L.x < 1.0; L.x += dr.x ) {
+    for ( p = p0; p.x < p0.x + df.x; p.x += dr.x ) {
+      CoorToIndex2( g->aabb.lo, dg, p, &O, &P);
+      if( !GridIndexInBox( g, O) ) continue;
+      const Coor L = { P.x - O.x, P.y - O.y, P.z - O.z };
       sol.y = -phi[O.y][O.x] + L.x*phi[O.y][O.x] - L.x*phi[O.y][1 + O.x] +
                phi[1 + O.y][O.x] - L.x*phi[1 + O.y][O.x] + L.x*phi[1 + O.y][1 + O.x];
-      if( PetscAbs( sol.y ) > TOL ) {
-        sol.y = ( -phi[O.y][O.x] + L.x*phi[O.y][O.x] - L.x*phi[O.y][1 + O.x] ) / sol.y;
-        if( 0 <= sol.y && sol.y < 1 ) {
-          ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
-          root->x = O.x + L.x;
-          root->y = O.y + sol.y;
-          root->z = O.z + L.z;
-        }
-      }
+      if( PetscAbs( sol.y ) < TOL ) continue;
+      sol.y = ( -phi[O.y][O.x] + L.x*phi[O.y][O.x] - L.x*phi[O.y][1 + O.x] ) / sol.y;
+      if( sol.y < 0 && 1 < sol.y ) continue;
+      sol.y *= dg.y;
+      if( sol.y < p0.y && p0.y + df.x < sol.y ) continue;
+      ierr = ArrayAppend(roots, &root); CHKERRQ(ierr);
+      root->x = p.x;
+      root->y = p.y + sol.y;
+      root->z = p.z;
     }
   } else {
 

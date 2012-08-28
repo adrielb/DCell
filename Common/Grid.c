@@ -2,6 +2,7 @@
 
 PetscErrorCode Grid_MakeGrid( Grid g );
 PetscErrorCode Grid_RestoreGrid( Grid g );
+void Grid_CalcAABB( Grid g );
 
 #undef __FUNCT__
 #define __FUNCT__ "GridCreate"
@@ -124,18 +125,20 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
 
   if( g->is2D ) {
     pos.z  = 0;
-    size.z = 0;
+    size.z = 1;
+  }
+
+  if( size.x < 0 || size.y < 0 || size.z < 0 ) {
+    SETERRQ3(PETSC_COMM_WORLD, PETSC_ERR_ARG_OUTOFRANGE, "Negative grid size: [%d, %d, %d]\n", size.x, size.y, size.z );
   }
 
   g->p = pos;
   g->n = size;
+  g->q.x = pos.x + size.x;
+  g->q.y = pos.y + size.y;
+  g->q.z = pos.z + size.z;
   g->SIZE = g->is2D ? size.x*size.y*g->dof : size.x*size.y*size.z*g->dof;
-  g->aabb = (AABB) {
-      (Coor){g->d.x*pos.x, g->d.y*pos.y, g->d.z*pos.z},
-      (Coor){ g->d.x*(pos.x + size.x),
-              g->d.y*(pos.y + size.y),
-              g->d.z*(pos.z + size.z) }
-    };
+  Grid_CalcAABB( g );
 
   //If requested size is smaller than previously allocated, enlarge
   if( g->SIZE > g->MAXSIZE )
@@ -155,7 +158,22 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
 PetscErrorCode GridSetDx( Grid g, Coor d )
 {
   g->d = d;
+  Grid_CalcAABB( g );
   return  0;
+}
+
+void Grid_CalcAABB( Grid g )
+{
+  const  Coor d = g->d;
+  const iCoor p = g->p;
+  const iCoor q = g->q;
+
+  g->aabb = (AABB) {
+    (Coor){ d.x*p.x, d.y*p.y, d.z*p.z},
+    (Coor){ d.x*(q.x - 1),
+            d.y*(q.y - 1),
+            d.z*(q.z - 1) }
+  };
 }
 
 PetscErrorCode GridSetName( Grid g, const char *name )
@@ -180,9 +198,7 @@ PetscErrorCode GridGet( Grid g, void *grid )
 PetscErrorCode GridGetBounds( Grid g, iCoor *p, iCoor *q )
 {
   *p = g->p;
-  q->x = g->p.x + g->n.x;
-  q->y = g->p.y + g->n.y;
-  q->z = g->p.z + g->n.z;
+  *q = g->q;
   return 0;
 }
 
@@ -419,4 +435,14 @@ PetscErrorCode GridCopy( Grid g, Grid copy )
   ierr = GridResize(copy,g->p,g->n); CHKERRQ(ierr);
   ierr = VecCopy(g->v,copy->v); CHKERRQ(ierr);
   PetscFunctionReturn(0);
+}
+
+inline PetscBool GridIndexInBox( Grid g, iCoor a )
+{
+  const PetscBool notInBox =
+      a.x < g->p.x || g->q.x <= a.x ||
+      a.y < g->p.y || g->q.y <= a.y ||
+      a.z < g->p.z || g->q.z <= a.z;
+
+  return !notInBox;
 }

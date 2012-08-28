@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[      9141,        295]*)
-(*NotebookOutlinePosition[      9772,        317]*)
-(*  CellTagsIndexPosition[      9728,        313]*)
+(*NotebookOptionsPosition[     15010,        418]*)
+(*NotebookOutlinePosition[     15640,        440]*)
+(*  CellTagsIndexPosition[     15596,        436]*)
 (*WindowFrame->Normal*)
 
 
@@ -116,7 +116,8 @@ Cell["2D", "Subsection"],
 Cell[BoxData[{
     \(Clear[a, b, c, d]\), "\[IndentingNewLine]", 
     \(f = 
-      a\ x\ y\  + \ b\ x\ \((1 - y)\) + c \((1 - x)\) \((1 - y)\) + 
+      a\ x\ y\  + \ b\ x\ \((1 - y)\) + 
+        v1 \((\(x0 - x\)\/dx)\) \((\(y0 - y\)\/dy)\) + 
         d \((1 - x)\) y\), "\[IndentingNewLine]", 
     \(solx = 
       x /. \(Solve[f \[Equal] 0, x]\)[\([1]\)]\), "\[IndentingNewLine]", 
@@ -222,6 +223,128 @@ phi[1 + O.y][O.x] - L.x*phi[1 + O.y][O.x] + L.x*phi[1 + O.y][1 + O.x]\"\>"}
         ColumnAlignments->{Left}],
       Function[ BoxForm`e$, 
         TableForm[ BoxForm`e$]]]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(f = 
+      Plus @@ Flatten@
+          Table[phi[\([OY + J, OX + I]\)]*
+              If[I \[Equal] 0, \(x1 - x\)\/dx, \(x - x0\)\/dx]*
+              If[J \[Equal] 0, \(y1 - y\)\/dy, \(y - y0\)\/dy], {I, 0, 
+              1}, {J, 0, 1}]\), "\[IndentingNewLine]", 
+    \(Function[
+          var, \[IndentingNewLine]solx = 
+            var /. \(Solve[f \[Equal] 0, 
+                  var]\)[\([1]\)]; \[IndentingNewLine]soln = 
+            Numerator[solx]; \[IndentingNewLine]sold = 
+            Denominator[
+              solx]; \[IndentingNewLine]sol = \(ToString@
+                  CForm[#] &\) /@ {soln, 
+                sold}; \[IndentingNewLine]StringReplace[
+            sol, {"\<x\>" \[Rule] "\<L.x\>", "\<y\>" \[Rule] "\<L.y\>", "\<OY\
+\>" \[Rule] "\<O.y\>", "\<OX\>" \[Rule] "\<O.x\>"}]\[IndentingNewLine]] /@ \
+{x, y} // TableForm\)}], "Input"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(OY\\) is neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + OY\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(OY\\) is neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"pspec\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    \(\(\((\(-x\) + x1)\)\ \((\(-y\) + y1)\)\ phi\[LeftDoubleBracket]OY, OX\
+\[RightDoubleBracket]\)\/\(dx\ dy\) + \(\((x - x0)\)\ \((\(-y\) + y1)\)\ phi\
+\[LeftDoubleBracket]OY, 1 + OX\[RightDoubleBracket]\)\/\(dx\ dy\) + \(\((\(-x\
+\) + x1)\)\ \((y - y0)\)\ phi\[LeftDoubleBracket]1 + OY, OX\
+\[RightDoubleBracket]\)\/\(dx\ dy\) + \(\((x - x0)\)\ \((y - y0)\)\ phi\
+\[LeftDoubleBracket]1 + OY, 1 + OX\[RightDoubleBracket]\)\/\(dx\ dy\)\)], \
+"Output"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell1"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(soln\\)\\\" is similar to existing symbol \\\
+\"\\!\\(solx\\)\\\". \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell1\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"spell"\), \(\(:\)\(\ \)\), "\<\"Possible spelling \
+error: new symbol name \\\"\\!\\(sold\\)\\\" is similar to existing symbols \
+\\!\\({soln, solx}\\). \\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", \
+ButtonStyle->\\\"RefGuideLinkText\\\", ButtonFrame->None, \
+ButtonData:>\\\"General::spell\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(OY\\) is neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(OY\\) is neither an integer nor a list of integers. \\!\\(\\*ButtonBox[\
+\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\\\", \
+ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], "Message"],
+
+Cell[BoxData[
+    RowBox[{\(Part::"pspec"\), \(\(:\)\(\ \)\), "\<\"Part specification \
+\\!\\(1 + OY\\) is neither an integer nor a list of integers. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::pspec\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    RowBox[{\(General::"stop"\), \(\(:\)\(\ \)\), "\<\"Further output of \
+\\!\\(Part :: \\\"pspec\\\"\\) will be suppressed during this calculation. \
+\\!\\(\\*ButtonBox[\\\"More\[Ellipsis]\\\", ButtonStyle->\\\"RefGuideLinkText\
+\\\", ButtonFrame->None, ButtonData:>\\\"General::stop\\\"]\\)\"\>"}]], \
+"Message"],
+
+Cell[BoxData[
+    TagBox[GridBox[{
+          {"\<\"L.x1*L.y*phi[O.y][O.x] - L.x1*L.y1*phi[O.y][O.x] - \
+L.x0*L.y*phi[O.y][1 + O.x] + L.x0*L.y1*phi[O.y][1 + O.x] - L.x1*L.y*phi[1 + \
+O.y][O.x] + L.x1*L.y0*phi[1 + O.y][O.x] + L.x0*L.y*phi[1 + O.y][1 + O.x] - \
+L.x0*L.y0*phi[1 + O.y][1 + O.x]\"\>", "\<\"L.y*phi[O.y][O.x] - \
+L.y1*phi[O.y][O.x] - L.y*phi[O.y][1 + O.x] + L.y1*phi[O.y][1 + O.x] - \
+L.y*phi[1 + O.y][O.x] + L.y0*phi[1 + O.y][O.x] + L.y*phi[1 + O.y][1 + O.x] - \
+L.y0*phi[1 + O.y][1 + O.x]\"\>"},
+          {"\<\"L.x*L.y1*phi[O.y][O.x] - L.x1*L.y1*phi[O.y][O.x] - \
+L.x*L.y1*phi[O.y][1 + O.x] + L.x0*L.y1*phi[O.y][1 + O.x] - L.x*L.y0*phi[1 + \
+O.y][O.x] + L.x1*L.y0*phi[1 + O.y][O.x] + L.x*L.y0*phi[1 + O.y][1 + O.x] - \
+L.x0*L.y0*phi[1 + O.y][1 + O.x]\"\>", "\<\"L.x*phi[O.y][O.x] - \
+L.x1*phi[O.y][O.x] - L.x*phi[O.y][1 + O.x] + L.x0*phi[O.y][1 + O.x] - \
+L.x*phi[1 + O.y][O.x] + L.x1*phi[1 + O.y][O.x] + L.x*phi[1 + O.y][1 + O.x] - \
+L.x0*phi[1 + O.y][1 + O.x]\"\>"}
+          },
+        RowSpacings->1,
+        ColumnSpacings->3,
+        RowAlignments->Baseline,
+        ColumnAlignments->{Left}],
+      Function[ BoxForm`e$, 
+        TableForm[ BoxForm`e$]]]], "Output"]
 }, Open  ]]
 }, Open  ]],
 
@@ -294,9 +417,9 @@ y*a(j,1 + i) - a(1 + j,i) + y*a(1 + j,i) - a(1 + j,1 + i) + y*a(1 + j,1 + i))\
 }, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
-ScreenRectangle->{{0, 1920}, {0, 1106}},
-WindowSize->{1200, 1026},
-WindowMargins->{{Automatic, 0}, {Automatic, 25}}
+ScreenRectangle->{{0, 2400}, {0, 1600}},
+WindowSize->{1200, 1525},
+WindowMargins->{{Automatic, 0}, {0, Automatic}}
 ]
 
 (*******************************************************************
@@ -349,48 +472,64 @@ Cell[2838, 106, 69, 1, 41, "Output"]
 
 Cell[CellGroupData[{
 Cell[2956, 113, 24, 0, 40, "Subsection"],
-Cell[2983, 115, 352, 7, 75, "Input"],
+Cell[2983, 115, 380, 8, 96, "Input"],
 
 Cell[CellGroupData[{
-Cell[3360, 126, 352, 7, 75, "Input"],
-Cell[3715, 135, 118, 2, 26, "Output"],
-Cell[3836, 139, 99, 2, 43, "Output"],
-Cell[3938, 143, 104, 2, 41, "Output"]
+Cell[3388, 127, 352, 7, 75, "Input"],
+Cell[3743, 136, 118, 2, 26, "Output"],
+Cell[3864, 140, 99, 2, 43, "Output"],
+Cell[3966, 144, 104, 2, 41, "Output"]
 }, Open  ]],
-Cell[4057, 148, 523, 10, 139, "Input"],
+Cell[4085, 149, 523, 10, 139, "Input"],
 
 Cell[CellGroupData[{
-Cell[4605, 162, 127, 2, 43, "Input"],
-Cell[4735, 166, 35, 1, 26, "Output"],
-Cell[4773, 169, 40, 1, 26, "Output"]
+Cell[4633, 163, 127, 2, 43, "Input"],
+Cell[4763, 167, 35, 1, 26, "Output"],
+Cell[4801, 170, 40, 1, 26, "Output"]
 }, Open  ]],
-Cell[4828, 173, 182, 3, 43, "Input"],
+Cell[4856, 174, 182, 3, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[5035, 180, 826, 17, 139, "Input"],
-Cell[5864, 199, 383, 7, 26, "Output"],
-Cell[6250, 208, 697, 15, 39, "Output"]
+Cell[5063, 181, 826, 17, 139, "Input"],
+Cell[5892, 200, 383, 7, 26, "Output"],
+Cell[6278, 209, 697, 15, 39, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[7012, 229, 873, 18, 158, "Input"],
+Cell[7888, 249, 310, 4, 20, "Message"],
+Cell[8201, 255, 316, 5, 20, "Message"],
+Cell[8520, 262, 310, 4, 20, "Message"],
+Cell[8833, 268, 329, 5, 20, "Message"],
+Cell[9165, 275, 467, 7, 43, "Output"],
+Cell[9635, 284, 356, 5, 20, "Message"],
+Cell[9994, 291, 355, 5, 20, "Message"],
+Cell[10352, 298, 310, 4, 20, "Message"],
+Cell[10665, 304, 310, 4, 20, "Message"],
+Cell[10978, 310, 316, 5, 20, "Message"],
+Cell[11297, 317, 329, 5, 20, "Message"],
+Cell[11629, 324, 1187, 22, 52, "Output"]
 }, Open  ]]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[6996, 229, 24, 0, 40, "Subsection"],
+Cell[12865, 352, 24, 0, 40, "Subsection"],
 
 Cell[CellGroupData[{
-Cell[7045, 233, 173, 4, 27, "Input"],
-Cell[7221, 239, 456, 8, 41, "Output"]
+Cell[12914, 356, 173, 4, 27, "Input"],
+Cell[13090, 362, 456, 8, 41, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[7714, 252, 83, 1, 27, "Input"],
-Cell[7800, 255, 410, 7, 54, "Output"]
+Cell[13583, 375, 83, 1, 27, "Input"],
+Cell[13669, 378, 410, 7, 54, "Output"]
 }, Open  ]],
 
 Cell[CellGroupData[{
-Cell[8247, 267, 289, 7, 59, "Input"],
-Cell[8539, 276, 200, 4, 26, "Output"],
-Cell[8742, 282, 198, 3, 43, "Output"],
-Cell[8943, 287, 170, 4, 26, "Output"]
+Cell[14116, 390, 289, 7, 59, "Input"],
+Cell[14408, 399, 200, 4, 26, "Output"],
+Cell[14611, 405, 198, 3, 43, "Output"],
+Cell[14812, 410, 170, 4, 26, "Output"]
 }, Open  ]]
 }, Open  ]]
 }

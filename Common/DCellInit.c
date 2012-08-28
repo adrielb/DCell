@@ -1,5 +1,6 @@
 #include "Common.h"
 
+PetscErrorCode  DCell_WriteParamsFile(void);
 PetscErrorCode  RegisterEvents(void);
 
 // source file = __FILE__
@@ -21,13 +22,8 @@ PetscErrorCode  DCellInitialize(int *argc,char ***args, const char file[])
   ierr = PetscInitialize(argc, args, (char *) 0, ""); CHKERRQ(ierr);
 
   PetscFunctionBegin;
-  PetscViewer viewer;
-  ierr = PetscViewerCreate(PETSC_COMM_SELF,&viewer); CHKERRQ(ierr);
-  ierr = PetscViewerSetType(viewer, PETSCVIEWERASCII); CHKERRQ(ierr);
-  ierr = PetscViewerFileSetMode(viewer, FILE_MODE_WRITE); CHKERRQ(ierr);
-  ierr = PetscViewerFileSetName(viewer, "params.txt"); CHKERRQ(ierr);
-  ierr = PetscOptionsView(viewer); CHKERRQ(ierr);
-  ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
+  ierr = PetscPushErrorHandler(PetscAbortErrorHandler,0); CHKERRQ(ierr);
+  ierr = DCell_WriteParamsFile(); CHKERRQ(ierr);
   //TODO: Open HDF5 simulation file here
   ierr = RegisterEvents(); CHKERRQ(ierr);
   ierr = HeapRegisterEvents(); CHKERRQ(ierr);
@@ -48,6 +44,23 @@ PetscErrorCode  DCellFinalize()
   ierr = PetscPrintf(PETSC_COMM_WORLD, "End %s\n", MAINFILE); CHKERRQ(ierr);
   ierr = PetscFinalize(); CHKERRQ(ierr);
   ierr = MPI_Finalize(); CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "DCell_WriteParamsFile"
+PetscErrorCode  DCell_WriteParamsFile(void)
+{
+  PetscViewer viewer;
+  PetscErrorCode  ierr;
+
+  PetscFunctionBegin;
+  ierr = PetscViewerCreate(PETSC_COMM_SELF,&viewer); CHKERRQ(ierr);
+  ierr = PetscViewerSetType(viewer, PETSCVIEWERASCII); CHKERRQ(ierr);
+  ierr = PetscViewerFileSetMode(viewer, FILE_MODE_WRITE); CHKERRQ(ierr);
+  ierr = PetscViewerFileSetName(viewer, "params.txt"); CHKERRQ(ierr);
+  ierr = PetscOptionsView(viewer); CHKERRQ(ierr);
+  ierr = PetscViewerDestroy(&viewer); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

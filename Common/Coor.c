@@ -1,13 +1,13 @@
 #include "Common.h"
 
-inline void CoorToIndex( const Coor origin, const Coor dh, const Coor point, iCoor* P )
+inline void CoorToIndex( const Coor origin, const Coor dh, const Coor point, iCoor *P )
 {
   P->x = (int)floor( (point.x - origin.x) / dh.x );
   P->y = (int)floor( (point.y - origin.y) / dh.y );
   P->z = (int)floor( (point.z - origin.z) / dh.z );
 }
 
-inline void CoorToIndex2( const Coor origin, const Coor dh, const Coor point, Coor* p, iCoor* P)
+inline void CoorToIndex2( const Coor origin, const Coor dh, const Coor point, iCoor* P, Coor *p )
 {
   p->x = (point.x - origin.x) / dh.x;
   p->y = (point.y - origin.y) / dh.y;
@@ -18,9 +18,18 @@ inline void CoorToIndex2( const Coor origin, const Coor dh, const Coor point, Co
   P->z = (int)floor( p->z );
 }
 
+inline void IndexToCoor( const Coor origin, const Coor dh, const iCoor i, Coor *p )
+{
+  p->x = origin.x + i.x * dh.x;
+  p->y = origin.y + i.y * dh.y;
+  p->z = origin.z + i.z * dh.z;
+}
+
 inline PetscBool AABBPointInBox( const AABB box, const Coor p )
 {
-  return  p.x < box.lo.x || box.hi.x < p.x ||
-          p.y < box.lo.y || box.hi.y < p.y ||
-          p.z < box.lo.z || box.hi.z < p.z;
+  const PetscBool notInBox =
+      p.x < box.lo.x || box.hi.x < p.x ||
+      p.y < box.lo.y || box.hi.y < p.y ||
+      p.z < box.lo.z || box.hi.z < p.z;
+  return !notInBox;
 }

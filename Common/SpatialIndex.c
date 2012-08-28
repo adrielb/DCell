@@ -126,9 +126,7 @@ PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data )
 
 PetscErrorCode SpatialIndexBin( SpatialIndex sidx, Coor pt, iCoor *bin )
 {
-  bin->x = (PetscInt)(( pt.x - sidx->lo.x ) / sidx->dh.x);
-  bin->y = (PetscInt)(( pt.y - sidx->lo.y ) / sidx->dh.y);
-  bin->z = (PetscInt)(( pt.z - sidx->lo.z ) / sidx->dh.z);
+  CoorToIndex( sidx->lo, sidx->dh, pt, bin );
 
   // if point outside domain, put in boundary bins
   if( bin->x < sidx->a.x ) bin->x = sidx->a.x;
@@ -156,6 +154,7 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+//  CoorToIndex( sidx->lo.x, sidx->dh, center-radius, &lo );
   lo.x = (PetscInt)(( center.x-radius - sidx->lo.x ) / sidx->dh.x);
   lo.y = (PetscInt)(( center.y-radius - sidx->lo.y ) / sidx->dh.y);
   lo.z = (PetscInt)(( center.z-radius - sidx->lo.z ) / sidx->dh.z);

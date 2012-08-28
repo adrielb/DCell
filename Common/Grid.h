@@ -10,6 +10,7 @@ struct _Grid {
   char name[PETSC_MAX_PATH_LEN]; // TODO: name when saving to disk
   AABB aabb; // bounding box in world coor
   iCoor p; // Position of this local grid within a global grid
+  iCoor q; // q = p + n
   iCoor n; // Number of grid points
   Coor d;  // grid spacing in units of length
   PetscBool is2D;
@@ -38,6 +39,7 @@ PetscErrorCode GridInterpolate2D( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridInterpolate3D( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridCopy( Grid g, Grid copy );
 PetscErrorCode GridDuplicate( Grid g, Grid *newg );
+inline PetscBool GridIndexInBox( Grid g, iCoor a );
 
 typedef double (*GridFunction2D)(PetscReal **p, int x, int y, Coor d);
 double GridFunction2D_Identity( PetscReal **p, int i, int j, Coor d);
