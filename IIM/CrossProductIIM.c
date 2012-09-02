@@ -8,7 +8,7 @@
 #define __FUNCT__ "IIMLaplaceCorrection"
 PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
 {
-  const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
+  const PetscReal dh = ((PetscReal*)&iim->df.x)[n->axis];
   const PetscReal dd = dh*dh;
   const PetscReal mu = iim->mu;
   PetscReal h;
@@ -54,7 +54,7 @@ PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j 
 {
   PetscReal h;
   const int negone = -1; // Correction is subtracted on RHS
-  const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
+  const PetscReal dh = ((PetscReal*)&iim->df.x)[n->axis];
   iCoor pos = n->pos;
   int sign;
   PetscErrorCode ierr;
@@ -79,7 +79,7 @@ PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j 
 PetscErrorCode IIMPressureGradientCorrection( IIM iim, IrregularNode *n, Jump j )
 {
   PetscReal h;
-  const PetscReal dh = ((PetscReal*)&iim->dh.x)[n->axis];
+  const PetscReal dh = ((PetscReal*)&iim->df.x)[n->axis];
   PetscErrorCode ierr;
 
   PetscFunctionBegin;

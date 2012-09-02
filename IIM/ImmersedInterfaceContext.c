@@ -3,7 +3,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMCreate"
-PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
+PetscErrorCode IIMCreate( PetscBool is2D, IIM *iim )
 {
   PetscErrorCode ierr;
   IIM i;
@@ -16,11 +16,13 @@ PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim )
   ierr = ArrayCreate( "iim_coor", 4*sizeof(int), &i->coor); CHKERRQ(ierr); // [ x y z d ]
   ierr = ArrayCreate( "iim_val", sizeof(PetscReal), &i->val); CHKERRQ(ierr);
   ierr = ArrayCreate( "debug", sizeof(IIMDebug), &i->debug); CHKERRQ(ierr);
+  ierr = ArrayCreate( "roots", sizeof(Coor), &i->roots); CHKERRQ(ierr);
 
-  i->dh = dh;
+  i->f =  (Coor){0.0, 0.0, 0.0};
+  i->df = (Coor){1.0, 1.0, 1.0};
   i->mu = 1.0;
   i->eps = 1.1;
-  i->Np = Np;
+  i->Np = 64;
   i->F = InterfacialForceSurfaceTension;
   
   ierr = PetscOptionsGetReal(0, "-iim_eps", &i->eps, 0 ); CHKERRQ(ierr);
@@ -44,9 +46,11 @@ PetscErrorCode IIMDestroy( IIM iim )
   
   PetscFunctionBegin;
   ierr = SpatialIndexDestroy(iim->sidx); CHKERRQ(ierr);
+  ierr = ArrayDestroy(iim->idx); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->coor); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->val); CHKERRQ(ierr);
-  ierr = ArrayDestroy(iim->idx); CHKERRQ(ierr);
+  ierr = ArrayDestroy(iim->debug); CHKERRQ(ierr);
+  ierr = ArrayDestroy(iim->roots); CHKERRQ(ierr);
   ierr = LocalCoorDestroy( iim->lc ); CHKERRQ(ierr);
   ierr = LeastSqDestroy( iim->lsq ); CHKERRQ(ierr);
   ierr = PetscFree(iim); CHKERRQ(ierr);
@@ -74,6 +78,13 @@ PetscErrorCode IIMSetEps( IIM iim, PetscReal eps )
 PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu )
 {
   iim->mu = mu;
+  return 0;
+}
+
+PetscErrorCode IIMSetFluidCoordinateSystem( IIM iim, Coor origin, Coor df )
+{
+  iim->f = origin;
+  iim->df = df;
   return 0;
 }
 

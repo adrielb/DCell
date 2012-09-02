@@ -29,7 +29,9 @@ typedef struct _IIM
   void *context; // context passed to Interfacial force function
   Array idx,coor,val; //Interpolation indexes, coors and values
   Array debug;    // for iimtest.c
-  Coor dh;       // Grid widths
+  Coor f;        // origin of fluid field coordinate system
+  Coor df;       // grid widths of fluid field coordinate system
+  Array roots;
   SpatialIndex sidx; // Indexes irregular nodes in 3D bins
 } *IIM;
 
@@ -50,13 +52,14 @@ typedef void (*JumpCondition)( PetscReal mu, IrregularNode *n, Jump *j, PetscInt
 void JumpPressure( IrregularNode *n, Jump *j );
 void JumpVelocity(PetscReal mu, IrregularNode *n, Jump *j, int i );
 
-PetscErrorCode IIMCreate( PetscBool is2D, int Np, Coor dh, IIM *iim );
+PetscErrorCode IIMCreate( PetscBool is2D, IIM *iim );
 PetscErrorCode IIMDestroy( IIM iim );
 PetscErrorCode IIMSetForceComponents(IIM iim, InterfacialForce F );
 PetscErrorCode IIMSetForceContext(IIM iim, void *context);
 PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu );
 PetscErrorCode IIMSetEps( IIM iim, PetscReal eps );
 PetscErrorCode IIMSetNp( IIM iim, int Np );
+PetscErrorCode IIMSetFluidCoordinateSystem( IIM iim, Coor origin, Coor df );
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga );
 PetscErrorCode IIMCorrectVelocity( IIM iim, const Coor X, Coor *vel );
 

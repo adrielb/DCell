@@ -33,3 +33,18 @@ inline PetscBool AABBPointInBox( const AABB box, const Coor p )
       p.z < box.lo.z || box.hi.z < p.z;
   return !notInBox;
 }
+
+inline PetscReal CoorGet( const Coor x, const int i )
+{
+  return ((PetscReal*)&x)[i];
+}
+
+inline void CoorSet( const Coor *x, const int i, const PetscReal val )
+{
+  ((PetscReal*)x)[i] = val;
+}
+
+inline PetscInt iCoorGet( const iCoor x, const int i )
+{
+  return ((PetscInt*)&x)[i];
+}

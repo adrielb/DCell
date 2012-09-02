@@ -369,6 +369,7 @@ PetscErrorCode GridInterpolate2D( Grid g, Coor X, PetscReal *val)
 {
   int i,j;
   int xs, ys;
+  int xsi, ysj;
   PetscReal sx, sy;
   PetscReal **field=0;
   PetscErrorCode ierr;
@@ -384,8 +385,14 @@ PetscErrorCode GridInterpolate2D( Grid g, Coor X, PetscReal *val)
   {
     for( i = 0; i < 2; ++i)
     {
+      xsi = xs + i;
+      ysj = ys + j;
+      if( xsi <  g->p.x ) xsi = g->p.x;
+      if( ysj <  g->p.y ) ysj = g->p.y;
+      if( xsi >= g->q.x ) xsi = g->q.x - 1;
+      if( ysj >= g->q.y ) ysj = g->q.y - 1;
       *val += ((1 - sx) * (1 - i) + i * sx) *
-              ((1 - sy) * (1 - j) + j * sy) * field[ys+j][xs+i];
+              ((1 - sy) * (1 - j) + j * sy) * field[ysj][xsi];
     }
   }
   PetscFunctionReturn(0);
@@ -426,6 +433,53 @@ PetscErrorCode GridInterpolate3D( Grid g, Coor X, PetscReal *val)
 }
 
 #undef __FUNCT__
+#define __FUNCT__ "GridInterpolate2"
+PetscErrorCode GridInterpolate2( Grid g, Coor X, PetscReal *val)
+{
+  int i,j,k;
+  Coor s;   //
+  iCoor S;  // lo of cell containing X
+  iCoor Si; // Si = S + {0,1}
+  PetscReal ***field=0;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = GridGet(g,&field); CHKERRQ(ierr);
+  CoorToIndex2(g->aabb.lo, g->d, X, &S, &s);
+
+  s.x = s.x - S.x;
+  s.y = s.y - S.y;
+  s.z = s.z - S.z;
+
+  *val = 0;
+  for( k = 0; k < 2; ++k)
+  {
+    for( j = 0; j < 2; ++j)
+    {
+      for( i = 0; i < 2; ++i)
+      {
+        Si.x = S.x + i;
+        Si.y = S.y + j;
+        Si.z = S.z + k;
+
+        if( Si.x <  g->p.x ) Si.x = g->p.x;
+        if( Si.y <  g->p.y ) Si.y = g->p.y;
+        if( Si.z <  g->p.z ) Si.z = g->p.z;
+
+        if( Si.x >= g->q.x ) Si.x = g->q.x - 1;
+        if( Si.y >= g->q.y ) Si.y = g->q.y - 1;
+        if( Si.z >= g->q.z ) Si.z = g->q.z - 1;
+
+        *val += ( (1-i) * (1-s.x) + i * s.x) *
+                ( (1-j) * (1-s.y) + j * s.y) *
+                ( (1-k) * (1-s.z) + k * s.z) * field[Si.z][Si.y][Si.x];
+      }
+    }
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
 #define __FUNCT__ "GridCopy"
 PetscErrorCode GridCopy( Grid g, Grid copy )
 {
@@ -437,6 +491,40 @@ PetscErrorCode GridCopy( Grid g, Grid copy )
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "GridIntersections"
+PetscErrorCode GridIntersections( const Grid g, const Coor p, const int axis, const Array roots )
+{
+  int i;
+  Coor X;
+  iCoor P, Q, O;
+  PetscReal v0, v1, x;
+  Coor root;
+  Coor *newroot;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  CoorToIndex2(g->aabb.lo, g->d, p, &O, &X);
+  GridGetBounds(g, &P, &Q);
+  for (i = iCoorGet(P,axis); i < iCoorGet(Q,axis) - 1; ++i) {
+    CoorSet(&X, axis, i);
+    GridInterpolate( g, X, &v0 );
+    CoorSet(&X, axis, i+1);
+    GridInterpolate( g, X, &v1 );
+    x = v0 / (v0 - v1);
+    if( x != x || x < 0.0 || x >= 1.0 ) continue;
+    root = X;
+    x = CoorGet( root, axis) + x - 1;
+    CoorSet( &root, axis, x);
+    GridIndexToCoor( g, root, &root);
+    if( !AABBPointInBox( g->aabb, root) ) continue;
+    ierr = ArrayAppend(roots, &newroot); CHKERRQ(ierr);
+    *newroot = root;
+  }
+  PetscFunctionReturn(0);
+}
+
+
 inline PetscBool GridIndexInBox( Grid g, iCoor a )
 {
   const PetscBool notInBox =
@@ -445,4 +533,18 @@ inline PetscBool GridIndexInBox( Grid g, iCoor a )
       a.z < g->p.z || g->q.z <= a.z;
 
   return !notInBox;
+}
+
+#if 0
+inline void GridCoorToIndex2( const Grid g, const Coor point, iCoor *P, Coor p )
+{
+  CoorToIndex2( g->aabb.lo, g->d, point, P, p);
+}
+#endif
+
+inline void GridIndexToCoor( const Grid g, const Coor i, Coor *p )
+{
+  p->x = g->aabb.lo.x + i.x * g->d.x;
+  p->y = g->aabb.lo.y + i.y * g->d.y;
+  p->z = g->aabb.lo.z + i.z * g->d.z;
 }

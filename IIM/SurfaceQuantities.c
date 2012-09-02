@@ -36,21 +36,22 @@ PetscErrorCode IIMUpdateSurfaceQuantities_2D( IIM iim, LevelSet ls )
   IrregularNode *n;
   PetscReal h;
   PetscReal **phi;
+  const Coor dh = ls->phi->d;
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceQuantities,0,0,0,0); CHKERRQ(ierr);
   ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
-  iim->dh = ls->phi->d;
+  iim->df = dh;
   for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
   {
     ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
-    n->k = Bilinear2D( GridFunction2D_Curv, phi, iim->dh, n->X.x, n->X.y );
+    n->k = Bilinear2D( GridFunction2D_Curv, phi, dh, n->X.x, n->X.y );
     n->k_nn = n->k;
     n->k_tt = 0;
     n->k_nt = 0;
-    n->nx = Bilinear2D(GridFunction2D_DerivX, phi, iim->dh, n->X.x, n->X.y);
-    n->ny = Bilinear2D(GridFunction2D_DerivY, phi, iim->dh, n->X.x, n->X.y);
+    n->nx = Bilinear2D(GridFunction2D_DerivX, phi, dh, n->X.x, n->X.y);
+    n->ny = Bilinear2D(GridFunction2D_DerivY, phi, dh, n->X.x, n->X.y);
     h = sqrt( n->nx*n->nx + n->ny*n->ny );
     n->nx = n->nx / h;
     n->ny = n->ny / h;

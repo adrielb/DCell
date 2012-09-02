@@ -35,6 +35,9 @@ typedef struct _AABB {
 inline void CoorToIndex( const Coor origin, const Coor dh, const Coor point, iCoor *P );
 inline void CoorToIndex2(const Coor origin, const Coor dh, const Coor point, iCoor *P, Coor* p );
 inline void IndexToCoor( const Coor origin, const Coor dh, const iCoor index, Coor *p );
+inline PetscReal CoorGet( const Coor  x, const int i );
+inline void      CoorSet( const Coor *x, const int i, const PetscReal val );
+inline PetscInt iCoorGet( const iCoor x, const int i );
 inline PetscBool AABBPointInBox( const AABB box, const Coor p );
 
 static const PetscReal Tensor1[][3] = {

@@ -204,7 +204,6 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
 PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *items )
 {
   iCoor lo, hi, b;
-  Coor p;
   SpatialItem iter;
   void **newItem;
   PetscErrorCode ierr;
@@ -219,9 +218,7 @@ PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *i
       for (b.x = lo.x; b.x <= hi.x; ++b.x) {
         ierr = ArrayGetCoorP( sidx->bins, b, &iter); CHKERRQ(ierr);
         while( iter != PETSC_NULL ) {
-          p = iter->p;
-          if( AABBPointInBox(box, p) ) {
-          } else {
+          if( AABBPointInBox(box, iter->p) ) {
             ierr = ArrayAppend(sidx->queriedItems, &newItem); CHKERRQ(ierr);
             *newItem = iter->item;
           }

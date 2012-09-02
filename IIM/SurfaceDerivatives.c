@@ -36,7 +36,7 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
     }
 
     LocalCoorSetLength(iim->lc, len);
-    LocalCoorSolve( iim->lc, iim->dh, n, nodes);
+    LocalCoorSolve( iim->lc, iim->df, n, nodes);
     ierr = LeastSqSetNumPoints(iim->lsq, len); CHKERRQ(ierr);
     LocalCoorGetVecs(iim->lc, &eta, &xi, 0);
     for( j = 0; j < len; j++ )
@@ -94,7 +94,7 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
     }
 
     LocalCoorSetLength( iim->lc, len);
-    LocalCoorSolve( iim->lc, iim->dh, n, nodes);
+    LocalCoorSolve( iim->lc, iim->df, n, nodes);
     ierr = LeastSqSetNumPoints(iim->lsq, len); CHKERRQ(ierr);
     LocalCoorGetVecs( iim->lc, &ss, &nn, &rr );
     for( j = 0; j < len; j++ )

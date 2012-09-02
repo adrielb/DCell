@@ -39,7 +39,9 @@ PetscErrorCode GridInterpolate2D( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridInterpolate3D( Grid g, Coor X, PetscReal *val);
 PetscErrorCode GridCopy( Grid g, Grid copy );
 PetscErrorCode GridDuplicate( Grid g, Grid *newg );
+PetscErrorCode GridIntersections( const Grid g, const Coor p, const int axis, const Array roots );
 inline PetscBool GridIndexInBox( Grid g, iCoor a );
+inline void GridIndexToCoor( const Grid g, const Coor i, Coor *p );
 
 typedef double (*GridFunction2D)(PetscReal **p, int x, int y, Coor d);
 double GridFunction2D_Identity( PetscReal **p, int i, int j, Coor d);
