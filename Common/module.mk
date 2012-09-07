@@ -1,8 +1,8 @@
 # Common Module
 
-LOCOBJS := LeastSq.o Serialize.o Array.o Grid.o Grid3D.o InterpolateVelocity.o \
+LOCOBJS := LeastSq.o Serialize.o Array.o Grid.o Bilinear.o InterpolateVelocity.o \
            GlobalArrays.o DCellInit.o Memcache.o Heap.o UniqueID.o SpatialIndex.o \
-           Coor.o
+           Coor.o Cubic.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
@@ -16,6 +16,7 @@ ${eval ${call test-library,${subdirectory},ga2da, Common, 1 }}
 ${eval ${call test-library,${subdirectory},uniqueid, Common, 5 }}
 #${eval ${call test-library,${subdirectory},Benchmarks, Common, 1 }}
 ${eval ${call test-library,${subdirectory},spatialindex, Common, 1 }}
+${eval ${call test-library,${subdirectory},interpolation, Common, 1 }}
 
 ${LOCOBJS}: Common/Common.h
 Common/Grid.o: Common/Grid.h

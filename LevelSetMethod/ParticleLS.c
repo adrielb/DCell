@@ -112,18 +112,15 @@ PetscErrorCode ParticleLS_AttractParticleToPhiGoal( ParticleLS pls, LevelSet ls,
   PetscReal sign; // Sign( phi_goal - phi_Xp )
   PetscReal lambda = 1; // step size
   PetscReal phi_Xp, phi_X;
-  Coor dh = ls->phi->d;
-  PetscReal **phigrid;
+  Grid phi = ls->phi;
   PetscErrorCode ierr;
 
-  ierr = GridGet(ls->phi,&phigrid); CHKERRQ(ierr);
-
   int l;
-  phi_Xp = Bilinear2D( GridFunction2D_Identity, phigrid, dh, p->X.x, p->X.y );
+  ierr = GridInterpolate( phi, p->X, &phi_Xp); CHKERRQ(ierr);
   for( l = 0; l < pls->L_MAX; ++l) {
     // Normal direction [N.x, N.y]
-    N.x = Bilinear2D( GridFunction2D_DerivX, phigrid, dh, p->X.x, p->X.y );
-    N.y = Bilinear2D( GridFunction2D_DerivY, phigrid, dh, p->X.x, p->X.y );
+    N.x = GridBilinear( phi, GridFunction2D_DerivX, p->X );
+    N.y = GridBilinear( phi, GridFunction2D_DerivY, p->X );
     PetscReal mag = sqrt( N.x*N.x + N.y*N.y );
     N.x = N.x / mag;
     N.y = N.y / mag;
@@ -131,7 +128,7 @@ PetscErrorCode ParticleLS_AttractParticleToPhiGoal( ParticleLS pls, LevelSet ls,
     sign = PetscSign(phi_goal - phi_Xp);
     X.x = p->X.x + sign * lambda * N.x ;
     X.y = p->X.y + sign * lambda * N.y;
-    phi_X = Bilinear2D( GridFunction2D_Identity, phigrid, dh, X.x, X.y );
+    ierr = GridInterpolate( phi, X, &phi_X); CHKERRQ(ierr);
 
     // step size failed, reduce it
     if( PetscAbs(phi_X - phi_goal) > PetscAbs(phi_Xp - phi_goal) ) {
@@ -147,7 +144,7 @@ PetscErrorCode ParticleLS_AttractParticleToPhiGoal( ParticleLS pls, LevelSet ls,
   } // for l
   // if max iterations reached, particle may not have settled in appropriate band
   if( l == pls->L_MAX ) {
-    phi_X = Bilinear2D( GridFunction2D_Identity, phigrid, dh, p->X.x, p->X.y);
+    ierr = GridInterpolate( phi, X, &phi_X); CHKERRQ(ierr);
     p->radius = PetscSign(phi_X);
   }
   return 0;

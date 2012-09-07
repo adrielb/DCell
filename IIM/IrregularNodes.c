@@ -1,49 +1,80 @@
 #include "ImmersedInterfaceMethod.h"
 #include "IIM_private.h"
 
-PetscErrorCode IIMIrregularNodes( IIM iim, LevelSet ls );
-//#if 0
 #undef __FUNCT__
-#define __FUNCT__ "IIMIrregularNodes"
-PetscErrorCode IIMIrregularNodes( IIM iim, LevelSet ls )
+#define __FUNCT__ "IIMGridIntersections"
+PetscErrorCode IIMGridIntersections( IIM iim, const Grid g, const Coor p, const int axis )
 {
-  int i, j, k;
+  Coor X0, X1;
+  PetscReal *x0 = &((PetscReal*)&X0)[axis];
+  PetscReal *x1 = &((PetscReal*)&X1)[axis];
+  PetscReal v0, v1, x;
+  PetscReal dh = CoorGet( g->d, axis) / 10;
+  PetscReal q = CoorGet(g->aabb.hi,axis);
+  Coor root;
+  IIMIrregularNode *newnode;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  q += dh;
+  for ( X0 = p; *x0 < q; *x0 += dh ) {
+    X1 = X0;
+    *x1 += dh;
+    GridInterpolate( g, X0, &v0 );
+    GridInterpolate( g, X1, &v1 );
+    x = (v0*(*x1) - v1*(*x0)) / (v0 - v1);
+    if( x != x || x < *x0 || x >= *x1 ) continue;
+    root = X0;
+    CoorSet( &root, axis, x);
+    if( !AABBPointInBox( g->aabb, root) ) continue;
+    ierr = ArrayAppend(iim->irregularNodes, &newnode); CHKERRQ(ierr);
+    newnode->X = root;
+    ierr = SpatialIndexInsertPoint( iim->sidx, root, newnode ); CHKERRQ(ierr);
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "IIMUpdateIrregularNodes"
+PetscErrorCode IIMUpdateIrregularNodes( IIM iim, LevelSet ls )
+{
+  int i, j;
+  int axis;
   iCoor P,Q;
-  Coor pp;
-  PetscReal *p = (PetscReal*)&pp;
-  PetscReal p0[3], p1[3];
+  Coor p;
+  Coor p0, p1;
   const Coor   f = iim->f;
   const Coor  df = iim->df;
   const Grid phi = ls->phi;
   const int dims = phi->is2D ? 2 : 3;
   const int faces[3][2] = { {1,2}, {0,2}, {0,1} };
+  const AABB aabb = phi->aabb;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  ierr = SpatialIndexClear( iim->sidx ); CHKERRQ(ierr);
+  ierr = SpatialIndexSetDomain( iim->sidx, aabb.lo, aabb.hi, df ); CHKERRQ(ierr);
+
   CoorToIndex( f, df, phi->aabb.lo, &P );
-  IndexToCoor( f, df, P, (Coor*)&p0 );
+  IndexToCoor( f, df, P, &p0 );
   CoorToIndex( f, df, phi->aabb.hi, &Q );
   Q.x++;Q.y++;Q.z++;
-  IndexToCoor( f, df, Q, (Coor*)&p1 );
+  IndexToCoor( f, df, Q, &p1 );
 
-  for (k = 0; k < dims; ++k) {
-    i = faces[k][1];
-    j = faces[k][2];
-    p[0] = p0[0];
-    p[1] = p0[1];
-    p[2] = p0[2];
-    for ( p[j] = p0[j]; p[j] < p1[j]; p[j] += CoorGet( df, j) ) {
-      for ( p[i] = p0[i]; p[i] < p1[i]; p[i] += CoorGet( df, i) ) {
-        ierr = GridIntersections( phi, pp, k, iim->roots ); CHKERRQ(ierr);
+  for (axis = 0; axis < dims; ++axis) {
+    i = faces[axis][0];
+    j = faces[axis][1];
+    p = p0;
+    for (   CoorSet(&p,j, CoorGet(p0,j)); CoorGet(p,j) < CoorGet(p1,j); CoorSet(&p,j, CoorGet(p,j)+CoorGet(df,j)) ) {
+      for ( CoorSet(&p,i, CoorGet(p0,i)); CoorGet(p,i) < CoorGet(p1,i); CoorSet(&p,i, CoorGet(p,i)+CoorGet(df,i)) ) {
+        ierr = IIMGridIntersections( iim, phi, p, axis ); CHKERRQ(ierr);
       }
     }
   }
-
-//  ierr = SpatialIndexInsertPoint(iim->sidx, pt, ir ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
-//#endif
 
+#if 0
 #undef __FUNCT__
 #define __FUNCT__ "IIMIrregularNodes2"
 PetscErrorCode IIMIrregularNodes2( IIM iim, LevelSet ls, GA ga )
@@ -108,3 +139,4 @@ PetscErrorCode IIMIrregularNodes2( IIM iim, LevelSet ls, GA ga )
   ierr = PetscLogEventEnd(EVENT_IIMIrregularNodes,0,0,0,0); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
+#endif

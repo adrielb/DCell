@@ -6,7 +6,7 @@
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMLaplaceCorrection"
-PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
+PetscErrorCode IIMLaplaceCorrection( IIM iim, IIMIrregularNode *n, Jump j )
 {
   const PetscReal dh = ((PetscReal*)&iim->df.x)[n->axis];
   const PetscReal dd = dh*dh;
@@ -50,7 +50,7 @@ PetscErrorCode IIMLaplaceCorrection( IIM iim, IrregularNode *n, Jump j )
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMVelocityGradientCorrection"
-PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j )
+PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IIMIrregularNode *n, Jump j )
 {
   PetscReal h;
   const int negone = -1; // Correction is subtracted on RHS
@@ -76,7 +76,7 @@ PetscErrorCode IIMVelocityGradientCorrection( IIM iim, IrregularNode *n, Jump j 
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMPressureGradientCorrection"
-PetscErrorCode IIMPressureGradientCorrection( IIM iim, IrregularNode *n, Jump j )
+PetscErrorCode IIMPressureGradientCorrection( IIM iim, IIMIrregularNode *n, Jump j )
 {
   PetscReal h;
   const PetscReal dh = ((PetscReal*)&iim->df.x)[n->axis];
@@ -149,7 +149,7 @@ PetscErrorCode IIMCorrection( IIM iim, iCoor x, Jump j, int axis, VelFace dof, i
 
 #endif
 
-void JumpPressure( IrregularNode *n, Jump *j )
+void JumpPressure( IIMIrregularNode *n, Jump *j )
 {
   j->j = n->f1; //#
   j->e = n->f2_n + n->f3_t; //#
@@ -166,7 +166,7 @@ void JumpPressure( IrregularNode *n, Jump *j )
   IIMLocalToGlobal_2nd( n, j );
 }
 
-void JumpVelocity( PetscReal mu, IrregularNode *n, Jump *j, int i )
+void JumpVelocity( PetscReal mu, IIMIrregularNode *n, Jump *j, int i )
 {
 //  PetscReal *ft = &n->ftx;
   PetscReal *e = &n->nx, *s = &n->sx, *r = &n->rx;

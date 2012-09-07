@@ -3,6 +3,7 @@
 PetscErrorCode Grid_MakeGrid( Grid g );
 PetscErrorCode Grid_RestoreGrid( Grid g );
 void Grid_CalcAABB( Grid g );
+PetscErrorCode GridInterpolate_Bilinear( Grid g, Coor X, PetscReal *val);
 
 #undef __FUNCT__
 #define __FUNCT__ "GridCreate"
@@ -13,14 +14,15 @@ PetscErrorCode GridCreate( Coor dh, iCoor pos, iCoor size, int dof, Grid *grid )
   
   PetscFunctionBegin;
   ierr = PetscNew( struct _Grid, &g); CHKERRQ(ierr);
-  g->d = dh;
+
   g->dof = dof;
   g->is2D = size.z < 2 ? PETSC_TRUE : PETSC_FALSE; //TODO: alert user that for z < 2, will create a 2D grid
 
   ierr = GridResize( g, pos, size ); CHKERRQ(ierr);
+  ierr = GridSetDx(  g, dh); CHKERRQ(ierr);
   ierr = PetscStrcpy(g->name,"grid"); CHKERRQ(ierr);
   
-  g->Interpolate = g->is2D ? GridInterpolate2D : GridInterpolate3D;
+  g->Interpolate = GridInterpolate_Bilinear;
 
   *grid = g;
   
@@ -157,6 +159,7 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
 
 PetscErrorCode GridSetDx( Grid g, Coor d )
 {
+  if( g->is2D ) d.z = 1;
   g->d = d;
   Grid_CalcAABB( g );
   return  0;
@@ -200,72 +203,6 @@ PetscErrorCode GridGetBounds( Grid g, iCoor *p, iCoor *q )
   *p = g->p;
   *q = g->q;
   return 0;
-}
-
-double Bilinear2D( GridFunction2D gf, PetscReal **v2, Coor dh, double x, double y)
-{
-  int k,l;
-  PetscReal xb, yb, sum = 0.;
-  PetscInt xi = (int)floor(x);
-  PetscInt yi = (int)floor(y);
-  PetscReal xf = ( 2. * ( x - xi ) - 1. );
-  PetscReal yf = ( 2. * ( y - yi ) - 1. );
-  
-  for( k = 0; k < 2; ++k)
-  {
-    for( l = 0; l < 2; ++l)
-    {
-      xb = 1. + (2. * k - 1.) * xf;
-      yb = 1. + (2. * l - 1.) * yf;
-      sum += gf( v2, xi+k, yi+l, dh ) * xb * yb;
-    }
-  }
-  
-  sum /= 4.;
-  
-  return sum;
-}
-
-inline double GridFunction2D_Identity( PetscReal **p, int i, int j, Coor d)
-{
-  return p[j][i];
-}
-
-inline double GridFunction2D_DerivX( PetscReal **p, int i, int j, Coor d)
-{
-  return (p[j][i+1]-p[j][i-1]) / (2. * d.x);
-}
-
-inline double GridFunction2D_DerivY( PetscReal **p, int i, int j, Coor d)
-{
-  return (p[j+1][i]-p[j-1][i]) / (2. * d.y);
-}
-/*Ex usage:
- *px = Bilinear2D( GridFunction2D_DerivX, ls->g2d, ox, oy ); 
- */
-inline double GridFunction2D_Curv( double **p, int i, int j, Coor d )
-{
-  double px, py, px2, py2, pxx, pyy, pxy, k;
-  px = (p[j][i+1]-p[j][i-1]) / (2. * d.x);
-  py = (p[j+1][i]-p[j-1][i]) / (2. * d.y);
-  px2 = px * px;
-  py2 = py * py;
-  pxx = (p[j][i-1] - 2.*p[j][i] + p[j][i+1]) / (d.x*d.x);
-  pyy = (p[j-1][i] - 2.*p[j][i] + p[j+1][i]) / (d.y*d.y);
-  pxy = (p[j-1][i-1] + p[j+1][i+1] - p[j+1][i-1] - p[j-1][i+1]) / (4.*d.x*d.y);
-  k   = (pxx*py2 - 2.*px*py*pxy + pyy*px2) / sqrt((px2+py2)*(px2+py2)*(px2+py2));
-/*
-  const double TOL = 1e-1;
-  const double mag = sqrt(px2+py2);
-  if( PetscAbs(px/mag) < TOL || PetscAbs(py/mag) < TOL)
-    k = 0;
-*/
-  if( k != k ) {
-    //TODO: what to do when curvature is NaN? why?
-    PetscInfo5(0,"Curvature NaN: px = %f, py = %f, pxx = %f, pyy = %f, pxy = %f\n",px,py,pxx,pyy,pxy);
-    k = 0;
-  }
-  return k;
 }
 
 #undef __FUNCT__
@@ -433,18 +370,22 @@ PetscErrorCode GridInterpolate3D( Grid g, Coor X, PetscReal *val)
 }
 
 #undef __FUNCT__
-#define __FUNCT__ "GridInterpolate2"
-PetscErrorCode GridInterpolate2( Grid g, Coor X, PetscReal *val)
+#define __FUNCT__ "GridInterpolate_Bilinear"
+PetscErrorCode GridInterpolate_Bilinear( Grid g, Coor X, PetscReal *val)
 {
   int i,j,k;
   Coor s;   //
   iCoor S;  // lo of cell containing X
   iCoor Si; // Si = S + {0,1}
-  PetscReal ***field=0;
+  PetscReal    field  =0;
+  PetscReal  **field2D=0;
+  PetscReal ***field3D=0;
+  const PetscBool is2D = g->is2D;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = GridGet(g,&field); CHKERRQ(ierr);
+  ierr = GridGet(g,&field2D); CHKERRQ(ierr);
+  ierr = GridGet(g,&field3D); CHKERRQ(ierr);
   CoorToIndex2(g->aabb.lo, g->d, X, &S, &s);
 
   s.x = s.x - S.x;
@@ -470,9 +411,11 @@ PetscErrorCode GridInterpolate2( Grid g, Coor X, PetscReal *val)
         if( Si.y >= g->q.y ) Si.y = g->q.y - 1;
         if( Si.z >= g->q.z ) Si.z = g->q.z - 1;
 
+        field = is2D ? field2D[Si.y][Si.x] : field3D[Si.z][Si.y][Si.x];
+
         *val += ( (1-i) * (1-s.x) + i * s.x) *
                 ( (1-j) * (1-s.y) + j * s.y) *
-                ( (1-k) * (1-s.z) + k * s.z) * field[Si.z][Si.y][Si.x];
+                ( (1-k) * (1-s.z) + k * s.z) * field;
       }
     }
   }
@@ -490,40 +433,6 @@ PetscErrorCode GridCopy( Grid g, Grid copy )
   ierr = VecCopy(g->v,copy->v); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
-
-#undef __FUNCT__
-#define __FUNCT__ "GridIntersections"
-PetscErrorCode GridIntersections( const Grid g, const Coor p, const int axis, const Array roots )
-{
-  int i;
-  Coor X;
-  iCoor P, Q, O;
-  PetscReal v0, v1, x;
-  Coor root;
-  Coor *newroot;
-  PetscErrorCode ierr;
-
-  PetscFunctionBegin;
-  CoorToIndex2(g->aabb.lo, g->d, p, &O, &X);
-  GridGetBounds(g, &P, &Q);
-  for (i = iCoorGet(P,axis); i < iCoorGet(Q,axis) - 1; ++i) {
-    CoorSet(&X, axis, i);
-    GridInterpolate( g, X, &v0 );
-    CoorSet(&X, axis, i+1);
-    GridInterpolate( g, X, &v1 );
-    x = v0 / (v0 - v1);
-    if( x != x || x < 0.0 || x >= 1.0 ) continue;
-    root = X;
-    x = CoorGet( root, axis) + x - 1;
-    CoorSet( &root, axis, x);
-    GridIndexToCoor( g, root, &root);
-    if( !AABBPointInBox( g->aabb, root) ) continue;
-    ierr = ArrayAppend(roots, &newroot); CHKERRQ(ierr);
-    *newroot = root;
-  }
-  PetscFunctionReturn(0);
-}
-
 
 inline PetscBool GridIndexInBox( Grid g, iCoor a )
 {

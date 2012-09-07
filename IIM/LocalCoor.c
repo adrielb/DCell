@@ -35,7 +35,7 @@ void LocalCoorSetLength( LocalCoor lc, PetscInt len)
   ArraySetSize(lc->coor, len);
 }
 
-void LocalCoor3DTangential( IrregularNode *n )
+void LocalCoor3DTangential( IIMIrregularNode *n )
 {
   PetscReal h;
 
@@ -66,7 +66,7 @@ void LocalCoor3DTangential( IrregularNode *n )
   n->rz /= h;
 }
 
-void LocalCoorSolve( LocalCoor lc, Coor dh, IrregularNode *N, IrregularNode *nodes[] )
+void LocalCoorSolve( LocalCoor lc, Coor dh, IIMIrregularNode *N, IIMIrregularNode *nodes[] )
 {
   int i;
   PetscReal x, y, z;

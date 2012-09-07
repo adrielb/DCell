@@ -2,6 +2,7 @@
 #include "LevelSetMethod.h"
 #include "LSM_private.h"
 
+inline void FMM_Derivative( const PetscReal bw, const PetscReal *p, PetscReal *a, PetscReal *b, PetscReal *c, PetscReal *D );
 inline void FMM_Derivative( const PetscReal bw, const PetscReal *p, PetscReal *a, PetscReal *b, PetscReal *c, PetscReal *D )
 {
   const PetscReal D2 = (3.*p[0] - 4.*p[1] + p[2]) / 2.;

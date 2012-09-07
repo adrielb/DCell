@@ -1,7 +1,7 @@
 #include "ImmersedInterfaceMethod.h"
 
-void InterfacialForceAdhesion( IrregularNode *n, void *context );
-void InterfacialForceCurvature( IrregularNode *n, void *context );
+void InterfacialForceAdhesion( IIMIrregularNode *n, void *context );
+void InterfacialForceCurvature( IIMIrregularNode *n, void *context );
 
 #undef __FUNCT__
 #define __FUNCT__ "main"
@@ -23,9 +23,8 @@ int main(int argc, char **args)
 
   PetscBool is2D = dh.z == 0.0;
   IIM iim;
-  int Np = 32;
-  ierr = IIMCreate( is2D, Np, dh, &iim); CHKERRQ(ierr);
-  ierr = IIMSetForceComponents(iim,InterfacialForceCurvature); CHKERRQ(ierr);
+  ierr = IIMCreate( is2D, &iim); CHKERRQ(ierr);
+  ierr = IIMSetForceComponents(iim, InterfacialForceCurvature); CHKERRQ(ierr);
   ierr = IIMSetForceContext(iim, &dx); CHKERRQ(ierr);
 
   ierr = IIMUpdateSurfaceQuantities( iim, ls); CHKERRQ(ierr);
@@ -40,14 +39,14 @@ int main(int argc, char **args)
   PetscFunctionReturn(0);
 }
 
-void InterfacialForceAdhesion( IrregularNode *n, void *context )
+void InterfacialForceAdhesion( IIMIrregularNode *n, void *context )
 {
   const int gx = 0, gy = -1;
   n->F1 = n->nx * gx + n->ny * gy;
   n->F2 = -n->ny * gx + n->nx * gy;
 }
 
-void InterfacialForceCurvature( IrregularNode *n, void *context )
+void InterfacialForceCurvature( IIMIrregularNode *n, void *context )
 {
   PetscReal dx = *(PetscReal*)context;
   n->F1 = n->X.y * dx;

@@ -25,32 +25,12 @@ struct _LevelSet {
   PetscErrorCode (*Advect)(LevelSet ls, Grid velgrid, PetscReal dt);
 };
 
-//TODO: separate node coordinates from implementation dependent nodal quantities
 typedef struct _IrregularNode IrregularNode;
 struct _IrregularNode {
-  iCoor pos;   //Node index in the grid
-  int axis;       // 0: x-axis, 1: y-axis, 2: z-axis, -1: no axis
-  VelFace shift;    //Irregnodes parallel to cell face U, V or W;
-  int signCenter;  //sign of phi at pos
-  int signFace;    //sign of phi at (pos-1)----|----pos
-  int GAP; // TODO: hack, 4-byte gap so that bytes align in both 32 and 64-bit word boundaries
-  // Coor o, n, s, r;
-//  PetscReal ox, oy, oz; //Stencil intersection (similar to 'd' and 'axis') [may remove since redundant]
-  PetscReal nx, ny, nz;//Normal direction
-  PetscReal sx, sy, sz;//Tangential direction
-  PetscReal rx, ry, rz;//Tangential direction (zero in 2D)
-  PetscReal d;        //distance from central node
-  PetscReal k;        //Curvature in 2D or 3D
-  PetscReal k_nn, k_tt, k_nt;  // Principal Curvatures (k_nn used in 2D)
-  PetscReal F1, f1, f1_n, f1_t, f1_nn, f1_tt, f1_nt; // the normal force
-  PetscReal F2, f2, f2_n, f2_t, f2_nn, f2_tt, f2_nt; // the tangential force in local coor
-  PetscReal F3, f3, f3_n, f3_t, f3_nn, f3_tt, f3_nt;
-  PetscReal ftx, fty, ftz;   // tangential force in global coor
-  PetscReal fa1, fa2; // Force of adhesion (in normal/tangential direction)
-  Coor X;   // X.x = x + ox + shift.x/2  (absolute position in space)
-  Coor op;  //Ortho proj relative to node location
-  int numNei;
-  PetscReal uj; // jump in velocity;
+  iCoor pos; // Node index in the grid
+  Coor X;    // absolute position in space
+  Coor op;   // Ortho proj relative to node location
+  int sign;
 };
 
 /* Level Set */
@@ -62,8 +42,8 @@ PetscErrorCode LevelSetResize( LevelSet ls);
 PetscErrorCode LevelSetUpdateIrregularNodeList( LevelSet ls );
 PetscErrorCode LevelSetWriteIrregularNodeList( LevelSet ls, int idx );
 PetscErrorCode LevelSetNormalDirection( LevelSet ls, Coor X, Coor *n );
-inline PetscReal LevelSetDiracDelta2D( PetscReal **phi, const Coor dh, const Coor X );
-inline PetscReal LevelSetDiracDelta3D( PetscReal ***phi, const Coor dh, const Coor X );
+inline PetscReal LevelSetDiracDelta2D( Grid phi, const Coor X );
+inline PetscReal LevelSetDiracDelta3D( Grid phi, const Coor X );
 
 PetscErrorCode LevelSetAdvect( LevelSet ls, int ga, PetscReal dt );
 PetscErrorCode LevelSetAdvectSL(LevelSet ls, Grid velgrid, PetscReal dt);

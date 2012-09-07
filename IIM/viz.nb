@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[     83211,       2467]*)
-(*NotebookOutlinePosition[     83890,       2491]*)
-(*  CellTagsIndexPosition[     83846,       2487]*)
+(*NotebookOptionsPosition[     82820,       2453]*)
+(*NotebookOutlinePosition[     83499,       2477]*)
+(*  CellTagsIndexPosition[     83455,       2473]*)
 (*WindowFrame->Normal*)
 
 
@@ -2372,39 +2372,28 @@ Cell[BoxData[
     \(FileNames[]\)], "Input"],
 
 Cell[BoxData[
-    \({"grid.10000.Real64", "grid.10000.Real64.info", "grid.pos", 
-      "grid.size", "params.txt", "roots.10000.array"}\)], "Output"]
+    \({"params.txt", "phi.10000.Real64", "phi.10000.Real64.info", 
+      "phi.irregNode.10000.array", "phi.irregNode.10000.array.info", 
+      "phi.pos", "phi.size"}\)], "Output"]
 }, Open  ]],
-
-Cell[CellGroupData[{
 
 Cell[BoxData[{
     \(clear\), "\n", 
-    \(\(dat = Import["\<roots.10000.array\>", "\<Real64\>"];\)\), "\n", 
-    \(\(dat = Partition[dat, 3];\)\), "\n", 
-    \(\(pts = dat[\([All, {1, 2}]\)];\)\), "\[IndentingNewLine]", 
-    \(Length[dat]\), "\[IndentingNewLine]", 
-    \(\(phi = ImportGrid["\<grid\>"];\)\), "\n", 
-    \(\(phi = phi[\([1, 1]\)];\)\), "\[IndentingNewLine]", 
-    \(\(ListPlot[pts, PlotRange \[Rule] {{\(-0.1\), 4}, {\(-0.1\), 4}}, 
-        AspectRatio \[Rule] Automatic];\)\)}], "Input"],
-
-Cell[BoxData[
-    \(38\)], "Output"]
-}, Open  ]],
-
-Cell[BoxData[
-    \(\(ListPlot[pts, PlotRange \[Rule] All, 
-        AspectRatio \[Rule] Automatic];\)\)], "Input"],
+    \(\(ImportIrreg["\<phi.irregNode.10000.array\>"];\)\), "\
+\[IndentingNewLine]", 
+    \(\(ListPlot[ir`X, PlotRange \[Rule] {{\(-0.1\), 4}, {\(-0.1\), 4}}, 
+        AspectRatio \[Rule] Automatic];\)\), "\[IndentingNewLine]", 
+    \(\(phi = ImportGrid["\<phi\>"];\)\), "\n", 
+    \(\(phi = phi[\([\)\(1, 1\)\(]\)];\)\)}], "Input"],
 
 Cell[BoxData[{
     \(\(f = 
-        ListInterpolation[phi, {{0, 4}, {0, 4}}, 
+        ListInterpolation[phi, {{0, 1.5}, {0, 1.5}}, 
           InterpolationOrder \[Rule] 1];\)\), "\[IndentingNewLine]", 
-    \(\(ContourPlot[f[x, y], {y, 0, 4}, {x, 0, 4}, Contours \[Rule] {0}, 
+    \(\(ContourPlot[f[x, y], {y, 0, 1}, {x, 0, 1}, Contours \[Rule] {0}, 
         ContourShading \[Rule] None, 
         Epilog \[Rule] {Green, \(Point[# + 0.01  rnd] &\) /@ 
-              pts}];\)\)}], "Input"],
+              ir`X}];\)\)}], "Input"],
 
 Cell[CellGroupData[{
 
@@ -2414,7 +2403,7 @@ Cell[BoxData[
 Cell[BoxData[
     TagBox[
       RowBox[{"(", "\[NoBreak]", GridBox[{
-            {"0.05`", "0.5`", "1.`"},
+            {"0.05`", "0.1`", "1.`"},
             {"1.`", \(-1.`\), "1.`"},
             {"1.`", "1.`", "15.`"}
             },
@@ -2430,33 +2419,30 @@ Cell[BoxData[
 
 Cell[BoxData[{
     \(\(clear;\)\), "\n", 
-    \(f = {\(-0.1\), \(-0.1\), 0}; \), "\n", 
+    \(\(f = {\(-0.1\), \(-0.1\), 0};\)\), "\n", 
     \(\(df = {0.06, 0.06, 1};\)\), "\n", 
     \(\(dg = {0.5, 0.5};\)\), "\[IndentingNewLine]", 
-    \(\(l1 = \(Line[{{f[\([\)\(1\)\(]\)] + #*
-                      df[\([\)\(1\)\(]\)], \(-1.0\)}, {f[\([\)\(1\)\(]\)] + #*
-                      df[\([\)\(1\)\(]\)], 10.0}}] &\) /@ 
-          Range[0, 200];\)\), "\n", 
-    \(\(l2 = \(Line[{{\(-10\), 
-                  f[\([\)\(2\)\(]\)] + #*df[\([\)\(2\)\(]\)]}, {10, 
-                  f[\([\)\(2\)\(]\)] + #*df[\([\)\(2\)\(]\)]}}] &\) /@ 
+    \(\(l1 = \(Line[{{f[\([1]\)] + #*df[\([1]\)], \(-1.0\)}, {f[\([1]\)] + #*
+                      df[\([1]\)], 10.0}}] &\) /@ Range[0, 200];\)\), "\n", 
+    \(\(l2 = \(Line[{{\(-10\), f[\([2]\)] + #*df[\([2]\)]}, {10, 
+                  f[\([2]\)] + #*df[\([2]\)]}}] &\) /@ 
           Range[0, 100];\)\), "\n", 
     \(\(lg = \({Line[{{#  dg[\([1]\)], \(-100\)}, {#  dg[\([1]\)], 100}}], 
               Line[{{\(-100\), #  dg[\([2]\)]}, {100, #  dg[\([2]\)]}}]} &\) /@ 
           Range[0, Max@Dimensions[phi]];\)\), "\[IndentingNewLine]", 
     \(\(pg = 
         Table[Point[dg {i, j}], {i, 0, Length[phi] - 1}, {j, 0, 
-            Length[phi[\([\)\(1\)\(]\)]] - 1}];\)\), "\[IndentingNewLine]", 
+            Length[phi[\([1]\)]] - 1}];\)\), "\[IndentingNewLine]", 
     \(\(func = 
-        ListInterpolation[phi, {{0, 1}, {0, 1}}, 
+        ListInterpolation[phi, {{0, 1.5}, {0, 1.5}}, 
           InterpolationOrder \[Rule] 1];\)\), "\n", 
     \(\(rng = Quantile[Flatten[phi], {0, 1}];\)\), "\n", 
-    \(\(DensityPlot[func[x, y], {y, 0, 1}, {x, 0, 1}, 
-        PlotRange \[Rule] {{\(-0.1\), 1.1}, {\(-0.1\), 1.1}, All}, 
+    \(\(DensityPlot[func[x, y], {y, 0, 1.5}, {x, 0, 1.5}, 
+        PlotRange \[Rule] {{\(-0.1\), 1.6}, {\(-0.1\), 1.6}, All}, 
         PlotPoints \[Rule] 300, 
         Epilog \[Rule] {Thickness[0.01], Cyan, lg, Black, PointSize[0.05], 
             pg, Thickness[0.001], Blue, 
-            PointSize[0.01], \(Point[# + 0.01  rnd] &\) /@ pts, l1, l2}, 
+            PointSize[0.01], \(Point[# + 0.0  rnd] &\) /@ ir`X, l1, l2}, 
         ColorFunctionScaling \[Rule] 
           False, \[IndentingNewLine]ColorFunction \[Rule] \((If[# < 
                   0, \[IndentingNewLine]RGBColor[1, 
@@ -3136,22 +3122,17 @@ Cell[79455, 2366, 32, 0, 44, "Section"],
 
 Cell[CellGroupData[{
 Cell[79512, 2370, 44, 1, 27, "Input"],
-Cell[79559, 2373, 148, 2, 26, "Output"]
+Cell[79559, 2373, 193, 3, 26, "Output"]
 }, Open  ]],
+Cell[79767, 2379, 368, 7, 91, "Input"],
+Cell[80138, 2388, 363, 7, 43, "Input"],
 
 Cell[CellGroupData[{
-Cell[79744, 2380, 505, 9, 139, "Input"],
-Cell[80252, 2391, 36, 1, 26, "Output"]
+Cell[80526, 2399, 48, 1, 27, "Input"],
+Cell[80577, 2402, 382, 11, 68, "Output"]
 }, Open  ]],
-Cell[80303, 2395, 114, 2, 27, "Input"],
-Cell[80420, 2399, 358, 7, 43, "Input"],
-
-Cell[CellGroupData[{
-Cell[80803, 2410, 48, 1, 27, "Input"],
-Cell[80854, 2413, 382, 11, 68, "Output"]
-}, Open  ]],
-Cell[81251, 2427, 66, 1, 27, "Input"],
-Cell[81320, 2430, 1875, 34, 338, "Input"]
+Cell[80974, 2416, 66, 1, 27, "Input"],
+Cell[81043, 2419, 1761, 31, 338, "Input"]
 }, Open  ]]
 }
 ]

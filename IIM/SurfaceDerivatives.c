@@ -1,14 +1,14 @@
 #include "ImmersedInterfaceMethod.h"
 #include "IIM_private.h"
 
-void RemoveDuplicates( int *len, IrregularNode *nodes[] ) ;
+void RemoveDuplicates( int *len, IIMIrregularNode *nodes[] ) ;
 
 #undef __FUNCT__
 #define __FUNCT__ "IIMUpdateSurfaceDerivatives_2D"
 PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
 {
   int len, j;
-  IrregularNode *n, *nodes[iim->Np];
+  IIMIrregularNode *n, *nodes[iim->Np];
   PetscReal *eta, *xi;    // Local Coordinates in iim->lc
   PetscReal *s, *g;       // Arc length and surface quantity in lsq
   PetscErrorCode ierr;
@@ -63,7 +63,7 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
 PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
 {
   int len, i, j;
-  IrregularNode *n, *nodes[iim->Np];
+  IIMIrregularNode *n, *nodes[iim->Np];
   PetscReal *f1, *f2, *f3;
   PetscReal *s,  *r,  *g;
   PetscReal *ss, *rr, *nn;
@@ -119,7 +119,7 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
   PetscFunctionReturn(0);
 }
 
-void RemoveDuplicates( int *len, IrregularNode *nodes[] ) {
+void RemoveDuplicates( int *len, IIMIrregularNode *nodes[] ) {
   int i,j;
   Coor d;
   const PetscReal tol = 1e-4;

@@ -6,7 +6,7 @@ include $(addsuffix /module.mk,$(MODULES))
 all: test
 
 SIM := NanoGrooves
-test: testIIM-irregnodes
+test: testIIM-surfquant
 viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}

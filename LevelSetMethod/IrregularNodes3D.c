@@ -11,7 +11,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
   int m;
   const int numNei = 6;
   IrregularNode *n;
-  PetscReal ***phi, phiHI, phiLO;
+  PetscReal ***phi;
   PetscReal  sten[3][3][3];
   PetscReal local[5][5][5];
   int b;
@@ -56,9 +56,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
         ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
         OrthogonalProjection3D( sten, local, &n->op);
         n->pos = band[b];
-        n->axis  = -1; // no-axis
-        n->shift = -1;
-        n->signCenter = sten[1][1][1] > 0. ? 1 : -1;
+        n->sign = sten[1][1][1] > 0. ? 1 : -1;
         n->X.x = n->pos.x + n->op.x;
         n->X.y = n->pos.y + n->op.y;
         n->X.z = n->pos.z + n->op.z;
@@ -66,52 +64,6 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_3D( LevelSet ls )
       }
     }
 
-    // Add IIM irregular grid point
-    // Cell-centered gradients
-    for( m = U_FACE; m <= W_FACE; ++m)
-    {
-      ni = 1 + STAGGERED_GRID[m].x;
-      nj = 1 + STAGGERED_GRID[m].y;
-      nk = 1 + STAGGERED_GRID[m].z;
-      if( sten[1][1][1] * sten[nk][nj][ni] <= 0. )
-      {
-        ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
-        n->d = sten[1][1][1] / (sten[1][1][1] - sten[nk][nj][ni]);
-        n->signCenter = sten[1][1][1] > 0. ? 1 : -1;
-        n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
-        n->pos = band[b];
-        n->shift = CELL_CENTER;
-        n->axis  = m-U_FACE; // assuming U_FACE == 1, x-axis is 0, y-axis is 1
-        n->X.x = n->pos.x + n->d * STAGGERED_GRID[m].x;
-        n->X.y = n->pos.y + n->d * STAGGERED_GRID[m].y;
-        n->X.z = n->pos.z + n->d * STAGGERED_GRID[m].z;
-      } // if irreg
-    } // for m in {U_FACE,V_FACE,W_FACE}
-
-    VelFace face, axis;
-    for (face = U_FACE; face <= W_FACE; ++face) {
-      iCoor g = STAGGERED_GRID[face];
-      phiHI = ( sten[1+g.z][1+g.y][1+g.x] + sten[1][1][1] ) / 2.;
-      for (axis = U_FACE; axis <= W_FACE; ++axis) {
-        if( face == axis ) continue;
-        iCoor lo = STAGGERED_GRID[axis];
-        phiLO = ( sten[1+g.z+lo.z][1+g.y+lo.y][1+g.x+lo.x] + sten[1+lo.z][1+lo.y][1+lo.x] ) / 2.;
-        if( phiHI * phiLO <= 0. )
-        {
-          ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
-          n->d = phiHI / (phiHI - phiLO);
-          if( n->d != n->d ) n->d = 0;
-          n->signCenter = phiHI > 0. ? 1 : -1;
-          n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
-          n->pos = band[b];
-          n->shift = face;
-          n->axis  = axis - U_FACE;
-          n->X.x = n->pos.x + STAGGERED_GRID[face].x / 2. + n->d * STAGGERED_GRID[axis].x;
-          n->X.y = n->pos.y + STAGGERED_GRID[face].y / 2. + n->d * STAGGERED_GRID[axis].y;
-          n->X.z = n->pos.z + STAGGERED_GRID[face].z / 2. + n->d * STAGGERED_GRID[axis].z;
-        } // if irreg
-      } // axis
-    } // face
   } // for b in band
   PetscFunctionReturn(0);
 }

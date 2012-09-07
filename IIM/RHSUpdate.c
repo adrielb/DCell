@@ -6,7 +6,7 @@
 PetscErrorCode IIMUpdateRHS( IIM iim, LevelSet ls, int ga )
 {
   int i;
-  IrregularNode *node;
+  IIMIrregularNode *node;
   int len = ArrayLength(ls->irregularNodes);
   Jump jump;
   PetscErrorCode ierr;

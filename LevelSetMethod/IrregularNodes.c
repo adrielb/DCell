@@ -35,7 +35,7 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
   const int numNei = 4;
   const int nei[][2] = {{1,0},{-1,0},{0,-1},{0,1}};
   IrregularNode *n;
-  PetscReal **phi, phiHI, phiLO;
+  PetscReal **phi;
   PetscReal sten[3][3];
   PetscReal local[5][5];
   iCoor *band;
@@ -58,9 +58,9 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
     } // for local 5x5 stencil
 
     // Cell-centered Irregular Node
-    for( J = -1; J < 2; ++J)
+    for( J = -1; J <= 1; ++J)
     {
-      for( I = -1; I < 2; ++I)
+      for( I = -1; I <= 1; ++I)
       {
         sten[J+1][I+1] = phi[J+j][I+i];
       }
@@ -76,66 +76,13 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
         ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
         OrthogonalProjection2D( sten, local, &n->op);
         n->pos = *band;
-        n->axis  = -1; // no-axis
-        n->shift = -1;
-        n->signCenter = sten[1][1] > 0. ? 1 : -1;
+        n->sign = sten[1][1] > 0. ? 1 : -1;
         n->X.x = n->pos.x + n->op.x;
         n->X.y = n->pos.y + n->op.y;
         break;
       }
     }
 
-    // Add IIM irregular grid point
-    // Cell-centered gradients
-    for( k = U_FACE; k <= V_FACE; ++k)
-    {
-      ni = 1 + STAGGERED_GRID[k].x;
-      nj = 1 + STAGGERED_GRID[k].y;
-      if( sten[1][1] * sten[nj][ni] <= 0. )
-      {
-        ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
-        n->d = sten[1][1] / (sten[1][1] - sten[nj][ni]);
-        n->signCenter = sten[1][1] > 0. ? 1 : -1;
-        n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
-        n->pos = *band;
-        n->shift = CELL_CENTER;
-        n->axis  = k-U_FACE; // assuming U_FACE == 1, x-axis is 0, y-axis is 1
-        n->X.x = n->pos.x + n->d * STAGGERED_GRID[k].x;
-        n->X.y = n->pos.y + n->d * STAGGERED_GRID[k].y;
-      } // if irreg
-    } // for k in {U_FACE,V_FACE}
-
-    // U-Velocity Laplacian
-    phiHI = ( sten[1][0] + sten[1][1] ) / 2.;
-    phiLO = ( sten[0][0] + sten[0][1] ) / 2.;
-    if( phiHI * phiLO <= 0. )
-    {
-      ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
-      n->d = phiHI / (phiHI - phiLO);
-      n->signCenter = phiHI > 0. ? 1 : -1;
-      n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
-      n->pos = *band;
-      n->shift = U_FACE;
-      n->axis  = V_FACE-U_FACE; // y-axis == 1
-      n->X.x = n->pos.x + STAGGERED_GRID[U_FACE].x / 2.;
-      n->X.y = n->pos.y + STAGGERED_GRID[U_FACE].y / 2. - n->d;
-    } // if irreg
-
-    // V-Velicty Laplacian
-    phiHI = ( sten[0][1] + sten[1][1] ) / 2.;
-    phiLO = ( sten[0][0] + sten[1][0] ) / 2.;
-    if( phiHI * phiLO <= 0. )
-    {
-      ierr = ArrayAppend( ls->irregularNodes, &n ); CHKERRQ(ierr);
-      n->d = phiHI / (phiHI - phiLO);
-      n->signCenter = phiHI > 0. ? 1 : -1;
-      n->signFace = n->d < 0.5 ? -n->signCenter : n->signCenter;
-      n->pos = *band;
-      n->shift = V_FACE;
-      n->axis  = U_FACE-U_FACE; // x-axis == 0
-      n->X.x = n->pos.x + STAGGERED_GRID[V_FACE].x / 2. - n->d;
-      n->X.y = n->pos.y + STAGGERED_GRID[V_FACE].y / 2.;
-    } // if irreg
   } // for b in band
   PetscFunctionReturn(0);
 }
@@ -144,29 +91,24 @@ PetscErrorCode LevelSetUpdateIrregularNodeList_2D( LevelSet ls )
 #define __FUNCT__ "LevelSetWriteIrregularNodeList_2D"
 PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscViewer viewer )
 {
-  int i,j;
-  int len = ArrayLength( irregularNodes );
-  const int rowlen = 11;
-  PetscReal row[rowlen]; // { X, Y, nv, nv, f1, f2, k, f1_n, f1_nn }
-  IrregularNode *node, *nodes = ArrayGetData( irregularNodes );
+  int i;
+  int rowlen;
+  const int len = ArrayLength( irregularNodes );
+  IrregularNode *nodes = ArrayGetData( irregularNodes );
+  IrregularNode *node;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   for ( i = 0; i < len; ++i) {
     node = &nodes[i];
-    if( node->axis == -1 ) continue;
-    j=0;
-    row[j++] = node->X.x;
-    row[j++] = node->X.y;
-    row[j++] = node->pos.x;
-    row[j++] = node->pos.y;
-    row[j++] = node->nx;
-    row[j++] = node->ny;
-    row[j++] = node->f1;
-    row[j++] = node->fa1;
-    row[j++] = node->k;
-    row[j++] = node->f1_n;
-    row[j++] = node->f1_nn;
+
+    PetscReal row[] = {
+        node->X.x,
+        node->X.y,
+        node->pos.x,
+        node->pos.y
+    };
+    rowlen = sizeof(row)/sizeof(PetscReal);
     ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
   }
   PetscFunctionReturn(0);
@@ -176,44 +118,26 @@ PetscErrorCode LevelSetWriteIrregularNodeList_2D( Array irregularNodes, PetscVie
 #define __FUNCT__ "LevelSetWriteIrregularNodeList_3D"
 PetscErrorCode LevelSetWriteIrregularNodeList_3D( Array irregularNodes, PetscViewer viewer )
 {
-  int i,j;
-  int len = ArrayLength( irregularNodes );
-  const int rowlen = 23;
-  PetscReal row[rowlen]; // { X, Y, Z, nv, nv, nv, k, f1 }
-  IrregularNode *node, *nodes = ArrayGetData( irregularNodes );
+  int i;
+  int rowlen;
+  const int len = ArrayLength( irregularNodes );
+  IrregularNode *nodes = ArrayGetData( irregularNodes );
+  IrregularNode *node;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   for ( i = 0; i < len; ++i) {
     node = &nodes[i];
-//    if( (node->shift == -1 && node->axis == -1) )
-    {
-      j=0;
-      row[j++] = node->X.x;    // 0
-      row[j++] = node->X.y;
-      row[j++] = node->X.z;
-      row[j++] = node->pos.x;  // 3
-      row[j++] = node->pos.y;
-      row[j++] = node->pos.z;
-      row[j++] = node->nx;     // 6
-      row[j++] = node->ny;
-      row[j++] = node->nz;
-      row[j++] = node->k;      // 9
-      row[j++] = node->f1;
-      row[j++] = node->f1_n;
-      row[j++] = node->f1_t;   //12
-      row[j++] = node->f1_nn;
-      row[j++] = node->f1_tt;
-      row[j++] = node->f1_nt;  //15
-      row[j++] = node->sx;     //16
-      row[j++] = node->sy;
-      row[j++] = node->sz;
-      row[j++] = node->rx;     //19
-      row[j++] = node->ry;
-      row[j++] = node->rz;     //21
-      row[j++] = node->numNei; //22
-      ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
-    }
+    PetscReal row[] = {
+        node->X.x,    // 0
+        node->X.y,
+        node->X.z,
+        node->pos.x,  // 3
+        node->pos.y,
+        node->pos.z
+    };
+    rowlen = sizeof(row)/sizeof(PetscReal);
+    ierr = PetscViewerBinaryWrite(viewer,row,rowlen,PETSC_DOUBLE,PETSC_TRUE); CHKERRQ(ierr);
   }
   PetscFunctionReturn(0);
 }

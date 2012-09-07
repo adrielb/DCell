@@ -17,7 +17,6 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   ierr = GridSetName(ls->phi0,"phi0"); CHKERRQ(ierr);
   ierr = GridCreate(dh,pos,size,1,&ls->tmp); CHKERRQ(ierr); // Use a global, shared buffer for all level sets
   ierr = GridSetName(ls->tmp,"tmp"); CHKERRQ(ierr);
-  //TODO: set band width, init mem sizes for band and heap, counts and thresholds as petsc options
   ls->CFLthres = 3;
   ls->CFLcount = 0;
   ls->AdvectCount = 0;
@@ -26,7 +25,6 @@ PetscErrorCode LevelSetCreate(Coor dh, iCoor pos, iCoor size, LevelSet *levelset
   ierr = PetscOptionsGetReal(0,"-ls_cflthres",&ls->CFLthres,0); CHKERRQ(ierr);
   ierr = PetscOptionsGetInt(0,"-ls_advectthres",&ls->AdvectThres,0); CHKERRQ(ierr);
   ierr = LevelSetSetBandWidth(ls, bandWidth); CHKERRQ(ierr);
-  // TODO: make a better estimate for initial sizes
   ierr = ArrayCreate( "irregularNodes", sizeof(IrregularNode), &ls->irregularNodes); CHKERRQ(ierr);
   ierr = ArrayCreate( "band", sizeof(iCoor), &ls->band); CHKERRQ(ierr);
 

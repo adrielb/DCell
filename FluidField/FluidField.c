@@ -29,9 +29,10 @@ PetscErrorCode FluidFieldCreate(MPI_Comm comm, FluidField *fluid)
   f->dh.x = dx;
   f->dh.y = dx;
   f->dh.z = dx;
+  f->origin = (Coor){0.0,0.0,0.0};
   
   nmax = 3;
-  CoorToIndex( (Coor){0,0,0}, f->dh, f->lens, &f->dims );
+  CoorToIndex( f->origin, f->dh, f->lens, &f->dims );
   ierr = PetscOptionsGetIntArray(0,"-fluid_dims", &f->dims.x, &nmax, 0); CHKERRQ(ierr);
 
   if( !f->is3D ) {

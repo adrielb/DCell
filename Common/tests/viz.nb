@@ -41,9 +41,9 @@ Wolfram Research.
 
 (*NotebookFileLineBreakTest
 NotebookFileLineBreakTest*)
-(*NotebookOptionsPosition[      3113,         92]*)
-(*NotebookOutlinePosition[      3771,        115]*)
-(*  CellTagsIndexPosition[      3727,        111]*)
+(*NotebookOptionsPosition[      4823,        171]*)
+(*NotebookOutlinePosition[      5481,        194]*)
+(*  CellTagsIndexPosition[      5437,        190]*)
 (*WindowFrame->Normal*)
 
 
@@ -88,6 +88,85 @@ Cell[BoxData[{
                             y1}}], Green, PointSize[0.01], 
                       Point /@ pts[\([All, {1, 2}]\)], 
                       Black}}]\[IndentingNewLine]] /@ dat;\)\)}], "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["interpolation", "Section"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(FileNames[]\)], "Input"],
+
+Cell[BoxData[
+    \({"grid.10000.Real64", "grid.10000.Real64.info", "grid.pos", 
+      "grid.size", "params.txt"}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+    \(clear\), "\[IndentingNewLine]", 
+    \(\({g, pos} = ImportGrid["\<grid\>"];\)\), "\[IndentingNewLine]", 
+    \(\(g = g[\([1]\)];\)\), "\[IndentingNewLine]", 
+    \(Dimensions[g]\), "\[IndentingNewLine]", 
+    \(\(ListDensityPlot[g];\)\)}], "Input"],
+
+Cell[BoxData[
+    \({59, 59}\)], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(g2 = 
+      ListContourPlot[g, Contours \[Rule] {0}, 
+        ContourStyle \[Rule] Blue]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  ContourGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Show[g1, g2]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  Graphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(ListPlot3D[g, Mesh \[Rule] False]\)], "Input"],
+
+Cell[BoxData[
+    TagBox[\(\[SkeletonIndicator]  SurfaceGraphics  \[SkeletonIndicator]\),
+      False,
+      Editable->False]], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(ListPlot[g[\([All, 24]\)]];\)\)], "Input"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+    \(Position[g, 1.0]\)], "Input"],
+
+Cell[BoxData[
+    \({{24, 37}}\)], "Output"]
+}, Open  ]],
+
+Cell[BoxData[
+    \(\(ListPlot[g[\([24]\)], Axes \[Rule] True, 
+        AxesOrigin \[Rule] {37, \(-1\)}];\)\)], "Input"]
 }, Open  ]]
 },
 FrontEndVersion->"5.2 for X",
@@ -126,6 +205,42 @@ Cell[CellGroupData[{
 Cell[2113, 68, 32, 0, 74, "Section"],
 Cell[2148, 70, 327, 6, 107, "Input"],
 Cell[2478, 78, 619, 11, 123, "Input"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3134, 94, 32, 0, 74, "Section"],
+
+Cell[CellGroupData[{
+Cell[3191, 98, 44, 1, 27, "Input"],
+Cell[3238, 101, 127, 2, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3402, 108, 269, 5, 91, "Input"],
+Cell[3674, 115, 42, 1, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[3753, 121, 121, 3, 27, "Input"],
+Cell[3877, 126, 137, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4051, 134, 45, 1, 27, "Input"],
+Cell[4099, 137, 130, 3, 26, "Output"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+Cell[4266, 145, 66, 1, 27, "Input"],
+Cell[4335, 148, 137, 3, 26, "Output"]
+}, Open  ]],
+Cell[4487, 154, 64, 1, 27, "Input"],
+
+Cell[CellGroupData[{
+Cell[4576, 159, 49, 1, 27, "Input"],
+Cell[4628, 162, 44, 1, 26, "Output"]
+}, Open  ]],
+Cell[4687, 166, 120, 2, 27, "Input"]
 }, Open  ]]
 }
 ]

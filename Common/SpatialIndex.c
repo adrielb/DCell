@@ -36,6 +36,7 @@ PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx )
   sprintf(tmp, "%s_%s", name, "spatialItems");
   ierr = MemCacheCreate( tmp, sizeof(struct _SpatialItem), chunksize, &s->items); CHKERRQ(ierr);
   ierr = ArrayCreate( "queriedItems", sizeof(void*), &s->queriedItems ); CHKERRQ(ierr);
+  ierr = SpatialIndexSetDomain( s, (Coor){0,0,0}, (Coor){1,1,1}, (Coor){1,1,1}); CHKERRQ(ierr);
   *sidx = s;
   PetscFunctionReturn(0);
 }
@@ -50,9 +51,10 @@ PetscErrorCode SpatialIndexSetDomain( SpatialIndex s, Coor lo, Coor hi, Coor dh 
   s->lo = lo;
   s->hi = hi;
   s->dh = dh;
-  s->numbins.x = (PetscInt)(( hi.x - lo.x ) / dh.x + 2);
-  s->numbins.y = (PetscInt)(( hi.y - lo.y ) / dh.y + 2);
-  s->numbins.z = (PetscInt)(( hi.z - lo.z ) / dh.z + 2);
+  CoorToIndex( lo, dh, hi, &s->numbins );
+  s->numbins.x += 2;
+  s->numbins.y += 2;
+  s->numbins.z += 2;
   s->a = (iCoor){-1,-1,-1};
   s->b.x = s->numbins.x - 2;
   s->b.y = s->numbins.y - 2;

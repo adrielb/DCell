@@ -59,23 +59,22 @@ PetscErrorCode FMM_InitializeEikonal( LevelSet ls, MemCache mc, Heap heap )
 //  Set the boundary condition for the fast marching method
   for( i = 0; i < len; i++ ) {
     n = &nodes[i];
-    if( n->axis != -1 ) continue;
+
     ierr = ArrayAppend(ls->band,&band); CHKERRQ(ierr);
     band->x = n->pos.x;
     band->y = n->pos.y;
     band->z = n->pos.z;
     if( is2D ) {
-      phi2D[n->pos.y][n->pos.x]          = n->signCenter * sqrt( PetscSqr(n->op.x) + PetscSqr(n->op.y) );
+      phi2D[n->pos.y][n->pos.x]          = n->sign * sqrt( PetscSqr(n->op.x) + PetscSqr(n->op.y) );
     } else {
-      phi3D[n->pos.z][n->pos.y][n->pos.x]= n->signCenter * sqrt( PetscSqr(n->op.x) + PetscSqr(n->op.y) + PetscSqr(n->op.z));
+      phi3D[n->pos.z][n->pos.y][n->pos.x]= n->sign * sqrt( PetscSqr(n->op.x) + PetscSqr(n->op.y) + PetscSqr(n->op.z));
     }
   }
 // Add neighbors of BC's to heap
   for ( sign = -1; sign <= 1; sign+=2) {
     for( i = 0; i < len; i++ ) {
       n = &nodes[i];
-       // if stencil node, skip it; (must be an ortho-proj node)
-      if( n->axis != -1 ) continue;
+
       if( is2D ) {
         if( sign*phi2D[n->pos.y][n->pos.x] >= 0. ) {
           ierr = FMM_PushNeighbors2D(ls, mc, heap, sign, n->pos); CHKERRQ(ierr);

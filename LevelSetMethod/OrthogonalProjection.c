@@ -9,7 +9,7 @@ PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor
   PetscReal distB, distQ, distL;
   PetscFunctionBegin;
   OrthogonalProjection2D_Bicubic( phi, &opB, &distB );
-//  OrthogonalProjection2D_Quadratic( phi3, &opQ, &distQ );
+  OrthogonalProjection2D_Quadratic( phi3, &opQ, &distQ );
   OrthogonalProjection2D_Linear( phi3, &opL, &distL );
 
   if( distB < distL ) {

@@ -22,7 +22,7 @@ PetscErrorCode DWorldCreate( FluidField fluid, DWorld *world )
   ierr = DCellsArrayCreate(&w->dcells); CHKERRQ(ierr);
   ierr = IIMCreate( !fluid->is3D, &w->iim); CHKERRQ(ierr);
   ierr = IIMSetViscosity(w->iim, fluid->mu); CHKERRQ(ierr);
-  ierr = IIMSetFluidSpacing( w->iim, fluid->dh ); CHKERRQ(ierr);
+  ierr = IIMSetFluidCoordinateSystem( w->iim, fluid->origin, fluid->dh ); CHKERRQ(ierr);
 
   w->fluid = fluid;
   w->timax = 1;

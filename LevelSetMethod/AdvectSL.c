@@ -46,7 +46,7 @@ PetscErrorCode LevelSetAdvectSL_2D(LevelSet ls, Grid velgrid, PetscReal dt)
     S.x = X.x - V.x * dt / dh.x;
     S.y = X.y - V.y * dt / dh.y;
     // Interpolate phi at projection
-    phi[band->y][band->x] = Bilinear2D(GridFunction2D_Identity,phi0,dh, S.x, S.y );
+    GridInterpolate( ls->phi0, S, &phi[band->y][band->x] );
   } // for b in band
   PetscFunctionReturn(0);
 }
@@ -81,8 +81,7 @@ PetscErrorCode LevelSetAdvectSL_3D(LevelSet ls, Grid velgrid, PetscReal dt)
     S.y = X.y - V.y * dt / dh.y;
     S.z = X.z - V.z * dt / dh.z;
 
-    phi[band[b].z][band[b].y][band[b].x] = Bilinear3D(GridFunction3D_Identity, phi0, dh, S );
-//    ierr = GridInterpolate(ls->phi0,S,&phi[band[b].z][band[b].y][band[b].x]); CHKERRQ(ierr);
+    ierr = GridInterpolate( ls->phi0, S, &phi[band[b].z][band[b].y][band[b].x]); CHKERRQ(ierr);
   } // for b in band
 
   PetscFunctionReturn(0);

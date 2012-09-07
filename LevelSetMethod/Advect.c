@@ -112,6 +112,7 @@ PetscErrorCode LevelSet_MaxVelocity( LevelSet ls, Grid velgrid )
 
 #undef __FUNCT__
 #define __FUNCT__ "LevelSetGetVelocityGA"
+PetscErrorCode LevelSetGetVelocityGA(LevelSet ls, int ga, Grid velgrid);
 PetscErrorCode LevelSetGetVelocityGA(LevelSet ls, int ga, Grid velgrid)
 {
   int lo[4],hi[4],ld[3] = {0,0,0};
