@@ -33,7 +33,7 @@ int main(int argc, char **args)
 
   ierr = IIMUpdateSurfaceQuantities( iim, ls); CHKERRQ(ierr);
 //  ierr = SpatialIndexPrint(iim->sidx); CHKERRQ(ierr);
-  ierr = IIMWriteIrregularNodeList( iim, "phi", 0); CHKERRQ(ierr);
+  ierr = IIMWriteIrregularNodeList( iim, (char*)"phi", 0); CHKERRQ(ierr);
   ierr = ArrayWrite( ls->band, 0); CHKERRQ(ierr);
 
   ierr = LevelSetDestroy(ls); CHKERRQ(ierr);
@@ -53,7 +53,7 @@ void InterfacialForceAdhesion( IIMIrregularNode *n, void *context )
 void InterfacialForceCurvature( IIMIrregularNode *n, void *context )
 {
   PetscReal dx = *(PetscReal*)context;
-  n->F1 = n->X.y * dx;
+  n->F1 = (n->X.y-2) * dx;
   n->F2 = 0;
   n->F3 = 0;
 }

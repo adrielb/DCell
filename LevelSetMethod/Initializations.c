@@ -36,8 +36,7 @@ PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radiu
   ierr = ArraySetSize(ls->irregularNodes,est); CHKERRQ(ierr);
   for (j = p.y; j < q.y; ++j) {
     for (i = p.x; i < q.x; ++i) {
-      X.x = i * dh.x;
-      X.y = j * dh.y;
+      GridIndexToCoor(ls->phi, p, &X);
       phi[j][i] = sqrt( PetscSqr(X.x - center.x) +
                         PetscSqr(X.y - center.y) ) - radius;
       if( -ls->PHI_INF < phi[j][i]/dh.x && phi[j][i]/dh.x < ls->PHI_INF ) {
