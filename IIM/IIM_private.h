@@ -16,7 +16,7 @@ struct _IIM
   PetscReal mu;  // Fluid viscosity
   Coor f;        // origin of fluid field coordinate system
   Coor df;       // grid widths of fluid field coordinate system
-  Array irregularNodes;
+  Array iimIrregularNodes;
   SpatialIndex sidx; // Indexes irregular nodes in 3D bins
 };
 
@@ -41,21 +41,6 @@ PetscLogEvent EVENT_IIMUpdateSurfaceDerivatives;
 PetscLogEvent EVENT_IIMUpdateRHS;
 PetscLogEvent EVENT_IIMIrregularNodes;
 PetscErrorCode IIMRegisterEvents( void );
-
-struct _IIMIrregularNode {
-  PetscReal nx, ny, nz;//Normal direction
-  PetscReal sx, sy, sz;//Tangential direction
-  PetscReal rx, ry, rz;//Tangential direction (zero in 2D)
-  PetscReal k;        //Curvature in 2D or 3D
-  PetscReal k_nn, k_tt, k_nt;  // Principal Curvatures (k_nn used in 2D)
-  PetscReal F1, f1, f1_n, f1_t, f1_nn, f1_tt, f1_nt; // the normal force
-  PetscReal F2, f2, f2_n, f2_t, f2_nn, f2_tt, f2_nt; // the tangential force in local coor
-  PetscReal F3, f3, f3_n, f3_t, f3_nn, f3_tt, f3_nt;
-  PetscReal ftx, fty, ftz;   // tangential force in global coor
-  PetscReal fa1, fa2; // Force of adhesion (in normal/tangential direction)
-  Coor X;   // absolute position in space
-  int numNei;
-};
 
 typedef struct Jump
 {

@@ -34,14 +34,14 @@ PetscErrorCode IIMUpdateSurfaceQuantities_2D( IIM iim, LevelSet ls )
   int i;
   IIMIrregularNode *n;
   Coor nv;
-  const int len = ArrayLength(ls->irregularNodes);
+  const int len = ArrayLength( iim->iimIrregularNodes );
   PetscErrorCode ierr;
   
   PetscFunctionBegin;
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceQuantities,0,0,0,0); CHKERRQ(ierr);
   for( i = 0; i < len; i++ )
   {
-    ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
+    ierr = ArrayGet( iim->iimIrregularNodes ,i,&n); CHKERRQ(ierr);
     n->k = GridBilinear( ls->phi, GridFunction2D_Curv, n->X );
     n->k_nn = n->k;
     n->k_tt = 0;
@@ -62,7 +62,7 @@ PetscErrorCode IIMUpdateSurfaceQuantities_2D( IIM iim, LevelSet ls )
 PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls )
 {
   int i;
-  const int len = ArrayLength(ls->irregularNodes);
+  const int len = ArrayLength( iim->iimIrregularNodes );
   IIMIrregularNode *n;
   Jump j; // Mangled, not a jump, but used for rotation functions
   Coor nv;
@@ -73,7 +73,7 @@ PetscErrorCode IIMUpdateSurfaceQuantities_3D( IIM iim, LevelSet ls )
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceQuantities,0,0,0,0); CHKERRQ(ierr);
   for( i = 0; i < len; i++ )
   {
-    ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
+    ierr = ArrayGet( iim->iimIrregularNodes, i,&n); CHKERRQ(ierr);
     
     // Surface Normal
     ierr = LevelSetNormalDirection( ls, n->X, &nv); CHKERRQ(ierr);

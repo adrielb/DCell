@@ -6,8 +6,8 @@ PetscErrorCode IIMWriteIrregularNodeList( IIM iim, char *name, int idx )
 {
   int i;
   int rowlen;
-  int len = ArrayLength( iim->irregularNodes );
-  IIMIrregularNode *nodes = ArrayGetData( iim->irregularNodes );
+  int len = ArrayLength( iim->iimIrregularNodes );
+  IIMIrregularNode *nodes = ArrayGetData( iim->iimIrregularNodes );
   IIMIrregularNode *node;
   char filename[PETSC_MAX_PATH_LEN], wd[PETSC_MAX_PATH_LEN];
   PetscViewer viewer;
@@ -20,7 +20,7 @@ PetscErrorCode IIMWriteIrregularNodeList( IIM iim, char *name, int idx )
 //  ierr = ArrayWrite( irreg, "irregNode", idx ); CHKERRQ(ierr);
 
   ierr = DCellGetWorkingDirectory(wd); CHKERRQ(ierr);
-  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/%s.irregNode.%d.array",wd,name,idx+FILE_COUNT_START); CHKERRQ(ierr);
+  ierr = PetscSNPrintf(filename,PETSC_MAX_PATH_LEN,"%s/%s.iimIrregNode.%d.array",wd,name,idx+FILE_COUNT_START); CHKERRQ(ierr);
   ierr = PetscViewerBinaryOpen(PETSC_COMM_SELF,filename,FILE_MODE_WRITE,&viewer); CHKERRQ(ierr);
 
   for ( i = 0; i < len; ++i) {
@@ -31,7 +31,7 @@ PetscErrorCode IIMWriteIrregularNodeList( IIM iim, char *name, int idx )
           node->X.y,
           node->nx,
           node->ny,
-          node->f1,
+          node->F1,
           node->fa1,
           node->k,
           node->f1_n,

@@ -18,13 +18,13 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_2D( IIM iim, LevelSet ls )
   LeastSqGetVecs(iim->lsq, &s, PETSC_NULL, &g, PETSC_NULL);
   
   int i;
-  for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
+  for( i = 0; i < ArrayLength(iim->iimIrregularNodes); i++ )
   {
-    ierr = ArrayGet(ls->irregularNodes,i,&n); CHKERRQ(ierr);
-    ierr = SpatialIndexQueryPoints(iim->sidx, n->X, iim->eps, iim->Np, &len, (void**)nodes); CHKERRQ(ierr);
+    ierr = ArrayGet(iim->iimIrregularNodes,i,&n); CHKERRQ(ierr);
+    ierr = SpatialIndexQueryPoints(iim->sidx, n->X, iim->eps*iim->df.x, iim->Np, &len, (void**)nodes); CHKERRQ(ierr);
     RemoveDuplicates( &len, nodes);
     n->numNei = len;
-
+printf("len: %d\n", len);
     if( len < 3 ) {
       n->f1    = 0;
       n->f1_n  = 0;
@@ -73,9 +73,9 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
   ierr = PetscLogEventBegin(EVENT_IIMUpdateSurfaceDerivatives,0,0,0,0); CHKERRQ(ierr);
   LeastSqGetVecs(iim->lsq, &s, &r, &g, PETSC_NULL);
   
-  for( i = 0; i < ArrayLength(ls->irregularNodes); i++ )
+  for( i = 0; i < ArrayLength(iim->iimIrregularNodes); i++ )
   {
-    ierr = ArrayGet(ls->irregularNodes,i,(void*)&n); CHKERRQ(ierr);
+    ierr = ArrayGet(iim->iimIrregularNodes,i,(void*)&n); CHKERRQ(ierr);
 
     f1 = &n->f1;
     f2 = &n->f2;
@@ -101,9 +101,9 @@ PetscErrorCode IIMUpdateSurfaceDerivatives_3D( IIM iim, LevelSet ls )
     {
       s[j] = ss[j];
       r[j] = rr[j];
-      g[j+0*len] = nodes[j]->f1;
-      g[j+1*len] = nodes[j]->f2;
-      g[j+2*len] = nodes[j]->f3;
+      g[j+0*len] = nodes[j]->F1;
+      g[j+1*len] = nodes[j]->F2;
+      g[j+2*len] = nodes[j]->F3;
     }
     
     ierr = LeastSqSolve(iim->lsq); CHKERRQ(ierr);

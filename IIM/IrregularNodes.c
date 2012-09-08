@@ -27,7 +27,7 @@ PetscErrorCode IIMGridIntersections( IIM iim, const Grid g, const Coor p, const 
     root = X0;
     CoorSet( &root, axis, x);
     if( !AABBPointInBox( g->aabb, root) ) continue;
-    ierr = ArrayAppend(iim->irregularNodes, &newnode); CHKERRQ(ierr);
+    ierr = ArrayAppend(iim->iimIrregularNodes, &newnode); CHKERRQ(ierr);
     newnode->X = root;
     ierr = SpatialIndexInsertPoint( iim->sidx, root, newnode ); CHKERRQ(ierr);
   }

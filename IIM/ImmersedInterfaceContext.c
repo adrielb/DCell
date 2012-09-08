@@ -16,11 +16,11 @@ PetscErrorCode IIMCreate( PetscBool is2D, IIM *iim )
   ierr = ArrayCreate( "iim_coor", 4*sizeof(int), &i->coor); CHKERRQ(ierr); // [ x y z d ]
   ierr = ArrayCreate( "iim_val", sizeof(PetscReal), &i->val); CHKERRQ(ierr);
   ierr = ArrayCreate( "debug", sizeof(IIMDebug), &i->debug); CHKERRQ(ierr);
-  ierr = ArrayCreate( "irregularNodes", sizeof(IIMIrregularNode), &i->irregularNodes); CHKERRQ(ierr);
+  ierr = ArrayCreate( "irregularNodes", sizeof(IIMIrregularNode), &i->iimIrregularNodes); CHKERRQ(ierr);
   i->f =  (Coor){0.0, 0.0, 0.0};
   i->df = (Coor){1.0, 1.0, 1.0};
   i->mu = 1.0;
-  i->eps = 1.1;
+  i->eps = 2.1;
   i->Np = 64;
   i->is2D = is2D;
   i->F = InterfacialForceSurfaceTension;
@@ -50,7 +50,7 @@ PetscErrorCode IIMDestroy( IIM iim )
   ierr = ArrayDestroy(iim->coor); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->val); CHKERRQ(ierr);
   ierr = ArrayDestroy(iim->debug); CHKERRQ(ierr);
-  ierr = ArrayDestroy(iim->irregularNodes); CHKERRQ(ierr);
+  ierr = ArrayDestroy(iim->iimIrregularNodes); CHKERRQ(ierr);
   ierr = LocalCoorDestroy( iim->lc ); CHKERRQ(ierr);
   ierr = LeastSqDestroy( iim->lsq ); CHKERRQ(ierr);
   ierr = PetscFree(iim); CHKERRQ(ierr);

@@ -1,4 +1,5 @@
 #include "ImmersedInterfaceMethod.h"
+#include "IIM_private.h"
 
 void InterfacialForceAdhesion( IIMIrregularNode *n, void *context );
 void InterfacialForceCurvature( IIMIrregularNode *n, void *context );
@@ -11,26 +12,29 @@ int main(int argc, char **args)
   PetscFunctionBegin;
   ierr = DCellInit(); CHKERRQ(ierr);
 
-  PetscReal dx = 0.01;
+  PetscReal dx = 0.2;
   Coor dh = {dx, dx, dx};
-  Coor center = { 0, 0, 0};
+  Coor center = { 2, 2, 0};
   PetscReal radius = 1;
 
   LevelSet ls;
-  ierr = LevelSetInitializeToSphere(dh, center, radius, &ls); CHKERRQ(ierr);
+  ierr = LevelSetInitializeToCircle(dh, center, radius, &ls); CHKERRQ(ierr);
 //  ierr = LevelSetInitializeToStar3D(dh, center, radius, 0.4, 5, &ls); CHKERRQ(ierr);
   ierr = GridWrite(ls->phi,0); CHKERRQ(ierr);
 
-  PetscBool is2D = dh.z == 0.0;
   IIM iim;
-  ierr = IIMCreate( is2D, &iim); CHKERRQ(ierr);
-  ierr = IIMSetForceComponents(iim, InterfacialForceCurvature); CHKERRQ(ierr);
-  ierr = IIMSetForceContext(iim, &dx); CHKERRQ(ierr);
+  ierr = IIMCreate( ls->phi->is2D, &iim); CHKERRQ(ierr);
+  ierr = IIMSetForceComponents( iim, InterfacialForceCurvature); CHKERRQ(ierr);
+  ierr = IIMSetForceContext( iim, &dx); CHKERRQ(ierr);
+
+  const Coor  f = (Coor){-0.1,  -0.1, 0};
+  const Coor df = (Coor){ 0.06, 0.06, 1};
+  ierr = IIMSetFluidCoordinateSystem( iim, f, df); CHKERRQ(ierr);
 
   ierr = IIMUpdateSurfaceQuantities( iim, ls); CHKERRQ(ierr);
 //  ierr = SpatialIndexPrint(iim->sidx); CHKERRQ(ierr);
-  ierr = LevelSetWriteIrregularNodeList( ls, 0); CHKERRQ(ierr);
-  ierr = ArrayWrite(ls->band,"band",0); CHKERRQ(ierr);
+  ierr = IIMWriteIrregularNodeList( iim, "phi", 0); CHKERRQ(ierr);
+  ierr = ArrayWrite( ls->band, 0); CHKERRQ(ierr);
 
   ierr = LevelSetDestroy(ls); CHKERRQ(ierr);
   ierr = IIMDestroy(iim); CHKERRQ(ierr);
