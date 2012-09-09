@@ -11,32 +11,42 @@ PetscErrorCode LevelSetInitializeToCircle( Coor dh, Coor center, PetscReal radiu
 {
   int i, j;
   const int BUF = 12;
-  PetscReal **phi;
+  Coor buf = (Coor){ BUF * dh.x, BUF * dh.y, BUF * dh.z};
   Coor X;
+  Coor s;
   iCoor p, q;
   iCoor pos, size;
   iCoor *band;
   LevelSet ls;
+  PetscReal **phi;
   PetscErrorCode ierr = 0;
   
   PetscFunctionBegin;
-  pos.x = (int)( (center.x - radius ) / dh.x - BUF );
-  pos.y = (int)( (center.y - radius ) / dh.y - BUF );
-  pos.z = 0;
-  size.x = (int)( 2 * (radius/dh.x + BUF) );
-  size.y = (int)( 2 * (radius/dh.y + BUF) );
-  size.z = 0;
+  AABB aabb;
+  aabb.lo.x = center.x - radius - buf.x;
+  aabb.lo.y = center.y - radius - buf.y;
+  aabb.hi.x = center.x + radius + buf.x;
+  aabb.hi.y = center.y + radius + buf.y;
+  CoorToIndex(aabb.lo, dh, aabb.hi, &size);
+  CoorToIndex(center, dh, aabb.lo, &pos);
+
   ierr = LevelSetCreate(dh, pos, size, &ls); CHKERRQ(ierr);
-  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
-  ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
+
+#if 0
   int est = (int)( PETSC_PI*PetscSqr(radius/dh.x+6) - PETSC_PI*PetscSqr(PetscMax(0,radius/dh.x-6)) );
   ierr = ArraySetSize(ls->band,(int)(1.1*est) ); CHKERRQ(ierr);
   ierr = ArraySetSize(ls->band,0); CHKERRQ(ierr);
   est = (int)( 2*PETSC_PI*radius/dh.x*2.6 ); // Circumference estimate
   ierr = ArraySetSize(ls->irregularNodes,est); CHKERRQ(ierr);
-  for (j = p.y; j < q.y; ++j) {
-    for (i = p.x; i < q.x; ++i) {
-      GridIndexToCoor(ls->phi, p, &X);
+#endif
+
+  ierr = GridGet(ls->phi,&phi); CHKERRQ(ierr);
+  ierr = GridGetBounds(ls->phi,&p,&q); CHKERRQ(ierr);
+  for (j = p.y; j < q.y; ++j ) {
+    for (i = p.x; i < q.x; ++i ) {
+      s.x = i;
+      s.y = j;
+      GridIndexToCoor( ls->phi, s, &X);
       phi[j][i] = sqrt( PetscSqr(X.x - center.x) +
                         PetscSqr(X.y - center.y) ) - radius;
       if( -ls->PHI_INF < phi[j][i]/dh.x && phi[j][i]/dh.x < ls->PHI_INF ) {
