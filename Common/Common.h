@@ -150,12 +150,13 @@ PetscErrorCode UniqueIDGenerate( UniqueID uid, UniqueIDType *id );
 
 // SpatialIndex
 typedef struct _SpatialIndex *SpatialIndex;
+typedef struct _SpatialItem *SpatialItem;
 PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx );
 PetscErrorCode SpatialIndexSetDomain( SpatialIndex sidx, Coor lo, Coor hi, Coor dh );
 PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx );
-PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data );
+PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor *pt, SpatialItem newitem );
 PetscErrorCode SpatialIndexInsertBox( SpatialIndex sidx, AABB box, void *item );
-PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items[] );
+PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, Array *items );
 PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *items );
 PetscErrorCode SpatialIndexClear( SpatialIndex sidx );
 PetscErrorCode SpatialIndexInsertBox( SpatialIndex sidx, AABB box, void *item );

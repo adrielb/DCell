@@ -6,25 +6,23 @@ struct _SpatialIndex {
   iCoor numbins;  // [3x4x5]
   iCoor a,b;   // start bin coor, end bin coor
   Array bins;  // 2D/3D array of bins
-  MemCache items;
   Array queriedItems;
+  size_t offset;
 };
 
-typedef struct _SpatialItem *SpatialItem;
 struct _SpatialItem {
   SpatialItem next;
-  AABB box;
-  Coor p;
-  void *item;
+  AABB *box;
+  Coor *p;
 };
 
 PetscErrorCode SpatialIndexBin( SpatialIndex sidx, Coor pt, iCoor *bin );
+PetscErrorCode SpatialIndex_AddItem( SpatialIndex sidx, void *newItem );
 
 #undef __FUNCT__
 #define __FUNCT__ "SpatialIndexCreate"
 PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx )
 {
-  size_t chunksize = 65536; // TODO: make petsc option for this
   SpatialIndex s;
   char tmp[256];
   PetscErrorCode ierr;
@@ -34,7 +32,6 @@ PetscErrorCode SpatialIndexCreate( const char name[], SpatialIndex *sidx )
   sprintf(tmp, "%s_%s", name, "spatialbins");
   ierr = ArrayCreate( tmp, sizeof(SpatialItem), &s->bins); CHKERRQ(ierr);
   sprintf(tmp, "%s_%s", name, "spatialItems");
-  ierr = MemCacheCreate( tmp, sizeof(struct _SpatialItem), chunksize, &s->items); CHKERRQ(ierr);
   ierr = ArrayCreate( "queriedItems", sizeof(void*), &s->queriedItems ); CHKERRQ(ierr);
   ierr = SpatialIndexSetDomain( s, (Coor){0,0,0}, (Coor){1,1,1}, (Coor){1,1,1}); CHKERRQ(ierr);
   *sidx = s;
@@ -72,7 +69,6 @@ PetscErrorCode SpatialIndexDestroy( SpatialIndex sidx )
   PetscFunctionBegin;
   ierr = ArrayDestroy( sidx->queriedItems ); CHKERRQ(ierr);
   ierr = ArrayDestroy( sidx->bins ); CHKERRQ(ierr);
-  ierr = MemCacheDestroy( sidx->items ); CHKERRQ(ierr);
   ierr = PetscFree( sidx ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -100,21 +96,19 @@ PetscErrorCode SpatialIndexInsertBox( SpatialIndex sidx, AABB box, void *item )
 
 #undef __FUNCT__
 #define __FUNCT__ "SpatialIndexInsertPoint"
-PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor pt, void *data )
+PetscErrorCode SpatialIndexInsertPoint( SpatialIndex sidx, Coor *pt, SpatialItem newitem )
 {
   iCoor bin;
-  SpatialItem *iter, newitem;
+  SpatialItem *iter;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = SpatialIndexBin( sidx, pt, &bin ); CHKERRQ(ierr);
+  ierr = SpatialIndexBin( sidx, *pt, &bin ); CHKERRQ(ierr);
 
   ierr = ArrayGetCoor( sidx->bins, bin, &iter); CHKERRQ(ierr);
 
-  ierr = MemCacheAlloc(sidx->items,&newitem); CHKERRQ(ierr);
   newitem->next = PETSC_NULL;
   newitem->p = pt;
-  newitem->item = data;
 
   // Prepend to linked list
   if( *iter != PETSC_NULL ) {
@@ -144,18 +138,17 @@ PetscErrorCode SpatialIndexBin( SpatialIndex sidx, Coor pt, iCoor *bin )
 
 #undef __FUNCT__
 #define __FUNCT__ "SpatialIndexQueryPoints"
-PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, const int MAXLEN, int *len, void *items[] )
+PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscReal radius, Array *items )
 {
-  int c = 0;
   iCoor lo, hi, b;
   Coor p;
-  PetscReal r2 = radius * radius;
+  const PetscReal r2 = radius * radius;
   PetscReal sqdist;
   SpatialItem iter;
-
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+
 //  CoorToIndex( sidx->lo.x, sidx->dh, center-radius, &lo );
   lo.x = (PetscInt)(( center.x-radius - sidx->lo.x ) / sidx->dh.x);
   lo.y = (PetscInt)(( center.y-radius - sidx->lo.y ) / sidx->dh.y);
@@ -171,24 +164,19 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
   if( sidx->b.y < hi.y ) hi.y = sidx->b.y;
   if( sidx->b.z < hi.z ) hi.z = sidx->b.z;
 
+  ierr = ArraySetSize(sidx->queriedItems, 0); CHKERRQ(ierr);
   for (b.z = lo.z; b.z <= hi.z; ++b.z) {
     for (b.y = lo.y; b.y <= hi.y; ++b.y) {
       for (b.x = lo.x; b.x <= hi.x; ++b.x) {
         ierr = ArrayGetCoorP( sidx->bins, b, &iter); CHKERRQ(ierr);
         while( iter != PETSC_NULL ) {
-          p = iter->p;
+          p = *iter->p;
           p.x = p.x - center.x;
           p.y = p.y - center.y;
           p.z = p.z - center.z;
           sqdist = p.x*p.x + p.y*p.y + p.z*p.z;
           if( sqdist <= r2 ) {
-            items[c] = iter->item;
-            c++;
-            if( c == MAXLEN ) {
-              ierr = PetscInfo1(0,"Max query size reached: MAXLEN = %d\n", MAXLEN); CHKERRQ(ierr);
-              *len = c;
-              PetscFunctionReturn(0);
-            } // c == Np
+            ierr = SpatialIndex_AddItem( sidx, iter ); CHKERRQ(ierr);
           } // sqdist <= r2
           iter = iter->next;
         } // iter
@@ -196,7 +184,7 @@ PetscErrorCode SpatialIndexQueryPoints( SpatialIndex sidx, Coor center, PetscRea
     } // y
   } // z
 
-  *len = c;
+  *items = sidx->queriedItems;
 
   PetscFunctionReturn(0);
 }
@@ -207,22 +195,20 @@ PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *i
 {
   iCoor lo, hi, b;
   SpatialItem iter;
-  void **newItem;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = ArraySetSize(sidx->queriedItems, 0); CHKERRQ(ierr);
   ierr = SpatialIndexBin( sidx, box.lo, &lo ); CHKERRQ(ierr);
   ierr = SpatialIndexBin( sidx, box.hi, &hi ); CHKERRQ(ierr);
 
+  ierr = ArraySetSize(sidx->queriedItems, 0); CHKERRQ(ierr);
   for (b.z = lo.z; b.z <= hi.z; ++b.z) {
     for (b.y = lo.y; b.y <= hi.y; ++b.y) {
       for (b.x = lo.x; b.x <= hi.x; ++b.x) {
         ierr = ArrayGetCoorP( sidx->bins, b, &iter); CHKERRQ(ierr);
         while( iter != PETSC_NULL ) {
-          if( AABBPointInBox(box, iter->p) ) {
-            ierr = ArrayAppend(sidx->queriedItems, &newItem); CHKERRQ(ierr);
-            *newItem = iter->item;
+          if( AABBPointInBox(box, *iter->p) ) {
+            ierr = SpatialIndex_AddItem( sidx, iter ); CHKERRQ(ierr);
           }
           iter = iter->next;
         } // iter
@@ -239,22 +225,9 @@ PetscErrorCode SpatialIndexQueryPointsBox( SpatialIndex sidx, AABB box, Array *i
 #define __FUNCT__ "SpatialIndexClear"
 PetscErrorCode SpatialIndexClear( SpatialIndex sidx )
 {
-  int i;
-  int len = ArrayLength(sidx->bins);
-  SpatialItem item, nextitem, *items = ArrayGetData(sidx->bins);
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  for (i = 0; i < len; ++i) {
-    if( items[i] != PETSC_NULL ) {
-      item = items[i];
-      while( item != PETSC_NULL ) {
-        nextitem = item->next;
-        ierr = MemCacheFree( sidx->items, item); CHKERRQ(ierr);
-        item = nextitem;
-      }
-    }
-  }
   ierr = ArrayZero(sidx->bins); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -300,5 +273,18 @@ PetscErrorCode SpatialIndexPrint( SpatialIndex sidx )
     }
   }
   printf("%d \n", max);
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "SpatialIndex_AddItem"
+PetscErrorCode SpatialIndex_AddItem( SpatialIndex sidx, void *newItem )
+{
+  void **item;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = ArrayAppend(sidx->queriedItems, &item); CHKERRQ(ierr);
+  *item = (void*)((char*)newItem - sidx->offset);
   PetscFunctionReturn(0);
 }

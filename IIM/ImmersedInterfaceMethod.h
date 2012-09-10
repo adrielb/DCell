@@ -5,6 +5,7 @@
 
 typedef struct _IIMIrregularNode IIMIrregularNode;
 struct _IIMIrregularNode {
+  SpatialItem spatialitem;
   PetscReal nx, ny, nz; // Normal direction
   PetscReal sx, sy, sz; // Tangential direction
   PetscReal rx, ry, rz; // Tangential direction (zero in 2D)
