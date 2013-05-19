@@ -6,4 +6,6 @@
 *.bin
 *.Real64
 a.out
+*.pyc
+cscope.out
 

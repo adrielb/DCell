@@ -52,7 +52,7 @@ int main(int argc, char **args) {
   ierr = FiberFieldDestroy(fibers); CHKERRQ(ierr);
 	ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;
-}
+} 
 
 PetscErrorCode SphericalDistribution(PetscRandom rnd, Coor *d)
 {
@@ -119,3 +119,4 @@ PetscErrorCode MatVec( Coor *n, Coor *r, Coor *s, Coor *a, Coor *d)
   d->z = a->z*n->z + a->x*r->z + a->y*s->z;
   return 0;
 }
+
