@@ -50,9 +50,9 @@ rmTemp:
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
-CFLAGS += ${DCELL_INCLUDE} -I/share/apps/include/ -Wall -fPIC
+CFLAGS += ${DCELL_INCLUDE} -I/home/abergman/apps/ga-5-0-2/include -Wall -fPIC
 
-GA_LIB = -L/share/apps/lib -lga
+GA_LIB = -L/home/abergman/apps/ga-5-0-2/lib -lga
 PETSC_LIB := ${PETSC_LIB} ${GA_LIB}
 DCELL_LIB := -L${DCELL_DIR}/lib/${PETSC_ARCH} -Wl,-rpath,${DCELL_DIR}/lib/${PETSC_ARCH}
 LIBDCELL := lib/${PETSC_ARCH}/libDCell.so

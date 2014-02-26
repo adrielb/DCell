@@ -1,3 +1,5 @@
+PETSC_DIR=/home/abergman/apps/petsc
+PETSC_TMP=/home/abergman/tmp
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 include variables.mk
@@ -35,4 +37,12 @@ sync:
 sim: sim-${SIM}
 run: run-${SIM}
 
-.PHONY: all build alltests rebuild opt cleanDCell sync sim run
+cscope:
+	cscope -b -q -R 
+
+cscope-petsc:
+	cd ${PETSC_DIR} && \
+	cscope -b -q -R 
+
+.PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope
+.DEFAULT_GOAL=all

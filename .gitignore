@@ -8,4 +8,6 @@
 a.out
 *.pyc
 cscope.out
-
+cscope.in.out
+cscope.po.out
+.netrwhist
