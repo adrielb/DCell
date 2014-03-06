@@ -228,6 +228,9 @@ PetscErrorCode SpatialIndexCollide( SpatialIndex sidx, AABB box, SpatialItem ite
 
   PetscFunctionBegin;
   ierr = 0;
+  if (ierr) {
+	return 0;
+  }
   PetscFunctionReturn(0);
 }
 

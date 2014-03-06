@@ -23,7 +23,7 @@ PetscErrorCode GridCreate( Coor dh, iCoor pos, iCoor size, int dof, Grid *grid )
   g->MAXSIZE = g->SIZE;
   
   ierr = PetscMalloc(g->SIZE*sizeof(PetscReal), &g->v1); CHKERRQ(ierr);
-  ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
+  ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->dof, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
   ierr = VecZeroEntries(g->v); CHKERRQ(ierr); // TODO: is this redundant?
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
   
@@ -147,7 +147,7 @@ PetscErrorCode GridResize( Grid g, iCoor pos, iCoor size )
     ierr = PetscInfo3(0,"%s resizing: %d (%d MB)\n",g->name, g->MAXSIZE, g->MAXSIZE/(1024*1024) ); CHKERRQ(ierr);
   }
   ierr = VecDestroy(&g->v); CHKERRQ(ierr);
-  ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
+  ierr = VecCreateSeqWithArray(PETSC_COMM_SELF, g->dof, g->SIZE, g->v1, &g->v); CHKERRQ(ierr);
   ierr = PetscMemzero(g->v1,g->MAXSIZE*sizeof(PetscReal)); CHKERRQ(ierr);
   ierr = Grid_MakeGrid(g); CHKERRQ(ierr);
   PetscFunctionReturn(0);

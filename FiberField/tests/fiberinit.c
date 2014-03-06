@@ -9,7 +9,7 @@ int main(int argc, char **args) {
   FiberField fibers;
   ierr = FiberFieldCreate( MPI_COMM_WORLD, &fibers); CHKERRQ(ierr);
   ierr = FiberFieldDestroy(fibers); CHKERRQ(ierr);
-	ierr = DCellFinalize(); CHKERRQ(ierr);
+  ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;
 }
 

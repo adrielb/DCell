@@ -42,6 +42,7 @@ PetscErrorCode MemCacheDestroy( MemCache mc )
   }
   ierr = ArrayDestroy(mc->chunks); CHKERRQ(ierr);
   ierr = ArrayDestroy(mc->cache); CHKERRQ(ierr);
+  ierr = PetscFree( mc ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 

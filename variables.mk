@@ -22,9 +22,11 @@ define test-library
 CLEAN += ${1}/tests/${2}.o ${1}/tests/${2}.x
 ALLTESTS += test${1}-${2}
 .PHONY: test${1}-${2}
-${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
+#${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
+${1}/tests/${2}.o: ${LIBDCELL}
 ${1}/tests/${2}.x: ${1}/tests/${2}.o
-	@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
+	#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
+	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
 test${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
 	@echo Test target: $$@
@@ -50,7 +52,7 @@ rmTemp:
 
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
-CFLAGS += ${DCELL_INCLUDE} -I/home/abergman/apps/ga-5-0-2/include -Wall -fPIC
+CFLAGS += ${DCELL_INCLUDE} -I/home/abergman/apps/ga-5-0-2/include -Wall -fPIC -Werror
 
 GA_LIB = -L/home/abergman/apps/ga-5-0-2/lib -lga
 PETSC_LIB := ${PETSC_LIB} ${GA_LIB}

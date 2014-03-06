@@ -9,10 +9,10 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers)
 
   PetscFunctionBegin;
   ierr = PetscNew(struct _FiberField, &f); CHKERRQ(ierr);
-//  ierr = ArrayCreate("fibers",sizeof(Vertex),1000,&f->fibers); CHKERRQ(ierr);
+  ierr = ArrayCreate("fibers",sizeof(Vertex),&f->fibers); CHKERRQ(ierr);
   /*ierr = ArrayCreate(  */
-  ierr = MemCacheCreate(sizeof(struct _Edge),1000,&f->mcEdges); CHKERRQ(ierr);
-  ierr = MemCacheCreate(sizeof(struct _Vertex),1000,&f->mcVerticies); CHKERRQ(ierr);
+  ierr = MemCacheCreate("edges",sizeof(struct _Edge)  ,1000,&f->mcEdges); CHKERRQ(ierr);
+  ierr = MemCacheCreate("verts",sizeof(struct _Vertex),1000,&f->mcVerticies); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->vid ); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->eid ); CHKERRQ(ierr);
 

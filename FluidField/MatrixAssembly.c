@@ -12,7 +12,7 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
   MPI_Comm_size(f->comm, &size);
   if( f->is3D ) {
     dof = 4; // [u v w p]
@@ -44,9 +44,9 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
               dims.x,dims.y, PETSC_DECIDE,PETSC_DECIDE, dof,1, 0,0, &f->daB); CHKERRQ(ierr);
   }
   if( size == 1 ) {
-    ierr = DMGetMatrix(f->daV, MATSEQAIJ, &f->mat); CHKERRQ(ierr);
+    ierr = DMCreateMatrix(f->daV, MATSEQAIJ, &f->mat); CHKERRQ(ierr);
   } else {
-    ierr = DMGetMatrix(f->daV, MATMPIAIJ, &f->mat); CHKERRQ(ierr);
+    ierr = DMCreateMatrix(f->daV, MATMPIAIJ, &f->mat); CHKERRQ(ierr);
   }
   ierr = MatSetFromOptions(f->mat); CHKERRQ(ierr);
 
@@ -61,7 +61,7 @@ PetscErrorCode FluidFieldMatAssemble( FluidField f )
   ierr = MatAssemblyBegin(f->mat,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
   ierr = MatAssemblyEnd(f->mat,MAT_FINAL_ASSEMBLY); CHKERRQ(ierr);
 
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Assembly: %f sec\n", t2-t1); CHKERRQ(ierr);
 
 //  ierr = MatWrite(f->mat,"mat",0); CHKERRQ(ierr);

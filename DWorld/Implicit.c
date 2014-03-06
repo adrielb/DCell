@@ -65,7 +65,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
   // set psi_0 = phi_n
   n = 0;
   ierr = DCellsArrayAdvectImplicitInit(dcells, &n); CHKERRQ(ierr);
@@ -184,7 +184,7 @@ PetscErrorCode DWorldSimulate_ImplicitStep(DWorld w) {
 
   converged:
   ierr = DCellsArrayAdvectImplicitReinit(dcells, w->dt); CHKERRQ(ierr);
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD, "TS Solve: %f sec\n", t2 - t1); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

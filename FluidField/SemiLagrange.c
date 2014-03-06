@@ -19,7 +19,7 @@ PetscErrorCode AdvectSL_2D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
 
   Vec lvel;
   ierr = DMGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
@@ -73,7 +73,7 @@ PetscErrorCode AdvectSL_2D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi
   // Scatter single component parallel buffer into multi-component parallel vector.
   ierr = VecStrideScatter(vecBuf,f,vecPhi,INSERT_VALUES); CHKERRQ(ierr);
 
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Advect SL: %f sec\n", t2-t1); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
@@ -94,7 +94,7 @@ PetscErrorCode AdvectSL_3D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
 
   Vec lvel;
   ierr = DMGetLocalVector(daVel,&lvel); CHKERRQ(ierr);
@@ -149,7 +149,7 @@ PetscErrorCode AdvectSL_3D( DM daVel, Vec vecVel, DM daBuf, Vec vecBuf, DM daPhi
   // Scatter single component parallel buffer into multi-component parallel vector.
   ierr = VecStrideScatter(vecBuf,f,vecPhi,INSERT_VALUES); CHKERRQ(ierr);
 
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Advect SL: %f sec\n", t2-t1); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }

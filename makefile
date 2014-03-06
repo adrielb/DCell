@@ -1,3 +1,4 @@
+DCELL_DIR=/home/abergman/projects/DCell
 PETSC_DIR=/home/abergman/apps/petsc
 PETSC_TMP=/home/abergman/tmp
 include ${PETSC_DIR}/conf/variables
@@ -5,7 +6,7 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: test
+all: valgrind
 
 SIM := NanoGrooves
 test: testFiberField-fiberinit
@@ -44,5 +45,18 @@ cscope-petsc:
 	cd ${PETSC_DIR} && \
 	cscope -b -q -R 
 
-.PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope
+debug:
+	export EDITOR=gvim && \
+	gnome-terminal -e 'gdb FiberField/tests/fiberinit.x'
+
+valgrind-gen-suppress:
+	valgrind --leak-check=yes --gen-suppressions=all --suppressions=petscinit.supp FiberField/tests/fiberinit.x
+
+valgrind:
+	valgrind --leak-check=yes                                 \
+	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
+	  --suppressions=petscinit.supp                           \
+	  FiberField/tests/fiberinit.x
+
+.PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope cscope-petsc
 .DEFAULT_GOAL=all

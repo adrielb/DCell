@@ -120,7 +120,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PetscInfo3( 0,    "Size: %d %d %d\n", f->dims.x, f->dims.y, f->dims.z ); CHKERRQ(ierr);
   ierr = PetscInfo3( 0,      "dx: %e %e %e\n", f->dh.x,   f->dh.y,   f->dh.z ); CHKERRQ(ierr);
 
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
 
   // Create vectors
   ierr = GACreate( f->daV, &f->ga); CHKERRQ(ierr);
@@ -144,13 +144,17 @@ PetscErrorCode FluidFieldSetup( FluidField f )
   ierr = PCSetType(pc, PCFIELDSPLIT); CHKERRQ(ierr);
   ierr = PCFieldSplitSetType(pc,PC_COMPOSITE_SCHUR); CHKERRQ(ierr);
   if( f->is3D ) {
-    ierr = PCFieldSplitSetBlockSize(pc,4); CHKERRQ(ierr);                            // [p u v w]
-    ierr = PCFieldSplitSetFields(pc,"v",3,(int[]){U_FACE,V_FACE,W_FACE}); CHKERRQ(ierr); // [u v w]
-    ierr = PCFieldSplitSetFields(pc,"p",1,(int[]){CELL_CENTER}); CHKERRQ(ierr);          // [ p ]
+	const PetscInt ufields[] = {U_FACE,V_FACE,W_FACE};
+	const PetscInt pfields[] = {CELL_CENTER};
+    ierr = PCFieldSplitSetBlockSize(pc,4); CHKERRQ(ierr);                  // [p u v w]
+    ierr = PCFieldSplitSetFields(pc,"v",3,ufields,ufields); CHKERRQ(ierr); // [u v w]
+    ierr = PCFieldSplitSetFields(pc,"p",1,pfields,pfields); CHKERRQ(ierr); // [ p ]
   } else {
+	const PetscInt ufields[] = {U_FACE,V_FACE};
+	const PetscInt pfields[] = {CELL_CENTER};
     ierr = PCFieldSplitSetBlockSize(pc,3); CHKERRQ(ierr);                      // [p u v]
-    ierr = PCFieldSplitSetFields(pc,"v",2,(int[]){U_FACE,V_FACE}); CHKERRQ(ierr);  // [u v]
-    ierr = PCFieldSplitSetFields(pc,"p",1,(int[]){CELL_CENTER}); CHKERRQ(ierr);    // [ p ]
+    ierr = PCFieldSplitSetFields(pc,"v",2,ufields,ufields); CHKERRQ(ierr);  // [u v]
+    ierr = PCFieldSplitSetFields(pc,"p",1,pfields,pfields); CHKERRQ(ierr);    // [ p ]
   }
   ierr = PCSetUp(pc); CHKERRQ(ierr);
   int nVelP;
@@ -176,7 +180,7 @@ PetscErrorCode FluidFieldSetup( FluidField f )
    * TODO: use MG, w/FFT on coarse grid
    */
 
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"Finished Solver Setup: %f sec\n",t2-t1); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);

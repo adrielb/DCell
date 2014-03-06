@@ -5,8 +5,10 @@
 #define __FUNCT__ "OrthogonalProjection2D"
 PetscErrorCode OrthogonalProjection2D( double phi3[3][3], double phi[5][5], Coor *op )
 {
-  Coor opB, opQ, opL;
-  PetscReal distB, distQ, distL;
+  Coor opB, opL;
+  PetscReal distB, distL;
+//  Coor opQ; 
+//  PetscReal distQ;
   PetscFunctionBegin;
   OrthogonalProjection2D_Bicubic( phi, &opB, &distB );
 //  OrthogonalProjection2D_Quadratic( phi3, &opQ, &distQ );

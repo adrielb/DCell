@@ -32,9 +32,9 @@ PetscErrorCode FluidFieldSolve( FluidField f )
   ierr = FluidField_DiscreteCompatibilityCondition( f ); CHKERRQ(ierr);
 
   // Solve the system L(u) - px = del(sigma) + IIM
-  ierr = PetscGetTime(&t1); CHKERRQ(ierr);
+  ierr = PetscTime(&t1); CHKERRQ(ierr);
   ierr = KSPSolve(f->ksp,f->rhs,f->vel); CHKERRQ(ierr);
-  ierr = PetscGetTime(&t2); CHKERRQ(ierr);
+  ierr = PetscTime(&t2); CHKERRQ(ierr);
   ierr = PetscPrintf(PETSC_COMM_WORLD,"KSP Solve: %f sec\n",t2-t1); CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
