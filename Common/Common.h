@@ -5,6 +5,8 @@
 #include "macdecls.h"
 #include "petsc.h"
 
+#define UNUSED(x) (void)(x)
+
 #define LINE() { \
   int rank; \
   MPI_Comm_rank(PETSC_COMM_WORLD,&rank); \

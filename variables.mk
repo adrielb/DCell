@@ -50,9 +50,20 @@ endef
 rmTemp: 
 	-find ${PETSC_TMP}/ -type f -print0 | xargs -n1000 -0 rm
 
+ifndef PETSC_TMP
+  ${error PETSC_TMP not set}
+endif
+ifndef PETSC_DIR
+  ${error PETSC_DIR not set}
+endif
+ifndef DCELL_DIR
+  ${error DCELL_DIR not set}
+endif
+
 MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
 DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
 CFLAGS += ${DCELL_INCLUDE} -I/home/abergman/apps/ga-5-0-2/include -Wall -fPIC -Werror
+#-Wextra
 
 GA_LIB = -L/home/abergman/apps/ga-5-0-2/lib -lga
 PETSC_LIB := ${PETSC_LIB} ${GA_LIB}

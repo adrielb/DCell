@@ -119,6 +119,11 @@ PetscErrorCode DCellAdvectRK2FullStep( DCell dcell, int ga, PetscReal dt )
 PetscErrorCode DCellUpdateFluidFieldRHS( DCell this, IIM iim, int ga, PetscReal t )
 {
   PetscFunctionBegin;
+  
+  //TODO: implement DCellUpdateFluidFieldRHS
+  if (t && this && iim && ga) {
+  }
+  SETERRQ(PETSC_COMM_SELF,0,"Not Implemented");
 
   PetscFunctionReturn(0);
 }

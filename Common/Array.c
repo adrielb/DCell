@@ -5,7 +5,7 @@ struct _Array {
   void *dataArray;
   int len;        // actual length of data in array
   int ELEMSIZE;   // a constant
-  size_t MAXSIZE; // current max allocate number of elements
+  int MAXSIZE; // current max allocate number of elements
   PetscReal scale;// scaling factor when resizing array beyond requested size
   char name[64];  // name used for PetscInfo()
   iCoor p,q;

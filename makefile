@@ -6,10 +6,10 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: valgrind
+all: run
 
-SIM := NanoGrooves
-test: testFiberField-fiberinit
+SIM := Fibers
+test: testFiberField-fiber
 viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
@@ -38,6 +38,9 @@ sync:
 sim: sim-${SIM}
 run: run-${SIM}
 
+tags:
+	ctags -R  --fields=+S
+
 cscope:
 	cscope -b -q -R 
 
@@ -56,7 +59,7 @@ valgrind:
 	valgrind --leak-check=yes                                 \
 	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
 	  --suppressions=petscinit.supp                           \
-	  FiberField/tests/fiberinit.x
+	  ./sims/Fibers/Fibers.x
 
-.PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope cscope-petsc
+.PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope cscope-petsc tags
 .DEFAULT_GOAL=all

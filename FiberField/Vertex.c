@@ -23,6 +23,7 @@ PetscErrorCode VertexDestroy(FiberField field, Vertex vertex)
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  ierr = MemCacheFree(field->mcVerticies, vertex); CHKERRQ(ierr);
   //set edge ids to zero? neg?
   //delete the edges from vertices attached to it
   //delete the edges of this vertex

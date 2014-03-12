@@ -6,7 +6,7 @@ inline void IIMVelocityCorrection( Coor X, IrregularNode *n, Coor *vel )
   if( n->axis == -1 ) return;
 
   // stencil intersection
-  int uvw = n->shift == CELL_CENTER ? n->axis : n->shift - U_FACE;
+  int uvw = n->shift == CELL_CENTER ? (unsigned int)n->axis : n->shift - U_FACE;
 
   PetscReal s,a;
   PetscReal o0=0, o1=1;

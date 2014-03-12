@@ -79,6 +79,9 @@ PetscErrorCode IIMSetViscosity( IIM iim, PetscReal mu )
 
 PetscErrorCode IIMSetNp( IIM iim, int Np )
 {
+  if (iim && Np) {
+    
+  }
   SETERRQ(PETSC_COMM_SELF,0,"NOT IMP");
   PetscFunctionReturn(0);
 }
