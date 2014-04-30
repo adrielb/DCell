@@ -11,10 +11,8 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers)
   ierr = PetscNew(struct _FiberField, &f); CHKERRQ(ierr);
   ierr = ArrayCreate("fibers",sizeof(Vertex),&f->fibers); CHKERRQ(ierr);
   /*ierr = ArrayCreate(  */
-  ierr = MemCacheCreate("edges",sizeof(struct _Edge)  ,1000,&f->mcEdges); CHKERRQ(ierr);
   ierr = MemCacheCreate("verts",sizeof(struct _Vertex),1000,&f->mcVerticies); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->vid ); CHKERRQ(ierr);
-  ierr = UniqueIDCreate( &f->eid ); CHKERRQ(ierr);
 
   *fibers = f;
   PetscFunctionReturn(0);
@@ -28,8 +26,6 @@ PetscErrorCode FiberFieldDestroy(FiberField fibers)
 
   PetscFunctionBegin;
   ierr = UniqueIDDestroy(fibers->vid); CHKERRQ(ierr);
-  ierr = UniqueIDDestroy(fibers->eid); CHKERRQ(ierr);
-  ierr = MemCacheDestroy(fibers->mcEdges); CHKERRQ(ierr);
   ierr = MemCacheDestroy(fibers->mcVerticies); CHKERRQ(ierr);
   ierr = ArrayDestroy(fibers->fibers); CHKERRQ(ierr);
   ierr = PetscFree( fibers ); CHKERRQ(ierr);

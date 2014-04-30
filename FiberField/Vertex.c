@@ -34,15 +34,16 @@ PetscErrorCode VertexDestroy(FiberField field, Vertex vertex)
 
 #undef __FUNCT__
 #define __FUNCT__ "VertexAddEdge"
-PetscErrorCode VertexAddEdge( Vertex v, Edge e)
+PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype )
 {
   int i;
 
   PetscFunctionBegin;
   for (i = 0; i < MAXEDGES; ++i) {
-    if( v->edges[i] == NULL ) {
-      v->edges[i] = e;
-      v->edgeIDs[i] = e->id;
+    if( v0->v[i] == NULL ) {
+      v0->v[i] = v1;
+      v0->vID[i] = v1->id;
+      v0->e[i] = etype;
       break;
     }
   }
