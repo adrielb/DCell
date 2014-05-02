@@ -6,7 +6,7 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: debug
+all: test
 
 SIM := Fibers
 TEST := FiberField-fiberinit

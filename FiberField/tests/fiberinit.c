@@ -14,17 +14,16 @@ int main(int argc, char **args) {
   ierr = VertexCreate( fibers, &v2); CHKERRQ(ierr);
   ierr = VertexCreate( fibers, &v3); CHKERRQ(ierr);
 
+  printf("Adding edge\n");
   EdgeType e = 1;
   ierr = VertexAddEdge( v0, v1, e ); CHKERRQ(ierr);
   ierr = VertexAddEdge( v2, v3, e ); CHKERRQ(ierr);
+  ierr = FiberFieldPrint( fibers ); CHKERRQ(ierr);
+
  
-  int i;
-  int len = ArrayLength( fibers->fibers );
-  printf("len: %d\n", len);
-  struct _Vertex* vs = ArrayGetData(fibers->fibers);
-  for (i = 0; i < len; i++) {
-    printf("ID: %d\n", vs[i].id );
-  }
+  printf("Removing edge\n");
+  ierr = VertexRemoveEdge( v3, v2); CHKERRQ(ierr);
+  ierr = FiberFieldPrint( fibers ); CHKERRQ(ierr);
 
   ierr = FiberFieldDestroy(fibers); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);
