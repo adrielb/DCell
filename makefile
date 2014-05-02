@@ -6,10 +6,10 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: run
+all: debug
 
 SIM := Fibers
-test: testFiberField-fiber
+TEST := FiberField-fiberinit
 viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
@@ -35,6 +35,9 @@ cleanDCell:
 sync:
 	syncDCell.sh
 
+test: test-${TEST}
+valgrind: valgrind-${TEST}
+debug: debug-${TEST}
 sim: sim-${SIM}
 run: run-${SIM}
 
@@ -48,18 +51,9 @@ cscope-petsc:
 	cd ${PETSC_DIR} && \
 	cscope -b -q -R 
 
-debug:
-	export EDITOR=gvim && \
-	gnome-terminal -e 'gdb FiberField/tests/fiberinit.x'
-
 valgrind-gen-suppress:
 	valgrind --leak-check=yes --gen-suppressions=all --suppressions=petscinit.supp FiberField/tests/fiberinit.x
 
-valgrind:
-	valgrind --leak-check=yes                                 \
-	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
-	  --suppressions=petscinit.supp                           \
-	  ./sims/Fibers/Fibers.x
 
 .PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope cscope-petsc tags
 .DEFAULT_GOAL=all

@@ -17,6 +17,7 @@ cscope add ~/apps/petsc/cscope.out ~/apps/petsc
 set cscopeverbose
 set tags+=~/apps/petsc/CTAGS
 
+map <leader>0 :cd ~/projects/DCell<CR>
 map <leader>1 :find makefile<CR>
 map <leader>2 :find local.vimrc<CR>
 map <leader>3 :find /home/abergman/tmp/info.log.0<CR>

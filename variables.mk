@@ -27,10 +27,18 @@ ${1}/tests/${2}.o: ${LIBDCELL}
 ${1}/tests/${2}.x: ${1}/tests/${2}.o
 	#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
-test${1}-${2}: ${1}/tests/${2}.x rmTemp
+test-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
 	@echo Test target: $$@
 	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5}
+valgrind-${1}-${2}: ${1}/tests/${2}.x rmTemp
+	valgrind --leak-check=yes                                 \
+	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
+	  --suppressions=petscinit.supp                           \
+		${CURDIR}/${1}/tests/${2}.x
+debug-${1}-${2}: ${1}/tests/${2}.x rmTemp
+	export EDITOR=gvim && \
+	gnome-terminal -e "gdb ${CURDIR}/${1}/tests/${2}.x"
 endef
 
 # ${call simulation,SimName,NP,runopts}
