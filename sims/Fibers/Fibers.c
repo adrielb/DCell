@@ -17,7 +17,6 @@ int main(int argc, char **args)
   ierr = VertexAddEdge( v0, v1, e ); CHKERRQ(ierr);
   ierr = VertexAddEdge( v2, v3, e ); CHKERRQ(ierr);
 
-
   ierr = FiberFieldDestroy(fibers); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);
   return 0;

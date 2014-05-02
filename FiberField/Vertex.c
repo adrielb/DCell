@@ -4,12 +4,11 @@
 #define __FUNCT__ "VertexCreate"
 PetscErrorCode VertexCreate(FiberField field, Vertex *vertex)
 {
-  Vertex v=0;
+  Vertex v;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = MemCacheAlloc(field->mcVerticies,&v); CHKERRQ(ierr);
-  ierr = ArrayAppendPtr(field->fibers,v); CHKERRQ(ierr);
+  ierr = ArrayAppend( field->fibers, &v); CHKERRQ(ierr);
   ierr = UniqueIDGenerate(field->vid,&v->id); CHKERRQ(ierr);
 
   *vertex = v;
@@ -18,12 +17,21 @@ PetscErrorCode VertexCreate(FiberField field, Vertex *vertex)
 
 #undef __FUNCT__
 #define __FUNCT__ "VertexDestroy"
-PetscErrorCode VertexDestroy(FiberField field, Vertex vertex)
+PetscErrorCode VertexDestroy(FiberField field, Vertex v0 )
 {
+  int i;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = MemCacheFree(field->mcVerticies, vertex); CHKERRQ(ierr);
+  for ( i = 0; i < MAXEDGES; i++) {
+    ierr = VertexRemoveEdge( v0, v0->v[i]); CHKERRQ(ierr);
+  }
+
+  // TODO: reset pointers when last vertex moved
+  //ierr = ArrayDelete1( field->fibers, v0->idx ); CHKERRQ(ierr);
+  
+  SETERRQ(PETSC_COMM_SELF,0,"NOT IMP");
+
   //set edge ids to zero? neg?
   //delete the edges from vertices attached to it
   //delete the edges of this vertex
@@ -50,6 +58,22 @@ PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype )
   if( i == MAXEDGES ) {
     printf("MAXEDGES (%d) reached\n", MAXEDGES);
     exit(1);
+  }
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "VertexRemoveEdge"
+PetscErrorCode VertexRemoveEdge( Vertex v0, Vertex v1 )
+{
+  int j;
+  //PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  if (v1 != NULL) {
+    for (j = 0; j < MAXEDGES; j++) {
+      v1->v[j] = NULL;
+    }
   }
   PetscFunctionReturn(0);
 }

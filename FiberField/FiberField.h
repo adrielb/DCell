@@ -31,7 +31,6 @@ struct _FiberField {
   PetscReal mass;      // Mass of node
   PetscReal thickness; // Fiber thickness ~0.005um?
   PetscReal TOL;
-  MemCache mcVerticies;
   Array fibers;
 };
 
@@ -39,5 +38,6 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers);
 PetscErrorCode FiberFieldDestroy(FiberField fibers);
 PetscErrorCode VertexCreate(FiberField field, Vertex *v);
 PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype );
+PetscErrorCode VertexRemoveEdge( Vertex v0, Vertex v1 );
 
 #endif /* FIBERFIELD_H_ */
