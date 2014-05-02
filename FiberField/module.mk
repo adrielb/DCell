@@ -1,6 +1,6 @@
 # FiberField module
 
-LOCOBJS := FiberField.o Vertex.o 
+LOCOBJS := FiberField.o Vertex.o Dynamics.o
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
