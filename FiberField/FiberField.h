@@ -25,6 +25,13 @@ struct _Vertex {
   Coor X;
 };
 
+struct _VertexMPI {
+  VertexID vID;
+  EdgeID eID[MAXEDGES];
+  Coor x;
+  Coor v;
+};
+
 struct _Edge {
   int petscIndex; // Global index of edge
   EdgeID eID;
