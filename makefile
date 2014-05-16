@@ -9,7 +9,7 @@ include $(addsuffix /module.mk,$(MODULES))
 all: test
 
 SIM := Fibers
-TEST := FiberField-fiberinit
+TEST := FiberField-balancing
 viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}

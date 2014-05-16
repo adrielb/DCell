@@ -4,16 +4,26 @@
 #define __FUNCT__ "VertexCreate"
 PetscErrorCode VertexCreate(FiberField field, Vertex *vertex)
 {
+  int i;
   Vertex v;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = ArrayAppend( field->fibers, &v); CHKERRQ(ierr);
-  ierr = UniqueIDGenerate(field->vid,&v->ID); CHKERRQ(ierr);
+  ierr = ArrayAppend( field->verts, &v); CHKERRQ(ierr);
+  ierr = UniqueIDGenerate(field->vid,&v->vID); CHKERRQ(ierr);
+
+  for (i = 0; i < MAXEDGES; i++) {
+    v->eID[i] = FIBERFIELD_NO_EDGE;
+  }
 
   *vertex = v;
   PetscFunctionReturn(0);
 }
+
+
+#define __BUGGY__
+#ifndef __BUGGY__ 
+
 
 #undef __FUNCT__
 #define __FUNCT__ "VertexDestroy"
@@ -114,3 +124,4 @@ PetscErrorCode Vertex_Unlink( Vertex v0, VertexID v1_ID )
   PetscFunctionReturn(0);
 }
 
+#endif
