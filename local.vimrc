@@ -1,13 +1,14 @@
 " since env vars not sourced:
 let g:petsc_dir="/home/abergman/apps/petsc"
+let g:slime_python_ipython = 1
 
 set nocscopeverbose
 cscope add cscope.out
-cscope add ~/apps/openmpi-1.8.1/build/include/cscope.out ~/apps/openmpi-1.8.1/build/include/
-cscope add ~/apps/petsc/cscope.out ~/apps/petsc
+"cscope add ~/apps/openmpi-1.8.1/cscope.out
+cscope add ~/apps/petsc/cscope.out
 set cscopeverbose
-set tags+=~/apps/openmpi-1.8.1/build/include/tags
-set tags+=~/apps/petsc/CTAGS
+set tags+=~/apps/openmpi-1.8.1/tags
+"set tags+=~/apps/petsc/CTAGS
 set path+=~/apps/petsc
 set path+=~/apps/openmpi-1.8.1
 
@@ -26,6 +27,7 @@ augroup setNomodPETSc
   autocmd!
   autocmd BufEnter ~/apps/petsc/* setlocal nomodifiable 
 augroup END
+
 "if exists("g:did_localvimrc")
 "  finish
 "endif
@@ -34,3 +36,23 @@ augroup END
 
 "let &efm = "%m line %l in %f,%-G[0]PETSC ERROR:%m" . efm
 
+function! DebugDCellInfo()
+ let s:makeprg_save=&makeprg
+ let s:efm_save=&efm
+
+ "let &efm ="%+G%.%#ERROR%m,"
+
+ let &efm ="%C%.%#:%m,"
+ let &efm.="%+E%.%#ERROR%m,"
+ let &efm.="%-Z%.%#MESSAGE,"
+ let &efm.="%-G%.%#"
+
+ let &makeprg="cat $PETSC_TMP/info.log.*"
+ execute ":silent make"
+ execute ":copen"
+
+ let &makeprg=s:makeprg_save
+ let &efm=s:efm_save
+endfunction
+
+command! D call DebugDCellInfo()

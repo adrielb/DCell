@@ -47,9 +47,34 @@ tags:
 cscope:
 	cscope -b -q -R 
 
+OPENMPI_DIR=/home/abergman/apps/openmpi-1.8.1
+tags-mpi: 
+	cd ${OPENMPI_DIR} && \
+	ctags -R --fields=+S ompi/mpi/c/*.c build/include/*.h
+
+cscope-mpi:
+	find "${OPENMPI_DIR}/build/include" -name "*.[ch]" > ${OPENMPI_DIR}/cscope.files
+	find "${OPENMPI_DIR}/ompi/mpi/c" \
+			-path "${OPENMPI_DIR}/ompi/mpi/c/profile/*" -prune -o \
+			-name "*.[ch]" -print >> ${OPENMPI_DIR}/cscope.files
+	cd ${OPENMPI_DIR} && \
+	cscope -b -q && \
+	ctags -L cscope.files
+
 cscope-petsc:
-	cd ${PETSC_DIR} && \
-	cscope -b -q -R 
+	find ${PETSC_DIR} \
+	  -path "${PETSC_DIR}/include/mpiuni/*" -prune -o \
+	  -path "${PETSC_DIR}/include/finclude/*" -prune -o \
+	  -path "${PETSC_DIR}/*/examples/*" -prune -o \
+	  -path "${PETSC_DIR}/externalpackages/*" -prune -o \
+	  -path "${PETSC_DIR}/src/docs/*" -prune -o \
+	  -name "petsclog.h" -prune -o \
+		-name "*.[ch]" -print > ${PETSC_DIR}/cscope.files && \
+		cd ${PETSC_DIR} && \
+	cscope -b -q 
+# cscope.files checked by default
+# -b  -  build cross-reference only, dont launch gui
+# -q  -  build fast lookup tables 'cscope.in.out' and 'cscope.po.out'
 
 valgrind-gen-suppress:
 	valgrind --leak-check=yes --gen-suppressions=all --suppressions=petscinit.supp FiberField/tests/fiberinit.x
