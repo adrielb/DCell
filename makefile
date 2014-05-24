@@ -6,11 +6,11 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: test
+all: viz 
 
 SIM := Fibers
-TEST := FiberField-mpinei
-viz: viz-LevelSet3DView
+TEST := FiberField-swirl
+#viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
 	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
@@ -38,6 +38,7 @@ sync:
 test: test-${TEST}
 valgrind: valgrind-${TEST}
 debug: debug-${TEST}
+viz: viz-${TEST}
 sim: sim-${SIM}
 run: run-${SIM}
 

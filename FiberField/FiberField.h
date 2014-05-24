@@ -11,6 +11,8 @@ typedef int EdgeType;
 typedef UniqueIDType VertexID;
 typedef UniqueIDType EdgeID;
 
+#define NUMNEI 27
+#define NEI_PROC_LOCAL 13
 #define MAXEDGES 4
 #define FIBERFIELD_NO_VERTEX -1
 #define FIBERFIELD_NO_EDGE -1
@@ -23,14 +25,15 @@ struct _Vertex {
   EdgeID eID[MAXEDGES]; // Connected edges (ID number) 
   int    ePO[MAXEDGES]; // global petsc ordering of edge IDs
   Coor X;
+  Coor V;
 };
 
-struct _VertexMPI {
+typedef struct _VertexMPI {
   VertexID vID;
   EdgeID eID[MAXEDGES];
-  Coor x;
-  Coor v;
-};
+  Coor X;
+  Coor V;
+} VertexMPI;
 
 struct _Edge {
   int petscIndex; // Global index of edge
@@ -40,13 +43,22 @@ struct _Edge {
   int      vPO[2]; // global petsc ordering of vertex ID
 };
 
-struct {
+typedef struct {
   Coor min;
   Coor max;
 } BoundingBox;
 
 struct _FiberField {
   MPI_Comm comm;
+  MPI_Datatype vertmpitype; 
+  PetscReal dh;
+  Coor dX; // 
+  BoundingBox globalBounds; // global bounding box of world
+  BoundingBox localBounds;  // local processor bbox
+  DM da;
+  PetscMPIInt *neiRanks; // neiRank = DMDAGetNeighbors(da)
+  int NUMRECV; // number of non-null nei ranks
+
   UniqueID vid;        // vertex id generator
   PetscReal mass;      // Mass of node
   PetscReal thickness; // Fiber thickness ~0.005um?
@@ -74,10 +86,14 @@ struct _FiberField {
   AO aoEdges;
   Array vIDs;
   Array eIDs;
+
+  Array sendbufs[NUMNEI];
+  Array recvbufs[NUMNEI];
 };
 
 PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers);
 PetscErrorCode FiberFieldDestroy(FiberField fibers);
+PetscErrorCode FiberFieldSetup(FiberField fibers);
 PetscErrorCode FiberFieldPrint( FiberField fibers );
 PetscErrorCode VertexCreate(FiberField field, Vertex *v);
 PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype );
@@ -87,6 +103,7 @@ PetscErrorCode Vertex_Link( Vertex v0, Vertex v1, EdgeType etype );
 PetscErrorCode Vertex_Unlink( Vertex v0, VertexID v1_id );
 
 
-PetscErrorCode FiberField_Setup( FiberField field );
 PetscErrorCode FiberField_Step( FiberField field );
+PetscErrorCode FiberField_CreateVertexMPIDatatype( FiberField f );
+PetscErrorCode FiberField_SpatiallyBalance( FiberField f );
 #endif /* FIBERFIELD_H_ */

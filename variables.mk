@@ -25,7 +25,7 @@ ALLTESTS += test${1}-${2}
 #${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
 ${1}/tests/${2}.o: ${LIBDCELL}
 ${1}/tests/${2}.x: ${1}/tests/${2}.o
-	#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
+	-#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
 test-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
