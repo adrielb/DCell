@@ -6,10 +6,10 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: viz 
+all: test
 
 SIM := Fibers
-TEST := FiberField-swirl
+TEST := FiberField-dynamics
 #viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}

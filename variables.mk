@@ -30,7 +30,9 @@ ${1}/tests/${2}.x: ${1}/tests/${2}.o
 test-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
 	@echo Test target: $$@
-	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5}
+	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} | tee ${PETSC_TMP}/stdout.log
+viz-${1}-${2}: ${PETSC_TMP}/stdout.log
+	${1}/tests/${2}.sh
 valgrind-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	valgrind --leak-check=yes                                 \
 	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \

@@ -1,8 +1,10 @@
 #include "FiberField.h"
 
+PetscErrorCode Vertex_Link( Vertex v0, Edge e ); 
+
 #undef __FUNCT__
-#define __FUNCT__ "VertexCreate"
-PetscErrorCode VertexCreate(FiberField field, Vertex *vertex)
+#define __FUNCT__ "FiberFieldAddVertex"
+PetscErrorCode FiberFieldAddVertex(FiberField field, Vertex *vertex)
 {
   int i;
   Vertex v;
@@ -20,6 +22,48 @@ PetscErrorCode VertexCreate(FiberField field, Vertex *vertex)
   PetscFunctionReturn(0);
 }
 
+#undef __FUNCT__
+#define __FUNCT__ "FiberFieldAddEdge"
+PetscErrorCode FiberFieldAddEdge( FiberField f,  Vertex v0, Vertex v1, EdgeType etype, PetscReal l0 )
+{
+  Edge edge;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = ArrayAppend( f->edges, &edge); CHKERRQ(ierr);
+  ierr = UniqueIDGenerate( f->eid, &edge->eID); CHKERRQ(ierr); 
+  edge->vID[0] = v0->vID;
+  edge->vID[1] = v1->vID;
+  edge->type = etype;
+  edge->l0 = l0;
+
+  ierr = Vertex_Link( v0, edge ); CHKERRQ(ierr);
+  ierr = Vertex_Link( v1, edge ); CHKERRQ(ierr);
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "Vertex_Link"
+PetscErrorCode Vertex_Link( Vertex v0, Edge e )
+{
+  int i;
+  //PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+
+  // Add edge into v0's edge list
+  for (i = 0; i < MAXEDGES; ++i) {
+    if( v0->eID[i] == FIBERFIELD_NO_EDGE ) {
+      v0->eID[i] = e->eID;
+      break;
+    }
+  }
+  if( i == MAXEDGES ) {
+    SETERRQ1(PETSC_COMM_SELF, 0, "MAXEDGES (%d) reached\n", MAXEDGES);
+  }
+  PetscFunctionReturn(0);
+}
 
 #define __BUGGY__
 #ifndef __BUGGY__ 
@@ -47,41 +91,6 @@ PetscErrorCode VertexDestroy(FiberField field, Vertex v0 )
   //delete the edges of this vertex
   //remove from field array
   //Delete the vertex from the cache
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
-#define __FUNCT__ "VertexAddEdge"
-PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype )
-{
-  PetscErrorCode ierr;
-  PetscFunctionBegin;
-  ierr = Vertex_Link( v0, v1, etype); CHKERRQ(ierr);
-  ierr = Vertex_Link( v1, v0, etype); CHKERRQ(ierr);
-  PetscFunctionReturn(0);
-}
-
-#undef __FUNCT__
-#define __FUNCT__ "Vertex_Link"
-PetscErrorCode Vertex_Link( Vertex v0, Vertex v1, EdgeType etype )
-{
-  int i;
-  //PetscErrorCode ierr;
-
-  PetscFunctionBegin;
-
-  // Add v1 into v0's vertex list
-  for (i = 0; i < MAXEDGES; ++i) {
-    if( v0->v[i] == NULL ) {
-      v0->v[i] = v1;
-      v0->vID[i] = v1->ID;
-      v0->e[i] = etype;
-      break;
-    }
-  }
-  if( i == MAXEDGES ) {
-    SETERRQ1(PETSC_COMM_SELF, 0, "MAXEDGES (%d) reached\n", MAXEDGES);
-  }
   PetscFunctionReturn(0);
 }
 

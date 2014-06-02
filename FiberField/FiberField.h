@@ -18,12 +18,11 @@ typedef UniqueIDType EdgeID;
 #define FIBERFIELD_NO_EDGE -1
 
 struct _Vertex {
-  int petscIndex;       // Global index of edg
-  VertexID vID;          // Unique ID for this vertex
+  VertexID vID;         // Unique ID for this vertex
   VertexType type;      // type of vertex
-  Edge edges[MAXEDGES]; // Connected edges (pointers)
   EdgeID eID[MAXEDGES]; // Connected edges (ID number) 
   int    ePO[MAXEDGES]; // global petsc ordering of edge IDs
+  int    vPO;           // Global petsc index of vert
   Coor X;
   Coor V;
 };
@@ -36,11 +35,12 @@ typedef struct _VertexMPI {
 } VertexMPI;
 
 struct _Edge {
-  int petscIndex; // Global index of edge
   EdgeID eID;
   EdgeType type;
   VertexID vID[2]; // global unique ID of vertex ID
+  PetscReal l0;    // rest length of edge
   int      vPO[2]; // global petsc ordering of vertex ID
+  int      ePO;    // Global index of edge
 };
 
 typedef struct {
@@ -59,7 +59,8 @@ struct _FiberField {
   PetscMPIInt *neiRanks; // neiRank = DMDAGetNeighbors(da)
   int NUMRECV; // number of non-null nei ranks
 
-  UniqueID vid;        // vertex id generator
+  UniqueID vid;        // vertex ID generator
+  UniqueID eid;        // edge ID generator
   PetscReal mass;      // Mass of node
   PetscReal thickness; // Fiber thickness ~0.005um?
   PetscReal drag;      // drag btw fluid and vertex velocity
@@ -95,15 +96,14 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers);
 PetscErrorCode FiberFieldDestroy(FiberField fibers);
 PetscErrorCode FiberFieldSetup(FiberField fibers);
 PetscErrorCode FiberFieldPrint( FiberField fibers );
-PetscErrorCode VertexCreate(FiberField field, Vertex *v);
-PetscErrorCode VertexAddEdge( Vertex v0, Vertex v1, EdgeType etype );
-PetscErrorCode VertexRemoveEdge( Vertex v0, Vertex v1 );
+PetscErrorCode FiberFieldView( FiberField fibers );
+PetscErrorCode FiberFieldWrite( FiberField fibers, int ti );
 
-PetscErrorCode Vertex_Link( Vertex v0, Vertex v1, EdgeType etype );
-PetscErrorCode Vertex_Unlink( Vertex v0, VertexID v1_id );
+PetscErrorCode FiberFieldAddVertex(FiberField field, Vertex *v);
+PetscErrorCode FiberFieldAddEdge( FiberField f, Vertex v0, Vertex v1, EdgeType etype, PetscReal l0 );
+PetscErrorCode FiberFieldRemoveEdge( Vertex v0, Vertex v1 );
 
-
-PetscErrorCode FiberField_Step( FiberField field );
-PetscErrorCode FiberField_CreateVertexMPIDatatype( FiberField f );
+PetscErrorCode FiberFieldSolve( FiberField field );
 PetscErrorCode FiberField_SpatiallyBalance( FiberField f );
+
 #endif /* FIBERFIELD_H_ */

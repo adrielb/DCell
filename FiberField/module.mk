@@ -1,6 +1,6 @@
 # FiberField module
 
-LOCOBJS := FiberField.o SpatialBalancing.o Vertex.o # Dynamics.o 
+LOCOBJS := FiberField.o SpatialBalancing.o Vertex.o Dynamics.o 
 LOCOBJS := ${addprefix ${subdirectory}/, ${LOCOBJS}}
 ${eval ${call make-library,${subdirectory}, ${LOCOBJS} }}
 
@@ -15,11 +15,6 @@ ${eval ${call test-library,${subdirectory},mpidatatype,FiberField, 2 }}
 ${eval ${call test-library,${subdirectory},sameRankSendRecv,FiberField, 23 }}
 ${eval ${call test-library,${subdirectory},mpinei,FiberField, 9 }}
 ${eval ${call test-library,${subdirectory},swirl,FiberField, 9, ${INFOLOG} }}
-${eval ${call test-library,${subdirectory},dynamics,FiberField, 1 }}
+${eval ${call test-library,${subdirectory},dynamics,FiberField, 1, ${INFOLOG} }}
 
 ${LOCOBJS}: FiberField/FiberField.h
-
-S := $(subdirectory)/tests
-
-viz-FiberField-swirl: ${PETSC_TMP}/info.log.0
-	$(S)/swirl.sh

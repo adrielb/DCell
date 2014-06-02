@@ -13,10 +13,10 @@ set path+=~/apps/petsc
 set path+=~/apps/openmpi-1.8.1
 
 map <leader>0 :cd ~/projects/DCell<CR>
-map <leader>1 :CtrlP ~/apps/petsc<CR>
-map <leader>2 :find local.vimrc<CR>
-map <leader>3 :find /home/abergman/tmp/info.log.0<CR>
-map <leader>4 :find ./sims/Fibers/Fibers.c<CR>
+map <leader>1 :find /home/abergman/tmp/info.log.0<CR>
+map <leader>2 :find /home/abergman/tmp/stdout.log<CR>
+map <leader>3 :make debug<CR>
+map <leader>4 :make viz<CR>
 
 augroup setDCellDir
   autocmd!
