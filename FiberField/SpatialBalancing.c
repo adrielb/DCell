@@ -25,6 +25,7 @@ PetscErrorCode FiberField_SpatiallyBalance( FiberField f )
 PetscErrorCode FiberField_AddToSendbufs( FiberField field )
 {
   int i;
+  int e;
   const int len = ArrayLength(field->verts);
   const Coor lmin = field->localBounds.min;
   const Coor lmax = field->localBounds.max;
@@ -32,6 +33,7 @@ PetscErrorCode FiberField_AddToSendbufs( FiberField field )
   VertexMPI *vertmpi;
   iCoor n; // index in 3x3x3 array nei
   Vertex v;
+  PetscMPIInt sendRank;
   const PetscMPIInt *neiRanks;
   PetscErrorCode ierr;
 
@@ -70,9 +72,11 @@ PetscErrorCode FiberField_AddToSendbufs( FiberField field )
     } else { 
       // convert 3D nei coor to 1D nei index
       neiIdx = n.x + 3*n.y + 9*n.z;
-
+      // convert nei index to mpi rank
+      sendRank = neiRanks[neiIdx];
       // in the edge case where a vertex leaves the global bounding box, abort
-      if ( neiRanks[neiIdx] == MPI_PROC_NULL) {
+      // handle this case in the physics, not in the communication routine
+      if ( sendRank == MPI_PROC_NULL) {
         ierr = PetscInfo(0, "ERROR: Vertex outside global bbox\n"); CHKERRQ(ierr);
         ierr = PetscInfo3(0, "X = {%f, %f, %f}\n",v->X.x,v->X.y,v->X.z); CHKERRQ(ierr);
         ierr = PetscInfo3(0, "n = {%d, %d, %d}\n",n.x,n.y,n.z); CHKERRQ(ierr);
@@ -84,7 +88,24 @@ PetscErrorCode FiberField_AddToSendbufs( FiberField field )
       // add vertex to send list[rank]
       ierr = ArrayAppend( field->sendbufs[neiIdx], &vertmpi); CHKERRQ(ierr); 
       vertmpi->vID = v->vID;
+      vertmpi->type= v->type;
       vertmpi->X = v->X;
+      vertmpi->V = v->V;
+      for (e = 0; e < MAXEDGES; e++) {
+        vertmpi->eID[e] = v->eID[e];
+
+        eLO = v->eLO[e];
+        edgeRank[ eLO ] = sendRank;
+      }
+    }
+  }
+
+  for (i = 0; i < elen; i++) {
+    if (e.v0 == e.v1) {
+      ierr = ArrayAppend( field->sendbufs[neiIdx], &vertmpi); CHKERRQ(ierr); 
+    } else {
+      ierr = ArrayAppend( field->sendbufs[neiIdx], &vertmpi); CHKERRQ(ierr); 
+      ierr = ArrayAppend( field->sendbufs[neiIdx], &vertmpi); CHKERRQ(ierr); 
     }
   }
 
@@ -164,6 +185,7 @@ PetscErrorCode FiberField_Nei_Alltoall( FiberField f )
 PetscErrorCode FiberField_UnpackFromRecvbufs( FiberField f )
 {
   int i;
+  int e;
   int b;
   int l;
   int len;
@@ -197,7 +219,12 @@ PetscErrorCode FiberField_UnpackFromRecvbufs( FiberField f )
     v_buf = ArrayGetData( recvbufs[b] );
     for (i = 0; i < len; i++) {
       v_local[l].vID = v_buf[i].vID;
+      v_local[l].type= v_buf[i].type;
       v_local[l].X   = v_buf[i].X;
+      v_local[l].V   = v_buf[i].V;
+      for (e = 0; e < MAXEDGES; e++) {
+        v_local.eID[e] = v_buf.eID[e];
+      }
       l++;
     }
   }
