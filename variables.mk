@@ -1,5 +1,6 @@
 #{{353 Miller, P. A. 1998;}}{{354 Mecklenburg,Robert 2005;}}
 #source: Managing Projects with GNU Make, Robert Mecklenburg 2005
+SHELL=/bin/bash
 
 # $(call make-library, library-name, source-file-list)
 define make-library
@@ -30,7 +31,9 @@ ${1}/tests/${2}.x: ${1}/tests/${2}.o
 test-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	@echo "====================================================================="
 	@echo Test target: $$@
-	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} | tee ${PETSC_TMP}/stdout.log
+	${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} \
+			 > >(tee ${PETSC_TMP}/stdout.log) \
+			2> >(tee ${PETSC_TMP}/stderr.log >&2)
 viz-${1}-${2}: ${PETSC_TMP}/stdout.log
 	${1}/tests/${2}.sh
 valgrind-${1}-${2}: ${1}/tests/${2}.x rmTemp
