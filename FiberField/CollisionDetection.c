@@ -32,19 +32,19 @@ FiberField_CollisionDetection( FiberField f )
   Coor x31 = { X3.x - X1.x, X3.y - X1.y, X3.z - X1.z};
   Coor x41 = { X4.x - X1.x, X4.y - X1.y, X4.z - X1.z};
   Coor x43 = { X4.x - X3.x, X4.y - X3.y, X4.z - X3.z};
-  Coor v21 = { X2.x - X1.x, X2.y - X1.y, X2.z - X1.z};
-  Coor v31 = { X3.x - X1.x, X3.y - X1.y, X3.z - X1.z};
-  Coor v41 = { X4.x - X1.x, X4.y - X1.y, X4.z - X1.z};
+  Coor v21 = { V2.x - V1.x, V2.y - V1.y, V2.z - V1.z};
+  Coor v31 = { V3.x - V1.x, V3.y - V1.y, V3.z - V1.z};
+  Coor v41 = { V4.x - V1.x, V4.y - V1.y, V4.z - V1.z};
 
   // parallel edges
-  // | x21 - x43 | < tol
+  // | x21 x x43 | < round-offtol
   a = -(x21.z*x43.y) + x21.y*x43.z;
   b =   x21.z*x43.x - x21.x*x43.z;
   c = -(x21.y*x43.x) + x21.x*x43.y;
   if( sqrt(a*a+b*b+c*c) < tol )
     // is parallel
   else
-
+  // (x21 + t*v21) x (x31 + t*v31) (x41 + t v41) = 0
   // a + b*t + c*t^2 + d*t^3 == 0
   a = -(x21.z*x31.y*x41.x) + x21.y*x31.z*x41.x + x21.z*x31.x*x41.y - x21.x*x31.z*x41.y
       - x21.y*x31.x*x41.z + x21.x*x31.y*x41.z;

@@ -1,4 +1,4 @@
-DCELL_DIR=/home/abergman/projects/DCell
+export DCELL_DIR=/home/abergman/projects/DCell
 PETSC_DIR=/home/abergman/apps/petsc
 PETSC_TMP=/home/abergman/tmp
 include ${PETSC_DIR}/conf/variables
@@ -9,7 +9,7 @@ include $(addsuffix /module.mk,$(MODULES))
 all: test
 
 SIM := Fibers
-TEST := FiberField-dynamics
+TEST := FiberField-swirlfibers
 #viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
@@ -79,6 +79,10 @@ cscope-petsc:
 
 valgrind-gen-suppress:
 	valgrind --leak-check=yes --gen-suppressions=all --suppressions=petscinit.supp FiberField/tests/fiberinit.x
+
+ipython:
+	cd ${PETSC_TMP} && \
+			tmux new ipython
 
 
 .PHONY: all build alltests rebuild opt cleanDCell sync sim run cscope cscope-petsc tags

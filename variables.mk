@@ -1,6 +1,7 @@
 #{{353 Miller, P. A. 1998;}}{{354 Mecklenburg,Robert 2005;}}
 #source: Managing Projects with GNU Make, Robert Mecklenburg 2005
 SHELL=/bin/bash
+PYTHONPATH:=${DCELL_DIR}/Visualization:${PYTHONPATH}
 
 # $(call make-library, library-name, source-file-list)
 define make-library
@@ -28,13 +29,15 @@ ${1}/tests/${2}.o: ${LIBDCELL}
 ${1}/tests/${2}.x: ${1}/tests/${2}.o
 	-#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
-test-${1}-${2}: ${1}/tests/${2}.x rmTemp
+test-${1}-${2}: rmTemp ${PETSC_TMP}/test-${1}-${2}
+${PETSC_TMP}/test-${1}-${2}: ${1}/tests/${2}.x
 	@echo "====================================================================="
 	@echo Test target: $$@
 	${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} \
 			 > >(tee ${PETSC_TMP}/stdout.log) \
 			2> >(tee ${PETSC_TMP}/stderr.log >&2)
-viz-${1}-${2}: ${PETSC_TMP}/stdout.log
+	touch ${PETSC_TMP}/test-${1}-${2}
+viz-${1}-${2}: ${PETSC_TMP}/test-${1}-${2}
 	${1}/tests/${2}.sh
 valgrind-${1}-${2}: ${1}/tests/${2}.x rmTemp
 	valgrind --leak-check=yes                                 \

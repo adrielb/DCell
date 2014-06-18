@@ -1,4 +1,5 @@
 #include "FiberField.h"
+#include "FiberField_private.h"
 
 PetscErrorCode FiberField_CreateVertexMPIDatatype( FiberField f );
 
@@ -15,14 +16,16 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers)
   ierr = ArrayCreate("edges",sizeof(struct _Edge),&f->edges); CHKERRQ(ierr);
   ierr = ArrayCreate("vIDs",sizeof(VertexID),&f->vIDs); CHKERRQ(ierr);
   ierr = ArrayCreate("eIDs",sizeof(EdgeID),  &f->eIDs); CHKERRQ(ierr);
+  ierr = ArrayCreate("fiberDB", sizeof(FiberType), &f->fibertypesDB); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->vid ); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->eid ); CHKERRQ(ierr);
   ierr = FiberField_CreateVertexMPIDatatype( f ); CHKERRQ(ierr);
 
+  ierr = FiberFieldSetFluidVelocityEvaluator( f, FiberField_ZeroFluidVelocity ); CHKERRQ(ierr);
 
 
   f->comm = comm;
-  f->drag = 1;
+  f->fluidDrag = 1;
   f->mass = 1;
   f->dt = 0;
 
@@ -30,10 +33,10 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers)
   char label[13];
   for (i = 0; i < NUMNEI; i++) {
     ierr = PetscSNPrintf( label, sizeof(label), "sendbuf%d", i); CHKERRQ(ierr);
-    ierr = ArrayCreate( label, sizeof(struct _VertexMPI), &f->sendbufs[i] ); CHKERRQ(ierr);
+    ierr = ArrayCreate( label, sizeof(struct _VertexEdgeMPI), &f->sendbufs[i] ); CHKERRQ(ierr);
 
     ierr = PetscSNPrintf( label, sizeof(label), "recvbuf%d", i); CHKERRQ(ierr);
-    ierr = ArrayCreate( label, sizeof(struct _VertexMPI), &f->recvbufs[i] ); CHKERRQ(ierr);
+    ierr = ArrayCreate( label, sizeof(struct _VertexEdgeMPI), &f->recvbufs[i] ); CHKERRQ(ierr);
   }
 
   *fibers = f;
@@ -54,6 +57,7 @@ PetscErrorCode FiberFieldDestroy(FiberField fibers)
   ierr = ArrayDestroy(fibers->vIDs); CHKERRQ(ierr);
   ierr = ArrayDestroy(fibers->eIDs); CHKERRQ(ierr);
   ierr = UniqueIDDestroy(fibers->vid); CHKERRQ(ierr);
+  ierr = UniqueIDDestroy(fibers->eid); CHKERRQ(ierr);
   ierr = MPI_Type_free( &fibers->vertmpitype ); CHKERRQ(ierr);
   for (i = 0; i < NUMNEI; i++) {
     ierr = ArrayDestroy( fibers->sendbufs[i] ); CHKERRQ(ierr);
@@ -66,6 +70,7 @@ PetscErrorCode FiberFieldDestroy(FiberField fibers)
 // FiberFieldSetup
 // Use a DA to determine spatial partitioning
 // TODO: DA needs to come from FluidField, not here.
+// TODO: DA needs to match MPI_Cart_create
 #undef __FUNCT__
 #define __FUNCT__ "FiberFieldSetup"
 PetscErrorCode FiberFieldSetup( FiberField fibers )
@@ -135,6 +140,14 @@ PetscErrorCode FiberFieldSetup( FiberField fibers )
   ierr = PetscInfo3(0, "localBounds.max = %f, %f, %f\n", localBounds.max.x, localBounds.max.y, localBounds.max.z ); CHKERRQ(ierr);
   ierr = PetscInfo1(0, "NUMRECV = %d\n", fibers->NUMRECV ); CHKERRQ(ierr);
   ierr = PetscInfo1(0, "strNei =%s\n", strNei ); CHKERRQ(ierr);
+
+  int len = ArrayLength( fibers->fibertypesDB );
+  FiberType *ftypes = ArrayGetData( fibers->fibertypesDB );
+  for (i = 0; i < len; i++) {
+    ierr = PetscInfo1(fibers->da, "ID = %d\n", ftypes[i].ID); CHKERRQ(ierr);
+    ierr = PetscInfo1(fibers->da, "isEdge = %d\n", ftypes[i].isEdge); CHKERRQ(ierr);
+    ierr = PetscInfo1(fibers->da, "name = %s\n", ftypes[i].name); CHKERRQ(ierr);
+  }
 
   PetscFunctionReturn(0);
 }
@@ -258,22 +271,25 @@ PetscErrorCode FiberField_CreateVertexMPIDatatype( FiberField f )
   PetscFunctionBegin;
 
   MPI_Aint disp[] = {
-    offsetof(struct _VertexMPI, vID), // vID
-    offsetof(struct _VertexMPI, eID), // eID
-    offsetof(struct _VertexMPI, X),   // Coor x
-    offsetof(struct _VertexMPI, V)    // Coor v
+    offsetof(struct _VertexEdgeMPI, xID),  // xID
+    offsetof(struct _VertexEdgeMPI, type), // type
+    offsetof(struct _VertexEdgeMPI, yIDs), // yIDs
+    offsetof(struct _VertexEdgeMPI, X),    // Coor x
+    offsetof(struct _VertexEdgeMPI, V)     // Coor v
   };
 
   MPI_Datatype types[] = {
-    MPI_INT,    // vID
-    MPI_INT,    // eID
+    MPI_INT,    // xID
+    MPI_INT,    // type
+    MPI_INT,    // yIDs
     MPI_DOUBLE, // Coor x
     MPI_DOUBLE  // Coor v
   };
 
   int blocklen[] = { 
-    1,        // vID
-    MAXEDGES, // eID
+    1,        // xID
+    1,        // type
+    MAXEDGES, // yIDs
     3,        // Coor x
     3         // Coor v
   };
@@ -302,6 +318,14 @@ PetscErrorCode FiberFieldWrite( FiberField f, int ti )
 
   PetscFunctionBegin;
 
+  // handle special case of first time step,
+  // values not in x1 yet until after FiberFieldSolve()
+  if (ti == 0) {
+    ierr = FiberField_Init( f ); CHKERRQ(ierr);
+    ierr = FiberField_ToVec( f ); CHKERRQ(ierr);
+    ierr = VecCopy(f->x0,f->x1); CHKERRQ(ierr);
+  }
+
   ierr = VecWrite( f->x1, "verts", ti ); CHKERRQ(ierr);
 
   // Write edge list as CSV file
@@ -310,7 +334,8 @@ PetscErrorCode FiberFieldWrite( FiberField f, int ti )
   ierr = PetscFOpen(PETSC_COMM_SELF, edgefilename, "w", &edgefile);CHKERRQ(ierr);
   
   // Add a header line
-  if (rank == 0) {
+  //if (rank == 0) {
+  if( PETSC_TRUE ) {
     ierr = PetscFPrintf( PETSC_COMM_SELF, edgefile, "eID,etype,vID0,vID1,vPO0,vPO1,eP0\n"); CHKERRQ(ierr);
   }
   for (i = 0; i < elen; i++) {
@@ -321,6 +346,49 @@ PetscErrorCode FiberFieldWrite( FiberField f, int ti )
   }
 
   ierr = PetscFClose(PETSC_COMM_SELF, edgefile); CHKERRQ(ierr);
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "FiberFieldAddType"
+PetscErrorCode FiberFieldAddType( FiberField f, const char *typeName, PetscBool isEdge, FiberTypeID *ID )
+{
+  FiberType *ftype;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+
+  *ID = ArrayLength( f->fibertypesDB );
+
+  ierr = ArrayAppend( f->fibertypesDB, &ftype); CHKERRQ(ierr);
+  ierr = PetscStrncpy( ftype->name, typeName, sizeof(ftype->name) ); CHKERRQ(ierr);
+  ftype->isEdge = isEdge;
+  ftype->ID = *ID;
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "FiberFieldGetVertexArrayPO"
+PetscErrorCode FiberFieldGetVertexArrayPO( FiberField f, Vertex *vertsPO )
+{
+  int start;
+  int end;
+  struct _Vertex *verts;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+
+  verts = ArrayGetData( f->verts );
+
+  /*verts[0].vPO*/
+
+  ierr = VecGetOwnershipRange(f->x1, &start, &end); CHKERRQ(ierr);
+
+  start = start / 3;
+
+  *vertsPO = verts - start;
 
   PetscFunctionReturn(0);
 }

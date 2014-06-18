@@ -37,6 +37,23 @@ int main(int argc, char* args[])
   ierr = AOApplicationToPetscIS(ao, is); CHKERRQ(ierr);
   ierr = ISView(is, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
 
+
+  int nlocal = 4+rank;
+  Vec vec;
+  ierr = VecCreateMPI(PETSC_COMM_WORLD, nlocal, PETSC_DETERMINE, &vec); CHKERRQ(ierr);
+  PetscReal *x;
+  ierr = VecGetArray( vec, &x); CHKERRQ(ierr);
+  int i_start, i_end;
+  ierr = VecGetOwnershipRange(vec, &i_start, &i_end); CHKERRQ(ierr);
+  printf("istart = %d, i_end = %d\n", i_start, i_end);
+  int i;
+  for (i = 0; i < nlocal; i++) {
+    x[i] = i;
+  }
+  ierr = VecRestoreArray(vec, &x ); CHKERRQ(ierr);
+  ierr = VecView( vec, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
+  ierr = VecDestroy( &vec ); CHKERRQ(ierr);
+
   ierr = ISDestroy(&is); CHKERRQ(ierr);
   ierr = AODestroy(&ao); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);

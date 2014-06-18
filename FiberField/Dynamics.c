@@ -1,14 +1,7 @@
 #include "FiberField.h"
+#include "FiberField_private.h"
 
 /*#define DEBUG_DYNAMICS*/
-
-PetscErrorCode FiberField_Init( FiberField field );
-PetscErrorCode FiberField_ToVec( FiberField field );
-PetscErrorCode FiberField_Step( FiberField field );
-PetscErrorCode FiberField_Solve( FiberField f, PetscReal ti, Vec x );
-PetscErrorCode FiberField_AssembleDisplacementMatrix( FiberField field );
-PetscErrorCode FiberField_AssembleForceMatrix( FiberField field );
-PetscErrorCode FiberField_FromVec( FiberField field );
 
 /* 1) AO: renumber obj so that contiguous entries are adjacent
  * 2) determine needed neighbors
@@ -33,6 +26,7 @@ PetscErrorCode FiberFieldSolve( FiberField f )
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  ierr = FiberField_SpatiallyBalance( f ); CHKERRQ(ierr);
   ierr = FiberField_Init( f ); CHKERRQ(ierr);
   ierr = FiberField_ToVec( f ); CHKERRQ(ierr);
   ierr = FiberField_AssembleDisplacementMatrix( f ); CHKERRQ(ierr);
@@ -62,6 +56,7 @@ PetscErrorCode FiberField_Init( FiberField field )
   ierr = VecDestroy(&field->v0); CHKERRQ(ierr);
   ierr = VecDestroy(&field->vi); CHKERRQ(ierr);
   ierr = VecDestroy(&field->v1); CHKERRQ(ierr);
+  ierr = VecDestroy(&field->vf); CHKERRQ(ierr);
   ierr = VecDestroy(&field->Fe_v); CHKERRQ(ierr);
   ierr = VecCreateMPI(field->comm, 3*local_len_verts, PETSC_DETERMINE, &field->Fe_v); CHKERRQ(ierr);
   ierr = VecDuplicate(field->Fe_v, &field->x0); CHKERRQ(ierr);
@@ -70,6 +65,7 @@ PetscErrorCode FiberField_Init( FiberField field )
   ierr = VecDuplicate(field->Fe_v, &field->v0); CHKERRQ(ierr);
   ierr = VecDuplicate(field->Fe_v, &field->vi); CHKERRQ(ierr);
   ierr = VecDuplicate(field->Fe_v, &field->v1); CHKERRQ(ierr);
+  ierr = VecDuplicate(field->Fe_v, &field->vf); CHKERRQ(ierr);
   
   // Create global edge vectors
   ierr = VecDestroy(&field->l0); CHKERRQ(ierr);
@@ -221,6 +217,9 @@ PetscErrorCode FiberField_Step( FiberField field )
   // x1 = x0 + dt * vi
   ierr = VecWAXPY(x1, dt, vi, x0); CHKERRQ(ierr);
 
+  // body collisions modify x1 and v0
+  ierr = FiberField_BodyCollisions( field ); CHKERRQ(ierr);
+
   // xi = (x0 + x1) / 2.0
   ierr = VecAXPBYPCZ( xi, 0.5, 0.5, 0.0, x0, x1); CHKERRQ(ierr);
 
@@ -250,10 +249,10 @@ PetscErrorCode FiberField_Solve( FiberField f, PetscReal ti, Vec x )
   PetscReal *l0;
   PetscReal *v0;
   PetscReal *vi;
+  PetscReal *vf; // Fluid velocity at vertex
   const PetscReal dt2m = 0.5 * f->dt / f->mass;
   const PetscReal E = 1; // Young's Modulus
-  const PetscReal vf = 0; // Fluid velocity
-  const PetscReal drag = f->drag; 
+  const PetscReal drag = f->fluidDrag; 
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
@@ -292,6 +291,14 @@ PetscErrorCode FiberField_Solve( FiberField f, PetscReal ti, Vec x )
     w[i+0] = u[i+0] / norm_u;
     w[i+1] = u[i+1] / norm_u;
     w[i+2] = u[i+2] / norm_u;
+    // if spring has collapsed to a point
+    if ( PetscIsInfOrNanReal(w[i+0]) ) {
+      // arbitrary offset
+      // TODO: use a random direction
+      w[i+0] = 0.333;
+      w[i+1] = 0.333;
+      w[i+2] = 0.333;
+    }
     j = i / 3;
     strain = norm_u / l0[j] - 1;
     Fe_e[j] = E * strain; 
@@ -318,25 +325,83 @@ PetscErrorCode FiberField_Solve( FiberField f, PetscReal ti, Vec x )
   ierr = VecView( f->Fe_v, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
 #endif
 
+  // Evaluate fluid velocity to compute drag force
+  //   returns f->vf
+  ierr = FiberFieldEvaluateFluidVelocity( f, ti, x ); CHKERRQ(ierr);
+
   // Solve for vi
   // vi = v0 + dt/2 * a( ti, x, vi )
   // vi = v0 + dt/2 * ( Fe(x) + Fd(vi) )
   ierr = VecGetLocalSize(f->vi,&nlocal);CHKERRQ(ierr);
   ierr = VecGetArray(f->vi,&vi);CHKERRQ(ierr);
   ierr = VecGetArray(f->v0,&v0);CHKERRQ(ierr);
+  ierr = VecGetArray(f->vf,&vf);CHKERRQ(ierr);
   ierr = VecGetArray(f->Fe_v,&Fe_v);CHKERRQ(ierr);
   for (i = 0; i < nlocal; i++) {
-    vi[i] = v0[i] + dt2m * Fe_v[i] + dt2m * drag * vf; // vf = vf[i]
+    vi[i] = v0[i] + dt2m * Fe_v[i] + dt2m * drag * vf[i];
     vi[i] = vi[i] / (1 + dt2m * drag);
   }
   ierr = VecRestoreArray(f->vi,&vi);CHKERRQ(ierr);
   ierr = VecRestoreArray(f->v0,&v0);CHKERRQ(ierr);
+  ierr = VecRestoreArray(f->vf,&vf);CHKERRQ(ierr);
   ierr = VecRestoreArray(f->Fe_v,&Fe_v);CHKERRQ(ierr);
 
 #ifdef DEBUG_DYNAMICS
   ierr = PetscPrintf(PETSC_COMM_WORLD, "\nvi\n"); CHKERRQ(ierr);
   ierr = VecView( f->vi, PETSC_VIEWER_STDOUT_WORLD); CHKERRQ(ierr);
 #endif
+
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "FiberField_BodyCollisions"
+PetscErrorCode FiberField_BodyCollisions( FiberField f )
+{
+  int i;
+  int len;
+  PetscReal *x1;
+  PetscReal *v0;
+  Coor gmin = f->globalBounds.min;
+  Coor gmax = f->globalBounds.max;
+  const PetscReal delta = PETSC_SMALL;
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+
+  // add small delta
+  gmin.x += delta;
+  gmin.y += delta;
+  gmin.z += delta;
+  gmax.x -= delta;
+  gmax.y -= delta;
+  gmax.z -= delta;
+
+  // body collisions modify x1 and v0
+  
+  ierr = VecGetLocalSize( f->x1, &len); CHKERRQ(ierr);
+  ierr = VecGetArray(f->x1,&x1);CHKERRQ(ierr);
+  ierr = VecGetArray(f->v0,&v0);CHKERRQ(ierr);
+  for (i = 0; i < len; i+=3) {
+    // upper boundary 
+    x1[i+0] = x1[i+0] > gmax.x ? gmax.x : x1[i+0];
+    x1[i+1] = x1[i+1] > gmax.y ? gmax.y : x1[i+1];
+    x1[i+2] = x1[i+2] > gmax.z ? gmax.z : x1[i+2];
+
+    // lower boundary
+    x1[i+0] = x1[i+0] < gmin.x ? gmin.x : x1[i+0];
+    x1[i+1] = x1[i+1] < gmin.y ? gmin.y : x1[i+1];
+    x1[i+2] = x1[i+2] < gmin.z ? gmin.z : x1[i+2];
+
+    //TODO: modify velocity if collision with global bbox occurs 
+    //      friction? no-slip?
+    /*v1[i+0] = */
+    /*v1[i+1] = */
+    /*v1[i+2] = */
+  }
+
+  ierr = VecRestoreArray(f->x1,&x1);CHKERRQ(ierr);
+  ierr = VecRestoreArray(f->v0,&v0);CHKERRQ(ierr);
 
   PetscFunctionReturn(0);
 }

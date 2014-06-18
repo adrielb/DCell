@@ -4,7 +4,7 @@ PetscErrorCode Vertex_Link( Vertex v0, Edge e );
 
 #undef __FUNCT__
 #define __FUNCT__ "FiberFieldAddVertex"
-PetscErrorCode FiberFieldAddVertex(FiberField field, Vertex *vertex)
+PetscErrorCode FiberFieldAddVertex(FiberField field, FiberTypeID vtype, Vertex *vertex)
 {
   int i;
   Vertex v;
@@ -18,18 +18,32 @@ PetscErrorCode FiberFieldAddVertex(FiberField field, Vertex *vertex)
     v->eID[i] = FIBERFIELD_NO_EDGE;
   }
 
+  FiberType *ftype;
+  ierr = ArrayGet( field->fibertypesDB, vtype, &ftype); CHKERRQ(ierr);
+  if (ftype->isEdge) {
+    SETERRQ( PETSC_COMM_SELF, 0, "Wrong fiber type: adding vertex with ftype edge\n");
+  }
+
+  v->type = vtype;
+
   *vertex = v;
   PetscFunctionReturn(0);
 }
 
 #undef __FUNCT__
 #define __FUNCT__ "FiberFieldAddEdge"
-PetscErrorCode FiberFieldAddEdge( FiberField f,  Vertex v0, Vertex v1, EdgeType etype, PetscReal l0 )
+PetscErrorCode FiberFieldAddEdge( FiberField f,  Vertex v0, Vertex v1, FiberTypeID etype, PetscReal l0 )
 {
   Edge edge;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
+  FiberType *ftype;
+  ierr = ArrayGet(f->fibertypesDB, etype, &ftype); CHKERRQ(ierr);
+  if (!ftype->isEdge) {
+    SETERRQ( PETSC_COMM_SELF, 0, "Wrong fiber type: adding edge with ftype vertex\n");
+  }
+
   ierr = ArrayAppend( f->edges, &edge); CHKERRQ(ierr);
   ierr = UniqueIDGenerate( f->eid, &edge->eID); CHKERRQ(ierr); 
   edge->vID[0] = v0->vID;
