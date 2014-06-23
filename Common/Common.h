@@ -77,6 +77,7 @@ PetscErrorCode ArrayCreate( const char name[], int elemSize, Array *array );
 PetscErrorCode ArrayDestroy( Array a );
 PetscErrorCode ArraySetName( Array a, const char name[] );
 PetscErrorCode ArraySetSize( Array a, int size );
+PetscErrorCode ArraySetMaxSize( Array a, int maxsize );
 PetscErrorCode ArrayAppend( Array a, void *elem );
 PetscErrorCode ArrayAppendPtr( Array a, void *elem );
 PetscErrorCode ArrayGet( Array a, int i, void *elem );

@@ -47,6 +47,8 @@ PetscErrorCode FiberField_Init( FiberField field )
   PetscFunctionBegin;
   ierr = PetscInfo1(0, "local_len_verts = %d\n", local_len_verts); CHKERRQ(ierr);
   ierr = PetscInfo1(0, "local_len_edges = %d\n", local_len_edges); CHKERRQ(ierr);
+  ierr = ArraySetSize( field->vIDs, local_len_verts ); CHKERRQ(ierr);
+  ierr = ArraySetSize( field->eIDs, local_len_edges ); CHKERRQ(ierr);
 
   // Create global vertex vectors
   // {x1,x2,x3, x1,x2,x3,...}

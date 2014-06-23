@@ -29,7 +29,8 @@ PetscErrorCode FiberField_InitLocalFiber( FiberField fibers, int numVerticies, P
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
-  ierr = ArrayCreate("fiber", sizeof(Vertex), &fiber); CHKERRQ(ierr);
+  ierr = ArraySetSize(fiber, 0); CHKERRQ(ierr);
+  ierr = ArraySetMaxSize( fibers->verts, flen + ArrayLength(fibers->verts) ); CHKERRQ(ierr);
 
   ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rnd); CHKERRQ(ierr);
   ierr = PetscRandomSetType(rnd,PETSCRAND48); CHKERRQ(ierr);

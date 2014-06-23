@@ -99,9 +99,11 @@ PetscErrorCode ArraySetSize( Array a, int size )
   if( a->MAXSIZE < size ) //TODO: report resizing in petsc info
   {
     ierr = PetscLogEventBegin(EVENT_ArraySetSize,0,0,0,0); CHKERRQ(ierr);
-    int s = a->scale * size * a->ELEMSIZE;
+    const int s = a->scale * size * a->ELEMSIZE;
+    const int newsize = (int)(a->scale*size);
+    const int mb = s/(1024*1024);
     void *tmp;
-    ierr = PetscInfo4(0,"%s resizing: %d to %d (%d MB)\n",a->name, a->MAXSIZE, (int)(a->scale*size), s/(1024*1024) ); CHKERRQ(ierr);
+    ierr = PetscInfo4(0,"%s resizing: %d to %d (%d MB)\n",a->name, a->MAXSIZE, newsize, mb ); CHKERRQ(ierr);
     ierr = PetscMalloc( s, &tmp ); CHKERRQ(ierr);
     ierr = PetscMemzero(tmp, s); CHKERRQ(ierr); //TODO: is this redundant?
     ierr = PetscMemcpy(tmp,a->dataArray,a->ELEMSIZE*a->MAXSIZE); CHKERRQ(ierr);
@@ -111,6 +113,19 @@ PetscErrorCode ArraySetSize( Array a, int size )
     ierr = PetscLogEventEnd(EVENT_ArraySetSize,0,0,0,0); CHKERRQ(ierr);
   }
   
+  PetscFunctionReturn(0);
+}
+
+#undef __FUNCT__
+#define __FUNCT__ "ArraySetMaxSize"
+PetscErrorCode ArraySetMaxSize( Array a, int maxsize )
+{
+  int len = ArrayLength(a);
+  PetscErrorCode ierr;
+
+  PetscFunctionBegin;
+  ierr = ArraySetSize( a, maxsize ); CHKERRQ(ierr);
+  ierr = ArraySetSize( a, len ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
