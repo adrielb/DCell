@@ -58,8 +58,20 @@ ${subdirectory}/${1}.x: ${subdirectory}/${1}.o
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
 sim-${1}: ${subdirectory}/${1}.x
 	@echo Simulation: sim-${1}
-run-${1}: sim-${1} rmTemp
+run-${1}: rmTemp ${PETSC_TMP}/run-sim-${1}
+${PETSC_TMP}/run-sim-${1}: ${subdirectory}/${1}.x
 	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3}
+	touch ${PETSC_TMP}/run-sim-${1}
+viz-sim-${1}: ${PETSC_TMP}/run-sim-${1}
+	${subdirectory}/${1}.sh
+debug-sim-${1}: ${subdirectory}/${1}.x rmTemp
+	export EDITOR=gvim && \
+	gnome-terminal -e "gdb ${subdirectory}/${1}.x "
+valgrind-sim-${1}: ${subdirectory}/${1}.x rmTemp
+	valgrind --leak-check=yes                                    \
+		--suppressions=/home/abergman/apps/openmpi-1.8.1/build/share/openmpi/openmpi-valgrind.supp \
+	  --suppressions=petscinit.supp                              \
+		${CURDIR}/${subdirectory}/${1}.x
 endef
 
 .PHONY: rmTemp

@@ -6,10 +6,10 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: test
+all: viz-sim
 
 SIM := Fibers
-TEST := FiberField-swirlfibers
+TEST := FiberField-fiberinit
 #viz: viz-LevelSet3DView
 
 ${LIBDCELL}: ${libraries}
@@ -41,6 +41,9 @@ debug: debug-${TEST}
 viz: viz-${TEST}
 sim: sim-${SIM}
 run: run-${SIM}
+viz-sim: viz-sim-${SIM}
+debug-sim: debug-sim-${SIM}
+valgrind-sim: valgrind-sim-${SIM}
 
 tags:
 	ctags -R  --fields=+S
