@@ -8,7 +8,7 @@ LOCDEPS := Common
 INFOLOG:=-info ${PETSC_TMP}/info.log
 
 ${eval ${call test-library,${subdirectory},fiber,FiberField, 1 }}
-${eval ${call test-library,${subdirectory},fiberinit,FiberField, 1 }}
+${eval ${call test-library,${subdirectory},fiberinit,FiberField, 1, ${INFOLOG} -viewer_binary_skip_info}}
 ${eval ${call test-library,${subdirectory},ao,FiberField, 2, -log_summary }}
 ${eval ${call test-library,${subdirectory},balancing,FiberField, 3 }}
 ${eval ${call test-library,${subdirectory},mpidatatype,FiberField, 2 }}

@@ -100,6 +100,9 @@ struct _FiberField {
 
   Array fibertypesDB; // 
 
+  PetscRandom rnd;
+  Array fiber; // 
+
   PetscErrorCode (*EvaluateFluidVelocity)(FiberField f, PetscReal t, Vec x);
 };
 
@@ -124,5 +127,8 @@ PetscErrorCode FiberField_ZeroFluidVelocity( FiberField f, PetscReal t, Vec x );
 PetscErrorCode FiberField_CircularFluidVelocity( FiberField f, PetscReal t, Vec x );
 
 PetscErrorCode FiberField_SpatiallyBalance( FiberField f );
+
+PetscErrorCode FiberFieldInitLocalFiber( FiberField fibers, int numVerticies, PetscReal l0,
+    FiberTypeID vertexType, FiberTypeID edgeType, FiberTypeID bendingEdgeType );
 
 #endif /* FIBERFIELD_H_ */

@@ -8,22 +8,26 @@ int main(int argc, char **args) {
   ierr = DCellInit(); CHKERRQ(ierr);
   FiberField fibers;
   ierr = FiberFieldCreate( MPI_COMM_WORLD, &fibers); CHKERRQ(ierr);
-  Vertex v0, v1, v2, v3;
-  ierr = VertexCreate( fibers, &v0); CHKERRQ(ierr);
-  ierr = VertexCreate( fibers, &v1); CHKERRQ(ierr);
-  ierr = VertexCreate( fibers, &v2); CHKERRQ(ierr);
-  ierr = VertexCreate( fibers, &v3); CHKERRQ(ierr);
 
-  printf("Adding edge\n");
-  EdgeType e = 1;
-  ierr = VertexAddEdge( v0, v1, e ); CHKERRQ(ierr);
-  ierr = VertexAddEdge( v2, v3, e ); CHKERRQ(ierr);
-  ierr = FiberFieldPrint( fibers ); CHKERRQ(ierr);
+  Coor gmin = {-1,-1,-1};
+  Coor gmax = {1,1,1};
+  fibers->dh = 0.1;
+  fibers->globalBounds = (BoundingBox){.min = gmin, .max = gmax };
 
- 
-  printf("Removing edge\n");
-  ierr = VertexRemoveEdge( v3, v2); CHKERRQ(ierr);
-  ierr = FiberFieldPrint( fibers ); CHKERRQ(ierr);
+  FiberTypeID collagenVert;
+  FiberTypeID collagenEdge;
+  FiberTypeID collagenBendEdge;
+  ierr = FiberFieldAddType( fibers,     "collagen vert",PETSC_FALSE,&collagenVert); CHKERRQ(ierr);
+  ierr = FiberFieldAddType( fibers,     "collagen edge", PETSC_TRUE,&collagenEdge); CHKERRQ(ierr);
+  ierr = FiberFieldAddType( fibers,"collagen bend edge", PETSC_TRUE,&collagenBendEdge); CHKERRQ(ierr);
+
+  ierr = FiberFieldSetup(fibers); CHKERRQ(ierr);
+
+  PetscReal l0 = 0.1;
+  const int MAX_VERTS = 100;
+  ierr = FiberFieldInitLocalFiber(fibers, MAX_VERTS, l0,
+      collagenVert, collagenEdge, collagenBendEdge); CHKERRQ(ierr);
+  ierr = FiberFieldWrite(fibers, 0); CHKERRQ(ierr);
 
   ierr = FiberFieldDestroy(fibers); CHKERRQ(ierr);
   ierr = DCellFinalize(); CHKERRQ(ierr);

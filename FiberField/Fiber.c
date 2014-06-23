@@ -1,39 +1,49 @@
 #include "FiberField.h"
 #include "FiberField_private.h"
 
+PetscErrorCode BoundaryCheck( Coor min, Coor max, Coor *X, PetscBool *hitBoundary );
 PetscErrorCode SphericalDistribution(PetscRandom rnd, PetscReal a, Coor *d);
 PetscErrorCode Rotation(Coor x0, Coor x1, Coor *n, Coor *r, Coor *s);
 PetscErrorCode MatVec( Coor *n, Coor *r, Coor *s, Coor *a, Coor *d);
 
 #undef __FUNCT__
-#define __FUNCT__ "FiberField_InitLocalFiber"
-PetscErrorCode FiberField_InitLocalFiber( FiberField fibers, int numVerticies, PetscReal l0,
+#define __FUNCT__ "FiberFieldInitLocalFiber"
+PetscErrorCode FiberFieldInitLocalFiber( FiberField fibers, int numVerticies, PetscReal l0,
     FiberTypeID vertexType, FiberTypeID edgeType, FiberTypeID bendingEdgeType )
 {
   int i;
-  const int flen = numVerticies;
-  Array fiber;
+  int flen = numVerticies;
+  Array fiber = fibers->fiber;
   Vertex v0;
   Vertex v1;
   Vertex v2;
-  PetscRandom rnd;
+  PetscRandom rnd = fibers->rnd;
+  PetscBool hitBoundary;
   Coor rndSphere;
   Coor n;
   Coor r;
   Coor s;
   Coor d;
-  const Coor lmin = fibers->localBounds.min;
-  const Coor lmax = fibers->localBounds.max;
+  Coor lmin = fibers->localBounds.min;
+  Coor lmax = fibers->localBounds.max;
+  PetscReal NORTH_HEMISPHERE = 0.65;
   const PetscReal WHOLE_SPHERE = 0.0;
-  const PetscReal NORTH_HEMISPHERE = 0.95;
+  const PetscReal DELTA = PETSC_SMALL;
   PetscErrorCode ierr;
 
   PetscFunctionBegin;
   ierr = ArraySetSize(fiber, 0); CHKERRQ(ierr);
   ierr = ArraySetMaxSize( fibers->verts, flen + ArrayLength(fibers->verts) ); CHKERRQ(ierr);
 
-  ierr = PetscRandomCreate(PETSC_COMM_WORLD,&rnd); CHKERRQ(ierr);
-  ierr = PetscRandomSetType(rnd,PETSCRAND48); CHKERRQ(ierr);
+  // add small delta
+  lmin.x += DELTA;
+  lmin.y += DELTA;
+  lmin.z += DELTA;
+  lmax.x -= DELTA;
+  lmax.y -= DELTA;
+  lmax.z -= DELTA;
+
+  ierr = PetscOptionsGetReal(0,"-fiber_bend",&NORTH_HEMISPHERE,0); CHKERRQ(ierr);
 
   // Initialize v0 anywhere in the local bbox
   ierr = FiberFieldAddVertex( fibers, vertexType, &v0); CHKERRQ(ierr);
@@ -53,6 +63,11 @@ PetscErrorCode FiberField_InitLocalFiber( FiberField fibers, int numVerticies, P
   v1->X.x = v0->X.x + l0*d.x;
   v1->X.y = v0->X.y + l0*d.y;
   v1->X.z = v0->X.z + l0*d.z;
+  BoundaryCheck( lmin, lmax, &v1->X, &hitBoundary );
+  if (hitBoundary) {
+    ierr = FiberFieldAddEdge( fibers, v0, v1, edgeType, l0 ); CHKERRQ(ierr);
+    PetscFunctionReturn(0);
+  }
 
   for (i = 1; i < flen-1; i++ ) {
     ierr = FiberFieldAddVertex( fibers, vertexType, &v2); CHKERRQ(ierr);
@@ -66,10 +81,16 @@ PetscErrorCode FiberField_InitLocalFiber( FiberField fibers, int numVerticies, P
     v2->X.y = v1->X.y + l0*d.y;
     v2->X.z = v1->X.z + l0*d.z;
 
+    BoundaryCheck( lmin, lmax, &v2->X, &hitBoundary );
+    if (hitBoundary) {
+      break;
+    }
+
     v0 = v1;
     v1 = v2;
   }
 
+  flen = ArrayLength( fiber );
   Vertex *v = ArrayGetData( fiber );
   // Link fiber edges: v_i -- v_i+1
   for (i = 0; i < flen-1; i++) {
@@ -81,7 +102,6 @@ PetscErrorCode FiberField_InitLocalFiber( FiberField fibers, int numVerticies, P
     ierr = FiberFieldAddEdge( fibers, v[i-1], v[i+1], bendingEdgeType, 2*l0 ); CHKERRQ(ierr);
   }
 
-  ierr = ArrayDestroy( fiber ); CHKERRQ(ierr);
   PetscFunctionReturn(0);
 }
 
@@ -151,3 +171,19 @@ PetscErrorCode MatVec( Coor *n, Coor *r, Coor *s, Coor *a, Coor *d)
   return 0;
 }
 
+PetscErrorCode BoundaryCheck( Coor min, Coor max, Coor *X, PetscBool *hitBoundary )
+{ 
+  *hitBoundary = PETSC_FALSE;
+
+  // upper boundary 
+  if (X->x > max.x) { X->x = max.x; *hitBoundary = PETSC_TRUE; }
+  if (X->y > max.y) { X->y = max.y; *hitBoundary = PETSC_TRUE; }
+  if (X->z > max.z) { X->z = max.z; *hitBoundary = PETSC_TRUE; }
+
+  // lower boundary
+  if (X->x < min.x) { X->x = min.x; *hitBoundary = PETSC_TRUE; }
+  if (X->y < min.y) { X->y = min.y; *hitBoundary = PETSC_TRUE; }
+  if (X->z < min.z) { X->z = min.z; *hitBoundary = PETSC_TRUE; }
+
+  return 0;
+}

@@ -20,6 +20,12 @@ PetscErrorCode FiberFieldCreate(MPI_Comm comm, FiberField *fibers)
   ierr = UniqueIDCreate( &f->vid ); CHKERRQ(ierr);
   ierr = UniqueIDCreate( &f->eid ); CHKERRQ(ierr);
   ierr = FiberField_CreateVertexMPIDatatype( f ); CHKERRQ(ierr);
+  ierr = PetscRandomCreate(PETSC_COMM_WORLD,&f->rnd); CHKERRQ(ierr);
+  ierr = PetscRandomSetType(f->rnd,PETSCRAND48); CHKERRQ(ierr);
+  /*ierr = PetscRandomSetFromOptions(rnd); CHKERRQ(ierr);*/
+  /*ierr = PetscRandomSeed(rnd); CHKERRQ(ierr);*/
+  ierr = ArrayCreate("fiber", sizeof(Vertex), &f->fiber); CHKERRQ(ierr);
+  
 
   ierr = FiberFieldSetFluidVelocityEvaluator( f, FiberField_ZeroFluidVelocity ); CHKERRQ(ierr);
 
@@ -59,6 +65,8 @@ PetscErrorCode FiberFieldDestroy(FiberField fibers)
   ierr = UniqueIDDestroy(fibers->vid); CHKERRQ(ierr);
   ierr = UniqueIDDestroy(fibers->eid); CHKERRQ(ierr);
   ierr = MPI_Type_free( &fibers->vertmpitype ); CHKERRQ(ierr);
+  ierr = PetscRandomDestroy(&fibers->rnd); CHKERRQ(ierr);
+  ierr = ArrayDestroy(fibers->fiber); CHKERRQ(ierr);
   for (i = 0; i < NUMNEI; i++) {
     ierr = ArrayDestroy( fibers->sendbufs[i] ); CHKERRQ(ierr);
     ierr = ArrayDestroy( fibers->recvbufs[i] ); CHKERRQ(ierr);
@@ -147,6 +155,9 @@ PetscErrorCode FiberFieldSetup( FiberField fibers )
     ierr = PetscInfo1(fibers->da, "ID = %d\n", ftypes[i].ID); CHKERRQ(ierr);
     ierr = PetscInfo1(fibers->da, "isEdge = %d\n", ftypes[i].isEdge); CHKERRQ(ierr);
     ierr = PetscInfo1(fibers->da, "name = %s\n", ftypes[i].name); CHKERRQ(ierr);
+  }
+  if (len == 0) {
+    SETERRQ(PETSC_COMM_WORLD,0,"FiberTypes DB not set\n");
   }
 
   PetscFunctionReturn(0);
