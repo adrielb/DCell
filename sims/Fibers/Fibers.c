@@ -23,8 +23,10 @@ int main(int argc, char **args)
 
   int i;
   PetscReal l0 = 0.1;
-  const int MAX_VERTS = 100;
-  const int NUM_FIBERS_PER_PROC = 50;
+  int MAX_VERTS = 100;
+  int NUM_FIBERS_PER_PROC = 50;
+  ierr = PetscOptionsGetInt(0,"-num_fibers_per_proc",&NUM_FIBERS_PER_PROC ,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetInt(0,"-max_verts",&MAX_VERTS,0); CHKERRQ(ierr);
   for (i = 0; i < NUM_FIBERS_PER_PROC; i++) {
     ierr = FiberFieldInitLocalFiber(fibers, MAX_VERTS, l0,
         collagenVert, collagenEdge, collagenBendEdge); CHKERRQ(ierr);
@@ -32,10 +34,14 @@ int main(int argc, char **args)
 
 // advect verts
   int ti;
-  const int timax = 800;
+  int timax = 800;
   fibers->dt = 0.5;
   fibers->fluidDrag = 10;
   /*ierr = FiberFieldSetFluidVelocityEvaluator( fibers, FiberField_CircularFluidVelocity); CHKERRQ(ierr);*/
+
+  ierr = PetscOptionsGetInt(0,"-timax",&timax ,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-fiber_dt",&fibers->dt,0); CHKERRQ(ierr);
+  ierr = PetscOptionsGetReal(0,"-fluidDrag",&fibers->fluidDrag,0); CHKERRQ(ierr);
 
   ierr = FiberFieldWrite( fibers, 0 ); CHKERRQ(ierr);
 
