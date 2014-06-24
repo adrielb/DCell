@@ -58,7 +58,7 @@ ${subdirectory}/${1}.x: ${subdirectory}/${1}.o
 	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
 sim-${1}: ${subdirectory}/${1}.x
 	@echo Simulation: sim-${1}
-run-${1}: rmTemp ${PETSC_TMP}/run-sim-${1}
+run-${1}: rmTemp ${PETSC_TMP}/run-sim-${1} ${subdirectory}/module.mk
 ${PETSC_TMP}/run-sim-${1}: ${subdirectory}/${1}.x
 	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3}
 	touch ${PETSC_TMP}/run-sim-${1}
