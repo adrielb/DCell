@@ -171,16 +171,30 @@ class FiberActor( vtk.vtkActor ): #{{{
 
 #polylineExport = vtk.vtkOBJExporter()
 
+
+#factGraphics = vtk.vtkGraphicsFactory()
+#factGraphics.SetUseMesaClasses(1);
+
+
+#ren = vtk.vtkMesaRenderer()
+#renWin = vtk.vtkXMesaRenderWindow()
+#renWin.OffScreenRenderingOn()
+
 class MyRenderer(vtk.vtkRenderer): # {{{
-    def __init__(self):
+    def __init__(self, onScreen = True ):
+        self.onScreen = onScreen
         self.SetBackground( 0, 0, 0)
 
         self.renWin = vtk.vtkRenderWindow()
         self.renWin.AddRenderer( self )
 
-        self.iren = vtk.vtkRenderWindowInteractor()
-        self.iren.SetRenderWindow( self.renWin )
-        self.iren.AddObserver("KeyPressEvent", self.Keypress_ShiftTime)
+        if onScreen:
+            self.iren = vtk.vtkRenderWindowInteractor()
+            self.iren.SetRenderWindow( self.renWin )
+            self.iren.AddObserver("KeyPressEvent", self.Keypress_ShiftTime)
+        else:
+            pass
+            #self.renWin.SetOffScreenRender(1)
 
         self.axesActor = vtk.vtkCubeAxesActor();
         self.axesActor.SetFlyModeToStaticTriad()
@@ -243,8 +257,22 @@ class MyRenderer(vtk.vtkRenderer): # {{{
         elif key == "9":
             self.GetActiveCamera().SetPosition(0,0,-A) 
 
-    def Block( self ):
-        self.iren.Initialize()
-        self.iren.Start()
+    def Draw( self ):
+        if self.onScreen:
+            self.iren.Initialize()
+            self.iren.Start()
+        else:
+            #pass
+            self.Render()
+
+            #windowToImageFilter = vtkWindowToImageFilter()
+            #windowToImageFilter.SetInput(renderWindow)
+            #windowToImageFilter.Update()
+            
+            #writer = vtkPNGWriter()
+            #writer.SetFileName("output."+str(FILE_OFFSET+time_index)+".png")
+            #writer.SetInputConnection(windowToImageFilter.GetOutputPort())
+            #writer.Write()
+
 
 # }}}

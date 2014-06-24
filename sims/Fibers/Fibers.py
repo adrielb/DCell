@@ -18,7 +18,7 @@ tiActor.GetTextProperty().SetFontSize( 18 )
 UpdateData( time_index )
     
 
-ren = MyRenderer()
+ren = MyRenderer(False)
 ren.SetUpdateData( UpdateData )
 ren.AddActor( vertActor )
 ren.AddActor( fiberActor )
@@ -33,6 +33,6 @@ camera.SetPosition( -6, 5, -4)
 camera.SetFocalPoint( 0, 0, 0)
 #camera.ParallelProjectionOn()
 
-ren.Block()
+ren.Draw()
 
 

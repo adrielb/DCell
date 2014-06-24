@@ -1,7 +1,7 @@
 # Fiber simulation
 
 RUNOPTS :=                  \
--timax 10                   \
+-timax 2                    \
 -fiber_bend 0.70            \
 -fiber_dt 0.5               \
 -fluidDrag 10               \
