@@ -12,5 +12,5 @@ cd $PETSC_TMP
 extractParams
 #column -s, -t params.csv
 
-$VIZ
+$VIZ 2
 

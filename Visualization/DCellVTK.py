@@ -1,3 +1,4 @@
+import sys
 import vtk
 import glob
 import vtk.util.colors as colors
@@ -181,21 +182,23 @@ class FiberActor( vtk.vtkActor ): #{{{
 #renWin.OffScreenRenderingOn()
 
 class MyRenderer(vtk.vtkRenderer): # {{{
-    def __init__(self, onScreen = True ):
-        self.onScreen = onScreen
+    def __init__(self):
+        # No cmd line time_index, use on screen rendering
+        self.onScreen = len(sys.argv) == 1
         self.SetBackground( 0, 0, 0)
 
         self.renWin = vtk.vtkRenderWindow()
         self.renWin.AddRenderer( self )
 
-        if onScreen:
+        if self.onScreen:
+            self.renWin.FullScreenOn()
             self.iren = vtk.vtkRenderWindowInteractor()
             self.iren.SetRenderWindow( self.renWin )
             self.iren.AddObserver("KeyPressEvent", self.Keypress_ShiftTime)
         else:
-            pass
-            #self.renWin.SetOffScreenRender(1)
-
+            self.renWin.OffScreenRenderingOn()
+            self.renWin.SetSize( 1280, 720 )
+            
         self.axesActor = vtk.vtkCubeAxesActor();
         self.axesActor.SetFlyModeToStaticTriad()
         #actorAxes->SetCamera(camOrtho);
@@ -258,21 +261,26 @@ class MyRenderer(vtk.vtkRenderer): # {{{
             self.GetActiveCamera().SetPosition(0,0,-A) 
 
     def Draw( self ):
+        global time_index
         if self.onScreen:
+            self.UpdateData( time_index )
             self.iren.Initialize()
             self.iren.Start()
         else:
             #pass
-            self.Render()
+            time_index = int(sys.argv[1])
+            self.UpdateData( time_index )
+            #self.Render()
+            self.renWin.Render()
 
-            #windowToImageFilter = vtkWindowToImageFilter()
-            #windowToImageFilter.SetInput(renderWindow)
-            #windowToImageFilter.Update()
+            windowToImageFilter = vtk.vtkWindowToImageFilter()
+            windowToImageFilter.SetInput(self.renWin)
+            windowToImageFilter.Update()
             
-            #writer = vtkPNGWriter()
-            #writer.SetFileName("output."+str(FILE_OFFSET+time_index)+".png")
-            #writer.SetInputConnection(windowToImageFilter.GetOutputPort())
-            #writer.Write()
+            writer = vtk.vtkPNGWriter()
+            writer.SetFileName("output."+str(FILE_OFFSET+time_index)+".png")
+            writer.SetInputConnection(windowToImageFilter.GetOutputPort())
+            writer.Write()
 
 
 # }}}

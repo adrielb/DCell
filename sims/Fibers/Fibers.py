@@ -15,10 +15,11 @@ fiberActor.tube.SetRadius( 0.01 )
 tiActor = Time_IndexActor()
 tiActor.GetTextProperty().SetFontSize( 18 )
 
-UpdateData( time_index )
+
+
     
 
-ren = MyRenderer(False)
+ren = MyRenderer()
 ren.SetUpdateData( UpdateData )
 ren.AddActor( vertActor )
 ren.AddActor( fiberActor )
