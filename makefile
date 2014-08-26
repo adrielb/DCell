@@ -6,20 +6,29 @@ include ${PETSC_DIR}/conf/rules
 include variables.mk
 include $(addsuffix /module.mk,$(MODULES))
 
-all: viz-sim
+all:  testsuite
 
-SIM := Fibers
-TEST := FiberField-fiberinit
-#viz: viz-LevelSet3DView
+SIM = sims/Fibers/Fibers
+TEST = FiberField/tests/fiberinit
+EXEC = ${SIM}
 
-${LIBDCELL}: ${libraries}
-	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
-	@echo Library: ${LIBDCELL}
+exec: ${EXEC}.x
+run: run-${EXEC}.x
+
+viz: 
+	${EXEC}.sh
+
+valgrind: ${EXEC}.x
+	valgrind --leak-check=yes                                 \
+	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
+	  --suppressions=petscinit.supp                           \
+		${CURDIR}/${EXEC}.x
+
+debug: ${EXEC}.x 
+	export EDITOR=gvim && \
+	gnome-terminal -e "gdb ${CURDIR}/${EXEC}.x"
 
 build: ${LIBDCELL}
-
-alltests: ${ALLTESTS}
-	@echo Tested everything
 
 rebuild: cleanDCell build
 
@@ -34,16 +43,6 @@ cleanDCell:
 
 sync:
 	syncDCell.sh
-
-test: test-${TEST}
-valgrind: valgrind-${TEST}
-debug: debug-${TEST}
-viz: viz-${TEST}
-sim: sim-${SIM}
-run: run-${SIM}
-viz-sim: viz-sim-${SIM}
-debug-sim: debug-sim-${SIM}
-valgrind-sim: valgrind-sim-${SIM}
 
 tags:
 	ctags -R  --fields=+S

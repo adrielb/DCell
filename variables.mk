@@ -1,7 +1,17 @@
 #{{353 Miller, P. A. 1998;}}{{354 Mecklenburg,Robert 2005;}}
 #source: Managing Projects with GNU Make, Robert Mecklenburg 2005
-SHELL=/bin/bash
+SHELL=/bin/bash -e -o pipefail
 PYTHONPATH:=${DCELL_DIR}/Visualization:${PYTHONPATH}
+VPATH=${CURDIR}
+
+${LIBDCELL}: ${libraries}
+	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
+	@echo Library: ${LIBDCELL}
+
+tests/%.o : ${LIBDCELL}
+sims/%.o : ${LIBDCELL}
+%.x : %.o
+	${CLINKER} $^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $@ 
 
 # $(call make-library, library-name, source-file-list)
 define make-library
@@ -22,61 +32,68 @@ subdirectory = $(patsubst %/module.mk,%, \
 # ${call test-library,module,testprog, depends, NP, runopts}
 define test-library
 CLEAN += ${1}/tests/${2}.o ${1}/tests/${2}.x
-ALLTESTS += test${1}-${2}
-.PHONY: test${1}-${2}
-#${1}/tests/${2}.o: ${3:%=lib/${PETSC_ARCH}/lib%.a}
-${1}/tests/${2}.o: ${LIBDCELL}
-${1}/tests/${2}.x: ${1}/tests/${2}.o
-	-#@${CLINKER} $$^ ${DCELL_LIB} ${3:%=-l%} ${PETSC_LIB} -o $$@ 
-	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
-test-${1}-${2}: rmTemp ${PETSC_TMP}/test-${1}-${2}
-${PETSC_TMP}/test-${1}-${2}: ${1}/tests/${2}.x
+ALLTESTS += ${1}/tests/${2}
+run-${1}/tests/${2}.x: ${PETSC_TMP}/${1}/tests/${2}/stdout.log
+${PETSC_TMP}/${1}/tests/${2}/stdout.log: ${1}/tests/${2}.x
 	@echo "====================================================================="
-	@echo Test target: $$@
-	${MPIEXEC} -wdir ${PETSC_TMP} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} \
-			 > >(tee ${PETSC_TMP}/stdout.log) \
-			2> >(tee ${PETSC_TMP}/stderr.log >&2)
-	touch ${PETSC_TMP}/test-${1}-${2}
-viz-${1}-${2}: ${PETSC_TMP}/test-${1}-${2}
-	${1}/tests/${2}.sh
-valgrind-${1}-${2}: ${1}/tests/${2}.x rmTemp
-	valgrind --leak-check=yes                                 \
-	  --suppressions=/usr/share/openmpi/openmpi-valgrind.supp \
-	  --suppressions=petscinit.supp                           \
-		${CURDIR}/${1}/tests/${2}.x
-debug-${1}-${2}: ${1}/tests/${2}.x rmTemp
-	export EDITOR=gvim && \
-	gnome-terminal -e "gdb ${CURDIR}/${1}/tests/${2}.x"
+	@echo Test target: ${1}/tests/${2}
+	@mkdir -p $${@D}
+	-find $${@D} -type f -delete
+	@${MPIEXEC} -wdir $${@D} -np ${4} ${CURDIR}/${1}/tests/${2}.x ${5} \
+			 > >(tee $${@D}/stdout.log) \
+			2> >(tee $${@D}/stderr.log >&2)
 endef
 
 # ${call simulation,SimName,NP,runopts}
 define simulation
 CLEAN += ${subdirectory}/${1}.o ${subdirectory}/${1}.x
-.PHONY: sim-${1} run-${1}
-${subdirectory}/${1}.o: ${LIBDCELL}
-${subdirectory}/${1}.x: ${subdirectory}/${1}.o
-	@${CLINKER} $$^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $$@ 
-sim-${1}: ${subdirectory}/${1}.x
-	@echo Simulation: sim-${1}
-run-${1}: rmTemp ${PETSC_TMP}/run-sim-${1}
-${PETSC_TMP}/run-sim-${1}: ${subdirectory}/${1}.x ${subdirectory}/module.mk
-	@${MPIEXEC} -wdir ${PETSC_TMP} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3}
-	touch ${PETSC_TMP}/run-sim-${1}
-viz-sim-${1}: ${PETSC_TMP}/run-sim-${1}
-	${subdirectory}/${1}.sh
-debug-sim-${1}: ${subdirectory}/${1}.x rmTemp
-	export EDITOR=gvim && \
-	gnome-terminal -e "gdb ${subdirectory}/${1}.x "
-valgrind-sim-${1}: ${subdirectory}/${1}.x rmTemp
-	valgrind --leak-check=yes                                    \
-		--suppressions=/home/abergman/apps/openmpi-1.8.1/build/share/openmpi/openmpi-valgrind.supp \
-	  --suppressions=petscinit.supp                              \
-		${CURDIR}/${subdirectory}/${1}.x
+run-${subdirectory}/${1}.x: ${PETSC_TMP}/sims/${1}/${1}.log
+${PETSC_TMP}/sims/${1}/stdout.log: ${subdirectory}/${1}.x ${subdirectory}/module.mk
+	@echo "====================================================================="
+	@echo Sim target: $$<
+	@mkdir -p $${@D}
+	-find $${@D} -type f -delete
+	@${MPIEXEC} -wdir $${@D} -np ${2} ${CURDIR}/${subdirectory}/${1}.x ${3} \
+			 > >(tee $${@D}/stdout.log) \
+			2> >(tee $${@D}/stderr.log >&2)
 endef
+
+# copy good stdout.log to repo 
+cache: 
+	cp ${PETSC_TMP}/${TEST}/stdout.log ${CURDIR}/${TEST}.log
+	-rm ${PETSC_TMP}/${TEST}/stdout.diff
+
+# diff cache log with current log
+${PETSC_TMP}/%.diff : ${PETSC_TMP}/%.log 
+	@echo "Diffing " ${subst ${PETSC_TMP}/,,${@D}}
+	-@CACHED=${subst ${PETSC_TMP},${CURDIR},${@D}}.log; \
+	${DIFF} $$CACHED $< > >(tee $@) 2>&1
+
+TESTSUITE=${firstword ${subst /, ,${TEST}}}
+.SECONDEXPANSION:
+testsuite: $${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${filter $${TESTSUITE}/%,$${ALLTESTS}}} check
+	@echo "Testsuite: " ${TESTSUITE}
+
+.SECONDEXPANSION:
+testall: $${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${ALLTESTS}} check
+	@echo "All tests"
+
+check:
+	@echo "Checking for failed tests"
+	@DIFFs=`find ${PETSC_TMP} -name stdout.diff`; \
+	for d in $${DIFFs}; do                        \
+		if [ -s $$d ]; then                       \
+			echo $$d;                             \
+			FAILEDTEST=1;                         \
+		fi                                        \
+	done;                                         \
+	if [ -z "$$FAILEDTEST" ]; then                \
+		echo "ALL PASSED";                        \
+	fi
 
 .PHONY: rmTemp
 rmTemp: 
-	-find ${PETSC_TMP}/ -type f -print0 | xargs -n1000 -0 rm
+	-find ${PETSC_TMP}/ -print0 | xargs -n1000 -0 rm
 
 ifndef PETSC_TMP
   ${error PETSC_TMP not set}
@@ -104,8 +121,9 @@ CLEAN :=
 libraries :=
 
 #mpiexec -n 4 --bysocket --bind-to-socket --report-bindings
+# -find $${@D} -type f -print0 | xargs -n1000 -0 rm
 
-#VTK building and visualization
+#VTK building and visualization {{{
 VTK_DIR=/share/apps/vtk/VTK
 VTK_INCLUDE= \
 -I${VTK_DIR} \
@@ -144,3 +162,4 @@ ${subdirectory}/${1}.x: ${subdirectory}/${1}.cxx
 viz-${1}: ${subdirectory}/${1}.x
 	${subdirectory}/${1}.x ${2}
 endef
+#}}}
