@@ -12,7 +12,7 @@ PetscErrorCode DCellGetWorkingDirectory( char* workingdirectory )
 
   PetscFunctionBegin;
   if( WORKING_DIRECTORY[0] == 0 ) {
-    ierr = PetscGetTmp( PETSC_COMM_WORLD, (char*)WORKING_DIRECTORY, PETSC_MAX_PATH_LEN); CHKERRQ(ierr);
+    ierr = PetscGetWorkingDirectory( (char*)WORKING_DIRECTORY, PETSC_MAX_PATH_LEN); CHKERRQ(ierr);
   }
   ierr = PetscStrcpy(workingdirectory,WORKING_DIRECTORY); CHKERRQ(ierr);
   PetscFunctionReturn(0);
