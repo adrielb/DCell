@@ -4,10 +4,6 @@ SHELL=/bin/bash -e -o pipefail
 PYTHONPATH:=${DCELL_DIR}/Visualization:${PYTHONPATH}
 VPATH=${CURDIR}
 
-${LIBDCELL}: ${libraries}
-	@${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
-	@echo Library: ${LIBDCELL}
-
 tests/%.o : ${LIBDCELL}
 sims/%.o : ${LIBDCELL}
 %.x : %.o
@@ -164,3 +160,9 @@ viz-${1}: ${subdirectory}/${1}.x
 	${subdirectory}/${1}.x ${2}
 endef
 #}}}
+
+include $(addsuffix /module.mk,$(MODULES))
+
+${LIBDCELL} : ${DCELLOBJECTS}
+	${CLINKER} -shared -o ${LIBDCELL} ${DCELLOBJECTS}
+	@echo Library: ${LIBDCELL}

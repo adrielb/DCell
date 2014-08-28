@@ -4,7 +4,6 @@ PETSC_TMP=/home/abergman/tmp
 include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 include variables.mk
-include $(addsuffix /module.mk,$(MODULES))
 
 all:  testsuite
 
