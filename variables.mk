@@ -91,9 +91,10 @@ check:
 		echo "ALL PASSED";                        \
 	fi
 
+# delete all files in $PETSC_TMP but not $PETSC_TMP itself
 .PHONY: rmTemp
 rmTemp: 
-	-find ${PETSC_TMP}/ -print0 | xargs -n1000 -0 rm
+	-find ${PETSC_TMP} -not -path ${PETSC_TMP} -delete
 
 ifndef PETSC_TMP
   ${error PETSC_TMP not set}
