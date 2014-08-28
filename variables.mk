@@ -4,10 +4,23 @@ SHELL=/bin/bash -e -o pipefail
 PYTHONPATH:=${DCELL_DIR}/Visualization:${PYTHONPATH}
 VPATH=${CURDIR}
 
-tests/%.o : ${LIBDCELL}
-sims/%.o : ${LIBDCELL}
-%.x : %.o
-	${CLINKER} $^ ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $@ 
+MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
+DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
+GA_INCLUDE := -I/home/abergman/apps/ga-5-0-2/include 
+CFLAGS += ${DCELL_INCLUDE} ${GA_INCLUDE} -Wall -fPIC -Werror #-Wextra
+
+GA_LIB = -L/home/abergman/apps/ga-5-0-2/lib -lga
+PETSC_LIB := ${PETSC_LIB} ${GA_LIB}
+DCELL_LIB := -L${DCELL_DIR}/lib/${PETSC_ARCH} -Wl,-rpath,${DCELL_DIR}/lib/${PETSC_ARCH}
+LIBDCELL := lib/${PETSC_ARCH}/libDCell.so
+
+#Accumulate info from each module
+DCELLOBJECTS := 
+CLEAN :=
+libraries :=
+
+%.x : %.o ${LIBDCELL}
+	${CLINKER} $< ${DCELL_LIB} -lDCell ${PETSC_LIB} -o $@ 
 
 # $(call make-library, library-name, source-file-list)
 define make-library
@@ -101,21 +114,6 @@ endif
 ifndef DCELL_DIR
   ${error DCELL_DIR not set}
 endif
-
-MODULES := $(subst /module.mk,,$(shell find . -name module.mk))
-DCELL_INCLUDE := $(patsubst %,-I%,${MODULES})
-CFLAGS += ${DCELL_INCLUDE} -I/home/abergman/apps/ga-5-0-2/include -Wall -fPIC -Werror
-#-Wextra
-
-GA_LIB = -L/home/abergman/apps/ga-5-0-2/lib -lga
-PETSC_LIB := ${PETSC_LIB} ${GA_LIB}
-DCELL_LIB := -L${DCELL_DIR}/lib/${PETSC_ARCH} -Wl,-rpath,${DCELL_DIR}/lib/${PETSC_ARCH}
-LIBDCELL := lib/${PETSC_ARCH}/libDCell.so
-
-#Accumulate info from each module
-DCELLOBJECTS := 
-CLEAN :=
-libraries :=
 
 #mpiexec -n 4 --bysocket --bind-to-socket --report-bindings
 # -find $${@D} -type f -print0 | xargs -n1000 -0 rm
