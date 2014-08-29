@@ -50,7 +50,7 @@ PetscErrorCode PrintGrid(const char title[], Grid g) {
 
   ierr = GridGet(g,&phi); CHKERRQ(ierr);
   ierr = GridGetBounds(g,&p,&q); CHKERRQ(ierr);
-  printf("%s\n\t   ",title);
+  printf("%s\n   ",title);
   for ( i = p.x; i < q.x; ++i)
     printf("%4d",i);
   printf("\n");
