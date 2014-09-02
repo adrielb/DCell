@@ -78,14 +78,9 @@ ${PETSC_TMP}/%.diff : ${PETSC_TMP}/%.log
 	-@CACHED=${subst ${PETSC_TMP},${CURDIR},${@D}}.log; \
 	${DIFF} $$CACHED $< > >(tee $@) 2>&1
 
-TESTSUITE=${firstword ${subst /, ,${TEST}}}
-.SECONDEXPANSION:
-testsuite: $${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${filter $${TESTSUITE}/%,$${ALLTESTS}}} check
-	@echo "Testsuite: " ${TESTSUITE}
+TESTSUITE=$${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${filter $${firstword $${subst /, ,$${TEST}}}/%,$${ALLTESTS}}} 
 
-.SECONDEXPANSION:
-testall: $${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${ALLTESTS}} check
-	@echo "All tests"
+TESTALL=$${patsubst %,$${PETSC_TMP}/%/stdout.diff,$${ALLTESTS}}
 
 check:
 	@echo "Checking for failed tests"

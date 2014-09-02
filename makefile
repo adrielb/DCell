@@ -5,14 +5,19 @@ include ${PETSC_DIR}/conf/variables
 include ${PETSC_DIR}/conf/rules
 include variables.mk
 
-all:  testsuite
+all: testsuite
 
 SIM = sims/Fibers/Fibers
 TEST = FiberField/tests/fiberinit
-EXEC = ${SIM}
+EXEC = ${TEST}
 
 exec: ${EXEC}.x
 run: run-${EXEC}.x
+
+.SECONDEXPANSION:
+testsingle: ${PETSC_TMP}/${TEST}/stdout.diff check
+testsuite: ${TESTSUITE} check
+testall: ${TESTALL} check
 
 viz: 
 	${EXEC}.sh
